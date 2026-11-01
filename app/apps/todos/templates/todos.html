@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Header & Breadcrumbs -->
+    <div class="mb-8">
+        <a href="/" class="inline-flex items-center space-x-2 text-xs font-semibold text-blue-400 hover:text-blue-300 transition mb-3">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            <span>Back to Portfolio</span>
+        </a>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight flex items-center space-x-3">
+                    <span class="p-2 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400">
+                        <i data-lucide="check-square" class="w-7 h-7"></i>
+                    </span>
+                    <span>Project Sprint & Task Tracker</span>
+                </h1>
+                <p class="text-slate-400 text-sm mt-1">
+                    Live interactive database tracking all roadmap tasks, milestones, and development sprints for this platform.
+                </p>
+            </div>
+            
+            <!-- Overall Stats Badge -->
+            <div class="flex items-center space-x-3 bg-slate-900/80 border border-slate-800 p-3 rounded-xl">
+                <div class="text-center px-3 border-r border-slate-800">
+                    <div class="text-lg font-bold text-white">{{ stats.total }}</div>
+                    <div class="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">Total</div>
+                </div>
+                <div class="text-center px-3 border-r border-slate-800">
+                    <div class="text-lg font-bold text-amber-400">{{ stats.in_progress }}</div>
+                    <div class="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">Active</div>
+                </div>
+                <div class="text-center px-3">
+                    <div class="text-lg font-bold text-emerald-400">{{ stats.completed }}</div>
+                    <div class="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">Done</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Add Form -->
+    <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 mb-8 backdrop-blur-sm shadow-xl">
+        <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-300 mb-4 flex items-center space-x-2">
+            <i data-lucide="plus-circle" class="w-4 h-4 text-blue-400"></i>
+            <span>Add New Sprint Item / To-Do</span>
+        </h2>
+        <form action="/apps/todos/add" method="POST" class="grid grid-cols-1 md:grid-cols-12 gap-3">
+            <div class="md:col-span-5">
+                <input 
+                    type="text" 
+                    name="title" 
+                    placeholder="Task summary (e.g., Build URL Shortener mini-app)" 
+                    required 
+                    class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                />
+            </div>
+            <div class="md:col-span-3">
+                <input 
+                    type="text" 
+                    name="category" 
+                    placeholder="Phase / Category (e.g. Phase 2: Apps)" 
+                    value="Phase 2: Apps"
+                    class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                />
+            </div>
+            <div class="md:col-span-2">
+                <select name="priority" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500">
+                    <option value="High">Priority: High</option>
+                    <option value="Medium" selected>Priority: Medium</option>
+                    <option value="Low">Priority: Low</option>
+                </select>
+            </div>
+            <div class="md:col-span-2">
+                <button type="submit" class="w-full h-full min-h-[42px] bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm rounded-lg shadow-lg shadow-blue-500/20 transition flex items-center justify-center space-x-1">
+                    <span>Add Task</span>
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <div class="md:col-span-12">
+                <input 
+                    type="text" 
+                    name="notes" 
+                    placeholder="Optional details, architecture thoughts, or acceptance criteria" 
+                    class="w-full bg-slate-950/60 border border-slate-800/70 rounded-lg px-4 py-1.5 text-xs text-slate-300 placeholder-slate-600 focus:outline-none focus:border-blue-500"
+                />
+            </div>
+        </form>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+        <div class="flex items-center space-x-2 text-xs">
+            <span class="text-slate-500 uppercase tracking-wider font-semibold mr-1">Filter:</span>
+            <a href="/apps/todos?status=all" class="px-3 py-1 rounded-lg border {{ 'bg-blue-600/20 border-blue-500/40 text-blue-300' if current_filter == 'all' else 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white' }}">
+                All ({{ stats.total }})
+            </a>
+            <a href="/apps/todos?status=in-progress" class="px-3 py-1 rounded-lg border {{ 'bg-amber-500/20 border-amber-500/40 text-amber-300' if current_filter == 'in-progress' else 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white' }}">
+                Active ({{ stats.in_progress }})
+            </a>
+            <a href="/apps/todos?status=pending" class="px-3 py-1 rounded-lg border {{ 'bg-slate-800 border-slate-700 text-slate-200' if current_filter == 'pending' else 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white' }}">
+                Pending ({{ stats.pending }})
+            </a>
+            <a href="/apps/todos?status=completed" class="px-3 py-1 rounded-lg border {{ 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300' if current_filter == 'completed' else 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white' }}">
+                Done ({{ stats.completed }})
+            </a>
+        </div>
+        <div class="text-xs text-slate-500 font-mono">
+            SQLite Database &bull; Instant Updates
+        </div>
+    </div>
+
+    <!-- Task Items List -->
+    <div class="space-y-3">
+        {% if todos %}
+            {% for todo in todos %}
+            <div class="group flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 rounded-xl border {{ 'border-emerald-500/30 bg-emerald-950/10' if todo.status == 'completed' else ('border-amber-500/30 bg-amber-950/10' if todo.status == 'in-progress' else 'border-slate-800/80 bg-slate-900/40') }} hover:border-slate-700 transition gap-3">
+                <div class="flex items-start space-x-3.5 flex-grow">
+                    <!-- Status Check Toggle Form -->
+                    <form action="/apps/todos/status/{{ todo.id }}" method="POST" class="mt-0.5">
+                        <input type="hidden" name="status" value="{{ 'pending' if todo.status == 'completed' else 'completed' }}">
+                        <button type="submit" class="w-5 h-5 rounded-md border flex items-center justify-center transition {{ 'border-emerald-500 bg-emerald-500/20 text-emerald-400' if todo.status == 'completed' else 'border-slate-700 hover:border-blue-400 text-transparent' }}">
+                            <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </form>
+
+                    <div>
+                        <div class="flex items-center space-x-2 flex-wrap">
+                            <span class="text-sm font-semibold {{ 'line-through text-slate-500' if todo.status == 'completed' else 'text-white' }}">
+                                {{ todo.title }}
+                            </span>
+                            
+                            <!-- Badges -->
+                            <span class="text-[10px] px-2 py-0.5 rounded-full font-medium bg-slate-800 text-slate-400 border border-slate-700/60">
+                                {{ todo.category }}
+                            </span>
+
+                            <span class="text-[10px] px-2 py-0.5 rounded-full font-medium {{ 'bg-red-500/10 text-red-400 border border-red-500/20' if todo.priority == 'High' else ('bg-blue-500/10 text-blue-400 border border-blue-500/20' if todo.priority == 'Medium' else 'bg-slate-800 text-slate-400') }}">
+                                {{ todo.priority }} Priority
+                            </span>
+
+                            <span class="text-[10px] px-2 py-0.5 rounded-full font-semibold {{ 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' if todo.status == 'completed' else ('bg-amber-500/10 text-amber-400 border border-amber-500/20' if todo.status == 'in-progress' else 'bg-slate-800/70 text-slate-400') }}">
+                                {{ todo.status }}
+                            </span>
+                        </div>
+
+                        {% if todo.notes %}
+                        <p class="text-xs text-slate-400 mt-1">
+                            {{ todo.notes }}
+                        </p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Right Action Buttons -->
+                <div class="flex items-center space-x-2 self-end sm:self-center">
+                    {% if todo.status != 'in-progress' and todo.status != 'completed' %}
+                    <form action="/apps/todos/status/{{ todo.id }}" method="POST">
+                        <input type="hidden" name="status" value="in-progress">
+                        <button type="submit" class="text-xs px-2.5 py-1 rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20 hover:bg-amber-500/20 transition">
+                            Start
+                        </button>
+                    </form>
+                    {% endif %}
+
+                    <!-- Delete button -->
+                    <form action="/apps/todos/delete/{{ todo.id }}" method="POST" onsubmit="return confirm('Delete this task?');">
+                        <button type="submit" class="p-1.5 text-slate-500 hover:text-red-400 transition" title="Delete Task">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="text-center py-12 border border-dashed border-slate-800 rounded-2xl">
+                <i data-lucide="inbox" class="w-10 h-10 text-slate-600 mx-auto mb-3"></i>
+                <h3 class="text-slate-300 font-semibold text-sm">No tasks found</h3>
+                <p class="text-slate-500 text-xs mt-1">Add a new sprint task above to start tracking.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

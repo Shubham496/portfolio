@@ -3,6 +3,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, FileResponse
 from app.core.config import settings
+from app.apps.todos.router import router as todos_router
 import os
 
 # Initialize application
@@ -13,6 +14,9 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
 )
+
+# Register Sub-Apps / Mini-Apps
+app.include_router(todos_router)
 
 # Mount static files
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
@@ -100,6 +104,15 @@ EXPERIENCE_DATA = [
 
 # Featured Projects & Interactive Apps
 MINI_APPS_DATA = [
+    {
+        "title": "Project Sprint & Task Tracker",
+        "tag": "Database & To-Do App",
+        "description": "Live SQLite-backed task and milestone tracker tracking our current engineering roadmap, sprint priorities, and progress.",
+        "status": "Live App",
+        "tech": ["FastAPI", "SQLite", "Jinja2", "Tailwind"],
+        "url": "/apps/todos",
+        "github": settings.GITHUB_URL
+    },
     {
         "title": "Adidas Retail Intelligence Dashboard",
         "tag": "Business Intelligence",
