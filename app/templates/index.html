@@ -1,0 +1,330 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section id="about" class="relative overflow-hidden pt-16 pb-16 md:pt-24 md:pb-20">
+    <!-- Ambient glow gradients -->
+    <div class="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-600/15 rounded-full blur-3xl pointer-events-none -z-10"></div>
+    <div class="absolute top-1/3 right-1/4 w-80 h-80 bg-indigo-600/15 rounded-full blur-3xl pointer-events-none -z-10"></div>
+
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col-reverse lg:flex-row items-center justify-between gap-12">
+            
+            <!-- Left: Hero Text & Pitch -->
+            <div class="w-full lg:w-3/5 text-left">
+                <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-400 text-xs font-semibold mb-6">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>Available for High-Impact Roles & Consulting</span>
+                </div>
+
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight mb-4">
+                    Hi, I'm <span class="bg-gradient-to-r from-blue-400 via-indigo-300 to-cyan-300 bg-clip-text text-transparent">{{ settings.OWNER_NAME }}</span>.
+                </h1>
+
+                <p class="text-lg sm:text-xl text-blue-300 font-medium mb-4">
+                    {{ settings.OWNER_TITLE }}
+                </p>
+
+                <p class="text-slate-300 leading-relaxed text-sm sm:text-base mb-8 max-w-2xl">
+                    {{ settings.OWNER_BIO }}
+                </p>
+
+                <div class="flex flex-wrap gap-4 items-center">
+                    <a href="/resume" target="_blank" class="inline-flex items-center space-x-2 px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium shadow-lg shadow-blue-500/25 transition">
+                        <i data-lucide="file-text" class="w-4 h-4"></i>
+                        <span>Download Full Resume</span>
+                    </a>
+                    <a href="#projects" class="inline-flex items-center space-x-2 px-6 py-3 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 font-medium transition">
+                        <span>Explore Projects & Apps</span>
+                        <i data-lucide="arrow-down" class="w-4 h-4"></i>
+                    </a>
+                </div>
+
+                <!-- Contact Fast Links with Brand Icons -->
+                <div class="flex flex-wrap items-center gap-4 sm:gap-6 mt-8 pt-6 border-t border-slate-800/80 text-sm text-slate-300">
+                    <a href="mailto:{{ settings.EMAIL }}" class="flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-slate-900/80 border border-slate-800 hover:border-red-500/50 hover:text-white transition group">
+                        <svg class="w-4 h-4 text-red-400 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                        </svg>
+                        <span class="font-mono text-xs">{{ settings.EMAIL }}</span>
+                    </a>
+                    <a href="{{ settings.LINKEDIN_URL }}" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-slate-900/80 border border-slate-800 hover:border-blue-500/50 hover:text-white transition group">
+                        <svg class="w-4 h-4 text-[#0A66C2] group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.64c-.95 0-1.72.78-1.72 1.73s.77 1.73 1.72 1.73c.96 0 1.73-.78 1.73-1.73s-.77-1.73-1.73-1.73z"/>
+                        </svg>
+                        <span>LinkedIn</span>
+                    </a>
+                    <a href="{{ settings.GITHUB_URL }}" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-slate-900/80 border border-slate-800 hover:border-slate-500 hover:text-white transition group">
+                        <svg class="w-4 h-4 text-slate-200 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+                        </svg>
+                        <span>GitHub</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right: Profile Photo with Proper Aspect Ratio & Natural Fit -->
+            <div class="w-full lg:w-2/5 flex justify-center">
+                <div class="relative group">
+                    <div class="absolute -inset-1.5 bg-gradient-to-tr from-blue-600 via-indigo-500 to-cyan-500 rounded-3xl blur-md opacity-60 group-hover:opacity-100 transition duration-500"></div>
+                    <div class="relative w-64 h-80 sm:w-72 sm:h-96 rounded-2xl overflow-hidden border border-slate-700/80 bg-slate-900 shadow-2xl flex items-center justify-center">
+                        <img 
+                            src="{{ settings.PROFILE_PHOTO_PATH }}" 
+                            alt="{{ settings.OWNER_NAME }}" 
+                            class="w-full h-full object-cover object-top group-hover:scale-[1.02] transition duration-500"
+                        />
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent pointer-events-none"></div>
+                    </div>
+                    <!-- Quick badge -->
+                    <div class="absolute -bottom-3 -right-3 bg-slate-900/95 backdrop-blur-md border border-slate-700 text-xs px-3.5 py-1.5 rounded-xl shadow-lg flex items-center space-x-2">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span class="font-medium text-slate-200">3+ Years Exp.</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Stats / Highlights Banner -->
+<section class="border-y border-slate-900 bg-slate-950/60 py-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+            <div class="p-4 rounded-xl bg-slate-900/40 border border-slate-800/60">
+                <div class="text-2xl sm:text-3xl font-extrabold text-blue-400">3+ Years</div>
+                <div class="text-xs text-slate-400 mt-1 uppercase tracking-wider font-semibold">Production Experience</div>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-900/40 border border-slate-800/60">
+                <div class="text-2xl sm:text-3xl font-extrabold text-indigo-400">Python & SQL</div>
+                <div class="text-xs text-slate-400 mt-1 uppercase tracking-wider font-semibold">Core Specialization</div>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-900/40 border border-slate-800/60">
+                <div class="text-2xl sm:text-3xl font-extrabold text-emerald-400">ETL & BI</div>
+                <div class="text-xs text-slate-400 mt-1 uppercase tracking-wider font-semibold">Data Warehousing</div>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-900/40 border border-slate-800/60">
+                <div class="text-2xl sm:text-3xl font-extrabold text-cyan-400">&lt; 50 MB</div>
+                <div class="text-xs text-slate-400 mt-1 uppercase tracking-wider font-semibold">FastAPI Live Instance</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Skills Section -->
+<section id="skills" class="py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+            <h2 class="text-3xl font-bold tracking-tight text-white mb-2">Technical Capabilities</h2>
+            <p class="text-slate-400 text-sm sm:text-base">Modern tech stack mastered across enterprise consulting, fintech, and data engineering.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {% for cat in skills %}
+            <div class="rounded-xl border border-slate-800/80 bg-slate-900/50 p-6 hover:border-slate-700 transition flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+                            <i data-lucide="{{ cat.icon }}" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="font-semibold text-base text-white">{{ cat.category }}</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-1.5">
+                        {% for item in cat.skills_list %}
+                        <span class="text-xs px-2.5 py-1 rounded-md bg-slate-800/70 text-slate-300 border border-slate-700/60">
+                            {{ item }}
+                        </span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Professional Experience Section -->
+<section id="experience" class="py-20 border-t border-slate-900 bg-slate-950/40">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-16">
+            <h2 class="text-3xl font-bold tracking-tight text-white mb-2">Professional Experience</h2>
+            <p class="text-slate-400 text-sm sm:text-base">Proven track record in high-impact consulting, workflow automation, and enterprise BI.</p>
+        </div>
+
+        <div class="space-y-8">
+            {% for exp in experiences %}
+            <div class="relative rounded-2xl border border-slate-800 bg-slate-900/40 p-6 sm:p-8 hover:border-blue-500/40 transition">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                    <div>
+                        <div class="flex items-center space-x-3">
+                            <h3 class="text-xl font-bold text-white">{{ exp.role }}</h3>
+                            <span class="text-xs px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-medium">
+                                {{ exp.company }}
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1 font-mono">{{ exp.type }}</p>
+                    </div>
+                    <div class="text-xs font-semibold text-slate-400 bg-slate-800/80 px-3 py-1 rounded-lg border border-slate-700/60 self-start sm:self-center">
+                        {{ exp.period }}
+                    </div>
+                </div>
+
+                <ul class="space-y-2 mt-4">
+                    {% for pt in exp.points %}
+                    <li class="flex items-start space-x-3 text-sm text-slate-300">
+                        <span class="text-blue-400 mt-1 font-bold">›</span>
+                        <span>{{ pt }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Projects & Mini-Apps Section -->
+<section id="projects" class="py-20 border-t border-slate-900 bg-slate-950/70">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+            <div>
+                <div class="inline-flex items-center space-x-2 text-xs font-semibold text-blue-400 uppercase tracking-widest mb-2">
+                    <span>Portfolio Hub</span>
+                </div>
+                <h2 class="text-3xl font-bold text-white tracking-tight">Featured Projects & Live Apps</h2>
+                <p class="text-slate-400 text-sm mt-1">Enterprise implementations alongside micro-apps running natively under this FastAPI host.</p>
+            </div>
+            <div class="mt-4 md:mt-0">
+                <a href="{{ settings.GITHUB_URL }}" target="_blank" class="inline-flex items-center space-x-2 text-xs text-blue-400 hover:text-blue-300 font-medium">
+                    <span>View all repositories on GitHub</span>
+                    <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {% for app in mini_apps %}
+            <div class="group flex flex-col justify-between rounded-xl border border-slate-800 bg-slate-900/40 p-6 hover:border-blue-500/50 hover:bg-slate-900/70 transition duration-300 shadow-lg">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-xs font-semibold px-2 py-0.5 rounded-full {{ 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' if 'Production' in app.status else 'bg-amber-500/10 text-amber-400 border border-amber-500/20' }}">
+                            {{ app.status }}
+                        </span>
+                        <span class="text-xs text-slate-500 font-mono">{{ app.tag }}</span>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-white group-hover:text-blue-400 transition mb-2">
+                        {{ app.title }}
+                    </h3>
+
+                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                        {{ app.description }}
+                    </p>
+                </div>
+
+                <div>
+                    <div class="flex flex-wrap gap-1.5 mb-6">
+                        {% for t in app.tech %}
+                        <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-slate-800/80 text-slate-400 border border-slate-700/50">
+                            {{ t }}
+                        </span>
+                        {% endfor %}
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-800/70 flex items-center justify-between">
+                        {% if app.url.startswith('/apps') %}
+                        <a href="{{ app.url }}" class="inline-flex items-center space-x-1.5 text-xs font-semibold text-blue-400 hover:text-blue-300">
+                            <span>Open Micro-App</span>
+                            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                        </a>
+                        {% else %}
+                        <a href="{{ app.url }}" target="_blank" class="inline-flex items-center space-x-1.5 text-xs font-semibold text-blue-400 hover:text-blue-300">
+                            <span>Inspect Project</span>
+                            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                        </a>
+                        {% endif %}
+
+                        <a href="{{ app.github }}" target="_blank" class="text-slate-400 hover:text-white transition">
+                            <i data-lucide="github" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Education & Certifications Section -->
+<section id="education" class="py-20 border-t border-slate-900 bg-slate-950/40">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Degree -->
+            <div class="rounded-xl border border-slate-800 bg-slate-900/40 p-6">
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+                        <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-white text-lg">{{ education.degree }}</h3>
+                        <p class="text-xs text-slate-400">{{ education.major }}</p>
+                    </div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-slate-800 flex justify-between text-xs text-slate-400">
+                    <span>{{ education.institution }}</span>
+                    <span class="font-mono">{{ education.period }}</span>
+                </div>
+            </div>
+
+            <!-- Certifications -->
+            <div class="rounded-xl border border-slate-800 bg-slate-900/40 p-6">
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
+                        <i data-lucide="award" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="font-bold text-white text-lg">Industry Certifications</h3>
+                </div>
+                <div class="space-y-2 mt-4 pt-2 border-t border-slate-800">
+                    {% for cert in education.certifications %}
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="text-slate-200 font-medium">{{ cert.name }}</span>
+                        <span class="text-slate-400 font-mono">{{ cert.issuer }} ({{ cert.year }})</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="py-20 border-t border-slate-900">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-bold text-white mb-3">Let's Connect & Build</h2>
+        <p class="text-slate-400 max-w-xl mx-auto mb-8 text-sm sm:text-base">
+            Looking for a Data Analyst, Python Consultant, or backend automation engineer? Reach out directly via email or LinkedIn.
+        </p>
+
+        <div class="inline-flex flex-wrap justify-center gap-4">
+            <a href="mailto:{{ settings.EMAIL }}" class="inline-flex items-center space-x-2.5 px-6 py-3 rounded-lg bg-red-600/90 hover:bg-red-600 text-white font-medium shadow-lg shadow-red-600/20 transition">
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                </svg>
+                <span>{{ settings.EMAIL }}</span>
+            </a>
+            <a href="{{ settings.LINKEDIN_URL }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-2.5 px-6 py-3 rounded-lg bg-[#0A66C2]/90 hover:bg-[#0A66C2] text-white font-medium shadow-lg shadow-blue-500/20 transition">
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.64c-.95 0-1.72.78-1.72 1.73s.77 1.73 1.72 1.73c.96 0 1.73-.78 1.73-1.73s-.77-1.73-1.73-1.73z"/>
+                </svg>
+                <span>LinkedIn</span>
+            </a>
+            <a href="{{ settings.GITHUB_URL }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-2.5 px-6 py-3 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-100 font-medium transition">
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+                </svg>
+                <span>GitHub</span>
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
