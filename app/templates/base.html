@@ -9,7 +9,7 @@
     <meta name="description" content="{{ settings.OWNER_BIO }}">
     <meta name="author" content="{{ settings.OWNER_NAME }}">
     
-    <!-- Tailwind CSS (CDN - zero build step, ultra fast) -->
+    <!-- Tailwind CSS (Clean, Minimalist Dev Palette) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -17,12 +17,9 @@
             theme: {
                 extend: {
                     colors: {
-                        brand: {
-                            50: '#eff6ff',
-                            100: '#dbeafe',
-                            500: '#3b82f6',
-                            600: '#2563eb',
-                            700: '#1d4ed8',
+                        slate: {
+                            850: '#151e2e',
+                            950: '#0b0f17',
                         }
                     }
                 }
@@ -30,13 +27,16 @@
         }
     </script>
     
+    <!-- Devicon for clean, official tech logos -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
+
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-blue-600 selection:text-white">
+<body class="bg-[#0b0f17] text-slate-200 min-h-screen flex flex-col font-sans antialiased selection:bg-blue-600 selection:text-white">
 
     <!-- Navigation -->
     {% include "partials/navbar.html" %}

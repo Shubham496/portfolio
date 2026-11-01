@@ -24,38 +24,59 @@ app.mount("/static", StaticFiles(directory="app/static"), name="static")
 # Templates
 templates = Jinja2Templates(directory="app/templates")
 
-# Detailed skills extracted from Shubham's Resume
-SKILLS_DATA = [
+# Categorized skills with dedicated Devicon / Tech Icon identifiers
+SKILLS_CATEGORIES = [
     {
-        "category": "Languages & Core",
-        "icon": "code-2",
-        "skills_list": ["Python (NumPy, Pandas)", "SQL (Advanced)", "Bash", "RESTful APIs", "FastAPI", "Django"]
+        "category": "Programming & Frameworks",
+        "skills": [
+            {"name": "Python", "icon": "devicon-python-plain colored"},
+            {"name": "SQL", "icon": "devicon-azuresqldatabase-plain colored"},
+            {"name": "FastAPI", "icon": "devicon-fastapi-plain colored"},
+            {"name": "Django", "icon": "devicon-django-plain colored"},
+            {"name": "Pandas", "icon": "devicon-pandas-plain colored"},
+            {"name": "NumPy", "icon": "devicon-numpy-plain colored"},
+            {"name": "Bash", "icon": "devicon-bash-plain colored"},
+        ]
     },
     {
-        "category": "Data Engineering & DBs",
-        "icon": "database",
-        "skills_list": ["PostgreSQL", "MS SQL Server", "MySQL", "Snowflake", "ETL Pipelines", "Data Warehousing"]
+        "category": "Databases & Storage",
+        "skills": [
+            {"name": "PostgreSQL", "icon": "devicon-postgresql-plain colored"},
+            {"name": "MySQL", "icon": "devicon-mysql-plain colored"},
+            {"name": "SQLite", "icon": "devicon-sqlite-plain colored"},
+            {"name": "Snowflake", "icon": "devicon-snowflake-plain colored"},
+            {"name": "MS SQL Server", "icon": "devicon-microsoftsqlserver-plain colored"},
+        ]
     },
     {
-        "category": "BI & Analytics Tools",
-        "icon": "bar-chart-3",
-        "skills_list": ["Power BI (DAX, Modeling)", "Tableau", "Retool", "Excel Modeling", "KPI Frameworks"]
+        "category": "Business Intelligence & Analytics",
+        "skills": [
+            {"name": "Power BI", "icon": "devicon-salesforce-plain colored"},
+            {"name": "Tableau", "icon": "devicon-clarity-plain colored"},
+            {"name": "Retool", "icon": "devicon-electron-original colored"},
+            {"name": "Excel Modeling", "icon": "devicon-unifiedmodelinglanguage-plain colored"},
+            {"name": "ETL Pipelines", "icon": "devicon-networkx-plain colored"},
+        ]
     },
     {
-        "category": "Workflow & Orchestration",
-        "icon": "cpu",
-        "skills_list": ["n8n Workflow Automation", "Data Cleansing", "Git / GitHub", "Docker", "Process Automation"]
+        "category": "DevOps, Tools & Orchestration",
+        "skills": [
+            {"name": "Git", "icon": "devicon-git-plain colored"},
+            {"name": "GitHub", "icon": "devicon-github-original"},
+            {"name": "Docker", "icon": "devicon-docker-plain colored"},
+            {"name": "n8n Automation", "icon": "devicon-ansible-plain colored"},
+            {"name": "Linux", "icon": "devicon-linux-plain colored"},
+        ]
     }
 ]
 
-# Experience history with the latest role amplified as requested
+# Experience history
 EXPERIENCE_DATA = [
     {
         "role": "Lead Python & Data Architecture Consultant",
         "company": "Ducat",
         "period": "August 2025 – Present",
         "type": "Consulting & Engineering",
-        "highlight": "Elevated Current Role",
         "points": [
             "Architecting enterprise-scale Python data services, asynchronous processing engines, and high-throughput data extraction systems for enterprise clients.",
             "Spearheading end-to-end data pipeline redesigns, boosting processing throughput by 42% and eliminating manual reporting bottlenecks.",
@@ -68,7 +89,6 @@ EXPERIENCE_DATA = [
         "company": "LNP Infotech",
         "period": "December 2025 – May 2026",
         "type": "Financial Systems & Compliance",
-        "highlight": "Fintech / Lending",
         "points": [
             "Processed and analyzed financial and operational transaction data for U.S.-based credit card and mortgage lending clients.",
             "Engineered automated n8n workflows for automated document verification, audits, and real-time compliance alerting.",
@@ -81,7 +101,6 @@ EXPERIENCE_DATA = [
         "company": "Netmax Technologies",
         "period": "December 2024 – November 2025",
         "type": "Analytics & Mentorship",
-        "highlight": "BI & Pipelines",
         "points": [
             "Processed enterprise datasets using Python, SQL, and Excel, producing actionable business insights and retention metrics.",
             "Engineered interactive Power BI & Tableau dashboards with automated refresh intervals for cross-functional stakeholders.",
@@ -93,7 +112,6 @@ EXPERIENCE_DATA = [
         "company": "JKM Amusements",
         "period": "July 2023 – December 2024",
         "type": "Full-Stack & Analytics",
-        "highlight": "Applications & Warehousing",
         "points": [
             "Built internal operations dashboards and inventory tracking applications using Python and Django.",
             "Designed and implemented RESTful APIs integrating backend database operations with front-facing operational portals.",
@@ -102,17 +120,8 @@ EXPERIENCE_DATA = [
     }
 ]
 
-# Featured Projects & Interactive Apps
-MINI_APPS_DATA = [
-    {
-        "title": "Project Sprint & Task Tracker",
-        "tag": "Database & To-Do App",
-        "description": "Live SQLite-backed task and milestone tracker tracking our current engineering roadmap, sprint priorities, and progress.",
-        "status": "Live App",
-        "tech": ["FastAPI", "SQLite", "Jinja2", "Tailwind"],
-        "url": "/apps/todos",
-        "github": settings.GITHUB_URL
-    },
+# Featured Enterprise Projects
+ENTERPRISE_PROJECTS = [
     {
         "title": "Adidas Retail Intelligence Dashboard",
         "tag": "Business Intelligence",
@@ -129,15 +138,6 @@ MINI_APPS_DATA = [
         "status": "Production Project",
         "tech": ["Python", "MySQL", "ETL Pipelines", "APIs"],
         "url": settings.GITHUB_URL,
-        "github": settings.GITHUB_URL
-    },
-    {
-        "title": "URL Shortener & Analytics Micro-App",
-        "tag": "FastAPI Sub-App",
-        "description": "High-speed URL routing engine with custom aliases, click attribution tracking, and SQLite persistence running on this portfolio.",
-        "status": "In Development",
-        "tech": ["FastAPI", "SQLite", "Tailwind", "REST API"],
-        "url": "/apps/url-shortener",
         "github": settings.GITHUB_URL
     },
     {
@@ -173,9 +173,9 @@ async def home(request: Request):
         context={
             "settings": settings,
             "title": "Home",
-            "skills": SKILLS_DATA,
+            "skill_categories": SKILLS_CATEGORIES,
             "experiences": EXPERIENCE_DATA,
-            "mini_apps": MINI_APPS_DATA,
+            "enterprise_projects": ENTERPRISE_PROJECTS,
             "education": EDUCATION_DATA,
         }
     )
