@@ -3,35 +3,37 @@ html {
     scroll-behavior: smooth;
 }
 
-/* Scrollbar: Responsive to Light & Dark Theme */
+/* Scrollbar: Responsive with floating inset margin */
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 14px;
 }
 
 /* Light Theme Scrollbar */
 ::-webkit-scrollbar-track {
-    background: #f1f5f9;
+    background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 4px;
+    background-color: #cbd5e1;
+    border-radius: 9999px;
+    border: 4px solid #f8fafc; /* Inset margin effect */
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+    background-color: #94a3b8;
 }
 
 /* Dark Theme Scrollbar */
 html.dark ::-webkit-scrollbar-track {
-    background: #020617;
+    background: transparent;
 }
 
 html.dark ::-webkit-scrollbar-thumb {
-    background: #1e293b;
-    border-radius: 4px;
+    background-color: #334155;
+    border-radius: 9999px;
+    border: 4px solid #0b0f17; /* Inset margin effect */
 }
 
 html.dark ::-webkit-scrollbar-thumb:hover {
-    background: #334155;
+    background-color: #475569;
 }
