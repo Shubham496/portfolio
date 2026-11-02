@@ -1,35 +1,35 @@
 // Theme toggle functionality (Dark / Light)
 document.addEventListener("DOMContentLoaded", () => {
     const themeToggleBtn = document.getElementById('theme-toggle');
-    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
-    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const sunIcon = document.getElementById('theme-toggle-sun-icon');
+    const moonIcon = document.getElementById('theme-toggle-moon-icon');
 
-    if (!themeToggleBtn) return;
+    if (!themeToggleBtn || !sunIcon || !moonIcon) return;
 
-    // Show correct icon: show Sun in dark mode (to switch to light), Moon in light mode (to switch to dark)
-    function updateIcons() {
-        if (document.documentElement.classList.contains('dark')) {
-            themeToggleDarkIcon.classList.add('hidden');
-            themeToggleLightIcon.classList.remove('hidden');
+    // Show Sun icon in Light mode, Moon icon in Dark mode
+    function updateThemeUI() {
+        const isDark = document.documentElement.classList.contains('dark');
+        if (isDark) {
+            moonIcon.classList.remove('hidden');
+            sunIcon.classList.add('hidden');
         } else {
-            themeToggleLightIcon.classList.add('hidden');
-            themeToggleDarkIcon.classList.remove('hidden');
-        }
-        if (window.lucide) {
-            lucide.createIcons();
+            sunIcon.classList.remove('hidden');
+            moonIcon.classList.add('hidden');
         }
     }
 
-    updateIcons();
+    // Set initial icon correctly on page load
+    updateThemeUI();
 
     themeToggleBtn.addEventListener('click', () => {
-        if (document.documentElement.classList.contains('dark')) {
+        const isDark = document.documentElement.classList.contains('dark');
+        if (isDark) {
             document.documentElement.classList.remove('dark');
             localStorage.setItem('color-theme', 'light');
         } else {
             document.documentElement.classList.add('dark');
             localStorage.setItem('color-theme', 'dark');
         }
-        updateIcons();
+        updateThemeUI();
     });
 });
