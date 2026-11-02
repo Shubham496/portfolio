@@ -24,48 +24,48 @@ app.mount("/static", StaticFiles(directory="app/static"), name="static")
 # Templates
 templates = Jinja2Templates(directory="app/templates")
 
-# Categorized skills with dedicated Devicon / Tech Icon identifiers
+# Accurate skills with verified Devicons and exact official SVGs
 SKILLS_CATEGORIES = [
     {
-        "category": "Programming & Frameworks",
+        "category": "Languages & Core",
         "skills": [
-            {"name": "Python", "icon": "devicon-python-plain colored"},
-            {"name": "SQL", "icon": "devicon-azuresqldatabase-plain colored"},
-            {"name": "FastAPI", "icon": "devicon-fastapi-plain colored"},
-            {"name": "Django", "icon": "devicon-django-plain colored"},
-            {"name": "Pandas", "icon": "devicon-pandas-plain colored"},
-            {"name": "NumPy", "icon": "devicon-numpy-plain colored"},
-            {"name": "Bash", "icon": "devicon-bash-plain colored"},
+            {"name": "Python", "type": "devicon", "icon": "devicon-python-plain colored"},
+            {"name": "SQL (Advanced)", "type": "devicon", "icon": "devicon-azuresqldatabase-plain colored"},
+            {"name": "FastAPI", "type": "devicon", "icon": "devicon-fastapi-plain colored"},
+            {"name": "Django", "type": "devicon", "icon": "devicon-django-plain colored"},
+            {"name": "Pandas", "type": "devicon", "icon": "devicon-pandas-plain colored"},
+            {"name": "NumPy", "type": "devicon", "icon": "devicon-numpy-plain colored"},
+            {"name": "Bash", "type": "devicon", "icon": "devicon-bash-plain colored"},
         ]
     },
     {
         "category": "Databases & Storage",
         "skills": [
-            {"name": "PostgreSQL", "icon": "devicon-postgresql-plain colored"},
-            {"name": "MySQL", "icon": "devicon-mysql-plain colored"},
-            {"name": "SQLite", "icon": "devicon-sqlite-plain colored"},
-            {"name": "Snowflake", "icon": "devicon-snowflake-plain colored"},
-            {"name": "MS SQL Server", "icon": "devicon-microsoftsqlserver-plain colored"},
+            {"name": "PostgreSQL", "type": "devicon", "icon": "devicon-postgresql-plain colored"},
+            {"name": "MySQL", "type": "devicon", "icon": "devicon-mysql-plain colored"},
+            {"name": "SQLite", "type": "devicon", "icon": "devicon-sqlite-plain colored"},
+            {"name": "Snowflake", "type": "svg", "slug": "snowflake", "color": "#29B5E8"},
+            {"name": "MS SQL Server", "type": "devicon", "icon": "devicon-microsoftsqlserver-plain colored"},
         ]
     },
     {
-        "category": "Business Intelligence & Analytics",
+        "category": "BI & Analytics",
         "skills": [
-            {"name": "Power BI", "icon": "devicon-salesforce-plain colored"},
-            {"name": "Tableau", "icon": "devicon-clarity-plain colored"},
-            {"name": "Retool", "icon": "devicon-electron-original colored"},
-            {"name": "Excel Modeling", "icon": "devicon-unifiedmodelinglanguage-plain colored"},
-            {"name": "ETL Pipelines", "icon": "devicon-networkx-plain colored"},
+            {"name": "Power BI", "type": "svg", "slug": "powerbi", "color": "#F2C811"},
+            {"name": "Tableau", "type": "svg", "slug": "tableau", "color": "#E97627"},
+            {"name": "Retool", "type": "devicon", "icon": "devicon-electron-original colored"},
+            {"name": "Excel Modeling", "type": "devicon", "icon": "devicon-unifiedmodelinglanguage-plain colored"},
+            {"name": "ETL Pipelines", "type": "devicon", "icon": "devicon-networkx-plain colored"},
         ]
     },
     {
-        "category": "DevOps, Tools & Orchestration",
+        "category": "Workflow & Orchestration",
         "skills": [
-            {"name": "Git", "icon": "devicon-git-plain colored"},
-            {"name": "GitHub", "icon": "devicon-github-original"},
-            {"name": "Docker", "icon": "devicon-docker-plain colored"},
-            {"name": "n8n Automation", "icon": "devicon-ansible-plain colored"},
-            {"name": "Linux", "icon": "devicon-linux-plain colored"},
+            {"name": "Git", "type": "devicon", "icon": "devicon-git-plain colored"},
+            {"name": "GitHub", "type": "devicon", "icon": "devicon-github-original"},
+            {"name": "Docker", "type": "devicon", "icon": "devicon-docker-plain colored"},
+            {"name": "n8n Automation", "type": "svg", "slug": "n8n", "color": "#EA4B71"},
+            {"name": "Linux", "type": "devicon", "icon": "devicon-linux-plain colored"},
         ]
     }
 ]

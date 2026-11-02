@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +9,7 @@
     <meta name="description" content="{{ settings.OWNER_BIO }}">
     <meta name="author" content="{{ settings.OWNER_NAME }}">
     
-    <!-- Tailwind CSS (Clean, Minimalist Dev Palette) -->
+    <!-- Tailwind CSS (Support both Dark & Light Themes) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -27,7 +27,16 @@
         }
     </script>
     
-    <!-- Devicon for clean, official tech logos -->
+    <!-- Inline Theme Initializer (prevents flicker on reload) -->
+    <script>
+        if (localStorage.getItem('color-theme') === 'light' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: light)').matches)) {
+            document.documentElement.classList.remove('dark');
+        } else {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+
+    <!-- Devicon -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
 
     <!-- Lucide Icons -->
@@ -36,7 +45,7 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
-<body class="bg-[#0b0f17] text-slate-200 min-h-screen flex flex-col font-sans antialiased selection:bg-blue-600 selection:text-white">
+<body class="bg-slate-50 text-slate-800 dark:bg-[#0b0f17] dark:text-slate-200 min-h-screen flex flex-col font-sans antialiased transition-colors duration-200 selection:bg-blue-600 selection:text-white">
 
     <!-- Navigation -->
     {% include "partials/navbar.html" %}
