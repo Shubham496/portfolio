@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!themeToggleBtn) return;
 
-    // Show current icon based on theme
+    // Show correct icon: show Sun in dark mode (to switch to light), Moon in light mode (to switch to dark)
     function updateIcons() {
         if (document.documentElement.classList.contains('dark')) {
             themeToggleDarkIcon.classList.add('hidden');
