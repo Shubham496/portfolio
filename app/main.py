@@ -4,6 +4,8 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, FileResponse
 from app.core.config import settings
 from app.apps.todos.router import router as todos_router
+from app.apps.courses.router import router as courses_router
+from app.apps.courses.services import get_instructor_curriculum_profile
 import os
 
 # Initialize application
@@ -17,6 +19,7 @@ app = FastAPI(
 
 # Register Sub-Apps / Mini-Apps
 app.include_router(todos_router)
+app.include_router(courses_router)
 
 # Mount static files
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
@@ -177,6 +180,7 @@ async def home(request: Request):
             "experiences": EXPERIENCE_DATA,
             "enterprise_projects": ENTERPRISE_PROJECTS,
             "education": EDUCATION_DATA,
+            "course_profile": get_instructor_curriculum_profile(),
         }
     )
 

@@ -9,3 +9,5 @@ services:
         value: production
       - key: PYTHON_VERSION
         value: 3.10.11
+      - key: DATABASE_URL
+        sync: false # Set via Render dashboard: from Neon.tech, Supabase, or Render PostgreSQL

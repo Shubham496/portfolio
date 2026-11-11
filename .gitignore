@@ -45,6 +45,7 @@ ENV/
 *.swp
 *.swo
 *~
+~$*
 .DS_Store
 
 # Testing & Coverage
