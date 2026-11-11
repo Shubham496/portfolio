@@ -212,21 +212,28 @@ async def registration_success_page(request: Request):
         }
     )
 
-@app.get("/course/syllabus/download")
+@app.get("/course/syllabus/download", response_class=FileResponse)
 async def download_full_course_syllabus():
-    """Download complete printable Data Analysis syllabus brochure."""
-    content = generate_syllabus_html_brochure()
-    return HTMLResponse(
-        content=content,
-        headers={
-            "Content-Disposition": "attachment; filename=Data_Analysis_Full_Course_Syllabus.html"
-        }
-    )
+    """Download complete Data Analysis syllabus PDF brochure."""
+    pdf_path = "app/static/pdf/Data_Analysis_Syllabus.pdf"
+    if os.path.exists(pdf_path):
+        return FileResponse(
+            path=pdf_path,
+            filename="Data_Analysis_Full_Course_Syllabus_Shubham_Singh.pdf",
+            media_type="application/pdf",
+        )
+    return HTMLResponse("Syllabus PDF file not found", status_code=404)
 
-@app.get("/course/syllabus", response_class=HTMLResponse)
+@app.get("/course/syllabus", response_class=FileResponse)
 async def view_course_syllabus():
-    """View printable Data Analysis syllabus brochure directly in browser."""
-    return HTMLResponse(content=generate_syllabus_html_brochure())
+    """View Data Analysis syllabus PDF directly in browser."""
+    pdf_path = "app/static/pdf/Data_Analysis_Syllabus.pdf"
+    if os.path.exists(pdf_path):
+        return FileResponse(
+            path=pdf_path,
+            media_type="application/pdf",
+        )
+    return HTMLResponse("Syllabus PDF file not found", status_code=404)
 
 @app.get("/resume", response_class=FileResponse)
 async def download_resume():

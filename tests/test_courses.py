@@ -3,6 +3,8 @@ from fastapi.testclient import TestClient
 from app.main import app
 from app.apps.courses.database import Base, engine, SessionLocal
 from app.apps.courses.models import Batch, StudentLead
+from app.apps.courses.services import init_courses_db
+import os
 
 client = TestClient(app)
 
@@ -10,6 +12,7 @@ client = TestClient(app)
 def setup_function():
     """Ensure clean test state before tests."""
     Base.metadata.create_all(bind=engine)
+    init_courses_db()
 
 
 def test_instructor_endpoint():
@@ -184,66 +187,87 @@ def test_registration_success_page():
     assert "Saturday & Sunday" in response.text
 
 
+def test_registration_without_email():
+    """Verify student can register without providing an email address."""
+    payload = {
+        "full_name": "Suresh Kumar",
+        "email": "",
+        "phone": "+91 9999888877",
+        "current_status": "Fresher",
+        "message": "Prefer WhatsApp contact only."
+    }
+    response = client.post("/api/courses/register", json=payload)
+    assert response.status_code == 201
+    data = response.json()
+    assert data["success"] is True
+    assert data["data"]["email"] in (None, "")
+    assert data["data"]["full_name"] == "Suresh Kumar"
+
+
 def test_syllabus_download_and_view():
-    """Verify course syllabus download button and printable view."""
+    """Verify course syllabus download button and printable view serve PDF file."""
     # Download attachment
     dl_resp = client.get("/course/syllabus/download")
     assert dl_resp.status_code == 200
-    assert "attachment; filename=Data_Analysis_Full_Course_Syllabus.html" in dl_resp.headers["content-disposition"]
-    assert "Complete Data Analysis Masterclass" in dl_resp.text
-    assert "Python" in dl_resp.text
-    assert "SQL" in dl_resp.text
-    assert "Power BI" in dl_resp.text
+    assert "application/pdf" in dl_resp.headers["content-type"]
+    assert "Data_Analysis_Full_Course_Syllabus_Shubham_Singh.pdf" in dl_resp.headers["content-disposition"]
+    assert dl_resp.content.startswith(b"%PDF")
 
     # Inline view
     view_resp = client.get("/course/syllabus")
     assert view_resp.status_code == 200
-    assert "Complete Data Analysis Masterclass" in view_resp.text
+    assert "application/pdf" in view_resp.headers["content-type"]
+    assert view_resp.content.startswith(b"%PDF")
 
 
 def test_admin_auth_and_dashboard_flow():
-    """Verify admin signup, login, protected dashboard, and lead status update."""
+    """Verify admin login only (signup disabled), protected dashboard, and lead status update."""
     # Unauthenticated access to dashboard must redirect to login
     unauth_resp = client.get("/admin/dashboard", follow_redirects=False)
     assert unauth_resp.status_code == 303
     assert "/admin/login" in unauth_resp.headers["location"]
 
-    # Signup new admin with unique credentials
-    import uuid
-    uid = uuid.uuid4().hex[:6]
-    test_user = f"admin_{uid}"
-    test_email = f"admin_{uid}@example.com"
-    signup_data = {
-        "username": test_user,
-        "email": test_email,
-        "password": "securepassword123",
-        "confirm_password": "securepassword123"
-    }
-    signup_resp = client.post("/admin/signup", data=signup_data, follow_redirects=False)
+    # Registration / Signup is strictly disabled - must redirect to login
+    signup_resp = client.get("/admin/signup", follow_redirects=False)
     assert signup_resp.status_code == 303
-    assert "/admin/dashboard" in signup_resp.headers["location"]
-    session_cookie = signup_resp.cookies.get("admin_session")
+    assert "/admin/login" in signup_resp.headers["location"]
+
+    signup_post_resp = client.post("/admin/signup", data={"username": "hacker"}, follow_redirects=False)
+    assert signup_post_resp.status_code == 303
+    assert "/admin/login" in signup_post_resp.headers["location"]
+
+    # Test login with invalid password
+    bad_login = client.post("/admin/login", data={"username": "admin", "password": "wrongpassword"})
+    assert bad_login.status_code == 401
+    assert "Invalid username or password" in bad_login.text
+
+    # Test login with valid admin credentials
+    admin_password = os.getenv("ADMIN_PASSWORD")
+    if not admin_password:
+        admin_password = "TemporaryTestPassword123!"
+        from app.apps.courses.auth import hash_password
+        from app.apps.courses.models import AdminUser
+        with SessionLocal() as db:
+            admin_u = db.query(AdminUser).filter(AdminUser.username == "admin").first()
+            if admin_u:
+                admin_u.hashed_password = hash_password(admin_password)
+                db.commit()
+
+    login_data = {
+        "username": "admin",
+        "password": admin_password
+    }
+    login_resp = client.post("/admin/login", data=login_data, follow_redirects=False)
+    assert login_resp.status_code == 303
+    assert "/admin/dashboard" in login_resp.headers["location"]
+    session_cookie = login_resp.cookies.get("admin_session")
     assert session_cookie is not None
 
     # Access dashboard with session cookie
     dash_resp = client.get("/admin/dashboard", cookies={"admin_session": session_cookie})
     assert dash_resp.status_code == 200
     assert "Student Leads &amp; Batch Admissions" in dash_resp.text or "Student Leads & Batch Admissions" in dash_resp.text
-    assert test_user in dash_resp.text
-
-    # Test login with valid credentials
-    login_data = {
-        "username_or_email": test_user,
-        "password": "securepassword123"
-    }
-    login_resp = client.post("/admin/login", data=login_data, follow_redirects=False)
-    assert login_resp.status_code == 303
-    assert "/admin/dashboard" in login_resp.headers["location"]
-
-    # Test login with invalid password
-    bad_login = client.post("/admin/login", data={"username_or_email": test_user, "password": "wrong"})
-    assert bad_login.status_code == 401
-    assert "Invalid username or password" in bad_login.text
+    assert "admin" in dash_resp.text
 
     # Test logout
     logout_resp = client.get("/admin/logout", follow_redirects=False)

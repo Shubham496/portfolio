@@ -9,7 +9,7 @@ EMAIL_REGEX = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 class EnquiryCreate(BaseModel):
     """Schema for a prospective student enquiry or callback request."""
     full_name: str = Field(..., min_length=2, max_length=120, description="Full name of student")
-    email: str = Field(..., description="Student email address")
+    email: Optional[str] = Field(default="", description="Student email address (optional)")
     phone: str = Field(..., min_length=7, max_length=25, description="Mobile / WhatsApp contact number")
     current_status: Optional[str] = Field(
         default="Working Professional",
@@ -27,9 +27,11 @@ class EnquiryCreate(BaseModel):
 
     @field_validator("email")
     @classmethod
-    def validate_email(cls, v: str) -> str:
+    def validate_email(cls, v: Optional[str]) -> Optional[str]:
+        if not v:
+            return ""
         v = v.strip().lower()
-        if not EMAIL_REGEX.match(v):
+        if v and not EMAIL_REGEX.match(v):
             raise ValueError("Invalid email format")
         return v
 
@@ -37,7 +39,7 @@ class EnquiryCreate(BaseModel):
 class BatchRegistrationCreate(BaseModel):
     """Schema for direct registration into an upcoming weekend batch."""
     full_name: str = Field(..., min_length=2, max_length=120, description="Full name of student")
-    email: str = Field(..., description="Student email address")
+    email: Optional[str] = Field(default="", description="Student email address (optional)")
     phone: str = Field(..., min_length=7, max_length=25, description="Mobile / WhatsApp contact number")
     batch_id: Optional[int] = Field(
         default=None,
@@ -62,9 +64,11 @@ class BatchRegistrationCreate(BaseModel):
 
     @field_validator("email")
     @classmethod
-    def validate_email(cls, v: str) -> str:
+    def validate_email(cls, v: Optional[str]) -> Optional[str]:
+        if not v:
+            return ""
         v = v.strip().lower()
-        if not EMAIL_REGEX.match(v):
+        if v and not EMAIL_REGEX.match(v):
             raise ValueError("Invalid email format")
         return v
 
@@ -118,7 +122,7 @@ class LeadOut(BaseModel):
     batch_title: Optional[str]
     batch_code: Optional[str]
     full_name: str
-    email: str
+    email: Optional[str] = ""
     phone: str
     current_status: Optional[str]
     prior_experience: Optional[str]

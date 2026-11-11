@@ -210,5 +210,12 @@ git commit -m "style(ui): description"
    - Prominent CTA buttons: "Enroll in Weekend Batch" (opens registration modal) & "Ask a Question / Enquiry" (opens enquiry modal).
 2. **Interactive Modals / Forms**:
    - Build client-side asynchronous modal forms submitting to `/api/courses/register` and `/api/courses/enquiry` via Fetch API with immediate feedback and toast notifications.
-3. **Admin Dashboard / Mini-app**:
-   - Provide a lightweight UI at `/courses/leads` to view, filter, update statuses, and one-click export CSV.
+3. **Admin Dashboard & Monitoring**:
+   - Hidden admin portal at `/admin/login` and `/admin/dashboard`.
+   - Registration strictly disabled on `/admin` (`/admin/signup` redirects to `/admin/login`).
+   - Default instructor user: `admin`, seeded automatically with bcrypt password hash via `ADMIN_PASSWORD` or fallback hash (no plaintext in repository).
+   - Real-time lead management, pipeline stage updates, notes, search, filtering, and one-click CSV export.
+4. **Syllabus PDF Delivery**:
+   - Course syllabus is served as a dedicated PDF file from `app/static/pdf/Data_Analysis_Syllabus.pdf` at `/course/syllabus/download` (attachment) and `/course/syllabus` (inline view).
+5. **Optional Student Email**:
+   - Email is strictly optional on all enquiry and batch registration forms (`register.html`, `index.html` modals, and `/api/courses/*`). Only full name and phone/WhatsApp are mandatory.

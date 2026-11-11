@@ -8,7 +8,6 @@ from sqlalchemy import or_
 from app.apps.courses.database import get_db
 from app.apps.courses.models import AdminUser, StudentLead
 from app.apps.courses.auth import (
-    hash_password,
     verify_password,
     create_session_token,
     get_current_admin,
@@ -31,7 +30,7 @@ async def admin_root():
 
 
 # -------------------------------------------------------------
-# Sign In
+# Sign In (Only Login Permitted - Registration Disabled)
 # -------------------------------------------------------------
 
 @router.get("/login", response_class=HTMLResponse)
@@ -50,16 +49,18 @@ async def admin_login_page(request: Request, db: Session = Depends(get_db)):
 @router.post("/login", response_class=HTMLResponse)
 async def admin_login_submit(
     request: Request,
-    username_or_email: str = Form(...),
+    username: Optional[str] = Form(None),
+    username_or_email: Optional[str] = Form(None),
     password: str = Form(...),
     db: Session = Depends(get_db)
 ):
     """Authenticate instructor and create signed session cookie."""
-    query_val = username_or_email.strip().lower()
+    raw_user = (username or username_or_email or "").strip().lower()
+    
     admin = db.query(AdminUser).filter(
         or_(
-            AdminUser.username.ilike(query_val),
-            AdminUser.email.ilike(query_val)
+            AdminUser.username.ilike(raw_user),
+            AdminUser.email.ilike(raw_user)
         )
     ).first()
 
@@ -82,94 +83,17 @@ async def admin_login_submit(
         httponly=True,
         max_age=60 * 60 * 24 * 7,  # 7 days
         samesite="lax",
-        secure=False  # True in strict HTTPS production if desired
-    )
-    return response
-
-
-# -------------------------------------------------------------
-# Sign Up
-# -------------------------------------------------------------
-
-@router.get("/signup", response_class=HTMLResponse)
-async def admin_signup_page(request: Request, db: Session = Depends(get_db)):
-    """Render instructor sign up page."""
-    admin = get_current_admin(request=request, db=db)
-    if admin:
-        return RedirectResponse(url="/admin/dashboard", status_code=303)
-    return templates.TemplateResponse(
-        request=request,
-        name="admin/signup.html",
-        context={"settings": settings, "error": None}
-    )
-
-
-@router.post("/signup", response_class=HTMLResponse)
-async def admin_signup_submit(
-    request: Request,
-    username: str = Form(...),
-    email: str = Form(...),
-    password: str = Form(...),
-    confirm_password: str = Form(...),
-    db: Session = Depends(get_db)
-):
-    """Register a new instructor account."""
-    clean_username = username.strip().lower()
-    clean_email = email.strip().lower()
-
-    if password != confirm_password:
-        return templates.TemplateResponse(
-            request=request,
-            name="admin/signup.html",
-            context={"settings": settings, "error": "Passwords do not match."}
-        )
-
-    if len(password) < 6:
-        return templates.TemplateResponse(
-            request=request,
-            name="admin/signup.html",
-            context={"settings": settings, "error": "Password must be at least 6 characters."}
-        )
-
-    # Check for existing user
-    existing = db.query(AdminUser).filter(
-        or_(
-            AdminUser.username == clean_username,
-            AdminUser.email == clean_email
-        )
-    ).first()
-
-    if existing:
-        return templates.TemplateResponse(
-            request=request,
-            name="admin/signup.html",
-            context={
-                "settings": settings,
-                "error": "An account with that username or email already exists. Please sign in."
-            }
-        )
-
-    new_admin = AdminUser(
-        username=clean_username,
-        email=clean_email,
-        hashed_password=hash_password(password),
-        is_active=True
-    )
-    db.add(new_admin)
-    db.commit()
-    db.refresh(new_admin)
-
-    response = RedirectResponse(url="/admin/dashboard", status_code=303)
-    token = create_session_token(admin_id=new_admin.id, username=new_admin.username)
-    response.set_cookie(
-        key=SESSION_COOKIE_NAME,
-        value=token,
-        httponly=True,
-        max_age=60 * 60 * 24 * 7,
-        samesite="lax",
         secure=False
     )
     return response
+
+
+# Public registration is strictly disabled
+@router.get("/signup")
+@router.post("/signup")
+async def admin_signup_disabled():
+    """Sign up is disabled for security. Only pre-configured admin login is permitted."""
+    return RedirectResponse(url="/admin/login", status_code=303)
 
 
 # -------------------------------------------------------------

@@ -1,3 +1,4 @@
+import os
 import csv
 import io
 import logging
@@ -6,7 +7,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import or_, desc
 
 from app.apps.courses.database import engine, Base
-from app.apps.courses.models import Batch, StudentLead
+from app.apps.courses.models import Batch, StudentLead, AdminUser
 from app.apps.courses.schemas import (
     EnquiryCreate,
     BatchRegistrationCreate,
@@ -50,6 +51,34 @@ def init_courses_db():
                 db.add(default_batch)
                 db.commit()
                 logger.info("Default Weekend Data Analysis batch seeded.")
+
+            # Seed / ensure default 'admin' user exists
+            admin_user = db.query(AdminUser).filter(AdminUser.username == "admin").first()
+            env_password = os.getenv("ADMIN_PASSWORD")
+            env_hash = os.getenv("ADMIN_PASSWORD_HASH")
+            default_hash = "$2b$12$uSiwGr.E6jVYlVLLvQmj/exumDJRDsAT2rJH1H.YKjsRGO9YCfJ8e"
+
+            if env_password:
+                from app.apps.courses.auth import hash_password
+                target_hash = hash_password(env_password)
+            elif env_hash:
+                target_hash = env_hash
+            else:
+                target_hash = default_hash
+
+            if not admin_user:
+                admin_user = AdminUser(
+                    username="admin",
+                    email="admin@mythostech.in",
+                    hashed_password=target_hash,
+                    is_active=True
+                )
+                db.add(admin_user)
+                db.commit()
+                logger.info("Admin user 'admin' seeded.")
+            else:
+                admin_user.hashed_password = target_hash
+                db.commit()
     except Exception as e:
         logger.error(f"Error initializing course database: {e}", exc_info=True)
 
@@ -93,7 +122,7 @@ def create_student_enquiry(
         lead_type="enquiry",
         batch_id=default_batch.id if default_batch else None,
         full_name=enquiry.full_name.strip(),
-        email=enquiry.email.strip().lower(),
+        email=enquiry.email.strip().lower() if enquiry.email else "",
         phone=enquiry.phone.strip(),
         current_status=enquiry.current_status,
         prior_experience=None,
@@ -133,7 +162,7 @@ def create_batch_registration(
         lead_type="batch_registration",
         batch_id=target_batch.id if target_batch else None,
         full_name=reg.full_name.strip(),
-        email=reg.email.strip().lower(),
+        email=reg.email.strip().lower() if reg.email else "",
         phone=reg.phone.strip(),
         current_status=reg.current_status,
         prior_experience=reg.prior_experience,

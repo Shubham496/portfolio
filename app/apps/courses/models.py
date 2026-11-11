@@ -74,7 +74,7 @@ class StudentLead(Base):
     
     # Student Contact Info
     full_name = Column(String(120), nullable=False)
-    email = Column(String(150), nullable=False, index=True)
+    email = Column(String(150), nullable=True, index=True)
     phone = Column(String(30), nullable=False, index=True)
     
     # Student Profile / Goals
