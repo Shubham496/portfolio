@@ -113,7 +113,11 @@ function bindForm(formId, endpoint, submitBtnId, successTitle, successMsg) {
             if (res.ok || res.status === 201) {
                 closeAllModals();
                 form.reset();
-                showToast('success', successTitle, successMsg);
+                if (formId === 'enroll-form') {
+                    window.location.href = '/registration-success';
+                } else {
+                    showToast('success', successTitle, successMsg);
+                }
             } else {
                 const err = await res.json().catch(() => ({}));
                 const detail = Array.isArray(err.detail)

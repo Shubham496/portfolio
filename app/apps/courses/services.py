@@ -334,3 +334,142 @@ def get_instructor_curriculum_profile() -> Dict[str, Any]:
             "fees": None  # Explicitly None - NO fees on page
         }
     }
+
+
+
+def generate_syllabus_html_brochure() -> str:
+    """Generate a clean, standalone, printable syllabus brochure HTML document."""
+    profile = get_instructor_curriculum_profile()
+    instructor = profile["instructor"]
+    course = profile["course"]
+    modules = course["syllabus_modules"]
+
+    modules_html = ""
+    for i, m in enumerate(modules, start=1):
+        topics_li = "".join([f"<li style='margin-bottom:6px;'>• {t}</li>" for t in m["topics"]])
+        modules_html += f"""
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:18px; margin-bottom:14px; page-break-inside:avoid;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+                <span style="background:#2563eb; color:#ffffff; font-weight:bold; font-size:12px; width:24px; height:24px; border-radius:6px; display:inline-flex; align-items:center; justify-content:center;">{i}</span>
+                <h3 style="margin:0; font-size:15px; font-weight:700; color:#0f172a;">{m['module']}</h3>
+            </div>
+            <ul style="margin:0; padding-left:18px; font-size:13px; color:#475569; line-height:1.6;">
+                {topics_li}
+            </ul>
+        </div>
+        """
+
+    html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Complete Data Analysis Masterclass Syllabus | {instructor['name']}</title>
+    <style>
+        body {{
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            background-color: #ffffff;
+            color: #0f172a;
+        }}
+        .container {{
+            max-width: 800px;
+            margin: 0 auto;
+        }}
+        .header {{
+            border-bottom: 2px solid #2563eb;
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+        }}
+        .badge {{
+            display: inline-block;
+            background: #dbeafe;
+            color: #1e40af;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }}
+        .schedule-box {{
+            background: #0f172a;
+            color: #ffffff;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }}
+        .footer {{
+            border-top: 1px solid #e2e8f0;
+            margin-top: 30px;
+            padding-top: 15px;
+            font-size: 12px;
+            color: #64748b;
+            text-align: center;
+        }}
+        @media print {{
+            body {{ padding: 0; }}
+            .no-print {{ display: none; }}
+            .schedule-box {{ background: #1e293b !important; -webkit-print-color-adjust: exact; }}
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="no-print" style="margin-bottom:20px; text-align:right;">
+            <button onclick="window.print()" style="background:#2563eb; color:#fff; border:none; padding:8px 16px; border-radius:8px; font-weight:600; cursor:pointer;">
+                🖨️ Print / Save as PDF
+            </button>
+        </div>
+
+        <div class="header">
+            <span class="badge">Official Course Curriculum</span>
+            <h1 style="margin:0 0 6px 0; font-size:28px; font-weight:800; color:#0f172a;">Complete Data Analysis Masterclass</h1>
+            <p style="margin:0; font-size:14px; color:#475569;">
+                Comprehensive Hands-On Mentorship: <strong>Python, SQL, Power BI, Excel & Tableau</strong>
+            </p>
+            <p style="margin:4px 0 0 0; font-size:13px; color:#64748b;">
+                Instructor: <strong>{instructor['name']}</strong> · {instructor['title']}
+            </p>
+        </div>
+
+        <div class="schedule-box">
+            <div>
+                <div style="font-size:11px; text-transform:uppercase; color:#94a3b8; font-weight:600;">Fixed Batch Schedule</div>
+                <div style="font-size:16px; font-weight:bold; color:#ffffff; margin-top:2px;">Saturday & Sunday Only</div>
+            </div>
+            <div>
+                <div style="font-size:11px; text-transform:uppercase; color:#94a3b8; font-weight:600;">Timings</div>
+                <div style="font-size:16px; font-weight:bold; color:#60a5fa; margin-top:2px;">6:00 PM – 8:00 PM IST</div>
+            </div>
+            <div>
+                <div style="font-size:11px; text-transform:uppercase; color:#94a3b8; font-weight:600;">Duration</div>
+                <div style="font-size:16px; font-weight:bold; color:#ffffff; margin-top:2px;">8–10 Weeks (Live Online)</div>
+            </div>
+        </div>
+
+        <h2 style="font-size:18px; font-weight:700; margin-bottom:14px; color:#0f172a;">Course Syllabus by Module</h2>
+        {modules_html}
+
+        <div style="background:#f1f5f9; border-radius:12px; padding:18px; margin-top:20px;">
+            <h3 style="margin:0 0 8px 0; font-size:14px; font-weight:700;">Mentorship & Hands-On Projects</h3>
+            <p style="margin:0; font-size:13px; color:#475569; line-height:1.6;">
+                Every module includes hands-on industry datasets (E-commerce retail, financial transactions, marketing analytics). 
+                Students graduate with end-to-end portfolio projects ready for resume and LinkedIn showcase.
+            </p>
+        </div>
+
+        <div class="footer">
+            <p style="margin:0 0 4px 0;">Instructor Contact: Phone: {instructor['phone']} · Email: {instructor['email']}</p>
+            <p style="margin:0;">© {instructor['name']}. Weekend Data Analysis Mentorship Program.</p>
+        </div>
+    </div>
+</body>
+</html>"""
+    return html

@@ -171,7 +171,7 @@ async def register_for_batch(
     result = create_batch_registration(db=db, reg=reg_obj, client_ip=client_ip)
 
     if "text/html" in request.headers.get("accept", "") and "application/json" not in content_type:
-        return RedirectResponse(url="/#registration-success", status_code=303)
+        return RedirectResponse(url="/registration-success", status_code=303)
 
     return JSONResponse(status_code=status.HTTP_201_CREATED, content=result)
 

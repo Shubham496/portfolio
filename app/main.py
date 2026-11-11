@@ -5,7 +5,8 @@ from fastapi.responses import HTMLResponse, FileResponse
 from app.core.config import settings
 from app.apps.todos.router import router as todos_router
 from app.apps.courses.router import router as courses_router
-from app.apps.courses.services import get_instructor_curriculum_profile
+from app.apps.courses.admin_router import router as admin_router
+from app.apps.courses.services import get_instructor_curriculum_profile, generate_syllabus_html_brochure
 import os
 
 # Initialize application
@@ -20,6 +21,7 @@ app = FastAPI(
 # Register Sub-Apps / Mini-Apps
 app.include_router(todos_router)
 app.include_router(courses_router)
+app.include_router(admin_router)
 
 # Mount static files
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
@@ -169,7 +171,7 @@ EDUCATION_DATA = {
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
-    """Render the primary portfolio homepage."""
+    """Render the primary portfolio and course homepage."""
     return templates.TemplateResponse(
         request=request,
         name="index.html",
@@ -183,6 +185,48 @@ async def home(request: Request):
             "course_profile": get_instructor_curriculum_profile(),
         }
     )
+
+@app.get("/register", response_class=HTMLResponse)
+async def register_page(request: Request):
+    """Dedicated registration page for prospective students."""
+    return templates.TemplateResponse(
+        request=request,
+        name="register.html",
+        context={
+            "settings": settings,
+            "title": "Register for Weekend Batch",
+            "course_profile": get_instructor_curriculum_profile(),
+        }
+    )
+
+@app.get("/registration-success", response_class=HTMLResponse)
+async def registration_success_page(request: Request):
+    """Confirmation page informing student that we received registration and will contact them."""
+    return templates.TemplateResponse(
+        request=request,
+        name="confirmation.html",
+        context={
+            "settings": settings,
+            "title": "Registration Confirmed",
+            "course_profile": get_instructor_curriculum_profile(),
+        }
+    )
+
+@app.get("/course/syllabus/download")
+async def download_full_course_syllabus():
+    """Download complete printable Data Analysis syllabus brochure."""
+    content = generate_syllabus_html_brochure()
+    return HTMLResponse(
+        content=content,
+        headers={
+            "Content-Disposition": "attachment; filename=Data_Analysis_Full_Course_Syllabus.html"
+        }
+    )
+
+@app.get("/course/syllabus", response_class=HTMLResponse)
+async def view_course_syllabus():
+    """View printable Data Analysis syllabus brochure directly in browser."""
+    return HTMLResponse(content=generate_syllabus_html_brochure())
 
 @app.get("/resume", response_class=FileResponse)
 async def download_resume():

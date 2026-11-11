@@ -46,8 +46,13 @@
                         <i data-lucide="user-plus" class="w-4 h-4"></i>
                         <span>Register for Weekend Batch</span>
                     </button>
+                    <a href="/course/syllabus/download"
+                        class="inline-flex items-center space-x-2 px-5 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-medium text-sm transition active:scale-95">
+                        <i data-lucide="download" class="w-4 h-4 text-blue-500"></i>
+                        <span>Download Full Course</span>
+                    </a>
                     <button onclick="openModal('enquiry')"
-                        class="inline-flex items-center space-x-2 px-6 py-3 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-medium text-sm transition active:scale-95">
+                        class="inline-flex items-center space-x-2 px-5 py-3 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-medium text-sm transition active:scale-95">
                         <i data-lucide="message-circle-question" class="w-4 h-4"></i>
                         <span>Ask a Question</span>
                     </button>
@@ -151,11 +156,15 @@
                     <div class="text-xs text-slate-600 dark:text-slate-400 mt-0.5">6:00 PM – 8:00 PM IST &nbsp;·&nbsp; 2 hrs/day &nbsp;·&nbsp; 4 hrs/week &nbsp;·&nbsp; 8–10 Weeks Hands-On</div>
                 </div>
             </div>
-            <div class="flex gap-2 shrink-0">
+            <div class="flex flex-wrap gap-2 shrink-0">
                 <button onclick="openModal('enroll')" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm rounded-lg shadow transition">
                     Reserve My Seat
                 </button>
-                <button onclick="openModal('enquiry')" class="px-5 py-2.5 border border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/40 font-medium text-sm rounded-lg transition">
+                <a href="/course/syllabus/download" class="px-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-semibold text-sm rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 shadow-sm transition inline-flex items-center space-x-1.5">
+                    <i data-lucide="download" class="w-3.5 h-3.5 text-blue-500"></i>
+                    <span>Download Syllabus</span>
+                </a>
+                <button onclick="openModal('enquiry')" class="px-4 py-2.5 border border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/40 font-medium text-sm rounded-lg transition">
                     Ask First
                 </button>
             </div>
@@ -170,9 +179,16 @@
 <section id="syllabus" class="py-10 border-b border-slate-200 dark:border-slate-800 transition-colors">
     <div class="max-w-5xl mx-auto px-4 sm:px-6">
 
-        <div class="mb-6">
-            <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-1">Full Course Syllabus</h2>
-            <p class="text-slate-500 dark:text-slate-400 text-sm">Every module is project-driven — you build real dashboards and analysis scripts.</p>
+        <div class="mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+            <div>
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-1">Full Course Syllabus</h2>
+                <p class="text-slate-500 dark:text-slate-400 text-sm">Every module is project-driven — you build real dashboards and analysis scripts.</p>
+            </div>
+            <a href="/course/syllabus/download" 
+               class="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow transition self-start sm:self-auto">
+                <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                <span>Download Full Course</span>
+            </a>
         </div>
 
         {% set syllabus = course_profile.course.syllabus_modules %}
@@ -252,8 +268,13 @@
                 <i data-lucide="user-plus" class="w-4 h-4"></i>
                 <span>Register for Weekend Batch</span>
             </button>
+            <a href="/course/syllabus/download"
+                class="inline-flex items-center space-x-2 px-6 py-3.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-medium text-sm transition active:scale-95">
+                <i data-lucide="download" class="w-4 h-4 text-blue-500"></i>
+                <span>Download Full Course</span>
+            </a>
             <button onclick="openModal('enquiry')"
-                class="inline-flex items-center space-x-2 px-7 py-3.5 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-medium text-sm transition active:scale-95">
+                class="inline-flex items-center space-x-2 px-6 py-3.5 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-medium text-sm transition active:scale-95">
                 <i data-lucide="message-circle-question" class="w-4 h-4"></i>
                 <span>Ask a Question</span>
             </button>

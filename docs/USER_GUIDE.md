@@ -76,11 +76,25 @@ You can open this CSV directly in Microsoft Excel, Google Sheets, or send it to 
 
 ---
 
-## 6. What's Next?
+## 6. Hidden Instructor Monitoring Portal (`/admin`)
 
-* The **backend foundation is 100% complete and tested**.
-* Next, we will design the **frontend user interface**:
-  * Modern hero banner introducing you as the Data Analysis instructor.
-  * Clear syllabus breakdown (Python, SQL, Power BI, Excel, Tableau).
-  * Prominent schedule banner ("Saturday & Sunday | 6:00 PM – 8:00 PM").
-  * Clean, interactive pop-up forms for "Enroll Now" and "Ask a Question".
+To keep your homepage clean and student-focused, **there is NO login button on the public website**. Only you know the secret URL:
+
+1. **First-time setup**: Go to **[http://localhost:8000/admin/signup](http://localhost:8000/admin/signup)**
+   - Enter your username, email, and password to create your instructor account.
+2. **Sign In**: Go to **[http://localhost:8000/admin/login](http://localhost:8000/admin/login)**
+3. **Monitor Dashboard**: Once logged in at **[http://localhost:8000/admin/dashboard](http://localhost:8000/admin/dashboard)**, you can:
+   - View all student enquiries and batch registrations in real time.
+   - Filter by type (*Batch Registrations* vs *Course Inquiries*) or status (*New*, *Contacted*, *Enrolled*, *Closed*).
+   - Search by student name, email, or WhatsApp number.
+   - Click WhatsApp/Phone links to immediately chat with or call the student.
+   - Change student status and add follow-up notes (e.g. "Called on Nov 12, agreed to join batch").
+   - One-click **Export CSV** button to download all student data.
+
+---
+
+## 7. New Student Flow & Pages
+
+* **Dedicated Register Page**: [http://localhost:8000/register](http://localhost:8000/register) — Direct full-page form for batch admissions.
+* **Post-Registration Confirmation Page**: [http://localhost:8000/registration-success](http://localhost:8000/registration-success) — Reassures the student that their registration was received and you will contact them shortly with batch orientation details.
+* **Download Full Course Syllabus**: [http://localhost:8000/course/syllabus/download](http://localhost:8000/course/syllabus/download) — Downloadable, print-ready curriculum covering Python, SQL, Power BI, Excel, and Tableau.

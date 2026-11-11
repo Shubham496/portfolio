@@ -163,3 +163,85 @@ def test_csv_export():
     assert "Email" in csv_text
     assert "Phone" in csv_text
     assert "Batch Title" in csv_text
+
+
+
+def test_register_page():
+    """Verify dedicated registration page renders correctly."""
+    response = client.get("/register")
+    assert response.status_code == 200
+    assert "text/html" in response.headers["content-type"]
+    assert "Weekend Batch Registration" in response.text
+    assert "Saturday &amp; Sunday" in response.text or "Saturday & Sunday" in response.text
+
+
+def test_registration_success_page():
+    """Verify confirmation page informs student that we will contact them."""
+    response = client.get("/registration-success")
+    assert response.status_code == 200
+    assert "text/html" in response.headers["content-type"]
+    assert "Thank You for Registering" in response.text
+    assert "Saturday & Sunday" in response.text
+
+
+def test_syllabus_download_and_view():
+    """Verify course syllabus download button and printable view."""
+    # Download attachment
+    dl_resp = client.get("/course/syllabus/download")
+    assert dl_resp.status_code == 200
+    assert "attachment; filename=Data_Analysis_Full_Course_Syllabus.html" in dl_resp.headers["content-disposition"]
+    assert "Complete Data Analysis Masterclass" in dl_resp.text
+    assert "Python" in dl_resp.text
+    assert "SQL" in dl_resp.text
+    assert "Power BI" in dl_resp.text
+
+    # Inline view
+    view_resp = client.get("/course/syllabus")
+    assert view_resp.status_code == 200
+    assert "Complete Data Analysis Masterclass" in view_resp.text
+
+
+def test_admin_auth_and_dashboard_flow():
+    """Verify admin signup, login, protected dashboard, and lead status update."""
+    # Unauthenticated access to dashboard must redirect to login
+    unauth_resp = client.get("/admin/dashboard", follow_redirects=False)
+    assert unauth_resp.status_code == 303
+    assert "/admin/login" in unauth_resp.headers["location"]
+
+    # Signup new admin
+    signup_data = {
+        "username": "shubham_admin",
+        "email": "admin@example.com",
+        "password": "securepassword123",
+        "confirm_password": "securepassword123"
+    }
+    signup_resp = client.post("/admin/signup", data=signup_data, follow_redirects=False)
+    assert signup_resp.status_code == 303
+    assert "/admin/dashboard" in signup_resp.headers["location"]
+    session_cookie = signup_resp.cookies.get("admin_session")
+    assert session_cookie is not None
+
+    # Access dashboard with session cookie
+    dash_resp = client.get("/admin/dashboard", cookies={"admin_session": session_cookie})
+    assert dash_resp.status_code == 200
+    assert "Student Leads &amp; Batch Admissions" in dash_resp.text or "Student Leads & Batch Admissions" in dash_resp.text
+    assert "shubham_admin" in dash_resp.text
+
+    # Test login with valid credentials
+    login_data = {
+        "username_or_email": "shubham_admin",
+        "password": "securepassword123"
+    }
+    login_resp = client.post("/admin/login", data=login_data, follow_redirects=False)
+    assert login_resp.status_code == 303
+    assert "/admin/dashboard" in login_resp.headers["location"]
+
+    # Test login with invalid password
+    bad_login = client.post("/admin/login", data={"username_or_email": "shubham_admin", "password": "wrong"})
+    assert bad_login.status_code == 401
+    assert "Invalid username or password" in bad_login.text
+
+    # Test logout
+    logout_resp = client.get("/admin/logout", follow_redirects=False)
+    assert logout_resp.status_code == 303
+    assert "/admin/login" in logout_resp.headers["location"]
