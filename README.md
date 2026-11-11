@@ -1,6 +1,13 @@
-# FastAPI Multi-App Portfolio Platform
+# Data Analysis Training & Admission Platform
 
-A lightweight, modular, and cloud-ready portfolio hub built with **FastAPI**. It showcases professional experience, skills, and serves as an umbrella host for multiple live mini-applications running under a unified low-memory footprint.
+A high-performance, modular web application built with **FastAPI**. It showcases instructor background and credentials, and provides an end-to-end student admission engine for weekend Data Analysis batches (Python, SQL, Power BI, Excel, Tableau).
+
+---
+
+## Quick Navigation & Guides
+
+- 🤖 **[Agent Technical Guide](docs/AGENT_GUIDE.md)**: Comprehensive technical specs, data schemas, business rules, Render.io database setup, and API specifications for AI coding assistants.
+- 👤 **[User & Beginner Guide](docs/USER_GUIDE.md)**: Simple, non-complex guide for Shubham explaining how the system works, how to run locally, how to connect Render to free cloud PostgreSQL, and how to export student leads to CSV.
 
 ---
 
