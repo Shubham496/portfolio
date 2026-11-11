@@ -1,77 +1,92 @@
 {% extends "base.html" %}
 
 {% block content %}
-<!-- 1. Hero & Intro (Restored "Hi, I'm Shubham Singh" with Halved Spacing) -->
-<section id="about" class="pt-6 pb-8 md:pt-8 md:pb-10 border-b border-slate-200 dark:border-slate-800 transition-colors">
+
+{# ─────────────────────────────────────────────────────────────
+   1. HERO — WHO I AM  (Instructor intro, not a resume)
+   ───────────────────────────────────────────────────────────── #}
+<section id="about" class="pt-8 pb-10 md:pt-12 md:pb-14 border-b border-slate-200 dark:border-slate-800 transition-colors">
     <div class="max-w-5xl mx-auto px-4 sm:px-6">
-        <div class="flex flex-col-reverse lg:flex-row items-center justify-between gap-8">
-            
-            <!-- Left: Hero Text, Bio & Primary Actions -->
+        <div class="flex flex-col-reverse lg:flex-row items-center justify-between gap-10">
+
+            {# Left: Text #}
             <div class="w-full lg:w-3/5 text-left">
-                <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-300 text-xs font-semibold mb-3">
+
+                {# Status pill #}
+                <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full border border-emerald-300 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-800 dark:text-emerald-300 text-xs font-semibold mb-4">
                     <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span>Available for High-Impact Roles & Consulting</span>
+                    <span>Weekend Batch — Enrolling Now</span>
                 </div>
 
-                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-950 dark:text-white leading-tight mb-2">
-                    Hi, I'm <span class="text-blue-600 dark:text-blue-400">{{ settings.OWNER_NAME }}</span>.
+                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-950 dark:text-white leading-tight mb-3">
+                    Hi, I'm <span class="text-blue-600 dark:text-blue-400">{{ settings.OWNER_NAME }}</span>.<br>
+                    <span class="text-2xl sm:text-3xl font-bold text-slate-700 dark:text-slate-300">Your Data Analysis Mentor.</span>
                 </h1>
 
-                <p class="text-base sm:text-lg text-slate-900 dark:text-blue-300 font-semibold mb-3">
-                    {{ settings.OWNER_TITLE }}
+                <p class="text-slate-700 dark:text-slate-300 leading-relaxed text-sm mb-5 max-w-xl">
+                    I teach <strong class="text-slate-900 dark:text-white">Python, SQL, Power&nbsp;BI, Excel, and Tableau</strong> — 
+                    the full stack a data analyst needs to get hired and excel at work. 
+                    3+ years in production data systems, 120+ students trained across top institutes.
                 </p>
 
-                <p class="text-slate-800 dark:text-slate-300 leading-relaxed text-xs sm:text-sm mb-6 max-w-xl font-normal">
-                    {{ settings.OWNER_BIO }}
-                </p>
-
-                <!-- Restored Big Prominent Action Buttons -->
-                <div class="flex flex-wrap gap-3 items-center mb-6">
-                    <a href="#apps" class="inline-flex items-center space-x-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm shadow-md shadow-blue-500/20 transition">
-                        <i data-lucide="play-circle" class="w-4 h-4"></i>
-                        <span>Try My Apps</span>
-                    </a>
-                    <a href="/resume" target="_blank" class="inline-flex items-center space-x-2 px-6 py-3 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-medium text-sm transition">
-                        <i data-lucide="file-text" class="w-4 h-4"></i>
-                        <span>Resume (PDF)</span>
-                    </a>
+                {# Schedule badge #}
+                <div class="inline-flex items-center space-x-2.5 px-4 py-2.5 mb-6 rounded-xl bg-slate-900 dark:bg-slate-800 text-white border border-slate-700 shadow-md">
+                    <i data-lucide="calendar-days" class="w-4 h-4 text-blue-400 shrink-0"></i>
+                    <div class="text-xs leading-snug">
+                        <span class="font-bold text-white">Saturday &amp; Sunday Only</span>
+                        <span class="text-slate-400 ml-1.5">·</span>
+                        <span class="text-blue-300 font-semibold ml-1.5">6:00 PM – 8:00 PM IST</span>
+                    </div>
                 </div>
 
-                <!-- Contact Fast Links (With Phone + Brand Icons) -->
-                <div class="flex flex-wrap items-center gap-2.5 pt-4 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-800 dark:text-slate-300">
-                    <a href="tel:{{ settings.OWNER_PHONE }}" class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:border-blue-500 hover:text-blue-600 dark:hover:text-white transition font-medium">
+                {# Primary CTAs #}
+                <div class="flex flex-wrap gap-3 items-center mb-6">
+                    <button onclick="openModal('enroll')"
+                        class="inline-flex items-center space-x-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm shadow-lg shadow-blue-500/25 transition active:scale-95">
+                        <i data-lucide="user-plus" class="w-4 h-4"></i>
+                        <span>Register for Weekend Batch</span>
+                    </button>
+                    <button onclick="openModal('enquiry')"
+                        class="inline-flex items-center space-x-2 px-6 py-3 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-medium text-sm transition active:scale-95">
+                        <i data-lucide="message-circle-question" class="w-4 h-4"></i>
+                        <span>Ask a Question</span>
+                    </button>
+                </div>
+
+                {# Fast contact links #}
+                <div class="flex flex-wrap items-center gap-2.5 pt-4 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-700 dark:text-slate-400">
+                    <a href="tel:{{ settings.OWNER_PHONE }}" class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:border-emerald-500 hover:text-emerald-600 dark:hover:text-emerald-400 transition font-medium">
                         <i data-lucide="phone" class="w-3.5 h-3.5 text-emerald-600"></i>
                         <span class="font-mono">{{ settings.OWNER_PHONE }}</span>
                     </a>
-                    <a href="mailto:{{ settings.EMAIL }}" class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:border-red-500 hover:text-red-600 dark:hover:text-white transition font-medium">
-                        <svg class="w-3.5 h-3.5 text-red-600" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-                        </svg>
+                    <a href="mailto:{{ settings.EMAIL }}" class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:border-red-500 hover:text-red-600 dark:hover:text-red-400 transition font-medium">
+                        <svg class="w-3.5 h-3.5 text-red-600" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
                         <span class="font-mono">{{ settings.EMAIL }}</span>
                     </a>
-                    <a href="{{ settings.LINKEDIN_URL }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:border-[#0A66C2] hover:text-[#0A66C2] dark:hover:text-white transition font-medium">
-                        <svg class="w-3.5 h-3.5 text-[#0A66C2]" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.64c-.95 0-1.72.78-1.72 1.73s.77 1.73 1.72 1.73c.96 0 1.73-.78 1.73-1.73s-.77-1.73-1.73-1.73z"/>
-                        </svg>
+                    <a href="{{ settings.LINKEDIN_URL }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:border-[#0A66C2] hover:text-[#0A66C2] dark:hover:text-[#5aabf7] transition font-medium">
+                        <svg class="w-3.5 h-3.5 text-[#0A66C2]" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.64c-.95 0-1.72.78-1.72 1.73s.77 1.73 1.72 1.73c.96 0 1.73-.78 1.73-1.73s-.77-1.73-1.73-1.73z"/></svg>
                         <span>LinkedIn</span>
                     </a>
-                    <a href="{{ settings.GITHUB_URL }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:border-slate-500 hover:text-slate-900 dark:hover:text-white transition font-medium text-slate-900 dark:text-slate-200">
-                        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
-                        </svg>
-                        <span>GitHub</span>
-                    </a>
                 </div>
             </div>
 
-            <!-- Right: Profile Photo (Natural Fit) -->
+            {# Right: Profile Photo #}
             <div class="w-full lg:w-2/5 flex justify-center">
-                <div class="w-48 h-64 sm:w-56 sm:h-72 rounded-xl overflow-hidden border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-md">
-                    <img 
-                        src="{{ settings.PROFILE_PHOTO_PATH }}" 
-                        alt="{{ settings.OWNER_NAME }}" 
-                        class="w-full h-full object-cover object-top"
-                    />
+                <div class="relative">
+                    <div class="w-48 h-60 sm:w-56 sm:h-72 rounded-2xl overflow-hidden border-2 border-blue-500/30 dark:border-blue-500/20 bg-white dark:bg-slate-900 shadow-xl shadow-blue-500/10">
+                        <img src="{{ settings.PROFILE_PHOTO_PATH }}"
+                             alt="{{ settings.OWNER_NAME }}"
+                             class="w-full h-full object-cover object-top">
+                    </div>
+                    {# Floating credential badges #}
+                    <div class="absolute -bottom-3 -left-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg px-3 py-2">
+                        <div class="text-xs font-bold text-slate-900 dark:text-white">120+</div>
+                        <div class="text-[10px] text-slate-500 dark:text-slate-400">Students Trained</div>
+                    </div>
+                    <div class="absolute -top-3 -right-4 bg-blue-600 rounded-xl shadow-lg px-3 py-2">
+                        <div class="text-xs font-bold text-white">3+ Yrs</div>
+                        <div class="text-[10px] text-blue-200">Industry Exp</div>
+                    </div>
                 </div>
             </div>
 
@@ -79,219 +94,133 @@
     </div>
 </section>
 
-<!-- Separator Line -->
-<div class="max-w-5xl mx-auto px-4 sm:px-6">
-    <div class="py-4 border-b border-slate-300 dark:border-slate-800 text-center">
-        <!-- 3+ Yrs Exp | Python & SQL | ETL & Warehousing Strip -->
-        <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-xs sm:text-sm font-bold tracking-wide text-slate-900 dark:text-slate-300">
-            <span class="text-emerald-700 dark:text-emerald-400">3+ Yrs Exp</span>
-            <span class="text-slate-400 dark:text-slate-700">|</span>
-            <span class="text-blue-700 dark:text-blue-400">Python & SQL</span>
-            <span class="text-slate-400 dark:text-slate-700">|</span>
-            <span class="text-purple-700 dark:text-purple-400">ETL & Warehousing</span>
-            <span class="text-slate-400 dark:text-slate-700">|</span>
-            <span class="text-amber-700 dark:text-amber-400">FastAPI Hub</span>
-        </div>
-    </div>
-</div>
-
-<!-- 2. Skills Table (Kept cleanly formatted as README.md table with accurate SVGs) -->
-<section id="skills" class="py-8 border-b border-slate-300 dark:border-slate-800 bg-slate-100 dark:bg-slate-950/40 transition-colors">
+{# ─────────────────────────────────────────────────────────────
+   2. COURSE OVERVIEW  — What you'll learn
+   ───────────────────────────────────────────────────────────── #}
+<section id="course" class="py-10 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/40 transition-colors">
     <div class="max-w-5xl mx-auto px-4 sm:px-6">
-        <div class="flex items-center space-x-2 mb-3">
-            <i data-lucide="terminal" class="w-4 h-4 text-slate-700 dark:text-slate-500"></i>
-            <h2 class="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-400 font-mono">
-                README.md / Tech Stack
-            </h2>
+
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center space-x-2 text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                <span>Complete Data Analysis Masterclass</span>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-2">What You Will Learn</h2>
+            <p class="text-slate-500 dark:text-slate-400 text-sm max-w-xl mx-auto">
+                Industry-proven tools taught by a practitioner with real production experience. 
+                Everything a modern data analyst needs — in one focused weekend programme.
+            </p>
         </div>
 
-        <div class="border border-slate-300 dark:border-slate-800 rounded-lg overflow-hidden bg-white dark:bg-slate-900/50 shadow-sm">
-            <table class="w-full text-left text-xs border-collapse">
-                <thead>
-                    <tr class="border-b border-slate-300 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-400 font-mono">
-                        <th class="py-2.5 px-3 sm:px-4 font-bold w-1/3">Category</th>
-                        <th class="py-2.5 px-3 sm:px-4 font-bold">Technologies & Tools</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-200 dark:divide-slate-800/70">
-                    {% for cat in skill_categories %}
-                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-850/50 transition">
-                        <td class="py-2.5 px-3 sm:px-4 font-semibold text-slate-900 dark:text-slate-300 align-top">
-                            {{ cat.category }}
-                        </td>
-                        <td class="py-2.5 px-3 sm:px-4">
-                            <div class="flex flex-wrap gap-2">
-                                {% for s in cat.skills %}
-                                <span class="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-[11px] font-semibold text-slate-900 dark:text-slate-200 shadow-sm">
-                                    {% if s.type == 'devicon' %}
-                                        <i class="{{ s.icon }} text-sm"></i>
-                                    {% elif s.slug == 'powerbi' %}
-                                        <!-- Official Power BI SVG -->
-                                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="{{ s.color }}">
-                                            <path d="M10 12a1 1 0 0 1 1 1v11H4a1 1 0 0 1-1-1V13a1 1 0 0 1 1-1h6Zm-2-.5V7a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v17h-4.5V13a1.5 1.5 0 0 0-1.5-1.5H8Zm5-6V1a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v22a1 1 0 0 1-1 1h-3.5V7A1.5 1.5 0 0 0 15 5.5h-2Z"/>
-                                        </svg>
-                                    {% elif s.slug == 'tableau' %}
-                                        <!-- Official Tableau SVG -->
-                                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="{{ s.color }}">
-                                            <path d="M11.654.174V2.377H9.682v.58h1.972V5.16h.696V2.957h1.97v-.58h-1.97V.174h-.348zm6.03 2.262l-.002 1.623v1.623h-2.957v.927h2.957v3.188H18.725l.011-1.582.02-1.576 1.465-.02 1.46-.01v-.927H18.728V2.436h-.522zm-12.407.06V5.686H2.291v.925H5.277V9.801h.985V6.61h3.013v-.925H6.262V2.496H5.77zm6.086 5.27v3.593H8.06v1.188h3.304v3.596h1.28v-3.596H15.953v-1.188H12.643V7.766h-.637zm9.721 1.55v2.221h-2.012v.811h2.012v2.261h.887v-2.261H24v-.811h-2.029V9.317h-.422zm-19.111.131V11.621H0v.621H1.973v2.194H2.64v-2.194h2v-.62H2.609V9.446h-.318zm15.709 4.516v3.254h-3.016v.927h3.016v3.217h1.072v-3.216H21.74v-.928H18.754v-3.254h-.533zm-12.463.008v3.246H2.262v.928h2.957v3.189H6.32v-3.189h2.955v-.928H6.32V13.97h-.55zm6.316 4.578l.002 1.103v1.1H9.566v.812h1.971v2.262h.928l.012-1.119.017-1.143H14.463v-.812h-2V18.549h-.465z"/>
-                                        </svg>
-                                    {% elif s.slug == 'snowflake' %}
-                                        <!-- Official Snowflake SVG -->
-                                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="{{ s.color }}">
-                                            <path d="M7.602 12.4c.038-.151.076-.304.076-.456 0-.114-.038-.228-.038-.342-.114-.343-.304-.647-.646-.838l-4.87-2.777c-.685-.38-1.56-.152-1.94.533-.381.685-.153 1.56.532 1.94l2.701 1.56-2.701 1.56c-.685.38-.913 1.256-.533 1.94.38.685 1.256.914 1.94.533l4.832-2.777c.343-.267.571-.533.647-.876zm1.332 2.626c-.266-.038-.57.038-.837.19l-4.832 2.777c-.685.38-.913 1.256-.532 1.94.38.686 1.255.914 1.94.533l2.701-1.56v3.12c0 .8.647 1.408 1.446 1.408.799 0 1.407-.647 1.407-1.408v-5.592c0-.761-.57-1.37-1.293-1.408zm4.946-6.088c.266.038.57-.038.837-.19l4.832-2.777c.685-.38.913-1.256.532-1.94-.38-.686-1.255-.914-1.94-.533l-2.701 1.56V1.975c0-.799-.647-1.408-1.446-1.408-.799 0-1.446.609-1.446 1.408V7.53c0 .76.609 1.37 1.332 1.407zM3.265 5.97l4.832 2.777c.266.152.533.19.837.19.723-.038 1.331-.684 1.331-1.407V1.975c0-.799-.646-1.408-1.407-1.408-.799 0-1.446.647-1.446 1.408v3.12l-2.701-1.56c-.685-.38-1.56-.152-1.94.533-.419.646-.19 1.521.494 1.902zm1.598 6.544L11.94 14.53c-.039.038-.153.114-.229.114h-.608a.411.411 0 01-.267-.114L8.82 12.514a.408.408 0 01-.076-.229v-.608c0-.076.038-.19.114-.267l2.016-2.016a.41.41 0 01.267-.114h.608a.41.41 0 01.267.114l2.016 2.016a.347.347 0 01.114.267v.608c-.076.077-.114.19-.19.229zm5.593 5.44l-4.832-2.777c-.266-.152-.57-.19-.837-.152-.723.038-1.332.684-1.332 1.408v5.554c0 .8.647 1.408 1.408 1.408.799 0 1.446-.647 1.446-1.408v-3.12l2.7 1.56c.686.38 1.561.152 1.941-.533.419-.646.19-1.521-.494-1.94zm2.549-7.533l-2.701 1.56 2.7 1.56c.686.38.914 1.256.533 1.94-.38.685-1.255.913-1.94.533l-4.832-2.778a1.644 1.644 0 01-.647-.798c-.037-.153-.076-.305-.076-.457 0-.114.039-.228.039-.342.114-.343.342-.647.646-.837l4.832-2.778c.685-.38 1.56-.152 1.94.533.457.609.19 1.484-.494 1.864"/>
-                                        </svg>
-                                    {% elif s.slug == 'n8n' %}
-                                        <!-- Official n8n SVG -->
-                                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="{{ s.color }}">
-                                            <path d="M21.4737 5.6842c-1.1772 0-2.1663.8051-2.4468 1.8947h-2.8955c-1.235 0-2.289.893-2.492 2.111l-.1038.623a1.263 1.263 0 0 1-1.246 1.0555H11.289c-.2805-1.0896-1.2696-1.8947-2.4468-1.8947s-2.1663.8051-2.4467 1.8947H4.973c-.2805-1.0896-1.2696-1.8947-2.4468-1.8947C1.1311 9.4737 0 10.6047 0 12s1.131 2.5263 2.5263 2.5263c1.1772 0 2.1663-.8051 2.4468-1.8947h1.4223c.2804 1.0896 1.2696 1.8947 2.4467 1.8947 1.1772 0 2.1663-.8051 2.4468-1.8947h1.0008a1.263 1.263 0 0 1 1.2459 1.0555l.1038.623c.203 1.218 1.257 2.111 2.492 2.111h.3692c.2804 1.0895 1.2696 1.8947 2.4468 1.8947 1.3952 0 2.5263-1.131 2.5263-2.5263s-1.131-2.5263-2.5263-2.5263c-1.1772 0-2.1664.805-2.4468 1.8947h-.3692a1.263 1.263 0 0 1-1.246-1.0555l-.1037-.623A2.52 2.52 0 0 0 13.9607 12a2.52 2.52 0 0 0 .821-1.4794l.1038-.623a1.263 1.263 0 0 1 1.2459-1.0555h2.8955c.2805 1.0896 1.2696 1.8947 2.4468 1.8947 1.3952 0 2.5263-1.131 2.5263-2.5263s-1.131-2.5263-2.5263-2.5263m0 1.2632a1.263 1.263 0 0 1 1.2631 1.2631 1.263 1.263 0 0 1-1.2631 1.2632 1.263 1.263 0 0 1-1.2632-1.2632 1.263 1.263 0 0 1 1.2632-1.2631M2.5263 10.7368A1.263 1.263 0 0 1 3.7895 12a1.263 1.263 0 0 1-1.2632 1.2632A1.263 1.263 0 0 1 1.2632 12a1.263 1.263 0 0 1 1.2631-1.2632m6.3158 0A1.263 1.263 0 0 1 10.1053 12a1.263 1.263 0 0 1-1.2632 1.2632A1.263 1.263 0 0 1 7.579 12a1.263 1.263 0 0 1 1.2632-1.2632m10.1053 3.7895a1.263 1.263 0 0 1 1.2631 1.2632 1.263 1.263 0 0 1-1.2631 1.2631 1.263 1.263 0 0 1-1.2632-1.2631 1.263 1.263 0 0 1 1.2632-1.2632"/>
-                                        </svg>
-                                    {% endif %}
-                                    <span>{{ s.name }}</span>
-                                </span>
-                                {% endfor %}
-                            </div>
-                        </td>
-                    </tr>
+        {# 5 tool cards #}
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-8">
+            {% set tools = [
+                { "name": "Python", "icon": "devicon-python-plain colored", "desc": "Pandas, NumPy, Automation", "color": "text-yellow-500" },
+                { "name": "SQL",    "icon": "devicon-azuresqldatabase-plain colored", "desc": "Queries, Joins, Windows", "color": "text-blue-500" },
+                { "name": "Power BI","icon": "", "desc": "DAX, KPI Dashboards", "color": "text-yellow-400", "type": "powerbi" },
+                { "name": "Excel",  "icon": "devicon-unifiedmodelinglanguage-plain colored", "desc": "Formulas, Pivot Tables", "color": "text-green-500", "type": "excel" },
+                { "name": "Tableau","icon": "", "desc": "Storyboards, Visuals", "color": "text-orange-500", "type": "tableau" }
+            ] %}
+            {% for t in tools %}
+            <div class="flex flex-col items-center text-center p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 shadow-sm hover:border-blue-400 dark:hover:border-blue-500 hover:shadow-md transition group">
+                <div class="w-10 h-10 flex items-center justify-center mb-2">
+                    {% if t.type == 'powerbi' %}
+                        <svg class="w-8 h-8" viewBox="0 0 24 24" fill="#F2C811"><path d="M10 12a1 1 0 0 1 1 1v11H4a1 1 0 0 1-1-1V13a1 1 0 0 1 1-1h6Zm-2-.5V7a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v17h-4.5V13a1.5 1.5 0 0 0-1.5-1.5H8Zm5-6V1a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v22a1 1 0 0 1-1 1h-3.5V7A1.5 1.5 0 0 0 15 5.5h-2Z"/></svg>
+                    {% elif t.type == 'excel' %}
+                        <svg class="w-8 h-8" viewBox="0 0 24 24" fill="#217346"><path d="M14.364 1.636a2 2 0 0 1 .914.343l6.5 4.333A2 2 0 0 1 22.5 8v8a2 2 0 0 1-.722 1.528l-6.5 5.333a2 2 0 0 1-2.556 0l-6.5-5.333A2 2 0 0 1 5.5 16V8a2 2 0 0 1 .722-1.528l6.5-5.333a2 2 0 0 1 1.642-.503zM8 10l3.5 2.5L8 15h2.5l1.5-1.5L13.5 15H16l-3.5-2.5L16 10h-2.5L12 11.5 10.5 10H8z"/></svg>
+                    {% elif t.type == 'tableau' %}
+                        <svg class="w-8 h-8" viewBox="0 0 24 24" fill="#E97627"><path d="M11.654.174V2.377H9.682v.58h1.972V5.16h.696V2.957h1.97v-.58h-1.97V.174h-.348zm6.03 2.262l-.002 1.623v1.623h-2.957v.927h2.957v3.188H18.725l.011-1.582.02-1.576 1.465-.02 1.46-.01v-.927H18.728V2.436h-.522zm-12.407.06V5.686H2.291v.925H5.277V9.801h.985V6.61h3.013v-.925H6.262V2.496H5.77zm6.086 5.27v3.593H8.06v1.188h3.304v3.596h1.28v-3.596H15.953v-1.188H12.643V7.766h-.637zm9.721 1.55v2.221h-2.012v.811h2.012v2.261h.887v-2.261H24v-.811h-2.029V9.317h-.422zm-19.111.131V11.621H0v.621H1.973v2.194H2.64v-2.194h2v-.62H2.609V9.446h-.318zm15.709 4.516v3.254h-3.016v.927h3.016v3.217h1.072v-3.216H21.74v-.928H18.754v-3.254h-.533zm-12.463.008v3.246H2.262v.928h2.957v3.189H6.32v-3.189h2.955v-.928H6.32V13.97h-.55zm6.316 4.578l.002 1.103v1.1H9.566v.812h1.971v2.262h.928l.012-1.119.017-1.143H14.463v-.812h-2V18.549h-.465z"/></svg>
+                    {% else %}
+                        <i class="{{ t.icon }} text-3xl"></i>
+                    {% endif %}
+                </div>
+                <div class="font-bold text-sm text-slate-900 dark:text-white mb-0.5">{{ t.name }}</div>
+                <div class="text-[11px] text-slate-500 dark:text-slate-400">{{ t.desc }}</div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {# Schedule highlight strip #}
+        <div class="rounded-xl border border-blue-200 dark:border-blue-900 bg-blue-50 dark:bg-blue-950/30 p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-start sm:items-center space-x-4">
+                <div class="w-10 h-10 rounded-lg bg-blue-600 flex items-center justify-center shrink-0">
+                    <i data-lucide="calendar-check" class="w-5 h-5 text-white"></i>
+                </div>
+                <div>
+                    <div class="font-bold text-slate-900 dark:text-white text-sm">Saturday &amp; Sunday Batch</div>
+                    <div class="text-xs text-slate-600 dark:text-slate-400 mt-0.5">6:00 PM – 8:00 PM IST &nbsp;·&nbsp; 2 hrs/day &nbsp;·&nbsp; 4 hrs/week &nbsp;·&nbsp; 8–10 Weeks Hands-On</div>
+                </div>
+            </div>
+            <div class="flex gap-2 shrink-0">
+                <button onclick="openModal('enroll')" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm rounded-lg shadow transition">
+                    Reserve My Seat
+                </button>
+                <button onclick="openModal('enquiry')" class="px-5 py-2.5 border border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/40 font-medium text-sm rounded-lg transition">
+                    Ask First
+                </button>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{# ─────────────────────────────────────────────────────────────
+   3. SYLLABUS  — Module breakdown
+   ───────────────────────────────────────────────────────────── #}
+<section id="syllabus" class="py-10 border-b border-slate-200 dark:border-slate-800 transition-colors">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
+
+        <div class="mb-6">
+            <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-1">Full Course Syllabus</h2>
+            <p class="text-slate-500 dark:text-slate-400 text-sm">Every module is project-driven — you build real dashboards and analysis scripts.</p>
+        </div>
+
+        {% set syllabus = course_profile.course.syllabus_modules %}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {% for mod in syllabus %}
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 p-5 shadow-sm hover:border-blue-300 dark:hover:border-blue-700 transition">
+                <div class="flex items-center space-x-3 mb-3">
+                    <div class="w-7 h-7 rounded-lg bg-blue-600/10 dark:bg-blue-500/10 flex items-center justify-center">
+                        <span class="text-blue-600 dark:text-blue-400 font-bold text-xs">{{ loop.index }}</span>
+                    </div>
+                    <h3 class="font-bold text-slate-900 dark:text-white text-sm">{{ mod.module }}</h3>
+                </div>
+                <ul class="space-y-1.5">
+                    {% for topic in mod.topics %}
+                    <li class="flex items-start space-x-2 text-xs text-slate-600 dark:text-slate-300">
+                        <span class="text-blue-500 font-bold mt-0.5">›</span>
+                        <span>{{ topic }}</span>
+                    </li>
                     {% endfor %}
-                </tbody>
-            </table>
+                </ul>
+            </div>
+            {% endfor %}
         </div>
     </div>
 </section>
 
-<!-- 3. TRY MY APPS -->
-<section id="apps" class="py-10 border-b border-slate-200 dark:border-slate-800 transition-colors">
+{# ─────────────────────────────────────────────────────────────
+   4. EXPERIENCE  — Why trust me (kept, but framed as credibility)
+   ───────────────────────────────────────────────────────────── #}
+<section id="experience" class="py-10 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/30 transition-colors">
     <div class="max-w-5xl mx-auto px-4 sm:px-6">
-        
-        <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-6">
-            <div>
-                <div class="inline-flex items-center space-x-2 text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                    <span>Interactive Workspace</span>
-                </div>
-                <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Try My Apps</h2>
-                <p class="text-slate-500 dark:text-slate-400 text-xs mt-0.5">
-                    Live apps hosted directly on this platform. Launch any app to test in real time.
-                </p>
-            </div>
-            <div class="mt-2 sm:mt-0">
-                <span class="text-[11px] text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-2.5 py-0.5 rounded">
-                    Active Development
-                </span>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            
-            <!-- App 1: Project Sprint Tracker (LIVE) -->
-            <div class="flex flex-col justify-between rounded-lg border border-blue-500/50 bg-white dark:bg-slate-900/60 p-4 hover:border-blue-500 transition shadow-sm">
-                <div>
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                            Live App
-                        </span>
-                        <span class="text-[11px] text-slate-400 font-mono">SQLite DB</span>
-                    </div>
-                    <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-1">
-                        Project Task & Sprint Tracker
-                    </h3>
-                    <p class="text-slate-600 dark:text-slate-400 text-xs leading-relaxed mb-3">
-                        Database-backed interactive board tracking our roadmap and sprint milestones. Add, filter, and complete tasks.
-                    </p>
-                </div>
-                <div>
-                    <div class="flex flex-wrap gap-1 mb-3">
-                        <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">FastAPI</span>
-                        <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">SQLite</span>
-                    </div>
-                    <a href="/apps/todos" class="w-full flex items-center justify-center space-x-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs transition">
-                        <span>Launch Tracker App</span>
-                        <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-                    </a>
-                </div>
-            </div>
-
-            <!-- App 2: URL Shortener & Analytics -->
-            <div class="flex flex-col justify-between rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 p-4 shadow-sm">
-                <div>
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
-                            In Pipeline
-                        </span>
-                        <span class="text-[11px] text-slate-400 font-mono">Sprint 2</span>
-                    </div>
-                    <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-1">
-                        URL Shortener & Analytics
-                    </h3>
-                    <p class="text-slate-600 dark:text-slate-400 text-xs leading-relaxed mb-3">
-                        Custom URL redirection engine with SQLite click-counters, referrers, and real-time link usage metrics.
-                    </p>
-                </div>
-                <div>
-                    <div class="flex flex-wrap gap-1 mb-3">
-                        <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400">FastAPI</span>
-                        <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400">SQLite</span>
-                    </div>
-                    <span class="w-full block text-center py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800/40 text-slate-400 text-xs cursor-not-allowed">
-                        Coming Next Sprint
-                    </span>
-                </div>
-            </div>
-
-            <!-- App 3: Developer JSON Toolkit -->
-            <div class="flex flex-col justify-between rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 p-4 shadow-sm">
-                <div>
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
-                            Planned
-                        </span>
-                        <span class="text-[11px] text-slate-400 font-mono">Sprint 3</span>
-                    </div>
-                    <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-1">
-                        JSON & Schema Inspector
-                    </h3>
-                    <p class="text-slate-600 dark:text-slate-400 text-xs leading-relaxed mb-3">
-                        In-browser developer utility to format, validate, compare payloads, and inspect complex JSON data trees.
-                    </p>
-                </div>
-                <div>
-                    <div class="flex flex-wrap gap-1 mb-3">
-                        <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400">Client JS</span>
-                        <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400">API</span>
-                    </div>
-                    <span class="w-full block text-center py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800/40 text-slate-400 text-xs cursor-not-allowed">
-                        Planned
-                    </span>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</section>
-
-<!-- 4. MORE INFORMATION: Professional Experience -->
-<section id="experience" class="py-10 border-b border-slate-200 dark:border-slate-800 bg-slate-100/40 dark:bg-slate-950/30 transition-colors">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6">
-        <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Professional Experience</h2>
-        <p class="text-slate-500 dark:text-slate-400 text-xs mb-6">Career history in data engineering consulting, fintech systems, and enterprise analytics.</p>
+        <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Why Learn From Me?</h2>
+        <p class="text-slate-500 dark:text-slate-400 text-sm mb-6">I teach exactly what I practice. Every topic comes from real production systems.</p>
 
         <div class="space-y-4">
             {% for exp in experiences %}
-            <div class="rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 p-4 sm:p-5 shadow-sm">
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 p-4 sm:p-5 shadow-sm">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
-                    <div class="flex items-center space-x-2">
+                    <div class="flex flex-wrap items-center gap-2">
                         <h3 class="text-sm font-bold text-slate-900 dark:text-white">{{ exp.role }}</h3>
-                        <span class="text-[11px] px-2 py-0.5 rounded bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 font-medium">
-                            {{ exp.company }}
-                        </span>
+                        <span class="text-[11px] px-2 py-0.5 rounded bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 font-medium">{{ exp.company }}</span>
                     </div>
-                    <span class="text-xs font-mono text-slate-500 dark:text-slate-400">{{ exp.period }}</span>
+                    <span class="text-xs font-mono text-slate-500 dark:text-slate-400 shrink-0">{{ exp.period }}</span>
                 </div>
-
                 <ul class="space-y-1.5 mt-2 text-xs text-slate-600 dark:text-slate-300">
                     {% for pt in exp.points %}
                     <li class="flex items-start space-x-2">
-                        <span class="text-blue-500 font-bold">›</span>
+                        <span class="text-blue-500 font-bold shrink-0">›</span>
                         <span>{{ pt }}</span>
                     </li>
                     {% endfor %}
@@ -302,104 +231,207 @@
     </div>
 </section>
 
-<!-- 5. Enterprise Projects -->
-<section id="projects" class="py-10 border-b border-slate-200 dark:border-slate-800 transition-colors">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6">
-        <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-6">
-            <div>
-                <h2 class="text-xl font-bold text-slate-900 dark:text-white">Enterprise & Industry Projects</h2>
-                <p class="text-slate-500 dark:text-slate-400 text-xs mt-0.5">Production data systems, warehouse pipelines, and business intelligence suites.</p>
-            </div>
-            <a href="{{ settings.GITHUB_URL }}" target="_blank" class="text-xs text-blue-600 dark:text-blue-400 hover:underline font-medium mt-1 sm:mt-0">
-                View repositories on GitHub &rarr;
-            </a>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {% for proj in enterprise_projects %}
-            <div class="flex flex-col justify-between rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 p-4 shadow-sm">
-                <div>
-                    <span class="text-[10px] font-mono text-slate-400">{{ proj.tag }}</span>
-                    <h3 class="text-sm font-bold text-slate-900 dark:text-white mt-1 mb-1.5">{{ proj.title }}</h3>
-                    <p class="text-slate-600 dark:text-slate-400 text-xs leading-relaxed mb-3">{{ proj.description }}</p>
-                </div>
-                <div>
-                    <div class="flex flex-wrap gap-1 mb-2.5">
-                        {% for t in proj.tech %}
-                        <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">{{ t }}</span>
-                        {% endfor %}
-                    </div>
-                    <a href="{{ proj.github }}" target="_blank" class="inline-flex items-center space-x-1 text-xs text-blue-600 dark:text-blue-400 hover:underline">
-                        <span>Inspect Repository</span>
-                        <i data-lucide="external-link" class="w-3 h-3"></i>
-                    </a>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-
-<!-- 6. Education & Certifications -->
-<section id="education" class="py-10 border-b border-slate-200 dark:border-slate-800 bg-slate-100/40 dark:bg-slate-950/30 transition-colors">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 p-4 shadow-sm">
-                <h3 class="text-xs font-bold text-slate-900 dark:text-white mb-0.5">{{ education.degree }}</h3>
-                <p class="text-xs text-slate-500 dark:text-slate-400 mb-2">{{ education.major }}</p>
-                <div class="flex justify-between text-xs text-slate-500 dark:text-slate-400 pt-2 border-t border-slate-200 dark:border-slate-800">
-                    <span>{{ education.institution }}</span>
-                    <span class="font-mono">{{ education.period }}</span>
-                </div>
-            </div>
-
-            <div class="rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 p-4 shadow-sm">
-                <h3 class="text-xs font-bold text-slate-900 dark:text-white mb-2">Industry Certifications</h3>
-                <div class="space-y-1.5 text-xs">
-                    {% for cert in education.certifications %}
-                    <div class="flex justify-between text-slate-700 dark:text-slate-300">
-                        <span>{{ cert.name }}</span>
-                        <span class="text-slate-400 dark:text-slate-500 font-mono">{{ cert.issuer }} ({{ cert.year }})</span>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- 7. Contact Section -->
-<section id="contact" class="py-10 transition-colors">
+{# ─────────────────────────────────────────────────────────────
+   5. CONTACT / REACH OUT
+   ───────────────────────────────────────────────────────────── #}
+<section id="contact" class="py-12 transition-colors">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-        <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-1.5">Let's Connect & Build</h2>
-        <p class="text-slate-500 dark:text-slate-400 text-xs max-w-lg mx-auto mb-5">
-            Available for Python consulting, data engineering pipelines, and full-stack backend development.
+        <div class="inline-flex items-center space-x-2 text-xs font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-3">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>Limited Seats Available</span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-2">Ready to Get Started?</h2>
+        <p class="text-slate-500 dark:text-slate-400 text-sm max-w-lg mx-auto mb-7">
+            Weekend classes — Saturday &amp; Sunday, 6:00&nbsp;PM to 8:00&nbsp;PM IST.
+            Drop your details and I'll reach out to confirm your seat.
         </p>
 
-        <div class="inline-flex flex-wrap justify-center gap-2.5">
-            <a href="tel:{{ settings.OWNER_PHONE }}" class="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium transition shadow-sm">
+        <div class="flex flex-wrap justify-center gap-3 mb-8">
+            <button onclick="openModal('enroll')"
+                class="inline-flex items-center space-x-2 px-7 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm shadow-lg shadow-blue-500/25 transition active:scale-95">
+                <i data-lucide="user-plus" class="w-4 h-4"></i>
+                <span>Register for Weekend Batch</span>
+            </button>
+            <button onclick="openModal('enquiry')"
+                class="inline-flex items-center space-x-2 px-7 py-3.5 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-medium text-sm transition active:scale-95">
+                <i data-lucide="message-circle-question" class="w-4 h-4"></i>
+                <span>Ask a Question</span>
+            </button>
+        </div>
+
+        <div class="flex flex-wrap justify-center gap-3 text-xs">
+            <a href="tel:{{ settings.OWNER_PHONE }}" class="inline-flex items-center space-x-1.5 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-medium transition shadow-sm">
                 <i data-lucide="phone" class="w-3.5 h-3.5"></i>
                 <span class="font-mono">{{ settings.OWNER_PHONE }}</span>
             </a>
-            <a href="mailto:{{ settings.EMAIL }}" class="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-lg bg-red-600 hover:bg-red-500 text-white text-xs font-medium transition shadow-sm">
-                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
-                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-                </svg>
+            <a href="mailto:{{ settings.EMAIL }}" class="inline-flex items-center space-x-1.5 px-4 py-2 rounded-lg bg-red-600 hover:bg-red-500 text-white font-medium transition shadow-sm">
+                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
                 <span>{{ settings.EMAIL }}</span>
             </a>
-            <a href="{{ settings.LINKEDIN_URL }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-lg bg-[#0A66C2] hover:bg-blue-600 text-white text-xs font-medium transition shadow-sm">
-                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
-                    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.64c-.95 0-1.72.78-1.72 1.73s.77 1.73 1.72 1.73c.96 0 1.73-.78 1.73-1.73s-.77-1.73-1.73-1.73z"/>
-                </svg>
+            <a href="{{ settings.LINKEDIN_URL }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-4 py-2 rounded-lg bg-[#0A66C2] hover:bg-blue-600 text-white font-medium transition shadow-sm">
+                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.64c-.95 0-1.72.78-1.72 1.73s.77 1.73 1.72 1.73c.96 0 1.73-.78 1.73-1.73s-.77-1.73-1.73-1.73z"/></svg>
                 <span>LinkedIn</span>
-            </a>
-            <a href="{{ settings.GITHUB_URL }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-medium transition shadow-sm">
-                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
-                </svg>
-                <span>GitHub</span>
             </a>
         </div>
     </div>
 </section>
+
+
+{# ═══════════════════════════════════════════════════════════
+   MODALS — Enquiry & Enrolment
+   ══════════════════════════════════════════════════════════ #}
+
+{# --- Shared Backdrop --- #}
+<div id="modal-backdrop" onclick="closeAllModals()"
+     class="hidden fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity">
+</div>
+
+{# --- ENROL MODAL --- #}
+<div id="modal-enroll"
+     class="hidden fixed inset-0 z-50 flex items-center justify-center p-4"
+     role="dialog" aria-modal="true" aria-labelledby="enroll-title">
+    <div class="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden"
+         onclick="event.stopPropagation()">
+
+        {# Header #}
+        <div class="flex items-center justify-between p-5 border-b border-slate-200 dark:border-slate-800">
+            <div>
+                <h3 id="enroll-title" class="font-bold text-slate-900 dark:text-white text-base">Register for Weekend Batch</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Saturday &amp; Sunday · 6:00 PM – 8:00 PM IST</p>
+            </div>
+            <button onclick="closeAllModals()" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+        </div>
+
+        {# Form #}
+        <form id="enroll-form" class="p-5 space-y-3.5">
+            <div class="grid grid-cols-2 gap-3">
+                <div class="col-span-2">
+                    <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Full Name <span class="text-red-500">*</span></label>
+                    <input type="text" name="full_name" required placeholder="Your full name"
+                           class="w-full px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Email <span class="text-red-500">*</span></label>
+                    <input type="email" name="email" required placeholder="you@email.com"
+                           class="w-full px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">WhatsApp No. <span class="text-red-500">*</span></label>
+                    <input type="tel" name="phone" required placeholder="+91 9XXXXXXXXX"
+                           class="w-full px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">I am a...</label>
+                    <select name="current_status"
+                            class="w-full px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                        <option>College Student</option>
+                        <option selected>Working Professional</option>
+                        <option>Fresher</option>
+                        <option>Career Changer</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Prior Experience</label>
+                    <select name="prior_experience"
+                            class="w-full px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                        <option selected>Beginner</option>
+                        <option>Basic Python</option>
+                        <option>Basic Excel</option>
+                        <option>Some SQL</option>
+                        <option>Intermediate</option>
+                    </select>
+                </div>
+                <div class="col-span-2">
+                    <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Your Learning Goals (optional)</label>
+                    <textarea name="message" rows="2" placeholder="What do you want to achieve with data analysis?"
+                              class="w-full px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition resize-none"></textarea>
+                </div>
+            </div>
+
+            <input type="hidden" name="preferred_schedule" value="Saturday & Sunday 6:00 PM – 8:00 PM IST">
+
+            <button type="submit" id="enroll-submit-btn"
+                    class="w-full flex items-center justify-center space-x-2 px-5 py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm rounded-xl shadow transition active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed">
+                <i data-lucide="user-check" class="w-4 h-4"></i>
+                <span>Confirm Registration</span>
+            </button>
+            <p class="text-center text-[11px] text-slate-400">No fees required on this form. Shubham will confirm your seat directly.</p>
+        </form>
+    </div>
+</div>
+
+{# --- ENQUIRY MODAL --- #}
+<div id="modal-enquiry"
+     class="hidden fixed inset-0 z-50 flex items-center justify-center p-4"
+     role="dialog" aria-modal="true" aria-labelledby="enquiry-title">
+    <div class="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden"
+         onclick="event.stopPropagation()">
+
+        <div class="flex items-center justify-between p-5 border-b border-slate-200 dark:border-slate-800">
+            <div>
+                <h3 id="enquiry-title" class="font-bold text-slate-900 dark:text-white text-base">Ask a Question</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Syllabus, schedule, or anything else — just ask.</p>
+            </div>
+            <button onclick="closeAllModals()" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+        </div>
+
+        <form id="enquiry-form" class="p-5 space-y-3.5">
+            <div>
+                <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Full Name <span class="text-red-500">*</span></label>
+                <input type="text" name="full_name" required placeholder="Your full name"
+                       class="w-full px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Email <span class="text-red-500">*</span></label>
+                    <input type="email" name="email" required placeholder="you@email.com"
+                           class="w-full px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Phone / WhatsApp <span class="text-red-500">*</span></label>
+                    <input type="tel" name="phone" required placeholder="+91 9XXXXXXXXX"
+                           class="w-full px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                </div>
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">I am a...</label>
+                <select name="current_status"
+                        class="w-full px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                    <option>College Student</option>
+                    <option selected>Working Professional</option>
+                    <option>Fresher</option>
+                    <option>Career Changer</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Your Question / Message <span class="text-red-500">*</span></label>
+                <textarea name="message" rows="3" required placeholder="Ask about the syllabus, duration, tools covered, or anything else..."
+                          class="w-full px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition resize-none"></textarea>
+            </div>
+            <input type="hidden" name="preferred_schedule" value="Saturday & Sunday 6:00 PM – 8:00 PM IST">
+
+            <button type="submit" id="enquiry-submit-btn"
+                    class="w-full flex items-center justify-center space-x-2 px-5 py-3 bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 dark:text-slate-900 text-white font-semibold text-sm rounded-xl shadow transition active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed">
+                <i data-lucide="send" class="w-4 h-4"></i>
+                <span>Send Enquiry</span>
+            </button>
+        </form>
+    </div>
+</div>
+
+{# --- Toast notification --- #}
+<div id="toast" class="hidden fixed bottom-6 right-6 z-[60] max-w-sm w-full">
+    <div id="toast-inner" class="flex items-start space-x-3 px-4 py-3.5 rounded-xl shadow-2xl border text-sm font-medium transition-all">
+        <i id="toast-icon" class="w-5 h-5 mt-0.5 shrink-0"></i>
+        <div>
+            <div id="toast-title" class="font-semibold"></div>
+            <div id="toast-msg" class="text-xs font-normal mt-0.5 opacity-80"></div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
