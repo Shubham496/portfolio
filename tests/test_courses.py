@@ -208,10 +208,14 @@ def test_admin_auth_and_dashboard_flow():
     assert unauth_resp.status_code == 303
     assert "/admin/login" in unauth_resp.headers["location"]
 
-    # Signup new admin
+    # Signup new admin with unique credentials
+    import uuid
+    uid = uuid.uuid4().hex[:6]
+    test_user = f"admin_{uid}"
+    test_email = f"admin_{uid}@example.com"
     signup_data = {
-        "username": "shubham_admin",
-        "email": "admin@example.com",
+        "username": test_user,
+        "email": test_email,
         "password": "securepassword123",
         "confirm_password": "securepassword123"
     }
@@ -225,11 +229,11 @@ def test_admin_auth_and_dashboard_flow():
     dash_resp = client.get("/admin/dashboard", cookies={"admin_session": session_cookie})
     assert dash_resp.status_code == 200
     assert "Student Leads &amp; Batch Admissions" in dash_resp.text or "Student Leads & Batch Admissions" in dash_resp.text
-    assert "shubham_admin" in dash_resp.text
+    assert test_user in dash_resp.text
 
     # Test login with valid credentials
     login_data = {
-        "username_or_email": "shubham_admin",
+        "username_or_email": test_user,
         "password": "securepassword123"
     }
     login_resp = client.post("/admin/login", data=login_data, follow_redirects=False)
@@ -237,7 +241,7 @@ def test_admin_auth_and_dashboard_flow():
     assert "/admin/dashboard" in login_resp.headers["location"]
 
     # Test login with invalid password
-    bad_login = client.post("/admin/login", data={"username_or_email": "shubham_admin", "password": "wrong"})
+    bad_login = client.post("/admin/login", data={"username_or_email": test_user, "password": "wrong"})
     assert bad_login.status_code == 401
     assert "Invalid username or password" in bad_login.text
 
