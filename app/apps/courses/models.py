@@ -114,6 +114,8 @@ class StudentLead(Base):
             "status": self.status,
             "admin_notes": self.admin_notes,
             "created_at": self.created_at.isoformat() if self.created_at else None,
+            "created_date": self.created_at.strftime("%b %d, %Y") if self.created_at else "",
+            "created_time": self.created_at.strftime("%I:%M %p") if self.created_at else "",
         }
 
 

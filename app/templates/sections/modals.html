@@ -1,0 +1,156 @@
+{# ═════════════════════════════════════════════════════════════
+   10. MODALS — ENROLLMENT & ENQUIRY (Updated with Mythos Theme)
+   ═════════════════════════════════════════════════════════════ #}
+
+{# --- Shared Backdrop --- #}
+<div id="modal-backdrop" onclick="closeAllModals()"
+     class="hidden fixed inset-0 z-40 bg-black/70 backdrop-blur-sm transition-opacity">
+</div>
+
+{# --- ENROL MODAL --- #}
+<div id="modal-enroll"
+     class="hidden fixed inset-0 z-50 flex items-center justify-center p-4"
+     role="dialog" aria-modal="true" aria-labelledby="enroll-title">
+    <div class="relative w-full max-w-md bg-white dark:bg-[#0B1120] rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden"
+         onclick="event.stopPropagation()">
+
+        {# Header #}
+        <div class="flex items-center justify-between p-5 border-b border-slate-200 dark:border-slate-800">
+            <div>
+                <h3 id="enroll-title" class="font-extrabold text-slate-900 dark:text-white text-base">Register for Weekend Batch</h3>
+                <p class="text-xs text-blue-600 dark:text-blue-400 font-medium mt-0.5">Saturday &amp; Sunday · 6:00 PM – 8:00 PM IST</p>
+            </div>
+            <button onclick="closeAllModals()" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+        </div>
+
+        {# Form #}
+        <form id="enroll-form" class="p-5 space-y-3.5">
+            <div class="grid grid-cols-2 gap-3">
+                <div class="col-span-2">
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Full Name <span class="text-red-500">*</span></label>
+                    <input type="text" name="full_name" required placeholder="Your full name"
+                           class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Email <span class="text-slate-400 font-normal">(Optional)</span></label>
+                    <input type="email" name="email" placeholder="you@email.com"
+                           class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">WhatsApp No. <span class="text-red-500">*</span></label>
+                    <input type="tel" name="phone" required placeholder="+91 9XXXXXXXXX"
+                           class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Current Background</label>
+                    <select name="current_status"
+                            class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                        <option>College Student</option>
+                        <option selected>Working Professional</option>
+                        <option>Fresher</option>
+                        <option>Career Transitioner</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Prior Experience</label>
+                    <select name="prior_experience"
+                            class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                        <option selected>Beginner (No coding)</option>
+                        <option>Basic Python</option>
+                        <option>Basic Excel</option>
+                        <option>Some SQL</option>
+                        <option>Intermediate</option>
+                    </select>
+                </div>
+                <div class="col-span-2">
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Your Learning Goals (optional)</label>
+                    <textarea name="message" rows="2" placeholder="What role or skills do you want to master?"
+                              class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition resize-none"></textarea>
+                </div>
+            </div>
+
+            <input type="hidden" name="preferred_schedule" value="Saturday & Sunday 6:00 PM – 8:00 PM IST">
+
+            <button type="submit" id="enroll-submit-btn"
+                    class="w-full flex items-center justify-center space-x-2 px-5 py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm rounded-xl shadow-lg shadow-blue-500/25 transition active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed">
+                <i data-lucide="user-check" class="w-4 h-4"></i>
+                <span>Confirm Registration</span>
+            </button>
+            <p class="text-center text-[11px] text-slate-500">Zero fees on this portal. Shubham will confirm your seat directly.</p>
+        </form>
+    </div>
+</div>
+
+{# --- ENQUIRY MODAL --- #}
+<div id="modal-enquiry"
+     class="hidden fixed inset-0 z-50 flex items-center justify-center p-4"
+     role="dialog" aria-modal="true" aria-labelledby="enquiry-title">
+    <div class="relative w-full max-w-md bg-white dark:bg-[#0B1120] rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden"
+         onclick="event.stopPropagation()">
+
+        <div class="flex items-center justify-between p-5 border-b border-slate-200 dark:border-slate-800">
+            <div>
+                <h3 id="enquiry-title" class="font-extrabold text-slate-900 dark:text-white text-base">Ask a Question</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Syllabus, schedule, or anything else — just ask.</p>
+            </div>
+            <button onclick="closeAllModals()" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+        </div>
+
+        <form id="enquiry-form" class="p-5 space-y-3.5">
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Full Name <span class="text-red-500">*</span></label>
+                <input type="text" name="full_name" required placeholder="Your full name"
+                       class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Email <span class="text-slate-400 font-normal">(Optional)</span></label>
+                    <input type="email" name="email" placeholder="you@email.com"
+                           class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Phone / WhatsApp <span class="text-red-500">*</span></label>
+                    <input type="tel" name="phone" required placeholder="+91 9XXXXXXXXX"
+                           class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                </div>
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">I am a...</label>
+                <select name="current_status"
+                        class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                    <option>College Student</option>
+                    <option selected>Working Professional</option>
+                    <option>Fresher</option>
+                    <option>Career Transitioner</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Your Question / Message <span class="text-red-500">*</span></label>
+                <textarea name="message" rows="3" required placeholder="Ask about the syllabus, batch schedule, tools covered, or projects..."
+                          class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition resize-none"></textarea>
+            </div>
+            <input type="hidden" name="preferred_schedule" value="Saturday & Sunday 6:00 PM – 8:00 PM IST">
+
+            <button type="submit" id="enquiry-submit-btn"
+                    class="w-full flex items-center justify-center space-x-2 px-5 py-3 bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 dark:text-slate-900 text-white font-semibold text-sm rounded-xl shadow transition active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed">
+                <i data-lucide="send" class="w-4 h-4"></i>
+                <span>Send Enquiry</span>
+            </button>
+        </form>
+    </div>
+</div>
+
+{# --- Toast Notification --- #}
+<div id="toast" class="hidden fixed bottom-6 right-6 z-[60] max-w-sm w-full">
+    <div id="toast-inner" class="flex items-start space-x-3 px-4 py-3.5 rounded-2xl shadow-2xl border text-sm font-medium transition-all">
+        <i id="toast-icon" class="w-5 h-5 mt-0.5 shrink-0"></i>
+        <div>
+            <div id="toast-title" class="font-bold"></div>
+            <div id="toast-msg" class="text-xs font-normal mt-0.5 opacity-90"></div>
+        </div>
+    </div>
+</div>

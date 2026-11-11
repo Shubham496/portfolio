@@ -1,6 +1,7 @@
 import os
 import csv
 import io
+import math
 import logging
 from typing import Optional, List, Dict, Any
 from sqlalchemy.orm import Session
@@ -52,19 +53,19 @@ def init_courses_db():
                 db.commit()
                 logger.info("Default Weekend Data Analysis batch seeded.")
 
-            # Seed / ensure default 'admin' user exists
+            # Seed / ensure default 'admin' user exists with updated password from .env
             admin_user = db.query(AdminUser).filter(AdminUser.username == "admin").first()
             env_password = os.getenv("ADMIN_PASSWORD")
             env_hash = os.getenv("ADMIN_PASSWORD_HASH")
-            default_hash = "$2b$12$uSiwGr.E6jVYlVLLvQmj/exumDJRDsAT2rJH1H.YKjsRGO9YCfJ8e"
+
+            from app.apps.courses.auth import hash_password
 
             if env_password:
-                from app.apps.courses.auth import hash_password
                 target_hash = hash_password(env_password)
             elif env_hash:
                 target_hash = env_hash
             else:
-                target_hash = default_hash
+                target_hash = "$2b$12$uSiwGr.E6jVYlVLLvQmj/exumDJRDsAT2rJH1H.YKjsRGO9YCfJ8e"
 
             if not admin_user:
                 admin_user = AdminUser(
@@ -77,7 +78,27 @@ def init_courses_db():
                 db.commit()
                 logger.info("Admin user 'admin' seeded.")
             else:
-                admin_user.hashed_password = target_hash
+                if env_password or env_hash:
+                    admin_user.hashed_password = target_hash
+                    db.commit()
+
+            # Seed / ensure dedicated 'agent_admin' profile exists for agent operations and automated tests
+            agent_user = db.query(AdminUser).filter(AdminUser.username == "agent_admin").first()
+            agent_password = os.getenv("AGENT_PASSWORD", "hUrHD1qKvVPQqk_y1itG*ISU")
+            agent_hash = hash_password(agent_password)
+
+            if not agent_user:
+                agent_user = AdminUser(
+                    username="agent_admin",
+                    email="agent@mythostech.in",
+                    hashed_password=agent_hash,
+                    is_active=True
+                )
+                db.add(agent_user)
+                db.commit()
+                logger.info("Dedicated agent user 'agent_admin' seeded.")
+            else:
+                agent_user.hashed_password = agent_hash
                 db.commit()
     except Exception as e:
         logger.error(f"Error initializing course database: {e}", exc_info=True)
@@ -221,6 +242,63 @@ def get_leads(
     return [l.to_dict() for l in leads]
 
 
+def get_leads_paginated(
+    db: Session,
+    lead_type: Optional[str] = None,
+    batch_id: Optional[int] = None,
+    status: Optional[str] = None,
+    search: Optional[str] = None,
+    page: int = 1,
+    per_page: int = 10
+) -> Dict[str, Any]:
+    """Retrieve paginated student leads with filtering and pagination metadata."""
+    query = db.query(StudentLead)
+
+    if lead_type and lead_type != "all":
+        query = query.filter(StudentLead.lead_type == lead_type)
+
+    if batch_id:
+        query = query.filter(StudentLead.batch_id == batch_id)
+
+    if status and status != "all":
+        query = query.filter(StudentLead.status == status)
+
+    if search:
+        search_term = f"%{search}%"
+        query = query.filter(
+            or_(
+                StudentLead.full_name.ilike(search_term),
+                StudentLead.email.ilike(search_term),
+                StudentLead.phone.ilike(search_term)
+            )
+        )
+
+    total_count = query.count()
+    per_page = max(1, min(per_page, 100))
+    total_pages = max(1, math.ceil(total_count / per_page)) if total_count > 0 else 1
+    page = max(1, min(page, total_pages)) if total_count > 0 else 1
+    offset = (page - 1) * per_page
+
+    leads = query.order_by(desc(StudentLead.id)).offset(offset).limit(per_page).all()
+
+    start_item = offset + 1 if total_count > 0 else 0
+    end_item = min(offset + per_page, total_count)
+
+    return {
+        "items": [l.to_dict() for l in leads],
+        "total": total_count,
+        "page": page,
+        "per_page": per_page,
+        "total_pages": total_pages,
+        "start_item": start_item,
+        "end_item": end_item,
+        "has_prev": page > 1,
+        "has_next": page < total_pages,
+        "prev_page": page - 1 if page > 1 else None,
+        "next_page": page + 1 if page < total_pages else None,
+    }
+
+
 def get_lead_summary(db: Session) -> Dict[str, Any]:
     """Provide dashboard analytics for leads and batch admissions."""
     all_leads = db.query(StudentLead).all()
@@ -317,11 +395,11 @@ def get_instructor_curriculum_profile() -> Dict[str, Any]:
             "title": "Lead Python & Data Architecture Consultant | Technical Instructor",
             "bio": (
                 "Lead Consultant and Instructor with deep production experience across enterprise data pipelines, "
-                "relational databases, and executive BI dashboards. Mentored 120+ developers and students in practical, "
-                "hands-on Python, SQL, Power BI, Excel modeling, and Tableau."
+                "relational databases, and executive BI dashboards. Trained and mentored 550+ students and developers in "
+                "practical, hands-on Python, SQL, Power BI, Excel modeling, and Tableau."
             ),
             "experience_highlights": [
-                "Lead Python & Data Architecture Consultant at Ducat (Mentored 120+ senior developers & data engineers)",
+                "Lead Python & Data Architecture Consultant at Ducat (Trained 550+ students & developers across enterprise batches)",
                 "Data Analyst & Automation Engineer at LNP Infotech (U.S. financial & compliance transaction analysis)",
                 "Data Analyst & Technical Instructor at Netmax Technologies (Enterprise ETL, SQL, and Power BI dashboards)"
             ],
@@ -340,24 +418,289 @@ def get_instructor_curriculum_profile() -> Dict[str, Any]:
             },
             "syllabus_modules": [
                 {
-                    "module": "Excel Advanced Modeling",
-                    "topics": ["Advanced Formulas (XLOOKUP, INDEX/MATCH)", "Pivot Tables & Pivot Charts", "Data Validation & Cleansing", "What-If Analysis & Financial Modeling"]
+                    "module": "Excel Advanced Modeling, Power Query & VBA",
+                    "badge": "Spreadsheets & Automation",
+                    "icon": "excel",
+                    "topics": [
+                        "Advanced Formulas: XLOOKUP, INDEX/MATCH, Dynamic Arrays",
+                        "Pivot Tables, Slicers & Executive Pivot Charts",
+                        "Power Query Editor: Multi-file Ingestion & ETL Cleansing",
+                        "VBA & Macro Automation for Routine Reporting"
+                    ],
+                    "detailed_sections": [
+                        {
+                            "title": "Power Query Editor & ETL",
+                            "bullets": [
+                                "Connecting to multiple CSVs, Excels, and folder directories",
+                                "Unpivoting cross-tabulated data into normalized rows",
+                                "Custom & conditional columns, data type casting, error handling",
+                                "Merging queries (VLOOKUP replacement) & Append queries (stacking datasets)",
+                                "Automated data refreshes without manual copy-pasting"
+                            ]
+                        },
+                        {
+                            "title": "VBA & Macro Automation",
+                            "bullets": [
+                                "Recording and editing macros for repetitive weekly tasks",
+                                "VBA core syntax: Subroutines, Variables, For/While Loops, If-Then logic",
+                                "Building User Defined Functions (UDFs) for proprietary business formulas",
+                                "Automating one-click workbook report generation and formatting"
+                            ]
+                        },
+                        {
+                            "title": "Advanced Formula Engineering & What-If",
+                            "bullets": [
+                                "Dynamic Arrays: FILTER, UNIQUE, SORT, XLOOKUP, XMATCH",
+                                "Modern formulas: LET (named variables) & LAMBDA custom reusable logic",
+                                "Nested conditionals: SUMIFS, COUNTIFS, AVERAGEIFS, IFS, SWITCH",
+                                "What-If Analysis: Goal Seek, Data Tables, Scenario Manager, Sensitivity modeling"
+                            ]
+                        },
+                        {
+                            "title": "Data Cleansing & Executive Dashboards",
+                            "bullets": [
+                                "Text wrangling: TEXTSPLIT, SUBSTITUTE, TRIM, Flash Fill",
+                                "Data validation rules, custom dropdown lists, IFERROR sanitization",
+                                "Multi-slicer linked dashboards with dynamic KPI cards & sparklines"
+                            ]
+                        }
+                    ]
                 },
                 {
-                    "module": "SQL (Structured Query Language)",
-                    "topics": ["Relational Database Design", "Multi-table Complex JOINs", "Window Functions (RANK, DENSE_RANK, ROW_NUMBER)", "CTEs & Subqueries", "Aggregations & Grouping Sets"]
+                    "module": "SQL for Data Analysis & Relational Databases",
+                    "badge": "Database Architecture",
+                    "icon": "sql",
+                    "topics": [
+                        "Relational Database Architecture & 3NF Normalization",
+                        "Complex Multi-Table JOINs & Nested Subqueries",
+                        "Analytical Window Functions (RANK, DENSE_RANK, ROW_NUMBER)",
+                        "Common Table Expressions (CTEs) & Query Optimization"
+                    ],
+                    "detailed_sections": [
+                        {
+                            "title": "Analytical Window Functions Deep-Dive",
+                            "bullets": [
+                                "Ranking metrics: ROW_NUMBER, RANK, DENSE_RANK, NTILE",
+                                "Lead & Lag analysis: Comparing period-over-period sales without self-joins",
+                                "Cumulative statistics: Running totals, moving averages with window frames",
+                                "Frame specifications: ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW"
+                            ]
+                        },
+                        {
+                            "title": "CTEs & Advanced Query Structuring",
+                            "bullets": [
+                                "Common Table Expressions (WITH clauses) for modular SQL architecture",
+                                "Correlated subqueries vs Non-correlated subqueries",
+                                "Recursive CTEs for hierarchical organizational trees & bill-of-materials",
+                                "Complex aggregations: GROUP BY, HAVING, GROUPING SETS, ROLLUP, CUBE"
+                            ]
+                        },
+                        {
+                            "title": "Relational Modeling & Schema Design",
+                            "bullets": [
+                                "Primary keys, Foreign keys, Composite keys, Unique constraints, Cascading",
+                                "Database normalization principles: 1NF, 2NF, 3NF design",
+                                "Entity Relationship Diagrams (ERD) & schema mapping"
+                            ]
+                        },
+                        {
+                            "title": "Performance Tuning & Business Analytics Queries",
+                            "bullets": [
+                                "B-Tree indexing strategies, composite indexes, avoiding table scans",
+                                "Query execution analysis using EXPLAIN and EXPLAIN ANALYZE",
+                                "Real business queries: Cohort retention analysis, customer churn velocity, active users"
+                            ]
+                        }
+                    ]
                 },
                 {
-                    "module": "Python for Data Analysis",
-                    "topics": ["Python Foundations & Data Structures", "NumPy Numerical Computing", "Pandas DataFrames & Manipulation", "Cleaning Missing/Duplicate Data", "Automated Scripting & File Processing"]
+                    "module": "Python for Data Analysis & Automation",
+                    "badge": "Core Programming & ETL",
+                    "icon": "python",
+                    "topics": [
+                        "Python Foundations, Control Flow & Data Structures",
+                        "High-Performance NumPy Array Matrix Computing",
+                        "Pandas DataFrames Manipulation & Multi-Source Cleansing",
+                        "Automated Data Extraction & Production Scripting"
+                    ],
+                    "detailed_sections": [
+                        {
+                            "title": "Pandas Data Wrangling Masterclass",
+                            "bullets": [
+                                "DataFrame indexing, slicing, boolean filtering, query() method",
+                                "High-performance vector operations: apply(), map(), transform()",
+                                "Reshaping datasets: pivot_table(), melt(), stack(), unstack()",
+                                "Multi-level GroupBy aggregations and statistical summarization",
+                                "Merging, joining, and concatenating heterogeneous sources"
+                            ]
+                        },
+                        {
+                            "title": "Data Sanitization & Missing Value Handling",
+                            "bullets": [
+                                "Detecting, imputing, and dropping null values (isna, fillna, dropna)",
+                                "Vectorized string manipulation (.str methods) and Regex extraction",
+                                "Datetime parsing, time-series resampling, and business calendars"
+                            ]
+                        },
+                        {
+                            "title": "NumPy Matrix Operations & Mathematics",
+                            "bullets": [
+                                "Creating and reshaping 1D, 2D, and 3D ndarrays",
+                                "Broadcasting rules, boolean masking, fast numerical filtering",
+                                "Vectorized mathematical computations & statistical arrays"
+                            ]
+                        },
+                        {
+                            "title": "Data Visualization & Scripted Automation",
+                            "bullets": [
+                                "Visualizing distributions, correlations & outliers with Matplotlib & Seaborn",
+                                "Connecting Python to SQL databases via SQLAlchemy & psycopg2",
+                                "Automating batch CSV/Excel processing and scheduling pipeline execution"
+                            ]
+                        }
+                    ]
                 },
                 {
-                    "module": "Power BI Interactive Dashboards",
-                    "topics": ["Power Query ETL Transformation", "Star Schema Data Modeling", "DAX Measures & Calculated Columns", "Executive KPI Dashboards & Drill-throughs"]
+                    "module": "Power BI Interactive Business Intelligence",
+                    "badge": "Enterprise BI & Modeling",
+                    "icon": "powerbi",
+                    "topics": [
+                        "Power Query ETL Ingestion & Data Transformation",
+                        "Star Schema Relational Data Modeling & Cardinality",
+                        "Advanced DAX Measures & Time Intelligence Calculations",
+                        "Executive KPI Dashboards, Bookmarks & Drill-Throughs"
+                    ],
+                    "detailed_sections": [
+                        {
+                            "title": "Data Modeling & Power Query ETL",
+                            "bullets": [
+                                "Power Query data shaping, unpivoting, merging queries, column profiling",
+                                "Star Schema vs Snowflake Schema: Fact tables vs Dimension tables",
+                                "Managing 1-to-Many and Many-to-Many relationships, active vs inactive (USERELATIONSHIP)",
+                                "Designing robust calendar tables for enterprise time-series"
+                            ]
+                        },
+                        {
+                            "title": "Advanced DAX Measures & Virtual Tables",
+                            "bullets": [
+                                "Evaluation contexts: Row context, Filter context, Context transition",
+                                "Core DAX functions: CALCULATE, FILTER, ALL, ALLEXCEPT, VALUES, RELATED, RELATEDTABLE",
+                                "Virtual table manipulation: SUMMARIZE, ADDCOLUMNS, GENERATE",
+                                "Safe numerical calculations using DIVIDE, COALESCE, SELECTEDVALUE"
+                            ]
+                        },
+                        {
+                            "title": "Time Intelligence Calculations",
+                            "bullets": [
+                                "Year-to-Date (YTD), Quarter-to-Date (QTD), Month-to-Date (MTD)",
+                                "Period-over-period comparisons: SAMEPERIODLASTYEAR, DATEADD, PARALLELPERIOD",
+                                "Rolling metrics: 30-day moving averages and trailing 12-month metrics"
+                            ]
+                        },
+                        {
+                            "title": "Executive Visual Storytelling & UX",
+                            "bullets": [
+                                "Building interactive drill-through pages and custom tooltip report pages",
+                                "Interactive UI bookmarks, buttons, slicer panels, dynamic measure selectors",
+                                "Designing responsive executive dashboard layouts optimized for leadership"
+                            ]
+                        }
+                    ]
                 },
                 {
-                    "module": "Tableau Visual Analytics",
-                    "topics": ["Connecting to Diverse Data Sources", "Visual Best Practices & Chart Types", "Calculated Fields & Parameters", "Storyboards & Interactive Visualizations"]
+                    "module": "Tableau Visual Storytelling & Dashboards",
+                    "badge": "Visual Analytics",
+                    "icon": "tableau",
+                    "topics": [
+                        "Connecting to Files, Cloud Databases & Live Extracts",
+                        "Visual Dimensions vs Measures & Granularity Controls",
+                        "Level of Detail (LOD) Calculations (FIXED, INCLUDE, EXCLUDE)",
+                        "Interactive Storyboards, Dynamic Actions & Cloud Publishing"
+                    ],
+                    "detailed_sections": [
+                        {
+                            "title": "LOD Expressions & Advanced Calculations",
+                            "bullets": [
+                                "Level of Detail (LOD) calculations: FIXED, INCLUDE, EXCLUDE syntax",
+                                "Calculating customer lifetime value and first-purchase cohorts with LODs",
+                                "Table calculations: Percent of total, running total, rank, difference from previous",
+                                "Dynamic parameters, parameter actions, and calculated field logic"
+                            ]
+                        },
+                        {
+                            "title": "Interactive Actions & Dashboard Architecture",
+                            "bullets": [
+                                "Filter actions, highlight actions, set actions, and URL external actions",
+                                "Creating collapsible containers, custom navigation buttons, dynamic icons",
+                                "Geographic mapping with latitude/longitude, spatial data, and regional layers"
+                            ]
+                        },
+                        {
+                            "title": "Advanced Chart Types & Visual Best Practices",
+                            "bullets": [
+                                "Dual-axis combination charts, Pareto charts, waterfall charts, donut charts",
+                                "Cognitive design: Color theory, visual hierarchy, avoiding chart clutter",
+                                "Formatting guidelines for C-level executive consumption"
+                            ]
+                        },
+                        {
+                            "title": "Storyboarding & Tableau Public Portfolio",
+                            "bullets": [
+                                "Building multi-chapter story points presenting narrative business insights",
+                                "Extract performance tuning, dashboard latency optimization",
+                                "Publishing interactive web portfolios on Tableau Public"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "module": "Career Acceleration: GitHub, Resume & LinkedIn Setup",
+                    "badge": "Job Readiness & Portfolio",
+                    "icon": "career",
+                    "topics": [
+                        "GitHub Portfolio Setup & Open-Source Code Architecture",
+                        "ATS-Compliant Data Analyst Resume Engineering",
+                        "LinkedIn Profile Optimization & Inbound Recruiter Strategy",
+                        "1-on-1 Mock Technical Interviews & Live SQL Screenings"
+                    ],
+                    "detailed_sections": [
+                        {
+                            "title": "GitHub Portfolio Architecture",
+                            "bullets": [
+                                "Setting up a clean, professional GitHub developer profile with profile README",
+                                "Git version control fundamentals: commits, branching, pushing repository updates",
+                                "Writing production-grade README.md files: Problem statements, architecture schemas, key insights, screenshots",
+                                "Hosting 3+ complete capstone portfolios with downloadable data dictionaries"
+                            ]
+                        },
+                        {
+                            "title": "ATS-Optimized Tech Resume Building",
+                            "bullets": [
+                                "Line-by-line resume engineering specifically for Data Analyst & BI roles",
+                                "Quantifiable business impact formula: Action + Tool + Business Result (e.g., 'Reduced query latency by 45%')",
+                                "Strategic technical keyword placement to pass automated ATS recruiter screeners",
+                                "Removing rookie formatting flaws and organizing technical skills hierarchy"
+                            ]
+                        },
+                        {
+                            "title": "LinkedIn Personal Branding & Inbound Networking",
+                            "bullets": [
+                                "High-converting profile headline, about section, and featured portfolio media",
+                                "Documenting learning in public: Sharing live dashboard demos and SQL insights",
+                                "High-response direct messaging templates for reaching hiring managers and team leads",
+                                "Leveraging alumni networks and technical community groups for interview referrals"
+                            ]
+                        },
+                        {
+                            "title": "Mock Technical Interviews & Capstone Deployment",
+                            "bullets": [
+                                "Live timed SQL query solving on CoderPad & HackerRank under interview pressure",
+                                "Python data wrangling live screening challenges using Pandas & NumPy",
+                                "Dashboard defense: Answering business stakeholder questions on DAX logic and metrics",
+                                "Publishing live web-accessible dashboards on Power BI Service and Tableau Public"
+                            ]
+                        }
+                    ]
                 }
             ],
             "fees": None  # Explicitly None - NO fees on page

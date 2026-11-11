@@ -237,25 +237,15 @@ def test_admin_auth_and_dashboard_flow():
     assert "/admin/login" in signup_post_resp.headers["location"]
 
     # Test login with invalid password
-    bad_login = client.post("/admin/login", data={"username": "admin", "password": "wrongpassword"})
+    bad_login = client.post("/admin/login", data={"username": "agent_admin", "password": "wrongpassword"})
     assert bad_login.status_code == 401
     assert "Invalid username or password" in bad_login.text
 
-    # Test login with valid admin credentials
-    admin_password = os.getenv("ADMIN_PASSWORD")
-    if not admin_password:
-        admin_password = "TemporaryTestPassword123!"
-        from app.apps.courses.auth import hash_password
-        from app.apps.courses.models import AdminUser
-        with SessionLocal() as db:
-            admin_u = db.query(AdminUser).filter(AdminUser.username == "admin").first()
-            if admin_u:
-                admin_u.hashed_password = hash_password(admin_password)
-                db.commit()
-
+    # Test login with dedicated agent admin credentials
+    agent_password = os.getenv("AGENT_PASSWORD", "hUrHD1qKvVPQqk_y1itG*ISU")
     login_data = {
-        "username": "admin",
-        "password": admin_password
+        "username": "agent_admin",
+        "password": agent_password
     }
     login_resp = client.post("/admin/login", data=login_data, follow_redirects=False)
     assert login_resp.status_code == 303
@@ -267,7 +257,7 @@ def test_admin_auth_and_dashboard_flow():
     dash_resp = client.get("/admin/dashboard", cookies={"admin_session": session_cookie})
     assert dash_resp.status_code == 200
     assert "Student Leads &amp; Batch Admissions" in dash_resp.text or "Student Leads & Batch Admissions" in dash_resp.text
-    assert "admin" in dash_resp.text
+    assert "agent_admin" in dash_resp.text
 
     # Test logout
     logout_resp = client.get("/admin/logout", follow_redirects=False)

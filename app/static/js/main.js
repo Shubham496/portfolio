@@ -174,3 +174,83 @@ function showToast(type, title, message) {
     if (toastTimer) clearTimeout(toastTimer);
     toastTimer = setTimeout(() => toast.classList.add('hidden'), 5000);
 }
+
+
+// ─────────────────────────────────────────────
+// Expandable Syllabus Accordion
+// ─────────────────────────────────────────────
+function toggleSyllabus(index) {
+    const content = document.getElementById(`syllabus-exp-${index}`);
+    const btn = document.getElementById(`syllabus-btn-${index}`);
+    const icon = document.getElementById(`syllabus-icon-${index}`);
+    if (!content) return;
+
+    const isClosed = content.classList.contains('hidden') || content.style.display === 'none' || window.getComputedStyle(content).display === 'none';
+    if (isClosed) {
+        content.classList.remove('hidden');
+        content.style.display = 'block';
+        if (btn) {
+            const span = btn.querySelector('.btn-label') || btn.querySelector('span');
+            if (span) span.textContent = 'Show Less Details';
+        }
+        if (icon) icon.style.transform = 'rotate(180deg)';
+        if (window.lucide && typeof lucide.createIcons === 'function') {
+            try { lucide.createIcons(); } catch (e) {}
+        }
+    } else {
+        content.classList.add('hidden');
+        content.style.display = 'none';
+        if (btn) {
+            const span = btn.querySelector('.btn-label') || btn.querySelector('span');
+            if (span) span.textContent = 'Show More Details';
+        }
+        if (icon) icon.style.transform = 'rotate(0deg)';
+    }
+}
+
+function toggleAllSyllabus() {
+    const contents = document.querySelectorAll('.syllabus-expandable-content');
+    const masterBtn = document.getElementById('toggle-all-syllabus-btn');
+    if (!contents.length) return;
+
+    // If any module is closed, expand all; otherwise collapse all
+    let anyClosed = false;
+    contents.forEach((c) => {
+        if (c.classList.contains('hidden') || c.style.display === 'none' || window.getComputedStyle(c).display === 'none') {
+            anyClosed = true;
+        }
+    });
+
+    contents.forEach((c) => {
+        const idx = c.id.replace('syllabus-exp-', '');
+        const btn = document.getElementById(`syllabus-btn-${idx}`);
+        const icon = document.getElementById(`syllabus-icon-${idx}`);
+        if (anyClosed) {
+            c.classList.remove('hidden');
+            c.style.display = 'block';
+            if (btn) {
+                const s = btn.querySelector('.btn-label') || btn.querySelector('span');
+                if (s) s.textContent = 'Show Less Details';
+            }
+            if (icon) icon.style.transform = 'rotate(180deg)';
+        } else {
+            c.classList.add('hidden');
+            c.style.display = 'none';
+            if (btn) {
+                const s = btn.querySelector('.btn-label') || btn.querySelector('span');
+                if (s) s.textContent = 'Show More Details';
+            }
+            if (icon) icon.style.transform = 'rotate(0deg)';
+        }
+    });
+
+    if (masterBtn) {
+        const masterSpan = masterBtn.querySelector('span');
+        if (masterSpan) {
+            masterSpan.textContent = anyClosed ? 'Collapse All Modules' : 'Expand All Modules';
+        }
+    }
+    if (window.lucide && typeof lucide.createIcons === 'function') {
+        try { lucide.createIcons(); } catch (e) {}
+    }
+}

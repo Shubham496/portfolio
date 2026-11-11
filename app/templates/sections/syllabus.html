@@ -1,0 +1,183 @@
+{# ═════════════════════════════════════════════════════════════
+   7. FULL SYLLABUS — EXPANDABLE 5 PILLARS + CAREER (Task 2)
+   ═════════════════════════════════════════════════════════════ #}
+<section id="syllabus" class="py-14 border-b border-slate-200 dark:border-slate-800/80 bg-slate-50/50 dark:bg-[#070B14] transition-colors">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+
+        <div class="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div>
+                <div class="text-[11px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-1.5">
+                    Curriculum Map &amp; Deep-Dive Breakdown
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mb-1">
+                    Complete Course Syllabus
+                </h2>
+                <p class="text-slate-600 dark:text-slate-400 text-xs sm:text-sm">
+                    Click <strong>"Show More Details"</strong> on any module to inspect the deep-dive topics, Power Query ETL, VBA, Window functions, DAX calculations, and capstone requirements.
+                </p>
+            </div>
+            <div class="flex items-center space-x-2.5 self-start sm:self-auto">
+                <button type="button" id="toggle-all-syllabus-btn" onclick="toggleAllSyllabus()" 
+                        class="inline-flex items-center space-x-1.5 px-3.5 py-2.5 rounded-xl bg-white dark:bg-[#0B1120] hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 text-xs font-semibold border border-slate-300 dark:border-slate-700 shadow-sm transition">
+                    <i data-lucide="layers" class="w-3.5 h-3.5 text-blue-500"></i>
+                    <span>Expand All Modules</span>
+                </button>
+                <a href="/course/syllabus/download" 
+                   class="inline-flex items-center space-x-1.5 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-md transition">
+                    <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                    <span>Download Brochure</span>
+                </a>
+            </div>
+        </div>
+
+        {% set syllabus = course_profile.course.syllabus_modules %}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {% for mod in syllabus %}
+            <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0B1120] p-5 sm:p-6 shadow-sm hover:border-blue-400/40 transition flex flex-col justify-between">
+                <div>
+                    <!-- Header -->
+                    <div class="flex items-start justify-between gap-3 mb-3">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-9 h-9 rounded-xl bg-blue-600/10 dark:bg-blue-500/10 flex items-center justify-center font-bold text-blue-600 dark:text-blue-400 text-sm shrink-0">
+                                {{ loop.index }}
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-900 dark:text-white text-sm sm:text-base leading-tight">{{ mod.module }}</h3>
+                                {% if mod.badge %}
+                                <span class="text-[10px] font-semibold text-blue-600 dark:text-blue-400">{{ mod.badge }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Core Visible Topics -->
+                    <div class="mb-3">
+                        <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">Core Competencies:</div>
+                        <ul class="space-y-1.5">
+                            {% for topic in mod.topics %}
+                            <li class="flex items-start space-x-2 text-xs text-slate-700 dark:text-slate-300">
+                                <span class="text-blue-500 font-bold mt-0.5">›</span>
+                                <span class="font-medium">{{ topic }}</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <!-- Expandable Drawer for Deep Dive Details (Task 2) -->
+                    <div id="syllabus-exp-{{ loop.index }}" class="syllabus-expandable-content hidden mt-4 pt-4 border-t border-slate-200 dark:border-slate-800 space-y-4">
+                        {% if mod.detailed_sections %}
+                            {% for section in mod.detailed_sections %}
+                            <div class="rounded-xl p-3 bg-slate-50/80 dark:bg-slate-900/60 border border-slate-200/70 dark:border-slate-800/70">
+                                <div class="text-xs font-bold text-slate-900 dark:text-white mb-2 flex items-center space-x-1.5">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                                    <span>{{ section.title }}</span>
+                                </div>
+                                <ul class="space-y-1 text-[11px] text-slate-600 dark:text-slate-300">
+                                    {% for item in section.bullets %}
+                                    <li class="flex items-start space-x-1.5">
+                                        <i data-lucide="check-circle" class="w-3 h-3 text-emerald-500 shrink-0 mt-0.5"></i>
+                                        <span>{{ item }}</span>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Show More / Show Less Toggle Button -->
+                <button type="button" 
+                        onclick="toggleSyllabus({{ loop.index }})" 
+                        id="syllabus-btn-{{ loop.index }}" 
+                        class="mt-4 w-full py-2.5 px-3 rounded-xl border border-blue-500/20 bg-blue-50/50 hover:bg-blue-100/70 dark:bg-blue-950/20 dark:hover:bg-blue-950/40 text-blue-700 dark:text-blue-300 font-semibold text-xs transition flex items-center justify-center space-x-1.5 active:scale-[0.99] cursor-pointer">
+                    <span class="btn-label">Show More Details</span>
+                    <i data-lucide="chevron-down" id="syllabus-icon-{{ loop.index }}" class="w-3.5 h-3.5 transition-transform duration-200"></i>
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Inline Robust Accordion Script (Prevents any external cache/loading delay) -->
+    <script>
+        function toggleSyllabus(index) {
+            var el = document.getElementById('syllabus-exp-' + index);
+            var btn = document.getElementById('syllabus-btn-' + index);
+            var icon = document.getElementById('syllabus-icon-' + index);
+            if (!el) return;
+
+            var isClosed = el.classList.contains('hidden') || el.style.display === 'none' || window.getComputedStyle(el).display === 'none';
+            if (isClosed) {
+                el.classList.remove('hidden');
+                el.style.display = 'block';
+                if (btn) {
+                    var label = btn.querySelector('.btn-label') || btn.querySelector('span');
+                    if (label) label.textContent = 'Show Less Details';
+                }
+                if (icon) icon.style.transform = 'rotate(180deg)';
+                if (window.lucide && typeof lucide.createIcons === 'function') {
+                    try { lucide.createIcons(); } catch (e) {}
+                }
+            } else {
+                el.classList.add('hidden');
+                el.style.display = 'none';
+                if (btn) {
+                    var label = btn.querySelector('.btn-label') || btn.querySelector('span');
+                    if (label) label.textContent = 'Show More Details';
+                }
+                if (icon) icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function toggleAllSyllabus() {
+            var drawers = document.querySelectorAll('.syllabus-expandable-content');
+            var masterBtn = document.getElementById('toggle-all-syllabus-btn');
+            if (!drawers.length) return;
+
+            var anyClosed = false;
+            for (var i = 0; i < drawers.length; i++) {
+                var d = drawers[i];
+                if (d.classList.contains('hidden') || d.style.display === 'none' || window.getComputedStyle(d).display === 'none') {
+                    anyClosed = true;
+                    break;
+                }
+            }
+
+            for (var j = 0; j < drawers.length; j++) {
+                var item = drawers[j];
+                var idx = item.id.replace('syllabus-exp-', '');
+                var b = document.getElementById('syllabus-btn-' + idx);
+                var ic = document.getElementById('syllabus-icon-' + idx);
+
+                if (anyClosed) {
+                    item.classList.remove('hidden');
+                    item.style.display = 'block';
+                    if (b) {
+                        var lbl = b.querySelector('.btn-label') || b.querySelector('span');
+                        if (lbl) lbl.textContent = 'Show Less Details';
+                    }
+                    if (ic) ic.style.transform = 'rotate(180deg)';
+                } else {
+                    item.classList.add('hidden');
+                    item.style.display = 'none';
+                    if (b) {
+                        var lbl2 = b.querySelector('.btn-label') || b.querySelector('span');
+                        if (lbl2) lbl2.textContent = 'Show More Details';
+                    }
+                    if (ic) ic.style.transform = 'rotate(0deg)';
+                }
+            }
+
+            if (masterBtn) {
+                var mLabel = masterBtn.querySelector('span');
+                if (mLabel) {
+                    mLabel.textContent = anyClosed ? 'Collapse All Modules' : 'Expand All Modules';
+                }
+            }
+            if (window.lucide && typeof lucide.createIcons === 'function') {
+                try { lucide.createIcons(); } catch (e) {}
+            }
+        }
+    </script>
+</section>

@@ -1,4 +1,9 @@
 import os
+from dotenv import load_dotenv
+
+# Load .env file for environment variables
+load_dotenv()
+
 from app.core.local import LocalSettings
 from app.core.deployment import DeploymentSettings
 

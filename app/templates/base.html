@@ -3,24 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{{ title }} | {{ settings.OWNER_NAME }}{% endblock %}</title>
+    <title>{% block title %}MYTHOS — Build Skills. Build Systems. Build The Future. | Data Analysis Mentorship{% endblock %}</title>
     
     <!-- Meta SEO -->
-    <meta name="description" content="{{ settings.OWNER_BIO }}">
-    <meta name="author" content="{{ settings.OWNER_NAME }}">
+    <meta name="description" content="Mythos is a controlled tech learning system. Weekend mentorship in Python, SQL, Power BI, Excel, and Tableau led by Shubham Singh.">
+    <meta name="author" content="Mythos &amp; {{ settings.OWNER_NAME }}">
     
-    <!-- Tailwind CSS (Support both Dark & Light Themes) -->
+    <!-- Favicon using Mythos Icon -->
+    <link rel="icon" type="image/png" href="/static/Images/mythos/mythos_icon_transparent.png">
+
+    <!-- Google Fonts: Poppins (Clean, Modern, Global from Mythos Brand Guide) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS (Configured for Mythos Design System) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                        display: ['Poppins', 'sans-serif'],
+                    },
                     colors: {
+                        mythos: {
+                            navy: '#070B14',
+                            dark: '#0B1120',
+                            slate: '#0F172A',
+                            card: '#111827',
+                            border: '#1E293B',
+                            royal: '#1E3A8A',
+                            primary: '#2563EB',
+                            cyan: '#06B6D4',
+                            purple: '#7C3AED',
+                            pink: '#EC4899',
+                            orange: '#F97316',
+                            amber: '#F59E0B',
+                        },
                         slate: {
                             850: '#151e2e',
                             950: '#0b0f17',
                         }
+                    },
+                    backgroundImage: {
+                        'gradient-mythos': 'linear-gradient(135deg, #06B6D4 0%, #2563EB 25%, #7C3AED 50%, #EC4899 75%, #F97316 100%)',
+                        'gradient-hero-text': 'linear-gradient(90deg, #F97316 0%, #EC4899 50%, #7C3AED 100%)',
+                        'gradient-banner': 'linear-gradient(90deg, #2563EB 0%, #7C3AED 50%, #F97316 100%)',
                     }
                 }
             }
@@ -42,24 +73,24 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     
-    <!-- Custom CSS -->
+    <!-- Custom Mythos CSS -->
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
-<body class="bg-[#f8fafc] text-slate-900 dark:bg-[#0b0f17] dark:text-slate-200 min-h-screen flex flex-col font-sans antialiased transition-colors duration-200 selection:bg-blue-600 selection:text-white">
+<body class="bg-[#f8fafc] text-slate-900 dark:bg-[#070B14] dark:text-slate-100 min-h-screen flex flex-col font-sans antialiased transition-colors duration-200 selection:bg-blue-600 selection:text-white">
 
-    <!-- Navigation -->
+    <!-- Top Navigation -->
     {% include "partials/navbar.html" %}
 
-    <!-- Main Content -->
+    <!-- Main Content Area -->
     <main class="flex-grow">
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Footer -->
+    <!-- Global Footer -->
     {% include "partials/footer.html" %}
 
-    <!-- Scripts -->
-    <script src="/static/js/main.js"></script>
+    <!-- Global Client Scripts (Cache-busted) -->
+    <script src="/static/js/main.js?v=2.2"></script>
     <script>
         lucide.createIcons();
     </script>

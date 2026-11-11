@@ -9,14 +9,14 @@ class SyllabusPDF(FPDF):
         self.set_font('Helvetica', 'B', 9)
         self.set_text_color(255, 255, 255)
         self.set_xy(10, 4)
-        self.cell(0, 8, 'DATA ANALYSIS MASTERCLASS | WEEKEND BATCH (SAT & SUN 6-8 PM IST)', 0, 0, 'C')
+        self.cell(0, 8, 'MYTHOS | DATA ANALYSIS MASTERCLASS | WEEKEND BATCH (SAT & SUN 6-8 PM IST)', 0, 0, 'C')
         self.ln(16)
 
     def footer(self):
         self.set_y(-15)
         self.set_font('Helvetica', '', 8)
         self.set_text_color(100, 116, 139)
-        self.cell(0, 10, f'Instructor: Shubham Singh  |  Phone: +91 9520132466  |  Page {self.page_no()}', 0, 0, 'C')
+        self.cell(0, 10, f'Instructor: Shubham Singh  |  WhatsApp: +91 8727864157  |  Page {self.page_no()}', 0, 0, 'C')
 
 
 def generate_syllabus_pdf():
@@ -41,7 +41,7 @@ def generate_syllabus_pdf():
     # Instructor & Credentials
     pdf.set_font('Helvetica', '', 10)
     pdf.set_text_color(71, 85, 105)
-    pdf.multi_cell(0, 5, 'Instructor: Shubham Singh - Lead Python & Data Architecture Consultant\nIndustry Background: Ducat, Netmax Technologies, LNP Infotech | 120+ Senior Developers & Students Mentored')
+    pdf.multi_cell(0, 5, 'Instructor: Shubham Singh - Lead Python & Data Architecture Consultant\nIndustry Background: Ducat, Netmax Technologies, LNP Infotech | 550+ Students & Senior Developers Trained')
     pdf.ln(4)
 
     # Schedule Box
@@ -88,12 +88,12 @@ def generate_syllabus_pdf():
     # Module 1
     render_module(
         1,
-        'Excel Advanced Modeling & Cleansing',
+        'Excel Advanced Modeling, Power Query & VBA',
         [
-            'Advanced Lookup & Formulas: XLOOKUP, INDEX/MATCH, VLOOKUP, Nested IFs, SUMIFS',
-            'Data Cleaning, Text Functions (TRIM, SUBSTITUTE, TEXTSPLIT), and Flash Fill',
-            'Interactive Pivot Tables, Calculated Fields, Grouping & Executive Pivot Charts',
-            'Data Validation, Conditional Formatting & What-If Financial Analysis'
+            'Power Query Editor: Multi-file ingestion, unpivoting, merging/appending datasets & ETL cleanses',
+            'VBA & Automation: Recording macros, writing subroutines, automating recurring weekly reports',
+            'Advanced Lookup & Dynamic Arrays: XLOOKUP, INDEX/MATCH, FILTER, UNIQUE, Nested IFS',
+            'Data Validation, Conditional Formatting & What-If Financial Analysis (Goal Seek, Scenarios)'
         ]
     )
 
@@ -102,22 +102,22 @@ def generate_syllabus_pdf():
         2,
         'SQL for Data Analysis & Relational Databases',
         [
-            'Relational Database Architecture, Schema Design, Normalization, Primary/Foreign Keys',
-            'Complex Querying: Multi-Table INNER/LEFT/RIGHT/FULL JOINs, Subqueries, and CTEs',
-            'Analytical Window Functions: ROW_NUMBER, RANK, DENSE_RANK, NTILE, LEAD/LAG',
-            'Aggregations, Grouping Sets, HAVING clauses, and Real-world Query Optimization'
+            'Relational Database Architecture, Schema Design, 3NF Normalization, Primary/Foreign Keys',
+            'Complex Querying: Multi-Table INNER/LEFT/RIGHT/FULL JOINs, Subqueries, and Nested CTEs',
+            'Analytical Window Functions: ROW_NUMBER, RANK, DENSE_RANK, NTILE, LEAD/LAG, Running Totals',
+            'Performance Tuning: B-tree indexing, EXPLAIN ANALYZE, and real-world business analytics queries'
         ]
     )
 
     # Module 3
     render_module(
         3,
-        'Python Programming for Data Analytics',
+        'Python Programming for Data Analytics & ETL',
         [
             'Python Foundations: Data structures (Lists, Tuples, Dictionaries), Control Flow, Functions',
             'NumPy Computing: Vectorized array operations, matrix mathematics, indexing & slicing',
-            'Pandas DataFrames: Reading CSV/Excel/SQL, Filtering, Handling Missing/Duplicate records',
-            'Automated Data Transformation, Aggregations, GroupBy pipelines, and Scripted Reporting'
+            'Pandas DataFrames: High-speed wrangling, missing data imputation, regex extraction, GroupBy pipelines',
+            'Automated Data Transformation, SQLAlchemy database ingestion, and scheduled reporting scripts'
         ]
     )
 
@@ -126,10 +126,10 @@ def generate_syllabus_pdf():
         4,
         'Power BI Business Intelligence & Interactive Dashboards',
         [
-            'End-to-End ETL with Power Query: Cleansing, Unpivoting, Merging & Appending Queries',
+            'End-to-End ETL with Power Query: Cleansing, unpivoting, merging & data modeling',
             'Relational Data Modeling: Star Schema, Snowflake Schema, 1-to-Many Relationships',
-            'DAX Measures: CALCULATE, FILTER, ALL, RELATED, Date-Time Intelligence (YTD, MTD, YoY)',
-            'Executive Visualization: Drill-through reports, interactive slicers, KPI visual cards'
+            'Advanced DAX: CALCULATE, FILTER, ALL, RELATED, Time Intelligence (YTD, MTD, YoY, moving averages)',
+            'Executive Visualization: Drill-through reports, interactive slicers, custom tooltips, KPI cards'
         ]
     )
 
@@ -139,9 +139,21 @@ def generate_syllabus_pdf():
         'Tableau Visual Storytelling & Dashboards',
         [
             'Connecting to Varied Sources (Files, Relational Databases, Cloud Warehouses)',
-            'Visual Dimensions vs Measures, Discrete vs Continuous data attributes',
-            'Calculated Fields, Table Calculations, User Parameters, and Custom Sets',
-            'Multi-layer Interactive Dashboards, Action Filters, and Executive Storyboards'
+            'Level of Detail (LOD) Calculations: FIXED, INCLUDE, EXCLUDE expressions & Table calculations',
+            'Interactive Dashboards: Filter actions, highlight actions, set actions, and dynamic parameters',
+            'Storyboarding & Cloud Publishing: Multi-chapter executive presentations on Tableau Public'
+        ]
+    )
+
+    # Module 6
+    render_module(
+        6,
+        'Career Acceleration: GitHub, Resume & LinkedIn Setup',
+        [
+            'GitHub Portfolio: Open-source repositories with production READMEs, architecture schemas & demos',
+            'ATS-Optimized Resume: Quantified impact bullet points (Action + Tool + Metric) tailored for Data roles',
+            'LinkedIn Setup: High-converting headline, featured projects, and recruiter direct outreach framework',
+            'Interview Preparation: 1-on-1 mock technical interviews, live SQL problem solving on CoderPad'
         ]
     )
 

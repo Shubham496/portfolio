@@ -9,11 +9,12 @@ class BaseConfig(BaseSettings):
     OWNER_NAME: str = "Shubham Singh"
     OWNER_TITLE: str = "Data Engineer & Python Consultant | Analytics & Automation"
     OWNER_BIO: str = (
-        "Data Analyst and Python Consultant with 3+ years of experience transforming complex datasets into "
-        "high-impact business intelligence, automated ETL pipelines, and scalable backend applications. "
-        "Proven expertise in Python, SQL, Power BI, workflow orchestration, and building production-ready data systems."
+        "Lead Python & Data Architecture Consultant with 3+ years of enterprise experience transforming complex "
+        "datasets into high-impact business intelligence, automated ETL pipelines, and scalable backend applications. "
+        "Trained and mentored 550+ students and developers across Ducat, Netmax Technologies, and LNP Infotech in "
+        "Python, SQL, Power BI, Excel modeling, and Tableau."
     )
-    OWNER_PHONE: str = "+91 9520132466"
+    OWNER_PHONE: str = "8727864157"
     OWNER_LOCATION: str = "India (Open to Global & Remote Roles)"
     GITHUB_URL: str = "https://github.com/Shubham496"
     LINKEDIN_URL: str = "https://linkedin.com/in/shubham469"

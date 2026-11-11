@@ -1,0 +1,133 @@
+{# ═════════════════════════════════════════════════════════════
+   1. HERO SECTION (Matching Image 4 Layout & Aesthetic)
+   ═════════════════════════════════════════════════════════════ #}
+<section id="hero" class="relative pt-10 pb-16 md:pt-16 md:pb-20 border-b border-slate-200 dark:border-slate-800/80 overflow-hidden transition-colors">
+    <!-- Ambient background glows -->
+    <div class="absolute top-1/4 -left-20 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute top-1/3 -right-20 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+
+            {# Left Column: Hero Text & CTAs (Image 4) #}
+            <div class="lg:col-span-7 text-left">
+
+                {# Status Pill #}
+                <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full border border-blue-500/20 bg-blue-50/80 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 text-xs font-semibold mb-5 backdrop-blur-sm">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>Weekend Cohort — Enrolling Now</span>
+                </div>
+
+                {# Main Headline from Mockup #}
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-950 dark:text-white leading-[1.1] mb-5">
+                    Become<br>
+                    Industry-Ready<br>
+                    Through<br>
+                    <span class="text-gradient-mythos">Structured Execution.</span>
+                </h1>
+
+                {# Subtitle #}
+                <p class="text-slate-600 dark:text-slate-300 text-base sm:text-lg leading-relaxed mb-6 max-w-xl font-normal">
+                    Mythos is a controlled learning system where you don't just learn — you build real systems.
+                    Master <strong class="text-slate-900 dark:text-white font-semibold">Python, SQL, Power&nbsp;BI, Excel, and Tableau</strong> through rigorous production simulation.
+                </p>
+
+                {# Primary Action CTAs #}
+                <div class="flex flex-wrap gap-3.5 items-center mb-6">
+                    <button onclick="openModal('enroll')"
+                        class="inline-flex items-center space-x-2 px-7 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm shadow-xl shadow-blue-500/25 transition-all transform hover:-translate-y-0.5 active:scale-95">
+                        <span>Apply Now</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                    <a href="/course/syllabus/download"
+                        class="inline-flex items-center space-x-2 px-6 py-3.5 rounded-xl bg-white dark:bg-[#111827] hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-semibold text-sm shadow-sm transition active:scale-95">
+                        <i data-lucide="download" class="w-4 h-4 text-blue-500"></i>
+                        <span>View Curriculum</span>
+                    </a>
+                    <button onclick="openModal('enquiry')"
+                        class="inline-flex items-center space-x-2 px-5 py-3.5 rounded-xl text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium text-sm transition">
+                        <i data-lucide="help-circle" class="w-4 h-4"></i>
+                        <span>Ask a Question</span>
+                    </button>
+                </div>
+
+                {# Schedule Notice from Image 4 #}
+                <div class="flex items-center space-x-2.5 text-xs text-slate-500 dark:text-slate-400">
+                    <i data-lucide="shield-check" class="w-4 h-4 text-emerald-500 shrink-0"></i>
+                    <span><strong>Saturday &amp; Sunday ONLY</strong> · 6:00 PM – 8:00 PM IST · Limited seats. Selection-based admission.</span>
+                </div>
+
+            </div>
+
+            {# Right Column: Instructor Photo Showcase (Clean, No Outer Box) #}
+            <div class="lg:col-span-5 flex justify-center relative">
+                <div class="relative w-full max-w-xs sm:max-w-sm">
+                    
+                    <!-- Ambient Soft Back Glow -->
+                    <div class="absolute -inset-4 bg-gradient-to-tr from-blue-600/25 via-purple-600/20 to-orange-500/20 rounded-3xl blur-2xl -z-10 pointer-events-none"></div>
+                    
+                    <!-- Floating Pill: Top Lead Mentor -->
+                    <div class="absolute -top-3 left-3 bg-white/95 dark:bg-[#0F172A]/95 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3 py-1.5 shadow-lg flex items-center space-x-1.5 text-[11px] font-semibold text-slate-800 dark:text-slate-200 z-20 backdrop-blur-sm">
+                        <i data-lucide="shield-check" class="w-3.5 h-3.5 text-blue-500"></i>
+                        <span>Shubham Singh · Lead Mentor</span>
+                    </div>
+
+                    <!-- Floating Pill: 5 Core Pillars -->
+                    <div class="absolute -top-3 right-3 bg-white/95 dark:bg-[#0F172A]/95 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3 py-1.5 shadow-lg flex items-center space-x-1.5 text-[11px] font-semibold text-slate-800 dark:text-slate-200 z-20 backdrop-blur-sm">
+                        <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                        <span>5 Core Pillars</span>
+                    </div>
+
+                    <!-- Clean Photo Container (Direct, No Clunky Outer Podium Frame) -->
+                    <div class="relative rounded-3xl overflow-hidden shadow-2xl border border-slate-200/80 dark:border-slate-800/80 bg-slate-900 group">
+                        <img src="{{ settings.PROFILE_PHOTO_PATH }}" 
+                             alt="Shubham Singh - Lead Instructor & Consultant" 
+                             class="w-full h-[400px] sm:h-[460px] object-cover object-top transition duration-500 group-hover:scale-105">
+                        
+                        <!-- Subtle Vignette Gradient at Bottom -->
+                        <div class="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-slate-950/95 via-slate-950/50 to-transparent pointer-events-none"></div>
+                        <div class="absolute bottom-3.5 inset-x-0 text-center pointer-events-none">
+                            <span class="text-xs font-bold text-white tracking-wide block">Data Architecture &amp; Analytics</span>
+                            <span class="text-[10px] text-blue-300 font-medium">3+ Years Enterprise Experience</span>
+                        </div>
+                    </div>
+
+                    <!-- Floating Badge: Students Trained 550+ -->
+                    <div class="absolute -bottom-3 -left-3 bg-white/95 dark:bg-[#0F172A]/95 border border-emerald-500/40 rounded-xl px-3.5 py-2 shadow-xl flex items-center space-x-2 text-xs font-bold text-slate-900 dark:text-white z-20 backdrop-blur-sm">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span>Students Trained: 550+</span>
+                    </div>
+
+                    <!-- Floating Pill: Weekend Cohort -->
+                    <div class="absolute -bottom-3 -right-3 bg-white/95 dark:bg-[#0F172A]/95 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3 py-2 shadow-xl flex items-center space-x-1.5 text-[11px] font-semibold text-slate-800 dark:text-slate-200 z-20 backdrop-blur-sm">
+                        <i data-lucide="calendar" class="w-3.5 h-3.5 text-orange-500"></i>
+                        <span>Sat &amp; Sun · 6–8 PM</span>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Trust Metrics Strip -->
+        <div class="mt-12 pt-8 border-t border-slate-200/80 dark:border-slate-800/80 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+            <div class="p-3.5 rounded-2xl bg-white/70 dark:bg-[#0B1120]/70 border border-slate-200/80 dark:border-slate-800/80 shadow-sm backdrop-blur-sm">
+                <div class="text-2xl sm:text-3xl font-black text-slate-950 dark:text-white">550+</div>
+                <div class="text-xs text-slate-500 dark:text-slate-400 font-semibold mt-0.5">Students Trained</div>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-white/70 dark:bg-[#0B1120]/70 border border-slate-200/80 dark:border-slate-800/80 shadow-sm backdrop-blur-sm">
+                <div class="text-2xl sm:text-3xl font-black text-blue-600 dark:text-blue-400">3+ Yrs</div>
+                <div class="text-xs text-slate-500 dark:text-slate-400 font-semibold mt-0.5">Enterprise Consulting</div>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-white/70 dark:bg-[#0B1120]/70 border border-slate-200/80 dark:border-slate-800/80 shadow-sm backdrop-blur-sm">
+                <div class="text-2xl sm:text-3xl font-black text-purple-600 dark:text-purple-400">Sat &amp; Sun</div>
+                <div class="text-xs text-slate-500 dark:text-slate-400 font-semibold mt-0.5">6:00 – 8:00 PM IST Only</div>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-white/70 dark:bg-[#0B1120]/70 border border-slate-200/80 dark:border-slate-800/80 shadow-sm backdrop-blur-sm">
+                <div class="text-2xl sm:text-3xl font-black text-emerald-600 dark:text-emerald-400">100%</div>
+                <div class="text-xs text-slate-500 dark:text-slate-400 font-semibold mt-0.5">Live Hands-On Builds</div>
+            </div>
+        </div>
+
+    </div>
+</section>

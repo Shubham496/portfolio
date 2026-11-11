@@ -1,0 +1,116 @@
+{# ═════════════════════════════════════════════════════════════
+   2. THE PROBLEM VS OUR SOLUTION (Image 4 Component)
+   ═════════════════════════════════════════════════════════════ #}
+<section id="engine" class="py-14 border-b border-slate-200 dark:border-slate-800/80 bg-slate-50/60 dark:bg-[#070B14] transition-colors">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+            
+            {# Left Box: The Problem #}
+            <div class="lg:col-span-5 rounded-2xl border border-red-200 dark:border-red-900/40 bg-red-50/40 dark:bg-red-950/10 p-6 sm:p-7 flex flex-col justify-between shadow-sm">
+                <div>
+                    <div class="text-[11px] font-bold text-red-500 uppercase tracking-widest mb-1.5 flex items-center space-x-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                        <span>The Problem</span>
+                    </div>
+                    <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-5">
+                        Why Most Students Fail in Tech
+                    </h2>
+                    
+                    <ul class="space-y-3.5 text-xs sm:text-sm text-slate-700 dark:text-slate-300">
+                        <li class="flex items-start space-x-3">
+                            <span class="w-5 h-5 rounded-full bg-red-100 dark:bg-red-900/40 text-red-600 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">✕</span>
+                            <span><strong>Watching tutorials without building:</strong> Passive video watching creates the illusion of learning without actual skill retention.</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <span class="w-5 h-5 rounded-full bg-red-100 dark:bg-red-900/40 text-red-600 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">✕</span>
+                            <span><strong>No structure &rarr; random learning:</strong> Jumping between disjointed tools without understanding architectural flow.</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <span class="w-5 h-5 rounded-full bg-red-100 dark:bg-red-900/40 text-red-600 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">✕</span>
+                            <span><strong>No real projects:</strong> Toy dataset exercises that recruiters and engineering managers immediately disregard.</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <span class="w-5 h-5 rounded-full bg-red-100 dark:bg-red-900/40 text-red-600 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">✕</span>
+                            <span><strong>No feedback or guidance:</strong> Getting stuck for days on simple errors without senior code reviews.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-red-200 dark:border-red-900/40 text-xs sm:text-sm font-bold text-blue-600 dark:text-blue-400">
+                    Mythos is built to eliminate this.
+                </div>
+            </div>
+
+            {# Right Box: Our Solution (The Mythos Learning Engine) #}
+            <div class="lg:col-span-7 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0B1120] p-6 sm:p-7 shadow-sm flex flex-col justify-between">
+                <div>
+                    <div class="text-[11px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-1.5 flex items-center space-x-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                        <span>Our Solution</span>
+                    </div>
+                    <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-6">
+                        The Mythos Learning Engine
+                    </h2>
+
+                    {# 4 Step Pipeline from Mockup #}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        
+                        {# Step 1 #}
+                        <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/40">
+                            <div class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-2.5">
+                                <i data-lucide="laptop" class="w-4 h-4"></i>
+                            </div>
+                            <div class="text-xs font-bold text-slate-900 dark:text-white mb-1">1. Foundation</div>
+                            <p class="text-xs text-slate-600 dark:text-slate-400 leading-snug">
+                                Build strong concepts with clarity and mathematical intuition.
+                            </p>
+                        </div>
+
+                        {# Step 2 #}
+                        <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/40">
+                            <div class="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center mb-2.5">
+                                <i data-lucide="code-2" class="w-4 h-4"></i>
+                            </div>
+                            <div class="text-xs font-bold text-slate-900 dark:text-white mb-1">2. Controlled Builds</div>
+                            <p class="text-xs text-slate-600 dark:text-slate-400 leading-snug">
+                                Work on guided projects with architectural structure and tests.
+                            </p>
+                        </div>
+
+                        {# Step 3 #}
+                        <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/40">
+                            <div class="w-8 h-8 rounded-lg bg-orange-500/10 text-orange-600 dark:text-orange-400 flex items-center justify-center mb-2.5">
+                                <i data-lucide="rocket" class="w-4 h-4"></i>
+                            </div>
+                            <div class="text-xs font-bold text-slate-900 dark:text-white mb-1">3. Independent Execution</div>
+                            <p class="text-xs text-slate-600 dark:text-slate-400 leading-snug">
+                                Build real data systems independently from empty scratch files.
+                            </p>
+                        </div>
+
+                        {# Step 4 #}
+                        <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/40">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-2.5">
+                                <i data-lucide="trophy" class="w-4 h-4"></i>
+                            </div>
+                            <div class="text-xs font-bold text-slate-900 dark:text-white mb-1">4. Industry Simulation</div>
+                            <p class="text-xs text-slate-600 dark:text-slate-400 leading-snug">
+                                Solve real-world business bottlenecks exactly like a production data engineer.
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs">
+                    <span class="text-slate-500 dark:text-slate-400 font-medium">8–10 Weeks Mentorship · Live Weekend Interactive Cohort</span>
+                    <button onclick="openModal('enroll')" class="text-blue-600 dark:text-blue-400 font-bold hover:underline inline-flex items-center space-x-1">
+                        <span>Apply to Engine</span>
+                        <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

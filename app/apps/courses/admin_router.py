@@ -14,7 +14,7 @@ from app.apps.courses.auth import (
     require_admin,
     SESSION_COOKIE_NAME
 )
-from app.apps.courses.services import get_leads, get_lead_summary, update_lead_status
+from app.apps.courses.services import get_leads, get_leads_paginated, get_lead_summary, update_lead_status
 from app.apps.courses.schemas import LeadStatusUpdate
 from app.core.config import settings
 
@@ -106,15 +106,19 @@ async def admin_dashboard(
     lead_type: str = Query("all"),
     status: str = Query("all"),
     search: Optional[str] = Query(None),
+    page: int = Query(1, ge=1),
+    per_page: int = Query(10, ge=1, le=100),
     admin: AdminUser = Depends(require_admin),
     db: Session = Depends(get_db)
 ):
-    """Protected monitoring dashboard displaying student admissions & enquiries."""
-    leads = get_leads(
+    """Protected monitoring dashboard displaying student admissions & enquiries with pagination."""
+    pagination = get_leads_paginated(
         db=db,
         lead_type=lead_type if lead_type != "all" else None,
         status=status if status != "all" else None,
-        search=search
+        search=search,
+        page=page,
+        per_page=per_page
     )
     summary = get_lead_summary(db=db)
 
@@ -124,11 +128,14 @@ async def admin_dashboard(
         context={
             "settings": settings,
             "admin": admin,
-            "leads": leads,
+            "leads": pagination["items"],
+            "pagination": pagination,
             "summary": summary,
             "current_lead_type": lead_type,
             "current_status": status,
-            "current_search": search
+            "current_search": search,
+            "current_page": page,
+            "per_page": per_page
         }
     )
 
@@ -138,6 +145,10 @@ async def admin_update_lead(
     lead_id: int,
     status: str = Form(...),
     admin_notes: Optional[str] = Form(""),
+    page: int = Form(1),
+    lead_type: str = Form("all"),
+    filter_status: str = Form("all"),
+    search: Optional[str] = Form(None),
     admin: AdminUser = Depends(require_admin),
     db: Session = Depends(get_db)
 ):
@@ -147,7 +158,11 @@ async def admin_update_lead(
         lead_id=lead_id,
         status_update=LeadStatusUpdate(status=status, admin_notes=admin_notes or "")
     )
-    return RedirectResponse(url="/admin/dashboard", status_code=303)
+    # Redirect preserving current filters and page
+    redirect_url = f"/admin/dashboard?page={page}&lead_type={lead_type}&status={filter_status}"
+    if search:
+        redirect_url += f"&search={search}"
+    return RedirectResponse(url=redirect_url, status_code=303)
 
 
 @router.get("/logout")

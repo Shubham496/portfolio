@@ -1,28 +1,28 @@
 {% extends "base.html" %}
 
-{% block title %}Register for Weekend Batch | Data Analysis | {{ settings.OWNER_NAME }}{% endblock %}
+{% block title %}Register for Weekend Batch | Data Analysis | MYTHOS{% endblock %}
 
 {% block content %}
-<section class="py-8 sm:py-12 border-b border-slate-200 dark:border-slate-800 transition-colors">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+<section class="py-10 sm:py-14 border-b border-slate-200 dark:border-slate-800/80 transition-colors">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
 
         <!-- Top Header & Breadcrumb -->
-        <div class="mb-8 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-                <a href="/" class="inline-flex items-center space-x-1.5 text-xs text-blue-600 dark:text-blue-400 font-semibold hover:underline mb-2">
+                <a href="/" class="inline-flex items-center space-x-1.5 text-xs text-blue-600 dark:text-blue-400 font-bold hover:underline mb-2">
                     <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
                     <span>Back to Homepage</span>
                 </a>
-                <h1 class="text-2xl sm:text-4xl font-extrabold text-slate-950 dark:text-white tracking-tight">
+                <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-950 dark:text-white tracking-tight">
                     Weekend Batch Registration
                 </h1>
                 <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">
-                    Live interactive Data Analysis mentorship taught by <strong class="text-slate-900 dark:text-slate-200">{{ settings.OWNER_NAME }}</strong>.
+                    Direct mentorship in Python, SQL, Power BI, Excel &amp; Tableau led by <strong class="text-slate-900 dark:text-slate-200">{{ settings.OWNER_NAME }}</strong>.
                 </p>
             </div>
             
             <a href="/course/syllabus/download" 
-               class="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 text-xs font-semibold shadow-sm transition">
+               class="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-white dark:bg-[#0B1120] hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 text-xs font-semibold shadow-sm transition">
                 <i data-lucide="download" class="w-3.5 h-3.5 text-blue-500"></i>
                 <span>Download Full Course Syllabus</span>
             </a>
@@ -31,14 +31,14 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
             
             <!-- Left 2 Cols: The Registration Form -->
-            <div class="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl p-6 sm:p-8">
+            <div class="lg:col-span-2 bg-white dark:bg-[#0B1120] border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl p-6 sm:p-8">
                 
                 <div class="flex items-center justify-between pb-4 mb-6 border-b border-slate-200 dark:border-slate-800">
                     <div>
                         <h2 class="text-base font-bold text-slate-900 dark:text-white">Student Enrollment Form</h2>
                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Please provide accurate contact details so we can reach you.</p>
                     </div>
-                    <span class="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
+                    <span class="text-[11px] font-semibold px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
                         Batch Enrolling Now
                     </span>
                 </div>
@@ -50,7 +50,7 @@
                             Full Name <span class="text-red-500">*</span>
                         </label>
                         <input type="text" name="full_name" required placeholder="e.g. Rahul Sharma"
-                               class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                               class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#070B14] text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -59,14 +59,14 @@
                                 Email Address <span class="text-slate-400 font-normal">(Optional)</span>
                             </label>
                             <input type="email" name="email" placeholder="rahul@example.com"
-                                   class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                                   class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#070B14] text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                                 Mobile / WhatsApp No. <span class="text-red-500">*</span>
                             </label>
                             <input type="tel" name="phone" required placeholder="+91 9876543210"
-                                   class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                                   class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#070B14] text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
                         </div>
                     </div>
 
@@ -76,7 +76,7 @@
                                 Current Background
                             </label>
                             <select name="current_status"
-                                    class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                                    class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#070B14] text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
                                 <option>College Student</option>
                                 <option selected>Working Professional</option>
                                 <option>Fresher / Job Seeker</option>
@@ -88,7 +88,7 @@
                                 Prior Experience
                             </label>
                             <select name="prior_experience"
-                                    class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                                    class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#070B14] text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
                                 <option selected>Complete Beginner (No prior coding)</option>
                                 <option>Basic Excel knowledge</option>
                                 <option>Basic Python knowledge</option>
@@ -100,83 +100,92 @@
 
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                            Learning Goals & Questions (Optional)
+                            Preferred Cohort Schedule
                         </label>
-                        <textarea name="message" rows="3" placeholder="Tell Shubham about your career target, what you want to achieve, or any specific questions..."
-                                  class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition resize-none"></textarea>
+                        <div class="p-3.5 rounded-xl border border-blue-200 dark:border-blue-900/50 bg-blue-50/50 dark:bg-blue-950/20 flex items-center space-x-3">
+                            <i data-lucide="calendar-check" class="w-5 h-5 text-blue-600 shrink-0"></i>
+                            <div class="text-xs">
+                                <strong class="text-slate-900 dark:text-white">Saturday &amp; Sunday Only</strong>
+                                <span class="text-slate-500 mx-1">·</span>
+                                <span class="text-blue-600 dark:text-blue-400 font-semibold">6:00 PM – 8:00 PM IST</span>
+                                <span class="block text-slate-500 text-[11px] mt-0.5">8–10 Weeks Hands-On Mentorship Cohort</span>
+                            </div>
+                        </div>
+                        <input type="hidden" name="preferred_schedule" value="Saturday & Sunday 6:00 PM – 8:00 PM IST">
                     </div>
 
-                    <input type="hidden" name="preferred_schedule" value="Saturday & Sunday 6:00 PM – 8:00 PM IST">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                            Your Goals &amp; Questions (Optional)
+                        </label>
+                        <textarea name="message" rows="3" placeholder="Tell us about your learning goals or what you want to achieve..."
+                                  class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#070B14] text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition resize-none"></textarea>
+                    </div>
 
-                    <div class="pt-2">
-                        <button type="submit" 
+                    <div class="pt-3">
+                        <button type="submit"
                                 class="w-full flex items-center justify-center space-x-2 px-6 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm shadow-lg shadow-blue-500/25 transition active:scale-95">
-                            <i data-lucide="check-circle" class="w-4 h-4"></i>
-                            <span>Confirm &amp; Register for Batch</span>
+                            <i data-lucide="user-plus" class="w-4 h-4"></i>
+                            <span>Submit Cohort Registration</span>
                         </button>
                     </div>
 
-                    <p class="text-center text-xs text-slate-500 dark:text-slate-400 pt-1">
-                        🔒 No fees are collected on this form. We will contact you directly to confirm your seat.
+                    <p class="text-center text-[11px] text-slate-500 dark:text-slate-400 pt-2">
+                        Zero fees on this portal. Shubham will directly contact you to confirm orientation and batch slot.
                     </p>
 
                 </form>
 
             </div>
 
-            <!-- Right 1 Col: Batch Details Summary Card -->
+            <!-- Right 1 Col: Summary Card & Mythos Guarantee -->
             <div class="space-y-4">
                 
-                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-md p-5 sm:p-6">
-                    <div class="flex items-center space-x-2 text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-3">
-                        <i data-lucide="calendar-check" class="w-4 h-4"></i>
-                        <span>Batch Timings</span>
+                <div class="bg-white dark:bg-[#0B1120] border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm p-5">
+                    <div class="flex items-center space-x-3 pb-3 mb-4 border-b border-slate-100 dark:border-slate-800">
+                        <img src="/static/Images/mythos/mythos_icon_transparent.png" alt="Mythos" class="w-7 h-7 object-contain">
+                        <div>
+                            <div class="text-xs font-bold text-slate-900 dark:text-white">Batch DA-WKND-2026-B1</div>
+                            <div class="text-[10px] text-blue-600 dark:text-blue-400 font-semibold">Weekend Cohort</div>
+                        </div>
                     </div>
 
-                    <div class="p-3.5 rounded-xl bg-slate-900 dark:bg-slate-800 text-white mb-4 border border-slate-700">
-                        <div class="text-xs text-slate-300">Schedule</div>
-                        <div class="text-sm font-bold text-white mt-0.5">Saturday &amp; Sunday Only</div>
-                        <div class="text-xs text-blue-300 font-semibold mt-0.5">6:00 PM – 8:00 PM IST</div>
-                    </div>
-
-                    <div class="space-y-2.5 text-xs text-slate-600 dark:text-slate-300">
-                        <div class="flex items-start space-x-2">
-                            <span class="text-emerald-500 font-bold">✓</span>
+                    <div class="space-y-3 text-xs">
+                        <div class="flex items-start space-x-2 text-slate-600 dark:text-slate-300">
+                            <i data-lucide="clock" class="w-4 h-4 text-blue-500 shrink-0 mt-0.5"></i>
+                            <span><strong>Timings:</strong> 6:00 PM – 8:00 PM IST (Saturday &amp; Sunday)</span>
+                        </div>
+                        <div class="flex items-start space-x-2 text-slate-600 dark:text-slate-300">
+                            <i data-lucide="calendar" class="w-4 h-4 text-purple-500 shrink-0 mt-0.5"></i>
                             <span><strong>Duration:</strong> 8–10 Weeks Hands-On</span>
                         </div>
-                        <div class="flex items-start space-x-2">
-                            <span class="text-emerald-500 font-bold">✓</span>
-                            <span><strong>Mode:</strong> Live Interactive Online</span>
+                        <div class="flex items-start space-x-2 text-slate-600 dark:text-slate-300">
+                            <i data-lucide="code" class="w-4 h-4 text-orange-500 shrink-0 mt-0.5"></i>
+                            <span><strong>Tools:</strong> Python, SQL, Power BI, Excel, Tableau</span>
                         </div>
-                        <div class="flex items-start space-x-2">
-                            <span class="text-emerald-500 font-bold">✓</span>
-                            <span><strong>Curriculum:</strong> Python, SQL, Power BI, Excel, Tableau</span>
+                        <div class="flex items-start space-x-2 text-slate-600 dark:text-slate-300">
+                            <i data-lucide="user-check" class="w-4 h-4 text-emerald-500 shrink-0 mt-0.5"></i>
+                            <span><strong>Mentor:</strong> {{ settings.OWNER_NAME }} (3+ Yrs Exp)</span>
                         </div>
-                        <div class="flex items-start space-x-2">
-                            <span class="text-emerald-500 font-bold">✓</span>
-                            <span><strong>Capstone:</strong> Production Portfolio Projects</span>
+                        <div class="flex items-start space-x-2 text-slate-600 dark:text-slate-300">
+                            <i data-lucide="users" class="w-4 h-4 text-emerald-500 shrink-0 mt-0.5"></i>
+                            <span><strong>Track Record:</strong> 550+ Students Trained</span>
+                        </div>
+                        <div class="flex items-start space-x-2 text-slate-600 dark:text-slate-300">
+                            <i data-lucide="briefcase" class="w-4 h-4 text-blue-500 shrink-0 mt-0.5"></i>
+                            <span><strong>Career Support:</strong> GitHub, Resume &amp; LinkedIn Setup</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Instructor Card -->
-                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-md p-5 sm:p-6">
-                    <div class="flex items-center space-x-3 mb-3">
-                        <img src="{{ settings.PROFILE_PHOTO_PATH }}" alt="{{ settings.OWNER_NAME }}" class="w-12 h-12 rounded-xl object-cover object-top border border-slate-300 dark:border-slate-700">
-                        <div>
-                            <div class="text-sm font-bold text-slate-900 dark:text-white">{{ settings.OWNER_NAME }}</div>
-                            <div class="text-[11px] text-slate-500 dark:text-slate-400">Lead Consultant &amp; Instructor</div>
-                        </div>
+                <div class="p-5 rounded-2xl bg-gradient-to-br from-blue-500/10 via-purple-500/5 to-orange-500/10 border border-blue-500/20 text-xs">
+                    <div class="font-bold text-slate-900 dark:text-white mb-1.5 flex items-center space-x-1.5">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-blue-500"></i>
+                        <span>Zero Risk Admission</span>
                     </div>
-                    <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-3">
-                        3+ years experience building enterprise pipelines at Ducat, Netmax, and LNP Infotech. Mentored 120+ developers.
+                    <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
+                        Submitting this form does not charge any fees. Shubham evaluates student readiness during an initial screening call before confirming enrollment.
                     </p>
-                    <div class="pt-3 border-t border-slate-200 dark:border-slate-800 flex justify-between items-center text-xs">
-                        <span class="text-slate-500">Need help?</span>
-                        <a href="tel:{{ settings.OWNER_PHONE }}" class="font-mono text-blue-600 dark:text-blue-400 font-semibold hover:underline">
-                            {{ settings.OWNER_PHONE }}
-                        </a>
-                    </div>
                 </div>
 
             </div>
