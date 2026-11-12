@@ -52,32 +52,37 @@ def generate_certificate(
         pdf.rect(cx, cy, 4, 4, 'F')
 
     # --- Header: Institution Brand ---
-    pdf.set_y(24)
-    pdf.set_font('Helvetica', 'B', 24)
+    icon_path = os.path.join(os.path.dirname(__file__), "assets", "mythos_icon_transparent.png")
+    if os.path.exists(icon_path):
+        pdf.image(icon_path, x=140.5, y=16, w=16)
+        pdf.set_y(33)
+    else:
+        pdf.set_y(24)
+    pdf.set_font('Helvetica', 'B', 22)
     pdf.set_text_color(7, 11, 20)  # Dark Navy
-    pdf.cell(0, 8, 'M Y T H O S', align='C', new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 7, 'M Y T H O S', align='C', new_x="LMARGIN", new_y="NEXT")
 
-    pdf.set_font('Helvetica', 'B', 8.5)
+    pdf.set_font('Helvetica', 'B', 8)
     pdf.set_text_color(100, 116, 139)  # Slate 500
-    pdf.cell(0, 5, 'ACADEMY OF DATA SYSTEMS & ARCHITECTURE', align='C', new_x="LMARGIN", new_y="NEXT")
-    pdf.ln(3)
-
-    # --- Certificate Award Title ---
-    pdf.set_font('Helvetica', 'B', 13)
-    pdf.set_text_color(37, 99, 235)  # Electric Blue
-    pdf.cell(0, 6, 'CERTIFICATE OF EXCELLENCE & COMPLETION', align='C', new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 4.5, 'ACADEMY OF DATA SYSTEMS & ARCHITECTURE', align='C', new_x="LMARGIN", new_y="NEXT")
     pdf.ln(2)
 
+    # --- Certificate Award Title ---
+    pdf.set_font('Helvetica', 'B', 12.5)
+    pdf.set_text_color(37, 99, 235)  # Electric Blue
+    pdf.cell(0, 5.5, 'CERTIFICATE OF EXCELLENCE & COMPLETION', align='C', new_x="LMARGIN", new_y="NEXT")
+    pdf.ln(1.5)
+
     # --- Presentation Line ---
-    pdf.set_font('Helvetica', '', 10)
+    pdf.set_font('Helvetica', '', 9.5)
     pdf.set_text_color(100, 116, 139)
-    pdf.cell(0, 5, 'THIS IS PROUDLY PRESENTED TO', align='C', new_x="LMARGIN", new_y="NEXT")
-    pdf.ln(3)
+    pdf.cell(0, 4.5, 'THIS IS PROUDLY PRESENTED TO', align='C', new_x="LMARGIN", new_y="NEXT")
+    pdf.ln(2)
 
     # --- Candidate Name (Prominent & Bold) ---
-    pdf.set_font('Helvetica', 'B', 30)
+    pdf.set_font('Helvetica', 'B', 28)
     pdf.set_text_color(15, 23, 42)  # Slate 900
-    pdf.cell(0, 12, candidate_name.upper(), align='C', new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 11, candidate_name.upper(), align='C', new_x="LMARGIN", new_y="NEXT")
 
     # Decorative Gradient Underline Bar
     line_w = 120
@@ -86,10 +91,10 @@ def generate_certificate(
     pdf.rect(line_x, pdf.get_y() + 1, line_w / 2, 1.2, 'F')
     pdf.set_fill_color(249, 115, 22)
     pdf.rect(line_x + line_w / 2, pdf.get_y() + 1, line_w / 2, 1.2, 'F')
-    pdf.ln(6)
+    pdf.ln(5)
 
     # --- Certification Body Copy ---
-    pdf.set_font('Helvetica', '', 11)
+    pdf.set_font('Helvetica', '', 10.5)
     pdf.set_text_color(51, 65, 85)
     pdf.set_x(36)
     citation = (
@@ -97,8 +102,8 @@ def generate_certificate(
         "demonstrating exceptional hands-on capability in architecting end-to-end production data pipelines, "
         "advanced relational SQL modeling, and executive business intelligence solutions."
     )
-    pdf.multi_cell(225, 5.5, citation, 0, 'C')
-    pdf.ln(4)
+    pdf.multi_cell(225, 5.2, citation, 0, 'C')
+    pdf.ln(3)
 
     # --- 5 Accredited Technology Pillars ---
     pdf.set_y(pdf.get_y() + 2)
@@ -122,9 +127,9 @@ def generate_certificate(
         pdf.set_xy(px, y_pos + 1)
         pdf.set_font('Helvetica', 'B', 7.5)
         pdf.set_text_color(30, 41, 59)
-        pdf.cell(44, 5, p, 0, 0, 'C')
+        pdf.cell(44, 5, p, 0, align='C', new_x="RIGHT", new_y="TOP")
 
-    pdf.ln(18)
+    pdf.ln(16)
 
     # --- Security & Signatory Footer ---
     footer_y = 158
@@ -133,11 +138,11 @@ def generate_certificate(
     pdf.set_xy(25, footer_y)
     pdf.set_font('Helvetica', 'B', 8.5)
     pdf.set_text_color(15, 23, 42)
-    pdf.cell(55, 4, f"Issued: {issue_date}", 0, 1, 'L')
+    pdf.cell(55, 4, f"Issued: {issue_date}", 0, align='L', new_x="LMARGIN", new_y="NEXT")
     pdf.set_x(25)
     pdf.set_font('Helvetica', '', 8)
     pdf.set_text_color(100, 116, 139)
-    pdf.cell(55, 4, "Batch: DA-WKND-2026-B1", 0, 0, 'L')
+    pdf.cell(55, 4, "Batch: DA-WKND-2026-B1", 0, align='L', new_x="RIGHT", new_y="TOP")
 
     # Center: Embossed Digital Seal
     seal_x = (297 - 40) / 2
@@ -148,21 +153,21 @@ def generate_certificate(
     pdf.set_xy(seal_x, footer_y - 2)
     pdf.set_font('Helvetica', 'B', 7)
     pdf.set_text_color(255, 255, 255)
-    pdf.cell(40, 4, "VERIFIED MENTORSHIP", 0, 1, 'C')
+    pdf.cell(40, 4, "VERIFIED MENTORSHIP", 0, align='C', new_x="LMARGIN", new_y="NEXT")
     pdf.set_xy(seal_x, footer_y + 1.5)
     pdf.set_font('Helvetica', '', 6)
     pdf.set_text_color(251, 146, 60)
-    pdf.cell(40, 3, "OFFICIAL ACCREDITATION", 0, 0, 'C')
+    pdf.cell(40, 3, "OFFICIAL ACCREDITATION", 0, align='C', new_x="RIGHT", new_y="TOP")
 
     # Right: Verification Serial & Link
     pdf.set_xy(217, footer_y)
     pdf.set_font('Courier', 'B', 9)
     pdf.set_text_color(15, 23, 42)
-    pdf.cell(55, 4, cert_id, 0, 1, 'R')
+    pdf.cell(55, 4, cert_id, 0, align='R', new_x="LMARGIN", new_y="NEXT")
     pdf.set_x(217)
     pdf.set_font('Helvetica', '', 7.5)
     pdf.set_text_color(37, 99, 235)
-    pdf.cell(55, 4, "mythostech.in/verify", 0, 0, 'R')
+    pdf.cell(55, 4, "mythostech.in/verify", 0, align='R', new_x="RIGHT", new_y="TOP")
 
     # Signatures
     sig_y = footer_y + 12
@@ -174,22 +179,22 @@ def generate_certificate(
     pdf.set_xy(25, sig_y + 9)
     pdf.set_font('Helvetica', 'B', 8)
     pdf.set_text_color(15, 23, 42)
-    pdf.cell(60, 4, "Lead Technical Mentor", 0, 1, 'L')
+    pdf.cell(60, 4, "Lead Technical Mentor", 0, align='L', new_x="LMARGIN", new_y="NEXT")
     pdf.set_x(25)
     pdf.set_font('Helvetica', '', 7)
     pdf.set_text_color(100, 116, 139)
-    pdf.cell(60, 3, "Data Architecture & Analytics", 0, 0, 'L')
+    pdf.cell(60, 3, "Data Architecture & Analytics", 0, align='L', new_x="RIGHT", new_y="TOP")
 
     # Sig 2
     pdf.line(212, sig_y + 8, 272, sig_y + 8)
     pdf.set_xy(212, sig_y + 9)
     pdf.set_font('Helvetica', 'B', 8)
     pdf.set_text_color(15, 23, 42)
-    pdf.cell(60, 4, "Program Director", 0, 1, 'R')
+    pdf.cell(60, 4, "Program Director", 0, align='R', new_x="LMARGIN", new_y="NEXT")
     pdf.set_x(212)
     pdf.set_font('Helvetica', '', 7)
     pdf.set_text_color(100, 116, 139)
-    pdf.cell(60, 3, "Cohort Admissions & Operations", 0, 0, 'R')
+    pdf.cell(60, 3, "Cohort Admissions & Operations", 0, align='R', new_x="RIGHT", new_y="TOP")
 
     pdf.output(output_path)
     print(f"Generated official certificate: {output_path}")

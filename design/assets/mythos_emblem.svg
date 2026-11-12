@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Left Leg Ribbon: Electric Blue & Cyan -->
+    <linearGradient id="mBlueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="40%" stop-color="#0284C7"/>
+      <stop offset="100%" stop-color="#1D4ED8"/>
+    </linearGradient>
+
+    <!-- Center Fold: Indigo, Violet & Magenta -->
+    <linearGradient id="mCenterFoldGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4F46E5"/>
+      <stop offset="50%" stop-color="#9333EA"/>
+      <stop offset="100%" stop-color="#DB2777"/>
+    </linearGradient>
+
+    <!-- Right Ascending Arrow: Magenta to Vivid Orange -->
+    <linearGradient id="mArrowGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#E11D48"/>
+      <stop offset="35%" stop-color="#F97316"/>
+      <stop offset="85%" stop-color="#FB923C"/>
+      <stop offset="100%" stop-color="#FDBA74"/>
+    </linearGradient>
+
+    <!-- Code Symbol Gradients -->
+    <linearGradient id="codeBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#60A5FA"/>
+      <stop offset="100%" stop-color="#3B82F6"/>
+    </linearGradient>
+    <linearGradient id="codeOrange" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FB923C"/>
+      <stop offset="100%" stop-color="#EA580C"/>
+    </linearGradient>
+
+    <!-- Drop Shadow Filter -->
+    <filter id="mShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0F172A" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#mShadow)">
+    <!-- Floating Digital Pixel Cubes (Voxels) at Upper Right -->
+    <rect x="375" y="82" width="16" height="16" rx="3" fill="#06B6D4" transform="rotate(10 383 90)"/>
+    <rect x="408" y="104" width="20" height="20" rx="4" fill="#F97316" transform="rotate(-8 418 114)"/>
+    <rect x="432" y="78" width="14" height="14" rx="3" fill="#EC4899" transform="rotate(15 439 85)"/>
+    <rect x="415" y="52" width="12" height="12" rx="2.5" fill="#38BDF8" transform="rotate(-5 421 58)"/>
+    <rect x="445" y="112" width="15" height="15" rx="3" fill="#7C3AED" transform="rotate(12 452 119)"/>
+    <rect x="428" y="140" width="12" height="12" rx="2.5" fill="#06B6D4" transform="rotate(-15 434 146)"/>
+    <rect x="456" y="132" width="10" height="10" rx="2" fill="#F97316" transform="rotate(20 461 137)"/>
+
+    <!-- Code Symbol </> Centered in the Valley -->
+    <g transform="translate(256, 172)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <!-- Left Angle < -->
+      <path d="M -18,-18 L -38,0 L -18,18" stroke="url(#codeBlue)"/>
+      <!-- Slash / -->
+      <path d="M 6,-24 L -6,24" stroke="#9333EA"/>
+      <!-- Right Angle > -->
+      <path d="M 18,-18 L 38,0 L 18,18" stroke="url(#codeOrange)"/>
+    </g>
+
+    <!-- 3D Ribbon 'M' Body Construction -->
+    <!-- Layer 1: Right Arrow Under-Ribbon -->
+    <path d="M 330,380 C 330,350 340,310 355,270 L 375,220 C 385,250 395,300 395,340 C 395,385 365,410 335,410 C 328,410 324,402 330,380 Z" 
+          fill="#EA580C" opacity="0.9"/>
+
+    <!-- Layer 2: Main Left Column (Electric Blue Ribbon) -->
+    <path d="M 115,200 C 115,160 145,140 185,165 C 215,185 240,225 256,260 C 220,205 190,165 155,165 C 135,165 125,180 125,210 L 125,360 C 125,395 100,410 85,410 C 70,410 70,390 70,360 L 70,225 C 70,175 90,160 115,200 Z" 
+          fill="url(#mBlueGrad)"/>
+
+    <!-- Layer 3: Left Stem Base & Front Curvature -->
+    <path d="M 70,230 C 70,180 115,145 155,185 L 256,310 C 240,290 220,250 200,220 C 175,180 140,170 120,195 L 75,360 C 75,395 105,415 130,405 C 110,405 95,385 95,360 Z" 
+          fill="url(#mBlueGrad)"/>
+
+    <!-- Layer 4: Center Fold Loop (Purple/Magenta Turn) -->
+    <path d="M 175,250 C 210,295 240,365 270,365 C 295,365 320,315 345,260 L 390,165 L 405,190 L 360,285 C 335,340 305,395 270,395 C 225,395 190,320 160,265 Z" 
+          fill="url(#mCenterFoldGrad)"/>
+
+    <!-- Layer 5: Ascending Arrow Shaft & Head -->
+    <path d="M 280,355 L 375,175 L 345,170 L 400,105 L 420,175 L 392,168 L 305,365 Z" 
+          fill="url(#mArrowGrad)"/>
+    <!-- Arrow Head Prominent -->
+    <polygon points="395,95 440,185 410,180 405,215 385,215 390,178 360,172" fill="url(#mArrowGrad)"/>
+  </g>
+</svg>

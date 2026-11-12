@@ -65,16 +65,31 @@
 
 ---
 
-## 4. Logo Usage & Vector Geometry
+## 4. Logo Usage, Asset Directory & Vector Geometry
 
-### Logo Assets in `design/assets/`:
-1. `mythos_icon.svg` / `mythos_icon_transparent.png`:
-   - Circular multi-segmented aperture gear representing 360-degree data capability.
-   - Outer segmented arcs gradient from Electric Blue to Cyan, Orange, and Violet.
-   - Core dark navy aperture ring with central white radiant node.
-2. `mythos_logo.svg` / `mythos_full_transparent.png`:
-   - Full horizontal lockup combining the emblem and the wordmark `MYTHOS`.
-   - The letter **'O'** is a stylized circular arc split into Electric Blue (left semicircle) and Vivid Orange (right semicircle).
+### Official Brand Emblem Geometry:
+* **The 'M' Ribbon**: Continuous 3D gradient ribbon sculpture forming the letter **'M'**.
+  - **Left Pillar**: Electric Blue (`#2563EB`) & Cyan (`#06B6D4`) rounded column symbolizing foundational stability and code extraction.
+  - **Valley Center**: Floating `< / >` code symbol in indigo and orange nestled in the upper notch.
+  - **Center Fold**: Indigo (`#4F46E5`), Violet (`#9333EA`), and Magenta (`#EC4899`) transition representing data pipeline transformation.
+  - **Right Pillar & Arrow**: Rises into a 45-degree ascending arrow in Vivid Orange (`#F97316`) and Amber (`#FB923C`) symbolizing upward career trajectory and executive mastery.
+  - **Digital Voxels / Pixels**: Floating 3D cubes / pixels dispersing into the upper right representing modern digital ecosystems, cloud infrastructure, and data scale.
+
+### High-Resolution Asset Master Catalog:
+
+| File Name | Location | Format & Resolution | Purpose & Usage |
+| :--- | :--- | :--- | :--- |
+| **`mythos_icon_transparent.png`** | `design/assets/` & `app/static/Images/mythos/` | PNG (1024x1024 RGBA) | Zero-halo unmultiplied transparent icon for headers, navbars, and cards. |
+| **`mythos_icon_2048.png`** | `design/assets/` | PNG (2048x2048 RGBA) | Ultra-HD master print icon for brochures, certificates, and billboards. |
+| **`mythos_icon.jpg`** | `app/static/Images/mythos/` | JPEG (1024x1024 RGB) | Crisp high-resolution icon master on clean white backdrop. |
+| **`mythos_full_transparent.png`** | `design/assets/` & `app/static/Images/mythos/` | PNG (1376x768 RGBA) | Complete transparent horizontal brand lockup (Emblem + Wordmark + Tagline + 5 Pillars). |
+| **`mythos_full_logo.jpg`** | `app/static/Images/mythos/` | JPEG (1376x768 RGB) | Master full-color corporate brand board on solid white canvas. |
+| **`mythos_logo_dark.jpg`** | `design/assets/` & `app/static/Images/mythos/` | JPEG (1376x768 RGB) | Dark-mode glowing neon brand render on Deep Navy (`#070B14`). |
+| **`hero_art.jpg`** | `app/static/Images/mythos/` | JPEG (1376x768 RGB) | 3D Hero artwork: 'M' ribbon on illuminated neon podium with digital wireframe globe. |
+| **`hero_podium.jpg`** | `app/static/Images/mythos/` | JPEG (1376x768 RGB) | 3D Hero podium master asset for platform landing showcase. |
+| **`mythos_emblem.svg`** | `design/assets/` & `app/static/Images/mythos/` | SVG Vector (512x512) | Scalable vector graphic of the official 3D 'M' ribbon and voxels. |
+| **`mythos_icon.svg`** | `design/assets/` | SVG Vector (512x512) | Radial aperture gear vector icon for seal and technical stamps. |
+| **`mythos_logo.svg`** | `design/assets/` | SVG Vector (600x120) | Scalable horizontal vector lockup with split 'O' wordmark. |
 
 ### Construction Rules:
 * **Minimum Clear Space**: Maintain at least `1x` the height of the 'M' as padding around the entire logo.
