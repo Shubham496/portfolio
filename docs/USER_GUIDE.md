@@ -9,10 +9,12 @@ This guide explains how your student admission platform works, how to run it loc
 ## 1. What Has Been Built?
 
 Your website is an **active training and student enrollment platform**:
-* **Instructor Authority**: Visitors see you as the **Lead Python & Data Architecture Consultant & Instructor** (3+ years experience, 120+ senior developers trained).
+* **Brand & System**: **Mythos Data Systems** (3+ years consulting, 550+ students & developers trained).
 * **Course Subject**: **Data Analysis** covering **Python, SQL, Power BI, Excel, and Tableau**.
 * **Fixed Schedule**: **Saturday and Sunday only, 6:00 PM to 8:00 PM IST**.
 * **Strictly No Fees on the Website**: As requested, **no fees or prices are shown anywhere on the website**. You discuss fees privately with students when counseling them.
+* **Direct Contact**: Email (`shubhamsinghh057@gmail.com`) and WhatsApp (`+91 8727864157`).
+* **Production Deployment Note**: Only you ("I") can push code to production (`git push`). AI agents maintain clean local git commits for every task without pushing to production.
 * **Easy Application for Students**:
   1. **Batch Registration**: To reserve a seat in your upcoming weekend batch (via `/register` or the homepage Enroll button). Email is optional—only name and WhatsApp/mobile number are required!
   2. **General Enquiry**: If they have questions about the syllabus, need career guidance, or want a callback.

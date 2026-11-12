@@ -5,7 +5,44 @@ This serves as an audit trail and system log (similar to GitHub releases/commit 
 
 ---
 
-## [Latest Updates] - 2026-11-12 (Frontend Architecture Modularization & Environment Template)
+## [Latest Updates] - 2026-11-12 (Production Push Authority, Brand Anonymization, Paired Syllabus, Design System & Styled Brochure)
+
+### Added, Updated & Hardened
+- **Agent Guide Git Maintenance & Strict Push Authority (Task 1)**:
+  - Updated `docs/AGENT_GUIDE.md` (Rule 6 in Section 2 and Section 10): Git repository hygiene is strictly maintained on every single task with automated test verification and atomic local commits.
+  - **Strict Production Push Restriction**: Codified immutable policy that **ONLY the platform owner ("I") can push things to production** (`git push origin main` or deploy). AI agents and automated scripts are strictly prohibited from pushing to production.
+- **Brand Anonymization & Contact Update (Task 2)**:
+  - Removed all personal identity, instructor photos, personal biography, and past employment history from the website, hero section, mentor section, footer, and documentation.
+  - Replaced the hero photo card with a high-tech **Mythos Data Systems Pipeline Showcase Card** with animated status pills, live execution stage tags, and 5-pillar highlights.
+  - Redesigned `#about` into the **Direct Admissions & Mentorship Desk** highlighting WhatsApp (`8727864157`) and Email (`shubhamsinghh057@gmail.com`).
+  - Updated official contact email across all files, templates, services, and footer to `shubhamsinghh057@gmail.com`.
+  - Updated `app/core/base_config.py` and `app/apps/courses/services.py` with generic platform mentorship metadata.
+- **Laptop Paired Syllabus Expansion (Task 3)**:
+  - Updated `toggleSyllabus(index)` in `app/templates/sections/syllabus.html`:
+    - On laptops/desktops (`window.matchMedia('(min-width: 768px)').matches`), modules expand in pairs: **[1, 2]**, **[3, 4]**, or **[5, 6]**.
+    - If either module in the pair is clicked, both modules expand/collapse in unison with matching button labels ("Show More Details" / "Show Less Details") and synchronized chevron rotations.
+    - On mobile / handheld screens (`< 768px`), modules continue expanding individually for optimal mobile scroll ergonomics.
+- **Design System & Certificate Guidelines Folder (`design/`) (Task 4)**:
+  - Created root-level design repository `design/`:
+    - `design/GUIDELINES.md`: Comprehensive brand manual detailing Poppins typography hierarchy, exact Mythos color tokens (Deep Navy, Electric Blue, Cyan, Violet, Split Orange, Emerald), vector logo rules, and formal A4 landscape graduation certificate specifications.
+    - `design/tokens.json`: Machine-readable design tokens for programmatic consumption.
+    - `design/assets/`: Scalable SVG vectors (`mythos_icon.svg`, `mythos_logo.svg`) and transparent PNG logos (`mythos_icon_transparent.png`, `mythos_full_transparent.png`).
+    - `design/certificate_generator_template.py`: Working Python automation template generating official student completion certificates using `fpdf2` and design tokens.
+- **Styled 2-Page Downloadable Syllabus Brochure (Task 5)**:
+  - Rebuilt `app/apps/courses/generate_syllabus_pdf.py` using `fpdf2`:
+    - Executive Mythos navy header banner with split Electric Blue / Vivid Orange accent bar.
+    - Fixed weekend schedule grid (Saturday & Sunday, 6:00 – 8:00 PM IST, 8–10 weeks hands-on).
+    - Color-coded module cards for all 6 pillars (Excel, SQL, Python, Power BI, Tableau, Career Prep) with Core Competencies and Deep-Dive Labs.
+    - 3 Production Capstone project showcases (Adidas Retail, Data Warehouse, Event Analytics Hub).
+    - Admissions & Counseling Desk strip with `shubhamsinghh057@gmail.com` and `+91 8727864157`.
+    - Exactly 2 print-ready publication-grade pages saved to `app/static/pdf/Data_Analysis_Syllabus.pdf`.
+  - Updated inline HTML printable brochure in `app/apps/courses/services.py`.
+- **Automated Verification**:
+  - Full pytest test suite passing with 15/15 tests (100%).
+
+---
+
+## [2026-11-12] (Frontend Architecture Modularization & Environment Template)
 
 ### Added & Refactored
 - **Mandatory Git Maintenance Protocols in Agent Guide**:

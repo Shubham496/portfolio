@@ -8,13 +8,10 @@
 
 ## 1. Project Mission & Identity
 
-* **Platform Name**: Data Analysis Training & Student Admission Engine
-* **Platform Owner & Instructor**: **Shubham Singh**
-  * **Title**: Lead Python & Data Architecture Consultant & Instructor
-  * **Experience**: 3+ years consulting & teaching across Ducat, Netmax Technologies, and LNP Infotech.
-  * **Track Record**: Architected enterprise data services and trained 550+ students, senior developers & data engineers.
-  * **Contact**: `shubhamsingh41100@gmail.com` | WhatsApp: `+91 8727864157`
-  * **Profiles**: GitHub: `https://github.com/Shubham496` | LinkedIn: `https://linkedin.com/in/shubham469`
+* **Platform Name**: Mythos Data Systems & Analytics Training Engine
+* **Platform Owner & Lead Mentorship**: Platform Maintainer
+* **Contact**: `shubhamsinghh057@gmail.com` | WhatsApp: `+91 8727864157`
+* **Production Deployment Authority**: **STRICTLY RESERVED FOR THE PLATFORM OWNER ("I")**. AI agents must NEVER execute `git push` or deploy to production.
 
 ---
 
@@ -42,11 +39,11 @@
    - Secret hidden portal at `/admin/login` and `/admin/dashboard`.
    - **Zero public links** to the admin portal on the landing page or navbar.
    - Public signup is permanently disabled (`/admin/signup` redirects with 303 to `/admin/login`).
-6. **Continuous Git Maintenance & Repository Hygiene (ALWAYS MANDATORY)**:
-   - Developers and AI agents must proactively maintain git repository cleanliness at all times.
-   - Every completed task, bug fix, feature, or refactoring must be staged and committed with clean, descriptive commit messages.
-   - The working directory must always be kept clean (`git status` clean, no leftover untracked debug artifacts).
-   - Remote synchronization: Changes must be pushed to remote repository (`origin/main`) to ensure code durability.
+6. **Continuous Git Maintenance in Every Task & Strict Push Authority (NON-NEGOTIABLE)**:
+   - Developers and AI agents must proactively maintain git repository cleanliness and discipline across **every single task**.
+   - Every completed task, bug fix, feature, or refactoring must be verified with the test suite, staged, and committed locally with clean, descriptive commit messages.
+   - The working directory must always be kept clean (`git status` clean, no leftover untracked debug artifacts or temporary scripts).
+   - **STRICT PRODUCTION PUSH RESTRICTION (OWNER ONLY)**: **Only the platform owner ("I") can push things to production or the remote repository (`origin/main`)**. AI agents and automated tools are **STRICTLY PROHIBITED** from running `git push` or triggering production deployments. Agents maintain local git repository hygiene (testing, staging, committing) so that the local repository is clean and ready for the platform owner to inspect, verify, and push to production.
    - **Zero-Secret Leak Guard**: Never stage or commit `.env`, plaintext passwords, authentication tokens, or SQLite databases (`*.db`). Always ensure `.gitignore` remains active.
 
 ---
@@ -92,6 +89,12 @@ coding/
 ├── render.yaml                         # Render.io blueprint for one-click web service deployment
 ├── requirements.txt                    # Production dependencies (FastAPI, Uvicorn, SQLAlchemy, etc.)
 ├── requirements-dev.txt                # Testing & dev dependencies (pytest, httpx)
+│
+├── design/                             # Design system, brand tokens, logos & certificate specs
+│   ├── GUIDELINES.md                   # Complete brand guide (colors, typography, certificate specs)
+│   ├── tokens.json                     # Programmatic design tokens (JSON format)
+│   ├── certificate_generator_template.py# Automation script template for generating student certificates
+│   └── assets/                         # Standalone SVGs and transparent PNG logos
 │
 ├── app/
 │   ├── main.py                         # Primary application entrypoint; mounts routers, static files, home routes
@@ -374,5 +377,18 @@ To preserve repository durability, auditability, and team collaboration integrit
      - `fix:` for bug fixes or test repairs.
      - `docs:` for documentation updates.
      - `chore:` for dependency and configuration updates.
-6. **Remote Synchronization (`git push`)**:
-   - Once changes are verified and committed locally, push to the upstream tracking branch (`git push origin <branch>`) to maintain alignment with remote GitHub repositories.
+6. **Strict Push Authority — OWNER ONLY (AI Agents MUST NEVER Push to Production)**:
+   - **Only the platform owner ("I") can push things to production or the remote repository (`origin/main`)**.
+   - AI agents and automated scripts are **STRICTLY PROHIBITED** from executing `git push` or triggering production deployments.
+   - For every task, agents must perform local git maintenance: verify tests pass, review `git status`, stage all relevant files, and commit locally with clear commit messages.
+   - The local repository must be left in a clean state (`git status` clean) ready for the human platform owner to review and push to production at their discretion.
+
+---
+
+## 11. Design System & Brand Asset Guidelines (`design/`)
+
+For brand consistency, marketing graphics, and certificate generation, all design specifications and assets are housed in the root `design/` directory:
+* `design/GUIDELINES.md`: Comprehensive brand manual detailing Poppins typography hierarchy, exact Mythos color tokens (Deep Navy, Electric Blue, Cyan, Split Orange, Emerald), SVG logo definitions, and formal certificate layout rules.
+* `design/tokens.json`: Machine-readable design tokens for automated generation tools (scripts, ReportLab/PIL, web components).
+* `design/assets/`: Scalable SVG vectors and transparent PNG logos (`mythos_icon.svg`, `mythos_logo.svg`, `mythos_icon_transparent.png`, `mythos_full_transparent.png`).
+* `design/certificate_generator_template.py`: Python script template demonstrating official completion certificate generation.

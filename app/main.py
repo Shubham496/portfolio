@@ -219,7 +219,7 @@ async def download_full_course_syllabus():
     if os.path.exists(pdf_path):
         return FileResponse(
             path=pdf_path,
-            filename="Data_Analysis_Full_Course_Syllabus_Shubham_Singh.pdf",
+            filename="Data_Analysis_Full_Course_Syllabus.pdf",
             media_type="application/pdf",
         )
     return HTMLResponse("Syllabus PDF file not found", status_code=404)

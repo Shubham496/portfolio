@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#1D4ED8"/>
+    </linearGradient>
+    <linearGradient id="orangeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FB923C"/>
+      <stop offset="100%" stop-color="#EA580C"/>
+    </linearGradient>
+    <linearGradient id="purpleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#A855F7"/>
+      <stop offset="100%" stop-color="#6D28D9"/>
+    </linearGradient>
+    <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22D3EE"/>
+      <stop offset="100%" stop-color="#0284C7"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Dark Background Badge Circle -->
+  <circle cx="256" cy="256" r="240" fill="#070B14" stroke="#1E293B" stroke-width="8"/>
+  <circle cx="256" cy="256" r="220" fill="none" stroke="url(#blueGrad)" stroke-width="2" opacity="0.3"/>
+
+  <!-- Segmented Radial Aperture Rays -->
+  <!-- Top Arc Segment (Electric Blue) -->
+  <path d="M 256,76 A 180 180 0 0 1 383,129 L 341,171 A 120 120 0 0 0 256,136 Z" fill="url(#blueGrad)"/>
+  
+  <!-- Right-Top Arc Segment (Cyan) -->
+  <path d="M 397,143 A 180 180 0 0 1 436,256 L 376,256 A 120 120 0 0 0 350,190 Z" fill="url(#cyanGrad)"/>
+
+  <!-- Right-Bottom Arc Segment (Orange / Flame) -->
+  <path d="M 436,256 A 180 180 0 0 1 383,383 L 341,341 A 120 120 0 0 0 376,256 Z" fill="url(#orangeGrad)"/>
+
+  <!-- Bottom Arc Segment (Magenta / Violet) -->
+  <path d="M 369,397 A 180 180 0 0 1 256,436 L 256,376 A 120 120 0 0 0 322,350 Z" fill="url(#purpleGrad)"/>
+
+  <!-- Left-Bottom Arc Segment (Purple) -->
+  <path d="M 256,436 A 180 180 0 0 1 129,383 L 171,341 A 120 120 0 0 0 256,376 Z" fill="url(#purpleGrad)"/>
+
+  <!-- Left-Top Arc Segment (Royal Blue) -->
+  <path d="M 115,369 A 180 180 0 0 1 76,256 L 136,256 A 120 120 0 0 0 162,322 Z" fill="url(#blueGrad)"/>
+
+  <!-- Top-Left Segment -->
+  <path d="M 76,256 A 180 180 0 0 1 129,129 L 171,171 A 120 120 0 0 0 136,256 Z" fill="url(#cyanGrad)"/>
+  <path d="M 143,115 A 180 180 0 0 1 256,76 L 256,136 A 120 120 0 0 0 190,162 Z" fill="url(#blueGrad)"/>
+
+  <!-- Core Emblem Ring -->
+  <circle cx="256" cy="256" r="70" fill="#0B1120" stroke="#38BDF8" stroke-width="6"/>
+
+  <!-- Inner Center Star / Core Spark -->
+  <circle cx="256" cy="256" r="32" fill="#F8FAFC"/>
+  <circle cx="256" cy="256" r="16" fill="url(#blueGrad)"/>
+</svg>

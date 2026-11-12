@@ -20,11 +20,11 @@ Welcome to the central documentation index for the **Data Analysis Training & St
 
 ### 1. Prospective Student Journey
 1. **Homepage Engagement (`/`)**:
-   - High-impact hero section presenting **Shubham Singh** as a seasoned Lead Python & Data Architecture Consultant.
-   - Verified credentials showcase: 3+ years experience across Ducat, Netmax, and LNP Infotech; 120+ senior developers mentored.
+   - High-impact hero section presenting Mythos Data Systems & Learning Engine.
+   - Verified credentials showcase: 3+ years enterprise consulting, 550+ students & developers trained.
    - Visual display of the **5 Data Analysis Pillars**: Python, SQL, Power BI, Excel, Tableau.
    - Prominent weekend schedule badges: **Saturday & Sunday only, 6:00 PM – 8:00 PM IST**.
-   - Immediate CTAs: **Enroll in Batch** and **Ask a Question / Counseling**.
+   - Immediate CTAs: **Apply for Batch** and **Ask a Question / Direct Admissions Desk**.
 2. **Syllabus PDF Access**:
    - Students can view the comprehensive PDF brochure in their browser (`/course/syllabus`) or download it directly (`/course/syllabus/download`).
 3. **Application & Admission**:

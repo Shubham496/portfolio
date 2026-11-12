@@ -99,16 +99,15 @@
         </div>
     </div>
 
-    <!-- Inline Robust Accordion Script (Prevents any external cache/loading delay) -->
+    <!-- Inline Robust Accordion Script with Laptop Paired Expansion (1,2 / 3,4 / 5,6) -->
     <script>
-        function toggleSyllabus(index) {
-            var el = document.getElementById('syllabus-exp-' + index);
-            var btn = document.getElementById('syllabus-btn-' + index);
-            var icon = document.getElementById('syllabus-icon-' + index);
+        function setModuleState(idx, expand) {
+            var el = document.getElementById('syllabus-exp-' + idx);
+            var btn = document.getElementById('syllabus-btn-' + idx);
+            var icon = document.getElementById('syllabus-icon-' + idx);
             if (!el) return;
 
-            var isClosed = el.classList.contains('hidden') || el.style.display === 'none' || window.getComputedStyle(el).display === 'none';
-            if (isClosed) {
+            if (expand) {
                 el.classList.remove('hidden');
                 el.style.display = 'block';
                 if (btn) {
@@ -116,9 +115,6 @@
                     if (label) label.textContent = 'Show Less Details';
                 }
                 if (icon) icon.style.transform = 'rotate(180deg)';
-                if (window.lucide && typeof lucide.createIcons === 'function') {
-                    try { lucide.createIcons(); } catch (e) {}
-                }
             } else {
                 el.classList.add('hidden');
                 el.style.display = 'none';
@@ -127,6 +123,44 @@
                     if (label) label.textContent = 'Show More Details';
                 }
                 if (icon) icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function toggleSyllabus(index) {
+            var clickedEl = document.getElementById('syllabus-exp-' + index);
+            if (!clickedEl) return;
+
+            var isClosed = clickedEl.classList.contains('hidden') || 
+                           clickedEl.style.display === 'none' || 
+                           window.getComputedStyle(clickedEl).display === 'none';
+
+            // Check if user is on laptop / desktop screen (>= 768px)
+            var isLaptop = window.matchMedia && window.matchMedia('(min-width: 768px)').matches;
+
+            if (isLaptop) {
+                // Pair mapping: [1, 2], [3, 4], [5, 6]
+                var pair;
+                if (index === 1 || index === 2) {
+                    pair = [1, 2];
+                } else if (index === 3 || index === 4) {
+                    pair = [3, 4];
+                } else if (index === 5 || index === 6) {
+                    pair = [5, 6];
+                } else {
+                    pair = [index];
+                }
+
+                // If clicked card is closed, expand both; if open, collapse both
+                for (var i = 0; i < pair.length; i++) {
+                    setModuleState(pair[i], isClosed);
+                }
+            } else {
+                // On mobile / handheld screens: expand clicked card individually
+                setModuleState(index, isClosed);
+            }
+
+            if (window.lucide && typeof lucide.createIcons === 'function') {
+                try { lucide.createIcons(); } catch (e) {}
             }
         }
 

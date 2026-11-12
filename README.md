@@ -15,8 +15,8 @@ A modern, high-performance web platform built with **FastAPI** showcasing instru
 
 ## 🚀 Current Platform Features & Live Modules
 
-### 1. Instructor Portfolio & Authority Showcase
-* **Lead Instructor**: **Shubham Singh** (Lead Python & Data Architecture Consultant with 3+ years experience across Ducat, Netmax, and LNP Infotech; trained 120+ developers).
+### 1. Training & Authority Showcase
+* **Mentorship & System**: Mythos Data Systems & Learning Engine (3+ years enterprise consulting, 550+ students & developers trained).
 * **5 Core Data Pillars**: Comprehensive curriculum covering **Python** (Pandas/NumPy), **SQL** (CTEs, Window functions, Joins), **Power BI** (DAX, data modeling), **Excel** (XLOOKUP, Pivot tables), and **Tableau** (visual dashboards).
 * **Strict Schedule Constraint**: **Saturday & Sunday ONLY, 6:00 PM – 8:00 PM IST** (4 hours/weekend, 8–10 weeks hands-on).
 * **Zero Public Pricing Policy**: STRICTLY NO fees, prices, or payment inputs appear on public pages. Tuition counseling happens privately.

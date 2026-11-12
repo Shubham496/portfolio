@@ -1,181 +1,451 @@
+"""
+MYTHOS Comprehensive Syllabus Brochure Generator
+Builds a high-impact, styled 2-page curriculum brochure PDF using fpdf2.
+"""
+
 import os
 from fpdf import FPDF
 
 
-class SyllabusPDF(FPDF):
+class MythosSyllabusPDF(FPDF):
     def header(self):
-        self.set_fill_color(15, 23, 42)  # Slate 900
+        # Top Dark Navy Banner
+        self.set_fill_color(7, 11, 20)  # Dark Navy #070B14
         self.rect(0, 0, 210, 16, 'F')
+
+        # Top Accent Split Line (Electric Blue on left, Vivid Orange on right)
+        self.set_fill_color(37, 99, 235)  # Electric Blue
+        self.rect(0, 16, 125, 1.2, 'F')
+        self.set_fill_color(249, 115, 22)  # Vivid Orange
+        self.rect(125, 16, 85, 1.2, 'F')
+
+        # Header Title in Top Banner
+        self.set_xy(10, 3.5)
         self.set_font('Helvetica', 'B', 9)
         self.set_text_color(255, 255, 255)
-        self.set_xy(10, 4)
-        self.cell(0, 8, 'MYTHOS | DATA ANALYSIS MASTERCLASS | WEEKEND BATCH (SAT & SUN 6-8 PM IST)', 0, 0, 'C')
-        self.ln(16)
+        self.cell(95, 8, 'MYTHOS | DATA SYSTEMS & ANALYTICS', align='L')
+
+        self.set_font('Helvetica', 'B', 8)
+        self.set_text_color(148, 163, 184)
+        self.cell(95, 8, 'WEEKEND COHORT | SAT & SUN 6:00 - 8:00 PM IST', align='R')
+        self.ln(15)
 
     def footer(self):
-        self.set_y(-15)
-        self.set_font('Helvetica', '', 8)
+        # Footer Baseline Bar
+        self.set_y(-14)
+        self.set_draw_color(226, 232, 240)
+        self.set_line_width(0.4)
+        self.line(10, self.get_y(), 200, self.get_y())
+
+        self.set_y(-12)
+        self.set_font('Helvetica', 'B', 7.5)
+        self.set_text_color(37, 99, 235)
+        self.cell(45, 6, 'MYTHOS LEARNING ENGINE', align='L')
+
+        self.set_font('Helvetica', '', 7.5)
+        self.set_text_color(71, 85, 105)
+        self.cell(110, 6, 'Admissions: shubhamsinghh057@gmail.com | WhatsApp: +91 8727864157', align='C')
+
+        self.set_font('Helvetica', 'B', 7.5)
         self.set_text_color(100, 116, 139)
-        self.cell(0, 10, f'Instructor: Shubham Singh  |  WhatsApp: +91 8727864157  |  Page {self.page_no()}', 0, 0, 'C')
+        self.cell(35, 6, f'Page {self.page_no()}', align='R')
 
 
-def generate_syllabus_pdf():
-    os.makedirs("app/static/pdf", exist_ok=True)
-    pdf_path = "app/static/pdf/Data_Analysis_Syllabus.pdf"
+def generate_syllabus_pdf(output_path: str = "app/static/pdf/Data_Analysis_Syllabus.pdf"):
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
-    pdf = SyllabusPDF()
-    pdf.set_auto_page_break(auto=True, margin=15)
+    pdf = MythosSyllabusPDF(orientation='P', unit='mm', format='A4')
+    pdf.set_auto_page_break(auto=False)
+    
+    # ═════════════════════════════════════════════════════════════
+    # PAGE 1: Intro, Schedule & Modules 1 - 3
+    # ═════════════════════════════════════════════════════════════
     pdf.add_page()
 
-    # Document Header Title
-    pdf.set_font('Helvetica', 'B', 22)
-    pdf.set_text_color(30, 41, 59)
-    pdf.cell(0, 10, 'Complete Data Analysis Masterclass', 0, 1, 'L')
+    # Document Headline
+    pdf.set_y(21)
+    pdf.set_font('Helvetica', 'B', 20)
+    pdf.set_text_color(15, 23, 42)  # Slate 900
+    pdf.cell(0, 8, 'Complete Data Analysis Masterclass', align='L', new_x="LMARGIN", new_y="NEXT")
 
-    # Subtitle
-    pdf.set_font('Helvetica', 'B', 12)
-    pdf.set_text_color(37, 99, 235)  # Blue 600
-    pdf.cell(0, 6, 'Hands-On Mentorship: Python, SQL, Power BI, Excel & Tableau', 0, 1, 'L')
+    # Subtitle / Pillar Spectrum
+    pdf.set_font('Helvetica', 'B', 10.5)
+    pdf.set_text_color(37, 99, 235)  # Electric Blue
+    pdf.cell(0, 5, 'Production-Grade Mentorship: Python | SQL | Power BI | Excel | Tableau', align='L', new_x="LMARGIN", new_y="NEXT")
+
+    # Value proposition
+    pdf.set_font('Helvetica', '', 8.5)
+    pdf.set_text_color(71, 85, 105)
+    pdf.cell(0, 4.5, 'Trained 550+ students & developers | 100% Weekend Live Interactive Coding | Real Capstones', align='L', new_x="LMARGIN", new_y="NEXT")
     pdf.ln(2)
 
-    # Instructor & Credentials
-    pdf.set_font('Helvetica', '', 10)
-    pdf.set_text_color(71, 85, 105)
-    pdf.multi_cell(0, 5, 'Instructor: Shubham Singh - Lead Python & Data Architecture Consultant\nIndustry Background: Ducat, Netmax Technologies, LNP Infotech | 550+ Students & Senior Developers Trained')
-    pdf.ln(4)
-
-    # Schedule Box
-    pdf.set_fill_color(241, 245, 249)  # Slate 100
+    # ── Fixed Schedule & Format Strip ──
+    sched_y = pdf.get_y()
+    pdf.set_fill_color(248, 250, 252)  # Slate 50
     pdf.set_draw_color(203, 213, 225)
-    pdf.rect(10, pdf.get_y(), 190, 22, 'DF')
-    
-    current_y = pdf.get_y() + 3
-    pdf.set_xy(14, current_y)
-    pdf.set_font('Helvetica', 'B', 10)
+    pdf.set_line_width(0.4)
+    pdf.rect(10, sched_y, 190, 16, 'DF')
+
+    # Accent left border for schedule
+    pdf.set_fill_color(37, 99, 235)
+    pdf.rect(10, sched_y, 2.5, 16, 'F')
+
+    # Schedule Column 1
+    pdf.set_xy(15, sched_y + 2)
+    pdf.set_font('Helvetica', 'B', 7)
+    pdf.set_text_color(100, 116, 139)
+    pdf.cell(45, 3.5, 'BATCH SCHEDULE', align='L', new_x="LMARGIN", new_y="NEXT")
+    pdf.set_x(15)
+    pdf.set_font('Helvetica', 'B', 9)
     pdf.set_text_color(15, 23, 42)
-    pdf.cell(60, 5, 'BATCH SCHEDULE:', 0, 0)
-    pdf.cell(60, 5, 'TIMINGS:', 0, 0)
-    pdf.cell(60, 5, 'FORMAT & DURATION:', 0, 1)
+    pdf.cell(45, 5, 'Saturday & Sunday Only', align='L')
 
-    pdf.set_xy(14, current_y + 6)
-    pdf.set_font('Helvetica', '', 9.5)
+    # Schedule Column 2
+    pdf.set_xy(68, sched_y + 2)
+    pdf.set_font('Helvetica', 'B', 7)
+    pdf.set_text_color(100, 116, 139)
+    pdf.cell(45, 3.5, 'LIVE TIMINGS', align='L', new_x="LMARGIN", new_y="NEXT")
+    pdf.set_x(68)
+    pdf.set_font('Helvetica', 'B', 9)
     pdf.set_text_color(37, 99, 235)
-    pdf.cell(60, 6, 'Saturday & Sunday Only', 0, 0)
-    pdf.cell(60, 6, '6:00 PM - 8:00 PM IST', 0, 0)
-    pdf.set_text_color(71, 85, 105)
-    pdf.cell(60, 6, '8-10 Weeks (Live Online Hands-On)', 0, 1)
-    pdf.ln(12)
+    pdf.cell(45, 5, '6:00 PM - 8:00 PM IST', align='L')
 
-    # Section: Course Pillars
-    def render_module(num, title, topics):
-        pdf.set_fill_color(37, 99, 235)
+    # Schedule Column 3
+    pdf.set_xy(125, sched_y + 2)
+    pdf.set_font('Helvetica', 'B', 7)
+    pdf.set_text_color(100, 116, 139)
+    pdf.cell(40, 3.5, 'DURATION & COHORT', align='L', new_x="LMARGIN", new_y="NEXT")
+    pdf.set_x(125)
+    pdf.set_font('Helvetica', 'B', 9)
+    pdf.set_text_color(15, 23, 42)
+    pdf.cell(40, 5, '8-10 Wks | 25 Max Seats', align='L')
+
+    # Schedule Column 4
+    pdf.set_xy(172, sched_y + 2)
+    pdf.set_font('Helvetica', 'B', 7)
+    pdf.set_text_color(100, 116, 139)
+    pdf.cell(26, 3.5, 'ADMISSION', align='L', new_x="LMARGIN", new_y="NEXT")
+    pdf.set_x(172)
+    pdf.set_font('Helvetica', 'B', 8.5)
+    pdf.set_text_color(16, 185, 129)  # Emerald
+    pdf.cell(26, 5, 'Selection-Based', align='L')
+
+    pdf.set_y(sched_y + 19)
+
+    # Helper function for rendering styled module cards
+    def draw_module_card(num, title, badge, accent_rgb, topics, deep_dives, card_h=67):
+        cur_y = pdf.get_y()
+
+        # Background card
+        pdf.set_fill_color(255, 255, 255)
+        pdf.set_draw_color(226, 232, 240)
+        pdf.set_line_width(0.35)
+        pdf.rect(10, cur_y, 190, card_h, 'DF')
+
+        # Color Accent Bar on Left
+        pdf.set_fill_color(*accent_rgb)
+        pdf.rect(10, cur_y, 3, card_h, 'F')
+
+        # Number Badge
+        pdf.set_fill_color(*accent_rgb)
+        pdf.rect(16, cur_y + 3.5, 7, 7, 'F')
+        pdf.set_xy(16, cur_y + 3.5)
+        pdf.set_font('Helvetica', 'B', 9)
         pdf.set_text_color(255, 255, 255)
-        pdf.set_font('Helvetica', 'B', 10)
-        pdf.cell(8, 7, f' {num} ', 0, 0, 'C', True)
-        
-        pdf.set_fill_color(248, 250, 252)
-        pdf.set_text_color(15, 23, 42)
-        pdf.cell(0, 7, f'  {title}', 0, 1, 'L', True)
-        pdf.ln(1)
+        pdf.cell(7, 7, str(num), align='C')
 
-        pdf.set_font('Helvetica', '', 9)
+        # Module Title
+        pdf.set_xy(26, cur_y + 3.5)
+        pdf.set_font('Helvetica', 'B', 10.5)
+        pdf.set_text_color(15, 23, 42)
+        pdf.cell(115, 7, title, align='L')
+
+        # Category Pill Badge
+        badge_w = 42
+        pdf.set_fill_color(241, 245, 249)
+        pdf.set_draw_color(203, 213, 225)
+        pdf.rect(153, cur_y + 4.5, badge_w, 5, 'DF')
+        pdf.set_xy(153, cur_y + 4.5)
+        pdf.set_font('Helvetica', 'B', 6.5)
+        pdf.set_text_color(*accent_rgb)
+        pdf.cell(badge_w, 5, badge.upper(), align='C')
+
+        # Core Topics Heading
+        pdf.set_xy(16, cur_y + 12)
+        pdf.set_font('Helvetica', 'B', 7)
+        pdf.set_text_color(100, 116, 139)
+        pdf.cell(85, 3.5, 'CORE COMPETENCIES & TECHNIQUES:', align='L')
+
+        # Deep Dives Heading
+        pdf.set_xy(105, cur_y + 12)
+        pdf.cell(90, 3.5, 'HANDS-ON PRODUCTION LABS & AUTOMATION:', align='L')
+
+        # Two-Column Content: Left = Topics, Right = Deep Dives
+        col_y = cur_y + 16.5
+
+        # Left Column (Core Topics)
+        pdf.set_xy(16, col_y)
+        pdf.set_font('Helvetica', '', 7.5)
         pdf.set_text_color(51, 65, 85)
         for t in topics:
-            pdf.cell(6, 4.5, '-', 0, 0, 'R')
-            pdf.cell(0, 4.5, f'  {t}', 0, 1, 'L')
-        pdf.ln(3)
+            pdf.set_x(16)
+            pdf.set_font('Helvetica', 'B', 7.5)
+            pdf.set_text_color(*accent_rgb)
+            pdf.cell(3, 4.2, '>', align='L')
+            pdf.set_font('Helvetica', '', 7.5)
+            pdf.set_text_color(51, 65, 85)
+            pdf.cell(82, 4.2, t[:56], align='L', new_x="LMARGIN", new_y="NEXT")
 
-    # Module 1
-    render_module(
-        1,
-        'Excel Advanced Modeling, Power Query & VBA',
-        [
-            'Power Query Editor: Multi-file ingestion, unpivoting, merging/appending datasets & ETL cleanses',
-            'VBA & Automation: Recording macros, writing subroutines, automating recurring weekly reports',
-            'Advanced Lookup & Dynamic Arrays: XLOOKUP, INDEX/MATCH, FILTER, UNIQUE, Nested IFS',
-            'Data Validation, Conditional Formatting & What-If Financial Analysis (Goal Seek, Scenarios)'
-        ]
+        # Right Column (Deep Dives)
+        pdf.set_xy(105, col_y)
+        for d in deep_dives:
+            pdf.set_x(105)
+            pdf.set_font('Helvetica', 'B', 7.5)
+            pdf.set_text_color(16, 185, 129)
+            pdf.cell(3, 4.2, '*', align='L')
+            pdf.set_font('Helvetica', '', 7.5)
+            pdf.set_text_color(51, 65, 85)
+            pdf.cell(90, 4.2, d[:62], align='L', new_x="LMARGIN", new_y="NEXT")
+
+        pdf.set_y(cur_y + card_h + 3.5)
+
+    # ── Module 1: Excel ──
+    draw_module_card(
+        num=1,
+        title="Excel Advanced Modeling, Power Query & VBA",
+        badge="Spreadsheets & Automation",
+        accent_rgb=(33, 115, 70),  # Excel Forest Green
+        topics=[
+            "Power Query Editor: Multi-file ingestion, ETL shaping & unpivoting",
+            "Advanced Formulas: Dynamic Arrays, XLOOKUP, INDEX/MATCH, FILTER",
+            "Modern Functions: LET (variables) & LAMBDA custom reusable logic",
+            "Financial Modeling: What-If Analysis, Goal Seek & Scenarios"
+        ],
+        deep_dives=[
+            "VBA & Macros: Subroutines, loops, custom UDFs & one-click reports",
+            "Multi-table linked data models with automated refresh pipelines",
+            "Executive dashboards: Multi-slicer linkage, dynamic sparklines & KPIs",
+            "Automated folder ingestion eliminating manual monthly copy-pasting"
+        ],
+        card_h=37
     )
 
-    # Module 2
-    render_module(
-        2,
-        'SQL for Data Analysis & Relational Databases',
-        [
-            'Relational Database Architecture, Schema Design, 3NF Normalization, Primary/Foreign Keys',
-            'Complex Querying: Multi-Table INNER/LEFT/RIGHT/FULL JOINs, Subqueries, and Nested CTEs',
-            'Analytical Window Functions: ROW_NUMBER, RANK, DENSE_RANK, NTILE, LEAD/LAG, Running Totals',
-            'Performance Tuning: B-tree indexing, EXPLAIN ANALYZE, and real-world business analytics queries'
-        ]
+    # ── Module 2: SQL ──
+    draw_module_card(
+        num=2,
+        title="SQL for Data Analysis & Relational Databases",
+        badge="Database Architecture",
+        accent_rgb=(37, 99, 235),  # Electric Blue
+        topics=[
+            "Relational Architecture: Schema design, 3NF normalization, PK/FK",
+            "Complex Joins: Multi-table INNER, LEFT, RIGHT, FULL OUTER joins",
+            "Analytical Window Functions: ROW_NUMBER, RANK, DENSE_RANK, NTILE",
+            "Lead & Lag Analysis: Period-over-period sales without self-joins"
+        ],
+        deep_dives=[
+            "CTEs (Common Table Expressions) & Recursive hierarchical queries",
+            "Query Optimization: B-Tree indexing strategies & EXPLAIN ANALYZE",
+            "Business Metrics: Cohort retention, churn velocity & active users",
+            "PostgreSQL & MySQL enterprise transactional dataset manipulation"
+        ],
+        card_h=37
     )
 
-    # Module 3
-    render_module(
-        3,
-        'Python Programming for Data Analytics & ETL',
-        [
-            'Python Foundations: Data structures (Lists, Tuples, Dictionaries), Control Flow, Functions',
-            'NumPy Computing: Vectorized array operations, matrix mathematics, indexing & slicing',
-            'Pandas DataFrames: High-speed wrangling, missing data imputation, regex extraction, GroupBy pipelines',
-            'Automated Data Transformation, SQLAlchemy database ingestion, and scheduled reporting scripts'
-        ]
+    # ── Module 3: Python ──
+    draw_module_card(
+        num=3,
+        title="Python for Data Analysis & Automation",
+        badge="Core Programming & ETL",
+        accent_rgb=(217, 119, 6),  # Amber / Python Gold
+        topics=[
+            "Python Foundations: Data structures, control flow & modular scripts",
+            "NumPy Computing: Vectorized ndarrays, broadcasting & matrix math",
+            "Pandas Wrangling: Multi-index GroupBy, pivot_table(), melt()",
+            "Data Cleansing: Missing value imputation, .str methods, Regex extraction"
+        ],
+        deep_dives=[
+            "SQLAlchemy Ingestion: Connecting Python to relational warehouses",
+            "Automated ETL pipelines: Parsing heterogeneous CSVs & Excel sheets",
+            "Statistical Distributions: Outlier detection with Matplotlib & Seaborn",
+            "Production scripting: Automated email alerting & cron-scheduled jobs"
+        ],
+        card_h=37
     )
 
-    # Module 4
-    render_module(
-        4,
-        'Power BI Business Intelligence & Interactive Dashboards',
-        [
-            'End-to-End ETL with Power Query: Cleansing, unpivoting, merging & data modeling',
-            'Relational Data Modeling: Star Schema, Snowflake Schema, 1-to-Many Relationships',
-            'Advanced DAX: CALCULATE, FILTER, ALL, RELATED, Time Intelligence (YTD, MTD, YoY, moving averages)',
-            'Executive Visualization: Drill-through reports, interactive slicers, custom tooltips, KPI cards'
-        ]
+    # Bottom Trust Note on Page 1
+    pdf.set_y(268)
+    pdf.set_fill_color(241, 245, 249)
+    pdf.set_draw_color(203, 213, 225)
+    pdf.rect(10, pdf.get_y(), 190, 11, 'DF')
+    pdf.set_xy(13, pdf.get_y() + 2)
+    pdf.set_font('Helvetica', 'B', 7.5)
+    pdf.set_text_color(15, 23, 42)
+    pdf.cell(40, 3.5, 'PRACTICAL CODE RIGOR:', align='L')
+    pdf.set_font('Helvetica', '', 7.5)
+    pdf.set_text_color(71, 85, 105)
+    pdf.cell(145, 3.5, 'Every session involves live hands-on execution. You write code and solve queries in real-time.', align='L')
+    pdf.set_xy(13, pdf.get_y() + 4)
+    pdf.set_font('Helvetica', 'I', 7)
+    pdf.set_text_color(100, 116, 139)
+    pdf.cell(180, 3, 'Zero prerequisite barriers: Program covers zero to advanced production execution over 8-10 weeks.', align='L')
+
+    # ═════════════════════════════════════════════════════════════
+    # PAGE 2: Modules 4 - 6, Capstone Projects & Admissions Desk
+    # ═════════════════════════════════════════════════════════════
+    pdf.add_page()
+    pdf.set_y(21)
+
+    # ── Module 4: Power BI ──
+    draw_module_card(
+        num=4,
+        title="Power BI Interactive Business Intelligence",
+        badge="Enterprise BI & Modeling",
+        accent_rgb=(234, 88, 12),  # Orange / Power BI
+        topics=[
+            "Power Query ETL: Shaping, unpivoting, merging queries, column profiles",
+            "Relational Data Modeling: Star Schema vs Snowflake, Fact/Dim tables",
+            "Advanced DAX: Row/Filter context, CALCULATE, FILTER, ALL, VALUES",
+            "Time Intelligence: YTD, QTD, MTD, SAMEPERIODLASTYEAR, moving averages"
+        ],
+        deep_dives=[
+            "Executive Dashboards: Drill-through reports, bookmarks & custom tooltips",
+            "Virtual Tables: SUMMARIZE, ADDCOLUMNS, safe numerical division",
+            "Managing relationships: Active vs inactive (USERELATIONSHIP logic)",
+            "Power BI Service deployment: Scheduled refreshes & workspace governance"
+        ],
+        card_h=37
     )
 
-    # Module 5
-    render_module(
-        5,
-        'Tableau Visual Storytelling & Dashboards',
-        [
-            'Connecting to Varied Sources (Files, Relational Databases, Cloud Warehouses)',
-            'Level of Detail (LOD) Calculations: FIXED, INCLUDE, EXCLUDE expressions & Table calculations',
-            'Interactive Dashboards: Filter actions, highlight actions, set actions, and dynamic parameters',
-            'Storyboarding & Cloud Publishing: Multi-chapter executive presentations on Tableau Public'
-        ]
+    # ── Module 5: Tableau ──
+    draw_module_card(
+        num=5,
+        title="Tableau Visual Storytelling & Analytics",
+        badge="Visual Storyboards",
+        accent_rgb=(124, 58, 237),  # Violet / Tableau
+        topics=[
+            "Enterprise Connections: Databases, CSVs, cloud warehouses & blending",
+            "Level of Detail (LOD): FIXED, INCLUDE, EXCLUDE calculations",
+            "Table Calculations: Running totals, percent of total, rank, window stats",
+            "Interactive Dashboards: Filter actions, highlight actions & set actions"
+        ],
+        deep_dives=[
+            "Dynamic Parameters: User-driven metric switching & what-if controls",
+            "Multi-chapter storyboards for C-suite executive decision-making",
+            "Extract performance tuning & dashboard latency optimization",
+            "Tableau Public portfolio publishing with live interactive web embeds"
+        ],
+        card_h=37
     )
 
-    # Module 6
-    render_module(
-        6,
-        'Career Acceleration: GitHub, Resume & LinkedIn Setup',
-        [
-            'GitHub Portfolio: Open-source repositories with production READMEs, architecture schemas & demos',
-            'ATS-Optimized Resume: Quantified impact bullet points (Action + Tool + Metric) tailored for Data roles',
-            'LinkedIn Setup: High-converting headline, featured projects, and recruiter direct outreach framework',
-            'Interview Preparation: 1-on-1 mock technical interviews, live SQL problem solving on CoderPad'
-        ]
+    # ── Module 6: Career Prep ──
+    draw_module_card(
+        num=6,
+        title="Career Acceleration: GitHub, Resume & LinkedIn",
+        badge="Job Readiness & Portfolio",
+        accent_rgb=(14, 165, 233),  # Cyan / Career
+        topics=[
+            "GitHub Architecture: Open-source repositories with production READMEs",
+            "ATS Resume Engineering: Action + Tool + Metric formula for Data roles",
+            "LinkedIn Optimization: High-converting headline, demos & inbound magnet",
+            "Live Technical Mocks: Timed SQL screenings on CoderPad & HackerRank"
+        ],
+        deep_dives=[
+            "Data dictionaries & architecture schemas for 3+ portfolio capstones",
+            "Passing automated recruiter screeners with keyword-dense formatting",
+            "Direct outreach frameworks for hiring managers & senior data leads",
+            "Dashboard defense: Justifying DAX measures & schema design under pressure"
+        ],
+        card_h=37
     )
 
-    # Capstone & Projects Strip
-    pdf.ln(2)
-    pdf.set_fill_color(236, 253, 245)  # Emerald 50
-    pdf.set_draw_color(167, 243, 208)
-    pdf.rect(10, pdf.get_y(), 190, 24, 'DF')
-    
-    box_y = pdf.get_y() + 2
-    pdf.set_xy(14, box_y)
-    pdf.set_font('Helvetica', 'B', 9.5)
-    pdf.set_text_color(6, 95, 70)  # Emerald 800
-    pdf.cell(0, 5, 'HANDS-ON PRODUCTION CAPSTONE PROJECTS:', 0, 1)
+    # ── Hands-On Production Capstones Box ──
+    cap_y = pdf.get_y()
+    pdf.set_fill_color(248, 250, 252)
+    pdf.set_draw_color(203, 213, 225)
+    pdf.set_line_width(0.35)
+    pdf.rect(10, cap_y, 190, 39, 'DF')
 
-    pdf.set_xy(14, box_y + 5.5)
-    pdf.set_font('Helvetica', '', 8.5)
-    pdf.set_text_color(51, 65, 85)
-    pdf.multi_cell(0, 4.2, '1. Retail & E-Commerce Sales Performance Suite (Python ETL + SQL + Power BI Dashboard)\n2. Financial Transactions & Compliance Auditing Analysis (SQL + Tableau Visual Storyboard)\nAll students complete live portfolio assets ready to showcase on GitHub and LinkedIn.')
+    # Top Capstone Accent Header
+    pdf.set_fill_color(15, 23, 42)
+    pdf.rect(10, cap_y, 190, 7.5, 'F')
+    pdf.set_xy(14, cap_y + 1)
+    pdf.set_font('Helvetica', 'B', 8.5)
+    pdf.set_text_color(255, 255, 255)
+    pdf.cell(120, 5.5, '3 PRODUCTION PORTFOLIO CAPSTONES (BUILT LIVE DURING COHORT):', align='L')
+    pdf.set_font('Helvetica', 'B', 7.5)
+    pdf.set_text_color(251, 146, 60)
+    pdf.cell(60, 5.5, 'PORTFOLIO ASSETS FOR GITHUB', align='R')
 
-    pdf.output(pdf_path)
-    print(f"Successfully generated {pdf_path}")
+    # Capstone 1
+    pdf.set_xy(14, cap_y + 9.5)
+    pdf.set_font('Helvetica', 'B', 8)
+    pdf.set_text_color(37, 99, 235)
+    pdf.cell(5, 4, '1.', align='L')
+    pdf.set_font('Helvetica', 'B', 8)
+    pdf.set_text_color(15, 23, 42)
+    pdf.cell(75, 4, 'Adidas Retail Intelligence & Forecasting:', align='L')
+    pdf.set_font('Helvetica', '', 7.5)
+    pdf.set_text_color(71, 85, 105)
+    pdf.cell(100, 4, 'Multi-region revenue tracking, inventory turnover velocity, and DAX KPI models.', align='L')
+
+    # Capstone 2
+    pdf.set_xy(14, cap_y + 16.5)
+    pdf.set_font('Helvetica', 'B', 8)
+    pdf.set_text_color(37, 99, 235)
+    pdf.cell(5, 4, '2.', align='L')
+    pdf.set_font('Helvetica', 'B', 8)
+    pdf.set_text_color(15, 23, 42)
+    pdf.cell(75, 4, 'Automated Multi-Source Data Warehouse:', align='L')
+    pdf.set_font('Helvetica', '', 7.5)
+    pdf.set_text_color(71, 85, 105)
+    pdf.cell(100, 4, 'Python ETL pipelines consolidating raw APIs/CSVs into 3NF PostgreSQL database.', align='L')
+
+    # Capstone 3
+    pdf.set_xy(14, cap_y + 23.5)
+    pdf.set_font('Helvetica', 'B', 8)
+    pdf.set_text_color(37, 99, 235)
+    pdf.cell(5, 4, '3.', align='L')
+    pdf.set_font('Helvetica', 'B', 8)
+    pdf.set_text_color(15, 23, 42)
+    pdf.cell(75, 4, 'Event Intelligence & Attendance Analytics:', align='L')
+    pdf.set_font('Helvetica', '', 7.5)
+    pdf.set_text_color(71, 85, 105)
+    pdf.cell(100, 4, 'Interactive ticketing analytics, cohort attrition curves, and executive storyboards.', align='L')
+
+    # Capstone Outcome Footer
+    pdf.set_xy(14, cap_y + 31)
+    pdf.set_font('Helvetica', 'B', 7)
+    pdf.set_text_color(16, 185, 129)
+    pdf.cell(180, 4, 'GRADUATION OUTCOME: You complete the cohort with 3 production-grade repositories ready for interviews.', align='L')
+
+    # ── Admissions & Counseling Desk Strip ──
+    desk_y = cap_y + 42.5
+    pdf.set_fill_color(7, 11, 20)  # Dark Navy
+    pdf.rect(10, desk_y, 190, 21, 'F')
+
+    pdf.set_xy(15, desk_y + 2.5)
+    pdf.set_font('Helvetica', 'B', 9)
+    pdf.set_text_color(255, 255, 255)
+    pdf.cell(120, 4.5, 'ADMISSIONS & TECHNICAL COUNSELING DESK', align='L')
+
+    pdf.set_font('Helvetica', 'B', 7.5)
+    pdf.set_text_color(249, 115, 22)
+    pdf.cell(60, 4.5, 'STRICT ZERO-FEE PUBLIC POLICY', align='R')
+
+    pdf.set_xy(15, desk_y + 8.5)
+    pdf.set_font('Helvetica', '', 8)
+    pdf.set_text_color(203, 213, 225)
+    pdf.cell(90, 4, 'Email: shubhamsinghh057@gmail.com', align='L')
+    pdf.cell(90, 4, 'WhatsApp / Direct Call: +91 8727864157', align='R')
+
+    pdf.set_xy(15, desk_y + 13.5)
+    pdf.set_font('Helvetica', '', 7.5)
+    pdf.set_text_color(148, 163, 184)
+    pdf.cell(180, 4, 'No payments are processed online. Tuition & orientation counseling is conducted privately with each applicant.', align='L')
+
+    pdf.output(output_path)
+    print(f"Successfully generated styled syllabus brochure: {output_path}")
+    return output_path
 
 
 if __name__ == "__main__":

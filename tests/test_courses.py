@@ -16,14 +16,16 @@ def setup_function():
 
 
 def test_instructor_endpoint():
-    """Instructor profile endpoint must accurately describe who Shubham is, the curriculum, and the schedule."""
+    """Instructor profile endpoint must accurately describe the mentorship desk, curriculum, and schedule."""
     response = client.get("/api/courses/instructor")
     assert response.status_code == 200
     data = response.json()
     
-    # Verify instructor credentials
+    # Verify instructor credentials & contact
     instructor = data["instructor"]
-    assert "Shubham" in instructor["name"]
+    assert "Mythos" in instructor["name"] or "Mentor" in instructor["name"]
+    assert instructor["email"] == "shubhamsinghh057@gmail.com"
+    assert instructor["phone"] == "8727864157"
     assert len(instructor["experience_highlights"]) > 0
 
     # Verify course & syllabus
@@ -210,7 +212,7 @@ def test_syllabus_download_and_view():
     dl_resp = client.get("/course/syllabus/download")
     assert dl_resp.status_code == 200
     assert "application/pdf" in dl_resp.headers["content-type"]
-    assert "Data_Analysis_Full_Course_Syllabus_Shubham_Singh.pdf" in dl_resp.headers["content-disposition"]
+    assert "Data_Analysis_Full_Course_Syllabus.pdf" in dl_resp.headers["content-disposition"]
     assert dl_resp.content.startswith(b"%PDF")
 
     # Inline view

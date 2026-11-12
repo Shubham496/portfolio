@@ -392,16 +392,16 @@ def get_instructor_curriculum_profile() -> Dict[str, Any]:
     return {
         "instructor": {
             "name": settings.OWNER_NAME,
-            "title": "Lead Python & Data Architecture Consultant | Technical Instructor",
+            "title": "Data Architecture & Analytics Mentorship Desk",
             "bio": (
-                "Lead Consultant and Instructor with deep production experience across enterprise data pipelines, "
-                "relational databases, and executive BI dashboards. Trained and mentored 550+ students and developers in "
-                "practical, hands-on Python, SQL, Power BI, Excel modeling, and Tableau."
+                "Rigorous hands-on mentorship designed for practical execution across Python, SQL, Power BI, "
+                "Excel modeling, and Tableau. Trained and mentored 550+ students and developers in "
+                "practical, production-grade data systems."
             ),
             "experience_highlights": [
-                "Lead Python & Data Architecture Consultant at Ducat (Trained 550+ students & developers across enterprise batches)",
-                "Data Analyst & Automation Engineer at LNP Infotech (U.S. financial & compliance transaction analysis)",
-                "Data Analyst & Technical Instructor at Netmax Technologies (Enterprise ETL, SQL, and Power BI dashboards)"
+                "Enterprise Data Architecture, Asynchronous ETL Pipelines & Production Systems",
+                "Advanced Relational SQL Modeling, Window Functions, and Schema Optimization",
+                "Executive BI Dashboard Engineering & Interactive Storytelling (Power BI & Tableau)"
             ],
             "phone": settings.OWNER_PHONE,
             "email": settings.EMAIL,
@@ -735,7 +735,7 @@ def generate_syllabus_html_brochure() -> str:
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Complete Data Analysis Masterclass Syllabus | {instructor['name']}</title>
+    <title>Complete Data Analysis Masterclass Syllabus | MYTHOS</title>
     <style>
         body {{
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -807,7 +807,7 @@ def generate_syllabus_html_brochure() -> str:
                 Comprehensive Hands-On Mentorship: <strong>Python, SQL, Power BI, Excel & Tableau</strong>
             </p>
             <p style="margin:4px 0 0 0; font-size:13px; color:#64748b;">
-                Instructor: <strong>{instructor['name']}</strong> · {instructor['title']}
+                Mentorship: <strong>{instructor['name']}</strong> · {instructor['title']}
             </p>
         </div>
 
@@ -838,8 +838,8 @@ def generate_syllabus_html_brochure() -> str:
         </div>
 
         <div class="footer">
-            <p style="margin:0 0 4px 0;">Instructor Contact: Phone: {instructor['phone']} · Email: {instructor['email']}</p>
-            <p style="margin:0;">© {instructor['name']}. Weekend Data Analysis Mentorship Program.</p>
+            <p style="margin:0 0 4px 0;">Admissions & Mentorship Desk: Phone/WhatsApp: {instructor['phone']} · Email: {instructor['email']}</p>
+            <p style="margin:0;">© 2026 MYTHOS. Weekend Data Analysis Mentorship Program.</p>
         </div>
     </div>
 </body>

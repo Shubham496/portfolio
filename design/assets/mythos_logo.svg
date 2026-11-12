@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 120" width="600" height="120">
+  <defs>
+    <linearGradient id="logoBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#1D4ED8"/>
+    </linearGradient>
+    <linearGradient id="logoOrange" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FB923C"/>
+      <stop offset="100%" stop-color="#EA580C"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Left Icon Emblem -->
+  <g transform="translate(10, 10) scale(0.195)">
+    <!-- Dark Backing Circle -->
+    <circle cx="256" cy="256" r="240" fill="#070B14" stroke="#1E293B" stroke-width="8"/>
+    <!-- Segmented Arcs -->
+    <path d="M 256,76 A 180 180 0 0 1 383,129 L 341,171 A 120 120 0 0 0 256,136 Z" fill="url(#logoBlue)"/>
+    <path d="M 397,143 A 180 180 0 0 1 436,256 L 376,256 A 120 120 0 0 0 350,190 Z" fill="#06B6D4"/>
+    <path d="M 436,256 A 180 180 0 0 1 383,383 L 341,341 A 120 120 0 0 0 376,256 Z" fill="url(#logoOrange)"/>
+    <path d="M 369,397 A 180 180 0 0 1 256,436 L 256,376 A 120 120 0 0 0 322,350 Z" fill="#7C3AED"/>
+    <path d="M 256,436 A 180 180 0 0 1 129,383 L 171,341 A 120 120 0 0 0 256,376 Z" fill="#7C3AED"/>
+    <path d="M 115,369 A 180 180 0 0 1 76,256 L 136,256 A 120 120 0 0 0 162,322 Z" fill="url(#logoBlue)"/>
+    <path d="M 76,256 A 180 180 0 0 1 129,129 L 171,171 A 120 120 0 0 0 136,256 Z" fill="#06B6D4"/>
+    <path d="M 143,115 A 180 180 0 0 1 256,76 L 256,136 A 120 120 0 0 0 190,162 Z" fill="url(#logoBlue)"/>
+    <circle cx="256" cy="256" r="70" fill="#0B1120" stroke="#38BDF8" stroke-width="6"/>
+    <circle cx="256" cy="256" r="32" fill="#F8FAFC"/>
+    <circle cx="256" cy="256" r="16" fill="url(#logoBlue)"/>
+  </g>
+
+  <!-- Wordmark MYTHOS -->
+  <g transform="translate(130, 72)" font-family="'Poppins', 'Inter', -apple-system, sans-serif" font-weight="900" font-size="52" letter-spacing="8">
+    <text x="0" y="0" fill="#0F172A">MYTH</text>
+    
+    <!-- Split 'O' Circle -->
+    <g transform="translate(202, -22)">
+      <!-- Left Blue Arc -->
+      <path d="M 0,-20 A 20 20 0 0 0 0,20" fill="none" stroke="#2563EB" stroke-width="7" stroke-linecap="round"/>
+      <!-- Right Orange Arc -->
+      <path d="M 0,-20 A 20 20 0 0 1 0,20" fill="none" stroke="#F97316" stroke-width="7" stroke-linecap="round"/>
+    </g>
+
+    <text x="238" y="0" fill="#0F172A">S</text>
+  </g>
+
+  <!-- Tagline Beneath -->
+  <text x="132" y="98" font-family="'Poppins', sans-serif" font-size="11" font-weight="600" fill="#64748B" letter-spacing="3.5">
+    BUILD SKILLS. BUILD SYSTEMS. BUILD THE FUTURE.
+  </text>
+</svg>

@@ -2,25 +2,23 @@ from pydantic_settings import BaseSettings
 
 class BaseConfig(BaseSettings):
     """Common configurations shared across environments."""
-    APP_NAME: str = "Shubham Singh | Portfolio & App Hub"
+    APP_NAME: str = "MYTHOS | Data Systems & Analytics Engine"
     APP_VERSION: str = "1.0.0"
     
-    # Portfolio Personal Information
-    OWNER_NAME: str = "Shubham Singh"
-    OWNER_TITLE: str = "Data Engineer & Python Consultant | Analytics & Automation"
+    # Platform Information & Contact
+    OWNER_NAME: str = "Mythos Lead Mentor"
+    OWNER_TITLE: str = "Data Architecture & Analytics Mentorship"
     OWNER_BIO: str = (
-        "Lead Python & Data Architecture Consultant with 3+ years of enterprise experience transforming complex "
-        "datasets into high-impact business intelligence, automated ETL pipelines, and scalable backend applications. "
-        "Trained and mentored 550+ students and developers across Ducat, Netmax Technologies, and LNP Infotech in "
-        "Python, SQL, Power BI, Excel modeling, and Tableau."
+        "Rigorous hands-on mentorship designed for practical execution across Python, SQL, Power BI, "
+        "Excel modeling, and Tableau. Building production data systems with live weekend cohort execution."
     )
     OWNER_PHONE: str = "8727864157"
-    OWNER_LOCATION: str = "India (Open to Global & Remote Roles)"
-    GITHUB_URL: str = "https://github.com/Shubham496"
-    LINKEDIN_URL: str = "https://linkedin.com/in/shubham469"
-    EMAIL: str = "shubhamsingh41100@gmail.com"
-    RESUME_PATH: str = "/static/pdf/resume.pdf"
-    PROFILE_PHOTO_PATH: str = "/static/Images/Profile/profilePhoto.jpeg"
+    OWNER_LOCATION: str = "Live Online Weekend Cohort"
+    GITHUB_URL: str = ""
+    LINKEDIN_URL: str = ""
+    EMAIL: str = "shubhamsinghh057@gmail.com"
+    RESUME_PATH: str = ""
+    PROFILE_PHOTO_PATH: str = "/static/Images/mythos/mythos_icon_transparent.png"
 
     class Config:
         env_file = ".env"
