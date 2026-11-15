@@ -15,6 +15,10 @@ class EnquiryCreate(BaseModel):
         default="Working Professional",
         description="Current background: College Student, Working Professional, Fresher, Career Changer"
     )
+    course_interest: Optional[str] = Field(
+        default="All Programs / Undecided",
+        description="Program of interest: Digital Marketing (Performance Ads), Digital Marketing (SEO & Growth), Data Analytics & BI"
+    )
     message: Optional[str] = Field(
         default="",
         max_length=2000,
@@ -43,7 +47,11 @@ class BatchRegistrationCreate(BaseModel):
     phone: str = Field(..., min_length=7, max_length=25, description="Mobile / WhatsApp contact number")
     batch_id: Optional[int] = Field(
         default=None,
-        description="ID of specific batch (if omitted, assigned to current active weekend batch)"
+        description="ID of specific batch (if omitted, assigned to matching or active weekend batch)"
+    )
+    course_name: Optional[str] = Field(
+        default="Data Analysis",
+        description="Program: Digital Marketing (Performance Ads), Digital Marketing (SEO & Growth), Data Analytics & BI"
     )
     current_status: Optional[str] = Field(
         default="Working Professional",
@@ -51,7 +59,7 @@ class BatchRegistrationCreate(BaseModel):
     )
     prior_experience: Optional[str] = Field(
         default="Beginner",
-        description="Experience level in Python, SQL, or BI"
+        description="Experience level in digital marketing, coding, or analytics"
     )
     message: Optional[str] = Field(
         default="",

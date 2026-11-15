@@ -61,7 +61,6 @@ class Batch(Base):
 class StudentLead(Base):
     """
     Represents either a prospective student enquiry or a direct batch registration.
-    No fees are recorded or required on public forms.
     """
     __tablename__ = "student_leads"
 

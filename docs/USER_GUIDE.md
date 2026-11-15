@@ -8,16 +8,19 @@ This guide explains how your student admission platform works, how to run it loc
 
 ## 1. What Has Been Built?
 
-Your website is an **active training and student enrollment platform**:
-* **Brand & System**: **Mythos Data Systems** (3+ years consulting, 550+ students & developers trained).
-* **Course Subject**: **Data Analysis** covering **Python, SQL, Power BI, Excel, and Tableau**.
-* **Fixed Schedule**: **Saturday and Sunday only, 6:00 PM to 8:00 PM IST**.
-* **Strictly No Fees on the Website**: As requested, **no fees or prices are shown anywhere on the website**. You discuss fees privately with students when counseling them.
+Your website is an **active online educational institute platform (MYTHOS Online Institute)**:
+* **Brand & Institute**: **MYTHOS Online Institute** (High-rigor 100% online cohorts).
+* **Multi-Course Offerings**:
+  1. **Performance Marketing & Paid Advertising** (Meta Ads, Google Ads, GA4, Funnel CRO, ROAS Scaling).
+  2. **SEO, Content Strategy & Social Media Growth** (Technical SEO, Semrush, Content Marketing, LinkedIn Growth).
+  3. **Data Analysis & Business Intelligence Masterclass** (Python, SQL, Power BI, Advanced Excel, Tableau).
+* **Fixed Schedule**: **Saturday and Sunday only, 6:00 PM to 8:00 PM IST** (live online cohorts).
+* **Admissions Model**: Pure educational admissions without online pricing or payment gateways. Enrollment readiness and batch selection are reviewed directly during orientation.
 * **Direct Contact**: Email (`shubhamsinghh057@gmail.com`) and WhatsApp (`+91 8727864157`).
 * **Production Deployment Note**: Only you ("I") can push code to production (`git push`). AI agents maintain clean local git commits for every task without pushing to production.
 * **Easy Application for Students**:
-  1. **Batch Registration**: To reserve a seat in your upcoming weekend batch (via `/register` or the homepage Enroll button). Email is optional—only name and WhatsApp/mobile number are required!
-  2. **General Enquiry**: If they have questions about the syllabus, need career guidance, or want a callback.
+  1. **Batch Registration**: Select their preferred course track and apply for upcoming weekend batches (via `/register` or homepage modal). Email is optional—only name and WhatsApp/mobile number are required!
+  2. **General Enquiry**: Select course of interest, ask curriculum questions, or request counseling callbacks.
 * **Syllabus PDF Brochure**:
   - Download PDF: [http://localhost:8000/course/syllabus/download](http://localhost:8000/course/syllabus/download)
   - View in browser: [http://localhost:8000/course/syllabus](http://localhost:8000/course/syllabus)

@@ -21,37 +21,75 @@ logger = logging.getLogger("courses.services")
 
 
 def init_courses_db():
-    """Create courses tables if they don't exist and seed the default weekend batch."""
+    """Create courses tables if they don't exist and seed all institute weekend batches."""
     try:
         Base.metadata.create_all(bind=engine)
         logger.info("Course platform tables verified / created.")
         
-        # Seed default weekend Data Analysis batch if none exists
+        # Seed educational institute batches (2 Digital Marketing, 1 Data Analysis)
         from app.apps.courses.database import SessionLocal
         with SessionLocal() as db:
-            existing_batch = db.query(Batch).filter(Batch.is_active == True).first()
-            if not existing_batch:
-                default_batch = Batch(
-                    batch_code="DA-WKND-2026-B1",
-                    title="Weekend Data Analysis Masterclass",
-                    course_name="Data Analysis (Python, SQL, PowerBI, Excel, Tableau)",
-                    technologies="Python, SQL, PowerBI, Excel, Tableau",
-                    schedule_days="Saturday & Sunday",
-                    schedule_time="6:00 PM – 8:00 PM IST",
-                    start_date="Upcoming Weekend",
-                    duration="8-10 Weeks Hands-On Mentorship",
-                    status="enrolling",
-                    max_seats=25,
-                    description=(
+            institute_batches = [
+                {
+                    "batch_code": "DA-WKND-2026-B1",
+                    "title": "Weekend Data Analysis Masterclass",
+                    "course_name": "Data Analysis (Python, SQL, PowerBI, Excel, Tableau)",
+                    "technologies": "Python, SQL, PowerBI, Excel, Tableau",
+                    "schedule_days": "Saturday & Sunday",
+                    "schedule_time": "6:00 PM – 8:00 PM IST",
+                    "start_date": "Upcoming Weekend",
+                    "duration": "8-10 Weeks Hands-On Mentorship",
+                    "status": "enrolling",
+                    "max_seats": 25,
+                    "description": (
                         "Live interactive weekend training designed for students and working professionals. "
                         "Complete practical curriculum covering Python programming, SQL databases, "
                         "Power BI dashboards, Excel data modeling, and Tableau visual storytelling."
                     ),
-                    is_active=True
-                )
-                db.add(default_batch)
-                db.commit()
-                logger.info("Default Weekend Data Analysis batch seeded.")
+                    "is_active": True
+                },
+                {
+                    "batch_code": "DM-PERF-2026-B1",
+                    "title": "Performance Marketing & Paid Advertising Masterclass",
+                    "course_name": "Digital Marketing: Performance Marketing & Paid Ads",
+                    "technologies": "Google Ads, Meta Ads, GA4, GTM, Funnel CRO",
+                    "schedule_days": "Saturday & Sunday",
+                    "schedule_time": "3:00 PM – 5:00 PM IST",
+                    "start_date": "Upcoming Weekend",
+                    "duration": "8-10 Weeks Hands-On Mentorship",
+                    "status": "enrolling",
+                    "max_seats": 25,
+                    "description": (
+                        "Live online cohort covering high-ROI paid traffic campaigns, Meta Ads Manager, "
+                        "Google Search & Performance Max ads, Google Analytics 4, Tag Manager, and conversion rate optimization."
+                    ),
+                    "is_active": True
+                },
+                {
+                    "batch_code": "DM-GROWTH-2026-B1",
+                    "title": "SEO, Content Strategy & Social Media Growth Masterclass",
+                    "course_name": "Digital Marketing: SEO & Growth Strategy",
+                    "technologies": "Technical SEO, Semrush, Content Marketing, Social Media, Email Automation",
+                    "schedule_days": "Saturday & Sunday",
+                    "schedule_time": "11:00 AM – 1:00 PM IST",
+                    "start_date": "Upcoming Weekend",
+                    "duration": "8-10 Weeks Hands-On Mentorship",
+                    "status": "enrolling",
+                    "max_seats": 25,
+                    "description": (
+                        "Full online practical masterclass in technical & on-page SEO, organic search ranking algorithms, "
+                        "viral social media storytelling, B2B LinkedIn growth, and lifecycle email marketing automation."
+                    ),
+                    "is_active": True
+                }
+            ]
+
+            for b_spec in institute_batches:
+                existing = db.query(Batch).filter(Batch.batch_code == b_spec["batch_code"]).first()
+                if not existing:
+                    db.add(Batch(**b_spec))
+                    logger.info(f"Seeded cohort batch {b_spec['batch_code']}.")
+            db.commit()
 
             # Seed / ensure default 'admin' user exists with updated password from .env
             admin_user = db.query(AdminUser).filter(AdminUser.username == "admin").first()
@@ -109,15 +147,15 @@ def get_default_active_batch(db: Session) -> Optional[Batch]:
     return db.query(Batch).filter(
         Batch.is_active == True,
         Batch.status == "enrolling"
-    ).order_by(desc(Batch.id)).first() or db.query(Batch).filter(Batch.is_active == True).first()
+    ).order_by(Batch.id.asc()).first() or db.query(Batch).filter(Batch.is_active == True).first()
 
 
 def list_batches(db: Session, active_only: bool = True) -> List[Dict[str, Any]]:
-    """List batches with registration stats."""
+    """List batches with registration stats in ascending order so primary batch is first."""
     query = db.query(Batch)
     if active_only:
         query = query.filter(Batch.is_active == True)
-    batches = query.order_by(desc(Batch.id)).all()
+    batches = query.order_by(Batch.id.asc()).all()
     return [b.to_dict() for b in batches]
 
 
@@ -135,13 +173,23 @@ def create_student_enquiry(
     enquiry: EnquiryCreate,
     client_ip: Optional[str] = None
 ) -> Dict[str, Any]:
-    """Record a general student enquiry or counseling request."""
-    # Associate with default weekend batch if available
-    default_batch = get_default_active_batch(db)
+    """Record a student enquiry or counseling request."""
+    target_batch = None
+    if getattr(enquiry, "course_interest", None):
+        kw = enquiry.course_interest.lower()
+        if "performance" in kw or "paid" in kw:
+            target_batch = db.query(Batch).filter(Batch.batch_code == "DM-PERF-2026-B1").first()
+        elif "seo" in kw or "growth" in kw or "content" in kw or "social" in kw:
+            target_batch = db.query(Batch).filter(Batch.batch_code == "DM-GROWTH-2026-B1").first()
+        elif "data" in kw or "bi" in kw or "python" in kw:
+            target_batch = db.query(Batch).filter(Batch.batch_code == "DA-WKND-2026-B1").first()
+
+    if not target_batch:
+        target_batch = get_default_active_batch(db)
     
     lead = StudentLead(
         lead_type="enquiry",
-        batch_id=default_batch.id if default_batch else None,
+        batch_id=target_batch.id if target_batch else None,
         full_name=enquiry.full_name.strip(),
         email=enquiry.email.strip().lower() if enquiry.email else "",
         phone=enquiry.phone.strip(),
@@ -158,7 +206,7 @@ def create_student_enquiry(
     
     return {
         "success": True,
-        "message": "Your enquiry has been received. Shubham will reach out shortly to discuss syllabus, schedule, and answer your questions.",
+        "message": "Your enquiry has been received. Our admissions desk will reach out shortly to discuss syllabus, schedule, and answer your questions.",
         "lead_id": lead.id,
         "lead_type": lead.lead_type,
         "schedule": lead.preferred_schedule,
@@ -171,13 +219,27 @@ def create_batch_registration(
     reg: BatchRegistrationCreate,
     client_ip: Optional[str] = None
 ) -> Dict[str, Any]:
-    """Record a direct batch registration for the Weekend Data Analysis class."""
+    """Record a direct batch registration for an institute cohort."""
     target_batch = None
     if reg.batch_id:
         target_batch = db.query(Batch).filter(Batch.id == reg.batch_id, Batch.is_active == True).first()
+    elif getattr(reg, "course_name", None):
+        kw = reg.course_name.lower()
+        if "performance" in kw or "paid" in kw:
+            target_batch = db.query(Batch).filter(Batch.batch_code == "DM-PERF-2026-B1").first()
+        elif "seo" in kw or "growth" in kw or "content" in kw or "social" in kw:
+            target_batch = db.query(Batch).filter(Batch.batch_code == "DM-GROWTH-2026-B1").first()
+        elif "data" in kw or "bi" in kw or "python" in kw:
+            target_batch = db.query(Batch).filter(Batch.batch_code == "DA-WKND-2026-B1").first()
     
     if not target_batch:
         target_batch = get_default_active_batch(db)
+
+    pref_sched = reg.preferred_schedule
+    if not pref_sched and target_batch:
+        pref_sched = f"{target_batch.schedule_days} {target_batch.schedule_time}"
+    if not pref_sched:
+        pref_sched = "Saturday & Sunday 6:00 PM – 8:00 PM IST"
 
     lead = StudentLead(
         lead_type="batch_registration",
@@ -187,7 +249,7 @@ def create_batch_registration(
         phone=reg.phone.strip(),
         current_status=reg.current_status,
         prior_experience=reg.prior_experience,
-        preferred_schedule=reg.preferred_schedule or "Saturday & Sunday 6:00 PM – 8:00 PM IST",
+        preferred_schedule=pref_sched,
         message=reg.message.strip() if reg.message else "",
         status="new",
         source_ip=client_ip
@@ -200,11 +262,11 @@ def create_batch_registration(
 
     return {
         "success": True,
-        "message": f"Successfully registered for the Weekend Data Analysis batch! Classes run Saturday & Sunday from 6:00 PM to 8:00 PM.",
+        "message": f"Successfully registered for {target_batch.title if target_batch else 'the cohort'}! Classes run Saturday & Sunday.",
         "registration_id": lead.id,
         "lead_type": lead.lead_type,
         "batch": batch_info,
-        "schedule": "Saturday & Sunday 6:00 PM – 8:00 PM IST",
+        "schedule": pref_sched,
         "data": lead.to_dict()
     }
 
@@ -386,28 +448,753 @@ def export_leads_csv(db: Session) -> str:
 
 def get_instructor_curriculum_profile() -> Dict[str, Any]:
     """
-    Returns structured data about the instructor, curriculum, and schedule.
-    Explicitly enforces NO fee mention.
+    Returns structured data about the educational institute, curriculum, and schedules.
     """
+    # 6 Data Analysis Modules
+    da_modules = [
+        {
+            "module": "Excel Advanced Modeling, Power Query & VBA",
+            "badge": "Spreadsheets & Automation",
+            "icon": "excel",
+            "topics": [
+                "Advanced Formulas: XLOOKUP, INDEX/MATCH, Dynamic Arrays",
+                "Pivot Tables, Slicers & Executive Pivot Charts",
+                "Power Query Editor: Multi-file Ingestion & ETL Cleansing",
+                "VBA & Macro Automation for Routine Reporting"
+            ],
+            "detailed_sections": [
+                {
+                    "title": "Power Query Editor & ETL",
+                    "bullets": [
+                        "Connecting to multiple CSVs, Excels, and folder directories",
+                        "Unpivoting cross-tabulated data into normalized rows",
+                        "Custom & conditional columns, data type casting, error handling",
+                        "Merging queries (VLOOKUP replacement) & Append queries (stacking datasets)",
+                        "Automated data refreshes without manual copy-pasting"
+                    ]
+                },
+                {
+                    "title": "VBA & Macro Automation",
+                    "bullets": [
+                        "Recording and editing macros for repetitive weekly tasks",
+                        "VBA core syntax: Subroutines, Variables, For/While Loops, If-Then logic",
+                        "Building User Defined Functions (UDFs) for proprietary business formulas",
+                        "Automating one-click workbook report generation and formatting"
+                    ]
+                },
+                {
+                    "title": "Advanced Formula Engineering & What-If",
+                    "bullets": [
+                        "Dynamic Arrays: FILTER, UNIQUE, SORT, XLOOKUP, XMATCH",
+                        "Modern formulas: LET (named variables) & LAMBDA custom reusable logic",
+                        "Nested conditionals: SUMIFS, COUNTIFS, AVERAGEIFS, IFS, SWITCH",
+                        "What-If Analysis: Goal Seek, Data Tables, Scenario Manager, Sensitivity modeling"
+                    ]
+                },
+                {
+                    "title": "Data Cleansing & Executive Dashboards",
+                    "bullets": [
+                        "Text wrangling: TEXTSPLIT, SUBSTITUTE, TRIM, Flash Fill",
+                        "Data validation rules, custom dropdown lists, IFERROR sanitization",
+                        "Multi-slicer linked dashboards with dynamic KPI cards & sparklines"
+                    ]
+                }
+            ]
+        },
+        {
+            "module": "SQL for Data Analysis & Relational Databases",
+            "badge": "Database Architecture",
+            "icon": "sql",
+            "topics": [
+                "Relational Database Architecture & 3NF Normalization",
+                "Complex Multi-Table JOINs & Nested Subqueries",
+                "Analytical Window Functions (RANK, DENSE_RANK, ROW_NUMBER)",
+                "Common Table Expressions (CTEs) & Query Optimization"
+            ],
+            "detailed_sections": [
+                {
+                    "title": "Analytical Window Functions Deep-Dive",
+                    "bullets": [
+                        "Ranking metrics: ROW_NUMBER, RANK, DENSE_RANK, NTILE",
+                        "Lead & Lag analysis: Comparing period-over-period sales without self-joins",
+                        "Cumulative statistics: Running totals, moving averages with window frames",
+                        "Frame specifications: ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW"
+                    ]
+                },
+                {
+                    "title": "CTEs & Advanced Query Structuring",
+                    "bullets": [
+                        "Common Table Expressions (WITH clauses) for modular SQL architecture",
+                        "Correlated subqueries vs Non-correlated subqueries",
+                        "Recursive CTEs for hierarchical organizational trees & bill-of-materials",
+                        "Complex aggregations: GROUP BY, HAVING, GROUPING SETS, ROLLUP, CUBE"
+                    ]
+                },
+                {
+                    "title": "Relational Modeling & Schema Design",
+                    "bullets": [
+                        "Primary keys, Foreign keys, Composite keys, Unique constraints, Cascading",
+                        "Database normalization principles: 1NF, 2NF, 3NF design",
+                        "Entity Relationship Diagrams (ERD) & schema mapping"
+                    ]
+                },
+                {
+                    "title": "Performance Tuning & Business Analytics Queries",
+                    "bullets": [
+                        "B-Tree indexing strategies, composite indexes, avoiding table scans",
+                        "Query execution analysis using EXPLAIN and EXPLAIN ANALYZE",
+                        "Real business queries: Cohort retention analysis, customer churn velocity, active users"
+                    ]
+                }
+            ]
+        },
+        {
+            "module": "Python for Data Analysis & Automation",
+            "badge": "Core Programming & ETL",
+            "icon": "python",
+            "topics": [
+                "Python Foundations, Control Flow & Data Structures",
+                "High-Performance NumPy Array Matrix Computing",
+                "Pandas DataFrames Manipulation & Multi-Source Cleansing",
+                "Automated Data Extraction & Production Scripting"
+            ],
+            "detailed_sections": [
+                {
+                    "title": "Pandas Data Wrangling Masterclass",
+                    "bullets": [
+                        "DataFrame indexing, slicing, boolean filtering, query() method",
+                        "High-performance vector operations: apply(), map(), transform()",
+                        "Reshaping datasets: pivot_table(), melt(), stack(), unstack()",
+                        "Multi-level GroupBy aggregations and statistical summarization",
+                        "Merging, joining, and concatenating heterogeneous sources"
+                    ]
+                },
+                {
+                    "title": "Data Sanitization & Missing Value Handling",
+                    "bullets": [
+                        "Detecting, imputing, and dropping null values (isna, fillna, dropna)",
+                        "Vectorized string manipulation (.str methods) and Regex extraction",
+                        "Datetime parsing, time-series resampling, and business calendars"
+                    ]
+                },
+                {
+                    "title": "NumPy Matrix Operations & Mathematics",
+                    "bullets": [
+                        "Creating and reshaping 1D, 2D, and 3D ndarrays",
+                        "Broadcasting rules, boolean masking, fast numerical filtering",
+                        "Vectorized mathematical computations & statistical arrays"
+                    ]
+                },
+                {
+                    "title": "Data Visualization & Scripted Automation",
+                    "bullets": [
+                        "Visualizing distributions, correlations & outliers with Matplotlib & Seaborn",
+                        "Connecting Python to SQL databases via SQLAlchemy & psycopg2",
+                        "Automating batch CSV/Excel processing and scheduling pipeline execution"
+                    ]
+                }
+            ]
+        },
+        {
+            "module": "Power BI Interactive Business Intelligence",
+            "badge": "Enterprise BI & Modeling",
+            "icon": "powerbi",
+            "topics": [
+                "Power Query ETL Ingestion & Data Transformation",
+                "Star Schema Relational Data Modeling & Cardinality",
+                "Advanced DAX Measures & Time Intelligence Calculations",
+                "Executive KPI Dashboards, Bookmarks & Drill-Throughs"
+            ],
+            "detailed_sections": [
+                {
+                    "title": "Data Modeling & Power Query ETL",
+                    "bullets": [
+                        "Power Query data shaping, unpivoting, merging queries, column profiling",
+                        "Star Schema vs Snowflake Schema: Fact tables vs Dimension tables",
+                        "Managing 1-to-Many and Many-to-Many relationships, active vs inactive (USERELATIONSHIP)",
+                        "Designing robust calendar tables for enterprise time-series"
+                    ]
+                },
+                {
+                    "title": "Advanced DAX Measures & Virtual Tables",
+                    "bullets": [
+                        "Evaluation contexts: Row context, Filter context, Context transition",
+                        "Core DAX functions: CALCULATE, FILTER, ALL, ALLEXCEPT, VALUES, RELATED, RELATEDTABLE",
+                        "Virtual table manipulation: SUMMARIZE, ADDCOLUMNS, GENERATE",
+                        "Safe numerical calculations using DIVIDE, COALESCE, SELECTEDVALUE"
+                    ]
+                },
+                {
+                    "title": "Time Intelligence Calculations",
+                    "bullets": [
+                        "Year-to-Date (YTD), Quarter-to-Date (QTD), Month-to-Date (MTD)",
+                        "Period-over-period comparisons: SAMEPERIODLASTYEAR, DATEADD, PARALLELPERIOD",
+                        "Rolling metrics: 30-day moving averages and trailing 12-month metrics"
+                    ]
+                },
+                {
+                    "title": "Executive Visual Storytelling & UX",
+                    "bullets": [
+                        "Building interactive drill-through pages and custom tooltip report pages",
+                        "Interactive UI bookmarks, buttons, slicer panels, dynamic measure selectors",
+                        "Designing responsive executive dashboard layouts optimized for leadership"
+                    ]
+                }
+            ]
+        },
+        {
+            "module": "Tableau Visual Storytelling & Dashboards",
+            "badge": "Visual Analytics",
+            "icon": "tableau",
+            "topics": [
+                "Connecting to Files, Cloud Databases & Live Extracts",
+                "Visual Dimensions vs Measures & Granularity Controls",
+                "Level of Detail (LOD) Calculations (FIXED, INCLUDE, EXCLUDE)",
+                "Interactive Storyboards, Dynamic Actions & Cloud Publishing"
+            ],
+            "detailed_sections": [
+                {
+                    "title": "LOD Expressions & Advanced Calculations",
+                    "bullets": [
+                        "Level of Detail (LOD) calculations: FIXED, INCLUDE, EXCLUDE syntax",
+                        "Calculating customer lifetime value and first-purchase cohorts with LODs",
+                        "Table calculations: Percent of total, running total, rank, difference from previous",
+                        "Dynamic parameters, parameter actions, and calculated field logic"
+                    ]
+                },
+                {
+                    "title": "Interactive Actions & Dashboard Architecture",
+                    "bullets": [
+                        "Filter actions, highlight actions, set actions, and URL external actions",
+                        "Creating collapsible containers, custom navigation buttons, dynamic icons",
+                        "Geographic mapping with latitude/longitude, spatial data, and regional layers"
+                    ]
+                },
+                {
+                    "title": "Advanced Chart Types & Visual Best Practices",
+                    "bullets": [
+                        "Dual-axis combination charts, Pareto charts, waterfall charts, donut charts",
+                        "Cognitive design: Color theory, visual hierarchy, avoiding chart clutter",
+                        "Formatting guidelines for C-level executive consumption"
+                    ]
+                },
+                {
+                    "title": "Storyboarding & Tableau Public Portfolio",
+                    "bullets": [
+                        "Building multi-chapter story points presenting narrative business insights",
+                        "Extract performance tuning, dashboard latency optimization",
+                        "Publishing interactive web portfolios on Tableau Public"
+                    ]
+                }
+            ]
+        },
+        {
+            "module": "Career Acceleration: GitHub, Resume & LinkedIn Setup",
+            "badge": "Job Readiness & Portfolio",
+            "icon": "career",
+            "topics": [
+                "GitHub Portfolio Setup & Open-Source Code Architecture",
+                "ATS-Compliant Data Analyst Resume Engineering",
+                "LinkedIn Profile Optimization & Inbound Recruiter Strategy",
+                "1-on-1 Mock Technical Interviews & Live SQL Screenings"
+            ],
+            "detailed_sections": [
+                {
+                    "title": "GitHub Portfolio Architecture",
+                    "bullets": [
+                        "Setting up a clean, professional GitHub developer profile with profile README",
+                        "Git version control fundamentals: commits, branching, pushing repository updates",
+                        "Writing production-grade README.md files: Problem statements, architecture schemas, key insights, screenshots",
+                        "Hosting 3+ complete capstone portfolios with downloadable data dictionaries"
+                    ]
+                },
+                {
+                    "title": "ATS-Optimized Tech Resume Building",
+                    "bullets": [
+                        "Line-by-line resume engineering specifically for Data Analyst & BI roles",
+                        "Quantifiable business impact formula: Action + Tool + Business Result (e.g., 'Reduced query latency by 45%')",
+                        "Strategic technical keyword placement to pass automated ATS recruiter screeners",
+                        "Removing rookie formatting flaws and organizing technical skills hierarchy"
+                    ]
+                },
+                {
+                    "title": "LinkedIn Personal Branding & Inbound Networking",
+                    "bullets": [
+                        "High-converting profile headline, about section, and featured portfolio media",
+                        "Documenting learning in public: Sharing live dashboard demos and SQL insights",
+                        "High-response direct messaging templates for reaching hiring managers and team leads",
+                        "Leveraging alumni networks and technical community groups for interview referrals"
+                    ]
+                },
+                {
+                    "title": "Mock Technical Interviews & Capstone Deployment",
+                    "bullets": [
+                        "Live timed SQL query solving on CoderPad & HackerRank under interview pressure",
+                        "Python data wrangling live screening challenges using Pandas & NumPy",
+                        "Dashboard defense: Answering business stakeholder questions on DAX logic and metrics",
+                        "Publishing live web-accessible dashboards on Power BI Service and Tableau Public"
+                    ]
+                }
+            ]
+        }
+    ]
+
+    # Digital Marketing 1: Performance Marketing & Paid Advertising
+    dm_perf_modules = [
+        {
+            "module": "Performance Marketing Core & Funnel Economics",
+            "badge": "Paid Acquisition Foundations",
+            "icon": "target",
+            "topics": [
+                "Unit Economics: CAC, LTV, ROAS, AOV & Contribution Margins",
+                "Full-Funnel Paid Acquisition Frameworks (TOF, MOF, BOF)",
+                "Tracking Infrastructure: Pixels, CAPI, UTM Taxonomy & Attribution",
+                "Competitor Creative & Offer Tear-Downs via Ad Libraries"
+            ],
+            "detailed_sections": [
+                {
+                    "title": "Funnel Economics & Metrics Calculation",
+                    "bullets": [
+                        "Calculating break-even ROAS and maximum allowable CPA across product categories",
+                        "Structuring Top of Funnel (TOF), Middle of Funnel (MOF), and Bottom of Funnel (BOF)",
+                        "Understanding first-click, last-click, linear, and data-driven attribution models",
+                        "Designing UTM tracking conventions for clean cross-channel analytics reporting"
+                    ]
+                },
+                {
+                    "title": "Direct Response Offer Engineering",
+                    "bullets": [
+                        "Constructing high-converting irresistible offers and risk-reversal guarantees",
+                        "Pricing psychology, bundle architecture, and bump offer optimization",
+                        "Auditing competitor ad copy, angles, and positioning in Meta Ad Library"
+                    ]
+                }
+            ]
+        },
+        {
+            "module": "Meta Ads Masterclass (Facebook & Instagram Advertising)",
+            "badge": "Paid Social & Scaling",
+            "icon": "share-2",
+            "topics": [
+                "Meta Ads Manager Architecture & Account Governance",
+                "Campaign Budget Optimization (CBO) vs Ad Set Budget (ABO)",
+                "Dynamic Creative Testing (DCT) & Hook Permutation Frameworks",
+                "Server-Side Conversions API (CAPI) & Custom Audience Retargeting"
+            ],
+            "detailed_sections": [
+                {
+                    "title": "Campaign Structure & Creative Testing",
+                    "bullets": [
+                        "Broad targeting vs Interest stacking vs 1%-5% Lookalike audience strategy",
+                        "Dynamic Creative Testing (DCT) matrix: 3 Hooks x 2 Bodies x 2 Visuals",
+                        "User-Generated Content (UGC), founder stories, and product demonstration formats",
+                        "Mitigating ad fatigue with creative sprint cycles and hook iteration"
+                    ]
+                },
+                {
+                    "title": "Retargeting & Audience Workflows",
+                    "bullets": [
+                        "Building custom audiences: 30-day website visitors, video 50%+ viewers, add-to-carts",
+                        "Dynamic Product Ads (DPA) catalog integration for Shopify & WooCommerce",
+                        "Exclusion lists and frequency capping rules to prevent budget cannibalization"
+                    ]
+                }
+            ]
+        },
+        {
+            "module": "Google Ads Search, Display & Performance Max (PMax)",
+            "badge": "High-Intent Paid Search",
+            "icon": "search",
+            "topics": [
+                "Google Ads Architecture & Intent-Based Keyword Research",
+                "Broad, Phrase & Exact Match Keyword Grouping Strategies",
+                "Responsive Search Ads (RSA) Copywriting & Ad Assets",
+                "Performance Max (PMax) Campaigns & Smart Bidding Strategies"
+            ],
+            "detailed_sections": [
+                {
+                    "title": "Search Network Mastery & Quality Score",
+                    "bullets": [
+                        "Negative keyword master lists to eliminate wasted spend and unqualified clicks",
+                        "Boosting Quality Score: Ad relevance, expected CTR, and landing page alignment",
+                        "Ad extensions & assets: Sitelinks, callouts, structured snippets, lead form assets"
+                    ]
+                },
+                {
+                    "title": "Performance Max (PMax) & Bidding Algorithms",
+                    "bullets": [
+                        "Building asset groups with high-converting imagery, video, and headlines",
+                        "Audience signals: Customer match lists, custom intent search queries",
+                        "Target CPA (tCPA), Target ROAS (tROAS), and Maximize Conversions bidding triggers"
+                    ]
+                }
+            ]
+        },
+        {
+            "module": "Web Analytics, GA4 & Google Tag Manager (GTM)",
+            "badge": "Tracking & Measurement",
+            "icon": "bar-chart-2",
+            "topics": [
+                "Google Tag Manager (GTM) Container Setup & Data Layer Architecture",
+                "GA4 Event-Based Data Model & Custom Dimensions / Metrics",
+                "E-Commerce Purchase Tracking, Cart Additions & Checkout Steps",
+                "Custom Exploration Reports: Funnel Exploration & Path Analysis"
+            ],
+            "detailed_sections": [
+                {
+                    "title": "GTM Tags, Triggers & Variables",
+                    "bullets": [
+                        "Deploying Meta Pixel, Google Ads Conversion Tags, and GA4 Configuration via GTM",
+                        "Configuring scroll depth triggers, outbound click listeners, and form submissions",
+                        "Testing events with GTM Preview Mode and GA4 DebugView"
+                    ]
+                },
+                {
+                    "title": "GA4 Advanced Funnels & Reporting",
+                    "bullets": [
+                        "Building custom checkout funnel exploration reports to locate drop-off points",
+                        "Cross-channel attribution analysis: Discovering assisted conversions",
+                        "Exporting GA4 events to BigQuery for automated custom reporting"
+                    ]
+                }
+            ]
+        },
+        {
+            "module": "Landing Page Engineering & Conversion Rate Optimization (CRO)",
+            "badge": "CRO & Copywriting",
+            "icon": "layout",
+            "topics": [
+                "Above-The-Fold Architecture & Conversion Visual Hierarchy",
+                "Direct-Response Copywriting: AIDA, PAS & Emotional Triggers",
+                "Heatmap & Session Replay Analysis (Clarity / Hotjar)",
+                "Scientific A/B Split Testing & Statistical Significance"
+            ],
+            "detailed_sections": [
+                {
+                    "title": "Landing Page UX & Mobile Optimization",
+                    "bullets": [
+                        "Speed optimization: Image compression, zero CLS, sub-2-second mobile load time",
+                        "Form design: Minimizing friction, multi-step forms, micro-commitments",
+                        "Social proof placement: Trust badges, real reviews, case study video embeds"
+                    ]
+                },
+                {
+                    "title": "Scientific Split Testing",
+                    "bullets": [
+                        "Formulating data-backed A/B testing hypotheses based on session recordings",
+                        "Testing single elements: Headline hooks, CTA button copy, pricing displays",
+                        "Calculating sample sizes and statistical significance thresholds"
+                    ]
+                }
+            ]
+        },
+        {
+            "module": "Budget Scaling, Ad Spend Simulation & Capstone Campaign",
+            "badge": "Live Execution & Capstone",
+            "icon": "zap",
+            "topics": [
+                "Vertical vs Horizontal Budget Scaling Playbooks",
+                "Creative Fatigue Mitigation & Rapid Ad Iteration Sprints",
+                "Compliance, Policy Adherence & Ad Account Security",
+                "End-to-End Multi-Channel E-Commerce Paid Campaign Capstone"
+            ],
+            "detailed_sections": [
+                {
+                    "title": "Budget Scaling & Account Safeguards",
+                    "bullets": [
+                        "The 20% incremental scaling rule vs intraday surge budget management",
+                        "Horizontal scaling: Duplicating top performers into new lookalikes and interest buckets",
+                        "Compliance rules: Avoiding common triggers for Meta/Google account suspensions"
+                    ]
+                },
+                {
+                    "title": "Capstone Ad Campaign Presentation",
+                    "bullets": [
+                        "Building an end-to-end multi-channel campaign strategy for a real brand",
+                        "Designing ad creatives, writing sales copy, setting up GA4 events, and projecting ROAS",
+                        "Presenting the campaign strategy to faculty panel and peer marketers"
+                    ]
+                }
+            ]
+        }
+    ]
+
+    # Digital Marketing 2: SEO, Content Strategy & Social Media Growth
+    dm_growth_modules = [
+        {
+            "module": "Inbound Marketing & Organic Acquisition Foundations",
+            "badge": "Organic Foundations",
+            "icon": "compass",
+            "topics": [
+                "The Inbound Marketing Flywheel vs Outbound Interruption",
+                "Search Engine Crawling, Indexing & Ranking Mechanisms",
+                "Search Intent Classification: Informational, Navigational, Commercial, Transactional",
+                "Google E-E-A-T Quality Guidelines & Brand Topical Authority"
+            ],
+            "detailed_sections": [
+                {
+                    "title": "How Search Engines Work",
+                    "bullets": [
+                        "Googlebot architecture: Rendering DOM, JavaScript indexing, mobile-first index",
+                        "Topical authority: Why niche depth beats broad, shallow content",
+                        "Demonstrating Experience, Expertise, Authoritativeness, and Trust (E-E-A-T)"
+                    ]
+                },
+                {
+                    "title": "Audience Persona & Competitor Audits",
+                    "bullets": [
+                        "Mapping customer pain points to high-value organic search queries",
+                        "Using Semrush & Ahrefs to identify competitor top-performing pages and traffic sources"
+                    ]
+                }
+            ]
+        },
+        {
+            "module": "Keyword Intelligence, Semantic SEO & Topic Clusters",
+            "badge": "Keyword Engineering",
+            "icon": "cpu",
+            "topics": [
+                "Long-Tail Keyword Discovery via Search Console & Intent Tools",
+                "Keyword Clustering & Topic Pillar Silo Architecture",
+                "SERP Feature Targeting: Featured Snippets, PAA & Knowledge Panels",
+                "Content Gap Identification: Uncovering Zero-Competition Queries"
+            ],
+            "detailed_sections": [
+                {
+                    "title": "Keyword Clustering & Semantic Search",
+                    "bullets": [
+                        "Grouping thousands of search queries by semantic intent and entity relevance",
+                        "Designing hub-and-spoke pillar pages with structured internal links",
+                        "Optimizing content for Google's Natural Language Processing (NLP) models"
+                    ]
+                },
+                {
+                    "title": "SERP Real Estate Domination",
+                    "bullets": [
+                        "Structuring tables, bullet points, and definitions to win Position 0 featured snippets",
+                        "Optimizing for People Also Ask (PAA) accordions and FAQ schema embeds"
+                    ]
+                }
+            ]
+        },
+        {
+            "module": "Technical SEO, Core Web Vitals & Schema Markup",
+            "badge": "Technical SEO",
+            "icon": "code",
+            "topics": [
+                "Full Technical Site Auditing with Screaming Frog",
+                "Indexation Control: Robots.txt, Canonical Tags, XML Sitemaps",
+                "Core Web Vitals Optimization: LCP, INP, and CLS Benchmarks",
+                "Structured Data Engineering: JSON-LD Schemas for Articles, FAQs & Products"
+            ],
+            "detailed_sections": [
+                {
+                    "title": "Crawl Budget & Technical Hygiene",
+                    "bullets": [
+                        "Locating and fixing crawl errors, 404s, redirect chains, and duplicate URLs",
+                        "Configuring canonical tags, hreflang for multi-region, and clean URL permalinks",
+                        "Log file analysis: Monitoring search engine bot visits and crawl frequency"
+                    ]
+                },
+                {
+                    "title": "Speed & Rich Snippets",
+                    "bullets": [
+                        "Compressing WebP/AVIF images, minifying CSS/JS, and setting browser caching headers",
+                        "Hand-crafting Schema.org JSON-LD structured data to trigger rich stars and FAQ badges"
+                    ]
+                }
+            ]
+        },
+        {
+            "module": "High-Converting Content Marketing & Copywriting",
+            "badge": "Content Strategy",
+            "icon": "edit-3",
+            "topics": [
+                "Editorial Calendar Management & Content Production Frameworks",
+                "High-Ranking SEO Long-Form Article Writing Frameworks",
+                "High-Value Lead Magnets: Guides, Toolkits, Cheatsheets & Free Audits",
+                "Content Repurposing: Turning 1 Core Piece into 15 Social Posts"
+            ],
+            "detailed_sections": [
+                {
+                    "title": "Content Creation & On-Page SEO",
+                    "bullets": [
+                        "Drafting comprehensive content that satisfies intent better than top 3 competitors",
+                        "Strategic keyword placement: Title tag, H1-H3 headers, meta descriptions, image alt text",
+                        "Formatting for digital readability: Short paragraphs, callout quotes, custom diagrams"
+                    ]
+                },
+                {
+                    "title": "Lead Magnet Funnel Architecture",
+                    "bullets": [
+                        "Designing downloadable assets that compel visitors to exchange email addresses",
+                        "Setting up automated instant delivery and thank-you onboarding pages"
+                    ]
+                }
+            ]
+        },
+        {
+            "module": "Organic Social Media Growth (LinkedIn, Instagram & Video)",
+            "badge": "Social Growth & Branding",
+            "icon": "users",
+            "topics": [
+                "B2B LinkedIn Personal Branding & Thought Leadership Playbooks",
+                "Instagram Organic Reach: Reels, Carousels & Engagement Loops",
+                "YouTube Search Optimization: High-CTR Thumbnails, Titles & Hooks",
+                "Community Building: Transforming Casual Followers into Brand Advocates"
+            ],
+            "detailed_sections": [
+                {
+                    "title": "LinkedIn Inbound Engine",
+                    "bullets": [
+                        "Optimizing personal profiles into high-converting landing pages",
+                        "Crafting scroll-stopping text hooks, visual PDF carousels, and case studies",
+                        "Outbound DM connection strategies for networking and agency client acquisition"
+                    ]
+                },
+                {
+                    "title": "Short-Form Video & YouTube SEO",
+                    "bullets": [
+                        "Scripting viral 30-60 second Reels, Shorts, and TikToks with tight pacing",
+                        "Optimizing YouTube long-form videos with timestamp chapters, tags, and cards"
+                    ]
+                }
+            ]
+        },
+        {
+            "module": "Email Marketing Automation & Inbound Growth Capstone",
+            "badge": "Lifecycle & Capstone",
+            "icon": "mail",
+            "topics": [
+                "Email Platform Setup (Klaviyo / ConvertKit / Mailchimp)",
+                "Automated Nurture Sequences: Welcome Series, Drips, Re-engagement",
+                "Deliverability Mastery: SPF, DKIM, DMARC & Inbox Placement",
+                "Full 0-to-50K Monthly Organic Traffic Playbook Capstone"
+            ],
+            "detailed_sections": [
+                {
+                    "title": "Email Sequences & Automation Rules",
+                    "bullets": [
+                        "5-part welcome email sequence that builds trust and introduces core offerings",
+                        "Behavioral segmentation based on link clicks, purchases, and engagement history",
+                        "A/B testing email subject lines, preview text, and send time optimization"
+                    ]
+                },
+                {
+                    "title": "Organic Growth Strategy Capstone",
+                    "bullets": [
+                        "Developing an end-to-end 6-month organic growth roadmap for a chosen business",
+                        "Auditing technical health, mapping keyword clusters, and planning content output",
+                        "Presenting the complete inbound roadmap and projected organic traffic growth"
+                    ]
+                }
+            ]
+        }
+    ]
+
+    all_institute_courses = [
+        {
+            "id": "dm-perf",
+            "code": "DM-PERF-2026-B1",
+            "name": "Digital Marketing: Performance Marketing & Paid Ads",
+            "short_name": "Performance Marketing",
+            "category": "Digital Marketing",
+            "tagline": "Master High-ROI Paid Acquisition, Meta & Google Ads, and Conversion Funnels",
+            "badge": "Paid Media & ROAS",
+            "icon": "target",
+            "duration": "8–10 Weeks (Live Online)",
+            "schedule": {
+                "days": "Saturday & Sunday",
+                "timings": "3:00 PM – 5:00 PM IST",
+                "frequency": "Weekend live online cohort (2 hours/day)"
+            },
+            "tools": ["Meta Ads", "Google Ads", "GA4", "Google Tag Manager", "Funnel CRO", "Canva"],
+            "highlights": [
+                "Meta Ads Manager: Broad vs Interest vs Lookalike CAPI Workflows",
+                "Google Search, Performance Max (PMax) & YouTube Bidding Systems",
+                "Server-Side Tagging & Google Analytics 4 (GA4) Funnel Tracking",
+                "Landing Page A/B Testing, Hook Copywriting & ROAS Scaling Frameworks"
+            ],
+            "syllabus_modules": dm_perf_modules
+        },
+        {
+            "id": "dm-growth",
+            "code": "DM-GROWTH-2026-B1",
+            "name": "Digital Marketing: SEO, Content Strategy & Social Media Growth",
+            "short_name": "SEO & Growth Strategy",
+            "category": "Digital Marketing",
+            "tagline": "Build Organic Inbound Engines, Search Authority, and Viral Social Proof",
+            "badge": "Organic & Inbound Growth",
+            "icon": "trending-up",
+            "duration": "8–10 Weeks (Live Online)",
+            "schedule": {
+                "days": "Saturday & Sunday",
+                "timings": "11:00 AM – 1:00 PM IST",
+                "frequency": "Weekend live online cohort (2 hours/day)"
+            },
+            "tools": ["Technical SEO", "Semrush / Ahrefs", "Google Search Console", "Content Marketing", "LinkedIn", "Email Automation"],
+            "highlights": [
+                "Technical SEO Auditing: Crawl Budgets, Core Web Vitals, Schema JSON-LD",
+                "Semantic Keyword Clustering & Topic Pillar Architecture",
+                "High-Converting Direct Copywriting & Lead Magnet Funnels",
+                "Organic LinkedIn & Instagram Growth Algorithms & Email Drip Automation"
+            ],
+            "syllabus_modules": dm_growth_modules
+        },
+        {
+            "id": "da-core",
+            "code": "DA-WKND-2026-B1",
+            "name": "Data Analysis & Business Intelligence Masterclass",
+            "short_name": "Data Analytics & BI",
+            "category": "Data Analytics",
+            "tagline": "Enterprise Data Pipelines, Advanced Relational SQL & Interactive Dashboards",
+            "badge": "Data Systems & BI",
+            "icon": "database",
+            "duration": "8–10 Weeks (Live Online)",
+            "schedule": {
+                "days": "Saturday & Sunday",
+                "timings": "6:00 PM – 8:00 PM IST",
+                "frequency": "Weekend live online cohort (2 hours/day)"
+            },
+            "tools": ["Python", "SQL", "PowerBI", "Excel", "Tableau"],
+            "highlights": [
+                "Excel Advanced Modeling: Power Query Multi-File ETL & VBA Macro Automation",
+                "Relational SQL Architecture: Window Functions, CTEs, 3NF & Query Tuning",
+                "Python Data Wrangling: Vectorized Pandas, NumPy Arrays & Automated Ingestion",
+                "Power BI & Tableau Storyboarding: Fact/Dim Star Schemas, DAX & LOD Calculations"
+            ],
+            "syllabus_modules": da_modules
+        }
+    ]
+
     return {
+        "institute": {
+            "name": "MYTHOS Online Institute",
+            "tagline": "Premier Live Online Educational Institute",
+            "description": (
+                "Mythos is a full online educational institute delivering rigorous live cohort programs in "
+                "Digital Marketing (Performance Marketing, Paid Ads, SEO, Content Growth) and "
+                "Data Analytics (Python, SQL, Power BI, Excel, Tableau). 100% online, live faculty mentorship."
+            ),
+            "phone": settings.OWNER_PHONE,
+            "email": settings.EMAIL,
+            "whatsapp": "https://wa.me/918727864157"
+        },
         "instructor": {
             "name": settings.OWNER_NAME,
-            "title": "Data Architecture & Analytics Mentorship Desk",
-            "bio": (
-                "Rigorous hands-on mentorship designed for practical execution across Python, SQL, Power BI, "
-                "Excel modeling, and Tableau. Trained and mentored 550+ students and developers in "
-                "practical, production-grade data systems."
-            ),
+            "title": settings.OWNER_TITLE,
+            "bio": settings.OWNER_BIO,
             "experience_highlights": [
-                "Enterprise Data Architecture, Asynchronous ETL Pipelines & Production Systems",
-                "Advanced Relational SQL Modeling, Window Functions, and Schema Optimization",
-                "Executive BI Dashboard Engineering & Interactive Storytelling (Power BI & Tableau)"
+                "Live Online Faculty Mentorship: Digital Marketing & Data Analytics Cohorts",
+                "Real Industry Simulations: Live Paid Ad Spends, GA4 Tracking & Multi-Source SQL Data Warehouses",
+                "Career Acceleration: 550+ Students & Working Professionals Mentored with ATS Resumes & Portfolios"
             ],
             "phone": settings.OWNER_PHONE,
             "email": settings.EMAIL,
             "linkedin": settings.LINKEDIN_URL,
             "github": settings.GITHUB_URL
         },
+        "courses": all_institute_courses,
         "course": {
             "name": "Complete Data Analysis Masterclass",
             "tools": ["Python", "SQL", "PowerBI", "Excel", "Tableau"],
@@ -416,294 +1203,8 @@ def get_instructor_curriculum_profile() -> Dict[str, Any]:
                 "timings": "6:00 PM – 8:00 PM IST",
                 "frequency": "Weekend only (2 hours/day, 4 hours/week)"
             },
-            "syllabus_modules": [
-                {
-                    "module": "Excel Advanced Modeling, Power Query & VBA",
-                    "badge": "Spreadsheets & Automation",
-                    "icon": "excel",
-                    "topics": [
-                        "Advanced Formulas: XLOOKUP, INDEX/MATCH, Dynamic Arrays",
-                        "Pivot Tables, Slicers & Executive Pivot Charts",
-                        "Power Query Editor: Multi-file Ingestion & ETL Cleansing",
-                        "VBA & Macro Automation for Routine Reporting"
-                    ],
-                    "detailed_sections": [
-                        {
-                            "title": "Power Query Editor & ETL",
-                            "bullets": [
-                                "Connecting to multiple CSVs, Excels, and folder directories",
-                                "Unpivoting cross-tabulated data into normalized rows",
-                                "Custom & conditional columns, data type casting, error handling",
-                                "Merging queries (VLOOKUP replacement) & Append queries (stacking datasets)",
-                                "Automated data refreshes without manual copy-pasting"
-                            ]
-                        },
-                        {
-                            "title": "VBA & Macro Automation",
-                            "bullets": [
-                                "Recording and editing macros for repetitive weekly tasks",
-                                "VBA core syntax: Subroutines, Variables, For/While Loops, If-Then logic",
-                                "Building User Defined Functions (UDFs) for proprietary business formulas",
-                                "Automating one-click workbook report generation and formatting"
-                            ]
-                        },
-                        {
-                            "title": "Advanced Formula Engineering & What-If",
-                            "bullets": [
-                                "Dynamic Arrays: FILTER, UNIQUE, SORT, XLOOKUP, XMATCH",
-                                "Modern formulas: LET (named variables) & LAMBDA custom reusable logic",
-                                "Nested conditionals: SUMIFS, COUNTIFS, AVERAGEIFS, IFS, SWITCH",
-                                "What-If Analysis: Goal Seek, Data Tables, Scenario Manager, Sensitivity modeling"
-                            ]
-                        },
-                        {
-                            "title": "Data Cleansing & Executive Dashboards",
-                            "bullets": [
-                                "Text wrangling: TEXTSPLIT, SUBSTITUTE, TRIM, Flash Fill",
-                                "Data validation rules, custom dropdown lists, IFERROR sanitization",
-                                "Multi-slicer linked dashboards with dynamic KPI cards & sparklines"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "module": "SQL for Data Analysis & Relational Databases",
-                    "badge": "Database Architecture",
-                    "icon": "sql",
-                    "topics": [
-                        "Relational Database Architecture & 3NF Normalization",
-                        "Complex Multi-Table JOINs & Nested Subqueries",
-                        "Analytical Window Functions (RANK, DENSE_RANK, ROW_NUMBER)",
-                        "Common Table Expressions (CTEs) & Query Optimization"
-                    ],
-                    "detailed_sections": [
-                        {
-                            "title": "Analytical Window Functions Deep-Dive",
-                            "bullets": [
-                                "Ranking metrics: ROW_NUMBER, RANK, DENSE_RANK, NTILE",
-                                "Lead & Lag analysis: Comparing period-over-period sales without self-joins",
-                                "Cumulative statistics: Running totals, moving averages with window frames",
-                                "Frame specifications: ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW"
-                            ]
-                        },
-                        {
-                            "title": "CTEs & Advanced Query Structuring",
-                            "bullets": [
-                                "Common Table Expressions (WITH clauses) for modular SQL architecture",
-                                "Correlated subqueries vs Non-correlated subqueries",
-                                "Recursive CTEs for hierarchical organizational trees & bill-of-materials",
-                                "Complex aggregations: GROUP BY, HAVING, GROUPING SETS, ROLLUP, CUBE"
-                            ]
-                        },
-                        {
-                            "title": "Relational Modeling & Schema Design",
-                            "bullets": [
-                                "Primary keys, Foreign keys, Composite keys, Unique constraints, Cascading",
-                                "Database normalization principles: 1NF, 2NF, 3NF design",
-                                "Entity Relationship Diagrams (ERD) & schema mapping"
-                            ]
-                        },
-                        {
-                            "title": "Performance Tuning & Business Analytics Queries",
-                            "bullets": [
-                                "B-Tree indexing strategies, composite indexes, avoiding table scans",
-                                "Query execution analysis using EXPLAIN and EXPLAIN ANALYZE",
-                                "Real business queries: Cohort retention analysis, customer churn velocity, active users"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "module": "Python for Data Analysis & Automation",
-                    "badge": "Core Programming & ETL",
-                    "icon": "python",
-                    "topics": [
-                        "Python Foundations, Control Flow & Data Structures",
-                        "High-Performance NumPy Array Matrix Computing",
-                        "Pandas DataFrames Manipulation & Multi-Source Cleansing",
-                        "Automated Data Extraction & Production Scripting"
-                    ],
-                    "detailed_sections": [
-                        {
-                            "title": "Pandas Data Wrangling Masterclass",
-                            "bullets": [
-                                "DataFrame indexing, slicing, boolean filtering, query() method",
-                                "High-performance vector operations: apply(), map(), transform()",
-                                "Reshaping datasets: pivot_table(), melt(), stack(), unstack()",
-                                "Multi-level GroupBy aggregations and statistical summarization",
-                                "Merging, joining, and concatenating heterogeneous sources"
-                            ]
-                        },
-                        {
-                            "title": "Data Sanitization & Missing Value Handling",
-                            "bullets": [
-                                "Detecting, imputing, and dropping null values (isna, fillna, dropna)",
-                                "Vectorized string manipulation (.str methods) and Regex extraction",
-                                "Datetime parsing, time-series resampling, and business calendars"
-                            ]
-                        },
-                        {
-                            "title": "NumPy Matrix Operations & Mathematics",
-                            "bullets": [
-                                "Creating and reshaping 1D, 2D, and 3D ndarrays",
-                                "Broadcasting rules, boolean masking, fast numerical filtering",
-                                "Vectorized mathematical computations & statistical arrays"
-                            ]
-                        },
-                        {
-                            "title": "Data Visualization & Scripted Automation",
-                            "bullets": [
-                                "Visualizing distributions, correlations & outliers with Matplotlib & Seaborn",
-                                "Connecting Python to SQL databases via SQLAlchemy & psycopg2",
-                                "Automating batch CSV/Excel processing and scheduling pipeline execution"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "module": "Power BI Interactive Business Intelligence",
-                    "badge": "Enterprise BI & Modeling",
-                    "icon": "powerbi",
-                    "topics": [
-                        "Power Query ETL Ingestion & Data Transformation",
-                        "Star Schema Relational Data Modeling & Cardinality",
-                        "Advanced DAX Measures & Time Intelligence Calculations",
-                        "Executive KPI Dashboards, Bookmarks & Drill-Throughs"
-                    ],
-                    "detailed_sections": [
-                        {
-                            "title": "Data Modeling & Power Query ETL",
-                            "bullets": [
-                                "Power Query data shaping, unpivoting, merging queries, column profiling",
-                                "Star Schema vs Snowflake Schema: Fact tables vs Dimension tables",
-                                "Managing 1-to-Many and Many-to-Many relationships, active vs inactive (USERELATIONSHIP)",
-                                "Designing robust calendar tables for enterprise time-series"
-                            ]
-                        },
-                        {
-                            "title": "Advanced DAX Measures & Virtual Tables",
-                            "bullets": [
-                                "Evaluation contexts: Row context, Filter context, Context transition",
-                                "Core DAX functions: CALCULATE, FILTER, ALL, ALLEXCEPT, VALUES, RELATED, RELATEDTABLE",
-                                "Virtual table manipulation: SUMMARIZE, ADDCOLUMNS, GENERATE",
-                                "Safe numerical calculations using DIVIDE, COALESCE, SELECTEDVALUE"
-                            ]
-                        },
-                        {
-                            "title": "Time Intelligence Calculations",
-                            "bullets": [
-                                "Year-to-Date (YTD), Quarter-to-Date (QTD), Month-to-Date (MTD)",
-                                "Period-over-period comparisons: SAMEPERIODLASTYEAR, DATEADD, PARALLELPERIOD",
-                                "Rolling metrics: 30-day moving averages and trailing 12-month metrics"
-                            ]
-                        },
-                        {
-                            "title": "Executive Visual Storytelling & UX",
-                            "bullets": [
-                                "Building interactive drill-through pages and custom tooltip report pages",
-                                "Interactive UI bookmarks, buttons, slicer panels, dynamic measure selectors",
-                                "Designing responsive executive dashboard layouts optimized for leadership"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "module": "Tableau Visual Storytelling & Dashboards",
-                    "badge": "Visual Analytics",
-                    "icon": "tableau",
-                    "topics": [
-                        "Connecting to Files, Cloud Databases & Live Extracts",
-                        "Visual Dimensions vs Measures & Granularity Controls",
-                        "Level of Detail (LOD) Calculations (FIXED, INCLUDE, EXCLUDE)",
-                        "Interactive Storyboards, Dynamic Actions & Cloud Publishing"
-                    ],
-                    "detailed_sections": [
-                        {
-                            "title": "LOD Expressions & Advanced Calculations",
-                            "bullets": [
-                                "Level of Detail (LOD) calculations: FIXED, INCLUDE, EXCLUDE syntax",
-                                "Calculating customer lifetime value and first-purchase cohorts with LODs",
-                                "Table calculations: Percent of total, running total, rank, difference from previous",
-                                "Dynamic parameters, parameter actions, and calculated field logic"
-                            ]
-                        },
-                        {
-                            "title": "Interactive Actions & Dashboard Architecture",
-                            "bullets": [
-                                "Filter actions, highlight actions, set actions, and URL external actions",
-                                "Creating collapsible containers, custom navigation buttons, dynamic icons",
-                                "Geographic mapping with latitude/longitude, spatial data, and regional layers"
-                            ]
-                        },
-                        {
-                            "title": "Advanced Chart Types & Visual Best Practices",
-                            "bullets": [
-                                "Dual-axis combination charts, Pareto charts, waterfall charts, donut charts",
-                                "Cognitive design: Color theory, visual hierarchy, avoiding chart clutter",
-                                "Formatting guidelines for C-level executive consumption"
-                            ]
-                        },
-                        {
-                            "title": "Storyboarding & Tableau Public Portfolio",
-                            "bullets": [
-                                "Building multi-chapter story points presenting narrative business insights",
-                                "Extract performance tuning, dashboard latency optimization",
-                                "Publishing interactive web portfolios on Tableau Public"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "module": "Career Acceleration: GitHub, Resume & LinkedIn Setup",
-                    "badge": "Job Readiness & Portfolio",
-                    "icon": "career",
-                    "topics": [
-                        "GitHub Portfolio Setup & Open-Source Code Architecture",
-                        "ATS-Compliant Data Analyst Resume Engineering",
-                        "LinkedIn Profile Optimization & Inbound Recruiter Strategy",
-                        "1-on-1 Mock Technical Interviews & Live SQL Screenings"
-                    ],
-                    "detailed_sections": [
-                        {
-                            "title": "GitHub Portfolio Architecture",
-                            "bullets": [
-                                "Setting up a clean, professional GitHub developer profile with profile README",
-                                "Git version control fundamentals: commits, branching, pushing repository updates",
-                                "Writing production-grade README.md files: Problem statements, architecture schemas, key insights, screenshots",
-                                "Hosting 3+ complete capstone portfolios with downloadable data dictionaries"
-                            ]
-                        },
-                        {
-                            "title": "ATS-Optimized Tech Resume Building",
-                            "bullets": [
-                                "Line-by-line resume engineering specifically for Data Analyst & BI roles",
-                                "Quantifiable business impact formula: Action + Tool + Business Result (e.g., 'Reduced query latency by 45%')",
-                                "Strategic technical keyword placement to pass automated ATS recruiter screeners",
-                                "Removing rookie formatting flaws and organizing technical skills hierarchy"
-                            ]
-                        },
-                        {
-                            "title": "LinkedIn Personal Branding & Inbound Networking",
-                            "bullets": [
-                                "High-converting profile headline, about section, and featured portfolio media",
-                                "Documenting learning in public: Sharing live dashboard demos and SQL insights",
-                                "High-response direct messaging templates for reaching hiring managers and team leads",
-                                "Leveraging alumni networks and technical community groups for interview referrals"
-                            ]
-                        },
-                        {
-                            "title": "Mock Technical Interviews & Capstone Deployment",
-                            "bullets": [
-                                "Live timed SQL query solving on CoderPad & HackerRank under interview pressure",
-                                "Python data wrangling live screening challenges using Pandas & NumPy",
-                                "Dashboard defense: Answering business stakeholder questions on DAX logic and metrics",
-                                "Publishing live web-accessible dashboards on Power BI Service and Tableau Public"
-                            ]
-                        }
-                    ]
-                }
-            ],
-            "fees": None  # Explicitly None - NO fees on page
+            "syllabus_modules": da_modules,
+            "fees": None
         }
     }
 

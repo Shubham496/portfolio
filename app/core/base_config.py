@@ -2,18 +2,19 @@ from pydantic_settings import BaseSettings
 
 class BaseConfig(BaseSettings):
     """Common configurations shared across environments."""
-    APP_NAME: str = "MYTHOS | Data Systems & Analytics Engine"
-    APP_VERSION: str = "1.0.0"
+    APP_NAME: str = "MYTHOS | Online Institute of Technology & Digital Sciences"
+    APP_VERSION: str = "2.0.0"
     
     # Platform Information & Contact
-    OWNER_NAME: str = "Mythos Lead Mentor"
-    OWNER_TITLE: str = "Data Architecture & Analytics Mentorship"
+    OWNER_NAME: str = "Mythos Academic Council"
+    OWNER_TITLE: str = "Faculty of Digital Marketing & Data Analytics"
     OWNER_BIO: str = (
-        "Rigorous hands-on mentorship designed for practical execution across Python, SQL, Power BI, "
-        "Excel modeling, and Tableau. Building production data systems with live weekend cohort execution."
+        "Premier full online educational institute providing structured, cohort-based live education "
+        "across Digital Marketing (Performance Marketing, Paid Ads, SEO, Content Growth) and "
+        "Data Analytics & Business Intelligence (Python, SQL, Power BI, Excel, Tableau)."
     )
     OWNER_PHONE: str = "8727864157"
-    OWNER_LOCATION: str = "Live Online Weekend Cohort"
+    OWNER_LOCATION: str = "Live Online Weekend Cohorts"
     GITHUB_URL: str = ""
     LINKEDIN_URL: str = ""
     EMAIL: str = "shubhamsinghh057@gmail.com"

@@ -6,7 +6,8 @@ from app.core.config import settings
 from app.apps.todos.router import router as todos_router
 from app.apps.courses.router import router as courses_router
 from app.apps.courses.admin_router import router as admin_router
-from app.apps.courses.services import get_instructor_curriculum_profile, generate_syllabus_html_brochure
+from app.apps.courses.services import get_instructor_curriculum_profile, generate_syllabus_html_brochure, list_batches
+from app.apps.courses.database import SessionLocal
 import os
 
 # Initialize application
@@ -171,7 +172,9 @@ EDUCATION_DATA = {
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
-    """Render the primary portfolio and course homepage."""
+    """Render the primary educational institute homepage."""
+    with SessionLocal() as db:
+        active_batches = list_batches(db)
     return templates.TemplateResponse(
         request=request,
         name="index.html",
@@ -183,12 +186,15 @@ async def home(request: Request):
             "enterprise_projects": ENTERPRISE_PROJECTS,
             "education": EDUCATION_DATA,
             "course_profile": get_instructor_curriculum_profile(),
+            "batches": active_batches,
         }
     )
 
 @app.get("/register", response_class=HTMLResponse)
 async def register_page(request: Request):
     """Dedicated registration page for prospective students."""
+    with SessionLocal() as db:
+        active_batches = list_batches(db)
     return templates.TemplateResponse(
         request=request,
         name="register.html",
@@ -196,6 +202,7 @@ async def register_page(request: Request):
             "settings": settings,
             "title": "Register for Weekend Batch",
             "course_profile": get_instructor_curriculum_profile(),
+            "batches": active_batches,
         }
     )
 

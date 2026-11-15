@@ -37,11 +37,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // Wire up forms
     bindForm('enroll-form',  '/api/courses/register', 'enroll-submit-btn',
         '🎉 Registered!',
-        'Your seat is reserved. Shubham will confirm your batch details shortly.');
+        'Your seat is reserved. Our admissions desk will confirm your batch schedule shortly.');
 
     bindForm('enquiry-form', '/api/courses/enquiry',  'enquiry-submit-btn',
         '✅ Enquiry Sent!',
-        'Got your message! Shubham will get back to you very soon.');
+        'Got your message! Our admissions advisor will get back to you shortly.');
 
     // ESC key closes modals
     document.addEventListener('keydown', (e) => {
@@ -70,6 +70,25 @@ function openModal(which) {
 
     // Prevent body scroll
     document.body.style.overflow = 'hidden';
+}
+
+function openModalWithCourse(which, courseName) {
+    openModal(which);
+    if (courseName) {
+        const modal = document.getElementById('modal-' + which);
+        if (modal) {
+            const select = modal.querySelector('select[name="course_name"]') || modal.querySelector('select[name="course_interest"]');
+            if (select) {
+                for (let i = 0; i < select.options.length; i++) {
+                    const opt = select.options[i];
+                    if (opt.value === courseName || opt.text.includes(courseName) || courseName.includes(opt.value)) {
+                        select.selectedIndex = i;
+                        break;
+                    }
+                }
+            }
+        }
+    }
 }
 
 function closeAllModals(restoreScroll = true) {

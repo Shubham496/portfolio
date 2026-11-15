@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Register for Weekend Batch | Data Analysis | MYTHOS{% endblock %}
+{% block title %}Register for Weekend Batch | MYTHOS Online Institute{% endblock %}
 
 {% block content %}
 <section class="py-10 sm:py-14 border-b border-slate-200 dark:border-slate-800/80 transition-colors">
@@ -17,7 +17,7 @@
                     Weekend Batch Registration
                 </h1>
                 <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">
-                    Direct mentorship in Python, SQL, Power BI, Excel &amp; Tableau led by <strong class="text-slate-900 dark:text-slate-200">{{ settings.OWNER_NAME }}</strong>.
+                    Direct mentorship in Digital Marketing &amp; Data Analytics across weekend cohorts led by <strong class="text-slate-900 dark:text-slate-200">{{ settings.OWNER_NAME }}</strong>.
                 </p>
             </div>
             
@@ -36,15 +36,28 @@
                 <div class="flex items-center justify-between pb-4 mb-6 border-b border-slate-200 dark:border-slate-800">
                     <div>
                         <h2 class="text-base font-bold text-slate-900 dark:text-white">Student Enrollment Form</h2>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Please provide accurate contact details so we can reach you.</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Please provide accurate contact details so our admissions desk can reach you.</p>
                     </div>
                     <span class="text-[11px] font-semibold px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
-                        Batch Enrolling Now
+                        Batches Enrolling Now
                     </span>
                 </div>
 
                 <form action="/api/courses/register" method="POST" class="space-y-4">
                     
+                    <!-- Course Selection Dropdown -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                            Select Course Track <span class="text-red-500">*</span>
+                        </label>
+                        <select name="course_name" required
+                                class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#070B14] text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                            <option value="Data Analysis & Business Intelligence Masterclass">Data Analysis & Business Intelligence Masterclass</option>
+                            <option value="Performance Marketing & Paid Advertising">Performance Marketing & Paid Advertising (Meta & Google Ads)</option>
+                            <option value="SEO, Content Strategy & Social Media Growth">SEO, Content Strategy & Social Media Growth</option>
+                        </select>
+                    </div>
+
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                             Full Name <span class="text-red-500">*</span>
@@ -89,11 +102,10 @@
                             </label>
                             <select name="prior_experience"
                                     class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#070B14] text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
-                                <option selected>Complete Beginner (No prior coding)</option>
-                                <option>Basic Excel knowledge</option>
-                                <option>Basic Python knowledge</option>
-                                <option>Basic SQL knowledge</option>
-                                <option>Intermediate / Practical user</option>
+                                <option selected>Complete Beginner</option>
+                                <option>Basic Marketing / Analytics Knowledge</option>
+                                <option>Practical Hands-on Experience</option>
+                                <option>Intermediate / Industry Practitioner</option>
                             </select>
                         </div>
                     </div>
@@ -105,10 +117,10 @@
                         <div class="p-3.5 rounded-xl border border-blue-200 dark:border-blue-900/50 bg-blue-50/50 dark:bg-blue-950/20 flex items-center space-x-3">
                             <i data-lucide="calendar-check" class="w-5 h-5 text-blue-600 shrink-0"></i>
                             <div class="text-xs">
-                                <strong class="text-slate-900 dark:text-white">Saturday &amp; Sunday Only</strong>
+                                <strong class="text-slate-900 dark:text-white">Saturday &amp; Sunday</strong>
                                 <span class="text-slate-500 mx-1">·</span>
                                 <span class="text-blue-600 dark:text-blue-400 font-semibold">6:00 PM – 8:00 PM IST</span>
-                                <span class="block text-slate-500 text-[11px] mt-0.5">8–10 Weeks Hands-On Mentorship Cohort</span>
+                                <span class="block text-slate-500 text-[11px] mt-0.5">8–10 Weeks Hands-On Live Interactive Mentorship</span>
                             </div>
                         </div>
                         <input type="hidden" name="preferred_schedule" value="Saturday & Sunday 6:00 PM – 8:00 PM IST">
@@ -118,7 +130,7 @@
                         <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                             Your Goals &amp; Questions (Optional)
                         </label>
-                        <textarea name="message" rows="3" placeholder="Tell us about your learning goals or what you want to achieve..."
+                        <textarea name="message" rows="3" placeholder="Tell us about your target role, domain interest, or questions..."
                                   class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#070B14] text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition resize-none"></textarea>
                     </div>
 
@@ -131,22 +143,22 @@
                     </div>
 
                     <p class="text-center text-[11px] text-slate-500 dark:text-slate-400 pt-2">
-                        Zero fees on this portal. Admissions team will directly contact you to confirm orientation and batch slot.
+                        Our admissions team will directly contact you to verify readiness and confirm your batch slot.
                     </p>
 
                 </form>
 
             </div>
 
-            <!-- Right 1 Col: Summary Card & Mythos Guarantee -->
+            <!-- Right 1 Col: Summary Card & Admissions Guidance -->
             <div class="space-y-4">
                 
                 <div class="bg-white dark:bg-[#0B1120] border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm p-5">
                     <div class="flex items-center space-x-3 pb-3 mb-4 border-b border-slate-100 dark:border-slate-800">
                         <img src="/static/Images/mythos/mythos_icon_transparent.png" alt="Mythos" class="w-7 h-7 object-contain">
                         <div>
-                            <div class="text-xs font-bold text-slate-900 dark:text-white">Batch DA-WKND-2026-B1</div>
-                            <div class="text-[10px] text-blue-600 dark:text-blue-400 font-semibold">Weekend Cohort</div>
+                            <div class="text-xs font-bold text-slate-900 dark:text-white">Live Cohort Programs</div>
+                            <div class="text-[10px] text-blue-600 dark:text-blue-400 font-semibold">Weekend Live Batches</div>
                         </div>
                     </div>
 
@@ -157,23 +169,23 @@
                         </div>
                         <div class="flex items-start space-x-2 text-slate-600 dark:text-slate-300">
                             <i data-lucide="calendar" class="w-4 h-4 text-purple-500 shrink-0 mt-0.5"></i>
-                            <span><strong>Duration:</strong> 8–10 Weeks Hands-On</span>
+                            <span><strong>Duration:</strong> 8–10 Weeks Hands-On Live</span>
                         </div>
                         <div class="flex items-start space-x-2 text-slate-600 dark:text-slate-300">
                             <i data-lucide="code" class="w-4 h-4 text-orange-500 shrink-0 mt-0.5"></i>
-                            <span><strong>Tools:</strong> Python, SQL, Power BI, Excel, Tableau</span>
+                            <span><strong>Tools Covered:</strong> Python, SQL, Power BI, Meta Ads, GA4, Semrush</span>
                         </div>
                         <div class="flex items-start space-x-2 text-slate-600 dark:text-slate-300">
                             <i data-lucide="user-check" class="w-4 h-4 text-emerald-500 shrink-0 mt-0.5"></i>
-                            <span><strong>Mentor:</strong> {{ settings.OWNER_NAME }} (3+ Yrs Exp)</span>
+                            <span><strong>Mentorship:</strong> {{ settings.OWNER_NAME }}</span>
                         </div>
                         <div class="flex items-start space-x-2 text-slate-600 dark:text-slate-300">
                             <i data-lucide="users" class="w-4 h-4 text-emerald-500 shrink-0 mt-0.5"></i>
-                            <span><strong>Track Record:</strong> 550+ Students Trained</span>
+                            <span><strong>Alumni:</strong> 550+ Students &amp; Professionals</span>
                         </div>
                         <div class="flex items-start space-x-2 text-slate-600 dark:text-slate-300">
                             <i data-lucide="briefcase" class="w-4 h-4 text-blue-500 shrink-0 mt-0.5"></i>
-                            <span><strong>Career Support:</strong> GitHub, Resume &amp; LinkedIn Setup</span>
+                            <span><strong>Career Support:</strong> Portfolio, ATS Resume &amp; LinkedIn</span>
                         </div>
                     </div>
                 </div>
@@ -181,10 +193,10 @@
                 <div class="p-5 rounded-2xl bg-gradient-to-br from-blue-500/10 via-purple-500/5 to-orange-500/10 border border-blue-500/20 text-xs">
                     <div class="font-bold text-slate-900 dark:text-white mb-1.5 flex items-center space-x-1.5">
                         <i data-lucide="shield-check" class="w-4 h-4 text-blue-500"></i>
-                        <span>Zero Risk Admission</span>
+                        <span>Admissions Verification</span>
                     </div>
                     <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
-                        Submitting this form does not charge any fees. Our admissions desk evaluates student readiness during an initial screening call before confirming enrollment.
+                        Our admissions desk reviews your learning background and career goals during an orientation call before confirming batch allocation.
                     </p>
                 </div>
 

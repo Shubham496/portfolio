@@ -1,11 +1,47 @@
 # Platform Changelog & Implementation History
 
-All notable changes, updates, feature implementations, and bug fixes for the **Data Analysis Training & Student Admission Platform** are documented in this file.
+All notable changes, updates, feature implementations, and bug fixes for the **MYTHOS Online Institute Platform** are documented in this file.
 This serves as an audit trail and system log (similar to GitHub releases/commit logs) for developers, agents, and maintainers to immediately check what is already built, configured, and verified.
 
 ---
 
-## [Latest Updates] - 2026-11-12 (High-Definition Design Assets & Brand Master Overhaul)
+## [Latest Updates] - 2026-11-15 (Transition to Multi-Course Online Educational Institute & Complete Removal of Payment Mentions)
+
+### Added, Updated & Refactored
+- **Full Transformation to MYTHOS Online Institute**:
+  - Re-architected platform identity from a single-subject data analytics site into a **comprehensive 100% online educational institute** offering structured cohort programs across multiple disciplines.
+  - Multi-faculty positioning introduced: **Digital Marketing & Growth** and **Data Analysis & Business Intelligence**.
+- **Expansion to Multiple Live Cohort Programs (3 Launch Tracks)**:
+  1. **Performance Marketing & Paid Advertising (Digital Marketing Track 1)**:
+     - 6 comprehensive modules: Meta Ads Manager architecture, Google Search & Performance Max campaigns, Conversion Tracking & GA4, High-converting Landing Pages & CRO, Budget Scaling & ROAS frameworks, Live Multi-Platform Capstone.
+     - Tools: Meta Ads Manager, Google Ads, GA4, GTM, Looker Studio, Triple Whale.
+  2. **SEO, Content Strategy & Social Media Growth (Digital Marketing Track 2)**:
+     - 6 comprehensive modules: Technical SEO & Website Audits, Keyword Research & Search Intent Architecture, High-Converting Content Funnels, LinkedIn B2B Personal Branding, Multi-Channel Email & CRM Automation, Live 0-to-50K Organic Traffic Capstone.
+     - Tools: Semrush, Ahrefs, Screaming Frog, Google Search Console, HubSpot, LinkedIn Sales Navigator.
+  3. **Data Analysis & Business Intelligence Masterclass (Data Analysis Track 3)**:
+     - 6 comprehensive modules: Advanced Excel & Financial Modeling, SQL Relational Database Mastery, Power BI Executive Dashboards & DAX, Python for Data Extraction & ETL, Tableau Storytelling & Spatial Analytics, Full-Stack BI Capstone & Career Strategy.
+     - Tools: Python, SQL, Power BI, Advanced Excel, Tableau.
+- **Complete Removal of Defensive Payment / Fee Mentions**:
+  - Completely purged defensive disclaimers and awkward mentions stating "payments will not be shown online", "Zero-Fee Public Policy: No prices or payments are taken online", "Submitting this form does not charge any fees", and "Zero fees on this portal" across:
+    - `app/templates/sections/mentor.html` (Replaced with Academic Admissions Desk callouts).
+    - `app/templates/sections/modals.html` (Replaced with admissions review message).
+    - `app/templates/register.html` (Replaced with Admissions Verification card).
+    - `app/templates/confirmation.html` (Clean online cohort confirmation).
+    - `app/apps/courses/generate_syllabus_pdf.py` (Purged from generated syllabus PDF and regenerated PDF).
+    - `docs/AGENT_GUIDE.md` and codebase docstrings.
+- **Dynamic Course Track Selection Across Forms & Modals**:
+  - Updated `/register`, enrollment modal (`#modal-enroll`), and inquiry modal (`#modal-enquiry`) with course selection dropdowns allowing applicants to choose their target track.
+  - Added `openModalWithCourse(which, courseName)` in `app/static/js/main.js` for instant preselection from course cards.
+  - Updated backend schemas (`EnquiryCreate`, `BatchRegistrationCreate`) and router endpoints (`/api/courses/register`, `/api/courses/enquiry`) to capture `course_name` and `course_interest` and dynamically map them to the proper batch.
+- **Interactive Multi-Course Syllabus Interface**:
+  - Added responsive course tabs in `app/templates/sections/syllabus.html` enabling instant switching between Digital Marketing and Data Analytics tracks.
+  - Retained paired desktop drawer accordion expansion (modules [1, 2], [3, 4], [5, 6] expand together on viewports >= 768px).
+- **Automated Verification**:
+  - All 15 automated pytest tests passing cleanly (100%).
+
+---
+
+## [2026-11-12] (High-Definition Design Assets & Brand Master Overhaul)
 
 ### Added, Updated & Enhanced
 - **High-Resolution Master Brand Assets (`design/assets/` & `app/static/Images/mythos/`)**:

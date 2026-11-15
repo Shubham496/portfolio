@@ -23,7 +23,7 @@ class MythosSyllabusPDF(FPDF):
         self.set_xy(10, 3.5)
         self.set_font('Helvetica', 'B', 9)
         self.set_text_color(255, 255, 255)
-        self.cell(95, 8, 'MYTHOS | DATA SYSTEMS & ANALYTICS', align='L')
+        self.cell(95, 8, 'MYTHOS | ONLINE EDUCATIONAL INSTITUTE', align='L')
 
         self.set_font('Helvetica', 'B', 8)
         self.set_text_color(148, 163, 184)
@@ -430,7 +430,7 @@ def generate_syllabus_pdf(output_path: str = "app/static/pdf/Data_Analysis_Sylla
 
     pdf.set_font('Helvetica', 'B', 7.5)
     pdf.set_text_color(249, 115, 22)
-    pdf.cell(60, 4.5, 'STRICT ZERO-FEE PUBLIC POLICY', align='R')
+    pdf.cell(60, 4.5, 'OFFICIAL ACADEMIC ADMISSIONS', align='R')
 
     pdf.set_xy(15, desk_y + 8.5)
     pdf.set_font('Helvetica', '', 8)
@@ -441,7 +441,7 @@ def generate_syllabus_pdf(output_path: str = "app/static/pdf/Data_Analysis_Sylla
     pdf.set_xy(15, desk_y + 13.5)
     pdf.set_font('Helvetica', '', 7.5)
     pdf.set_text_color(148, 163, 184)
-    pdf.cell(180, 4, 'No payments are processed online. Tuition & orientation counseling is conducted privately with each applicant.', align='L')
+    pdf.cell(180, 4, 'Direct 1-on-1 cohort orientation and onboarding guidelines are communicated to each admitted student.', align='L')
 
     pdf.output(output_path)
     print(f"Successfully generated styled syllabus brochure: {output_path}")

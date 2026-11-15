@@ -8,8 +8,9 @@
 
 ## 1. Project Mission & Identity
 
-* **Platform Name**: Mythos Data Systems & Analytics Training Engine
-* **Platform Owner & Lead Mentorship**: Platform Maintainer
+* **Platform Name**: MYTHOS Online Institute
+* **Platform Identity**: 100% Online Educational Institute offering live cohorts across Digital Marketing & Data Analytics.
+* **Lead Mentorship**: Mythos Academic Council / Platform Maintainer
 * **Contact**: `shubhamsinghh057@gmail.com` | WhatsApp: `+91 8727864157`
 * **Production Deployment Authority**: **STRICTLY RESERVED FOR THE PLATFORM OWNER ("I")**. AI agents must NEVER execute `git push` or deploy to production.
 
@@ -17,21 +18,19 @@
 
 ## 2. Immutable Business Rules (NON-NEGOTIABLE)
 
-1. **Course Curriculum — Exactly 5 Pillars**:
-   - **Python**: Pandas, NumPy, ETL pipelines, automated extraction, data wrangling.
-   - **SQL**: Complex queries, Window functions, Common Table Expressions (CTEs), multi-table joins, relational modeling.
-   - **Power BI**: Data modeling, DAX formulas, executive KPI dashboards, automated refreshes.
-   - **Excel**: Advanced XLOOKUP, Index/Match, multi-table Pivot tables, financial modeling.
-   - **Tableau**: Visual storytelling, parameters, calculated fields, dashboard actions.
+1. **Course Curriculum — Multiple Online Offerings**:
+   - **Digital Marketing Track 1**: *Performance Marketing & Paid Advertising* (Meta Ads Manager, Google Ads & PMax, GA4 & GTM Funnels, CRO, Scaling & ROAS).
+   - **Digital Marketing Track 2**: *SEO, Content Strategy & Social Media Growth* (Technical SEO, Semrush, Content Marketing Frameworks, LinkedIn Growth, Multi-channel Automation).
+   - **Data Analysis Track 3**: *Data Analysis & Business Intelligence Masterclass* (Python, SQL, Power BI, Advanced Excel, Tableau).
 2. **Batch Class Schedule**:
    - **Days**: **Saturday and Sunday ONLY**.
    - **Timings**: **6:00 PM to 8:00 PM IST** (2 hours/day = 4 hours/week).
    - **Duration**: **8 to 10 Weeks Hands-On Mentorship**.
-   - **Batch Format**: Live interactive weekend cohort (Batch code: `DA-WKND-2026-B1`).
-3. **Strict Zero-Fee Policy**:
-   - **NO pricing or tuition fees appear anywhere on the public website**.
-   - No prices, no discounts, no currency symbols, no payment gateways.
-   - Financial arrangements are strictly discussed privately between Shubham and the student during counseling calls.
+   - **Batches**: Live interactive weekend cohorts (`DA-WKND-2026-B1`, `DM-PERF-2026-B1`, `DM-GROWTH-2026-B1`).
+3. **Pure Educational Admissions Model (No Online Pricing & No Defensive Disclaimers)**:
+   - **NO pricing, tuition fees, discounts, currency symbols, or payment gateways appear on the public website**.
+   - **NO defensive payment disclaimers**: Do NOT display phrases like "payments will not be shown online", "Zero-Fee Public Policy: No prices or payments are taken online", or "Zero fees on this portal". The site simply presents professional academic curriculum and admissions enrollment without mentioning payment processing.
+   - Admissions counseling and cohort placements are handled privately during orientation.
 4. **Optional Student Email**:
    - Email is **strictly optional** across all student-facing enrollment and inquiry forms (`/register`, homepage modals, `/api/courses/*`).
    - Only **Full Name** and **Phone / WhatsApp Number** are mandatory.

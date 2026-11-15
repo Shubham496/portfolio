@@ -53,7 +53,6 @@ async def get_instructor_details():
     """
     Returns verified instructor profile (Shubham Singh), course syllabus (Python, SQL,
     PowerBI, Excel, Tableau), and weekend schedule (Sat & Sun 6-8 PM).
-    Does NOT contain or reveal any course fees.
     """
     return get_instructor_curriculum_profile()
 
@@ -86,7 +85,6 @@ async def submit_enquiry(
     """
     Register a prospective student enquiry.
     Accepts either JSON payload (via AJAX/Fetch) or URL-encoded Form fields.
-    No fees required or stored.
     """
     client_ip = request.client.host if request.client else None
     content_type = request.headers.get("content-type", "")
@@ -102,6 +100,7 @@ async def submit_enquiry(
                 email=str(form.get("email") or ""),
                 phone=str(form.get("phone") or ""),
                 current_status=str(form.get("current_status") or "Working Professional"),
+                course_interest=str(form.get("course_interest") or "All Programs / Undecided"),
                 message=str(form.get("message") or ""),
                 preferred_schedule=str(form.get("preferred_schedule") or "Saturday & Sunday 6:00 PM – 8:00 PM IST")
             )
@@ -125,15 +124,13 @@ async def submit_enquiry(
     return JSONResponse(status_code=status.HTTP_201_CREATED, content=result)
 
 
-@router.post("/register", summary="Register student for the Weekend Data Analysis batch")
+@router.post("/register", summary="Register student for an institute cohort")
 async def register_for_batch(
     request: Request,
     db: Session = Depends(get_db)
 ):
     """
-    Register student directly into the upcoming weekend Data Analysis batch.
-    Classes: Saturday & Sunday only, 6:00 PM to 8:00 PM.
-    No fees required on the page.
+    Register student directly into an institute cohort.
     """
     client_ip = request.client.host if request.client else None
     content_type = request.headers.get("content-type", "")
@@ -152,6 +149,7 @@ async def register_for_batch(
                 email=str(form.get("email") or ""),
                 phone=str(form.get("phone") or ""),
                 batch_id=batch_id,
+                course_name=str(form.get("course_name") or "Data Analysis"),
                 current_status=str(form.get("current_status") or "Working Professional"),
                 prior_experience=str(form.get("prior_experience") or "Beginner"),
                 message=str(form.get("message") or ""),
