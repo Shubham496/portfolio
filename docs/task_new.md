@@ -192,7 +192,7 @@ Tracks engagement to inform future content decisions and identify high-intent co
 
 ## 6. Phased Implementation Roadmap (Granular Task Breakdown)
 
-### Phase 1: Core Library Engine, Base Routing & Technical Docs UI
+### Phase 1: Core Library Engine, Base Routing & Technical Docs UI (Completed)
 * [x] **Task 1.1: Dependency Specification**
   * Add `markdown>=3.6.0`, `python-frontmatter>=1.1.0`, and `pymdown-extensions>=10.7` to `requirements.txt`.
   * Ensure consistent dependencies across local development and Render.io production blueprints.
@@ -230,6 +230,37 @@ Tracks engagement to inform future content decisions and identify high-intent co
     * Caching correctly prevents redundant disk reads.
   * Verify full test suite passes (all 15 existing tests + new library tests).
   * Run local git status check, stage, and commit with descriptive commit message.
+
+---
+
+### Phase 1.5: Site-Wide Navigation Architecture, Zero-Upfront Pricing & Minimalist Icon Library Hub (Completed)
+* [x] **Task 1.5.1: Top Navigation Bar Redesign (Inter-Page Links & Hover Menus)**
+  * Restructure `app/templates/partials/navbar.html` so top navigation exclusively links to distinct pages:
+    * **Courses & Cohorts**: Hover dropdown with links to Track 1 (Performance Marketing), Track 2 (SEO & Growth), and Track 3 (Data Analytics & BI).
+    * **Notes & Handbooks**: Hover dropdown with links to `/library/sql?vertical=notes`, `/library/python?vertical=notes`, `/library/bi?vertical=notes`, and `/library/digital-marketing?vertical=notes`.
+    * **Interview & Viva Questions**: Direct link to `/library?vertical=viva` or subject viva banks.
+    * **Practice Datasets**: Direct link to `/library?vertical=datasets`.
+    * **Admissions**: Dedicated link to `/register`.
+  * Update mobile slide-out menu with matching multi-page navigation and accordion groups.
+* [x] **Task 1.5.2: Universal Left-Side In-Page Section Navigator**
+  * Implement standard left-side in-page navigation rail/dock with active scroll-spy:
+    * On the landing page (`/`): Floating left dock allowing 1-click jumping between `#programs`, `#syllabus`, `#projects`, `#methodology`, `#career`, and `#about`.
+    * On the documentation reader (`reader.html`): Preserved left chapter tree with active chapter indicator.
+    * Include smooth scroll, tooltips, and responsive layout handling (collapsible on mobile/tablet).
+* [x] **Task 1.5.3: Strict Zero-Upfront Pricing Audit & Enforcement**
+  * Purge all upfront price figures ("₹10", "₹20", "₹99", "₹149", etc.) across all browse surfaces, card badges, header chips, and reader sidebars.
+  * Replace with clear access status pills: "Free Guide", "Viva Bank", "Clean Dataset", "Capstone Repo".
+  * Guarantee that prices are ONLY displayed when a student reaches a gated/locked asset or clicks to unlock/purchase.
+* [x] **Task 1.5.4: Minimalist Icon-First Library Hub (`app/templates/library/index.html`)**
+  * Completely redesign `/library` to eliminate textual clutter and long paragraphs.
+  * Implement an uncluttered, high-impact grid of technology tiles displaying prominent official logos (MySQL, PostgreSQL, Python, Pandas, Power BI, Tableau, Excel, Google Ads/GA4, Meta Ads, SEO) and clean titles.
+  * Direct 1-click routing to the technology's resources.
+* [x] **Task 1.5.5: Non-Negotiable Enforcement: Strictly Zero Code Execution**
+  * Verify that all code blocks remain static copy-only syntax elements with zero execution runners or interactive consoles.
+* [x] **Task 1.5.6: Verification, Automated Tests & Git Hygiene**
+  * Update test cases to reflect new navigation links and zero-upfront pricing.
+  * Verify full test suite passes with 0 failures.
+  * Stage and commit locally.
 
 ---
 

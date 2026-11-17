@@ -134,7 +134,23 @@ class DocumentMetadata:
         return self.price_inr == 0 or self.tier == "free"
 
     @property
+    def access_label(self) -> str:
+        """Zero-upfront pricing label: price is only shown on paywall block or purchase click."""
+        if self.is_free:
+            return "Free Access"
+        if self.tier == "student_login":
+            return "Student Account"
+        if self.vertical == "viva":
+            return "Viva Bank"
+        if self.vertical == "books":
+            return "Complete Handbook"
+        if self.vertical == "projects":
+            return "Capstone Repo"
+        return "Full Resource"
+
+    @property
     def formatted_price(self) -> str:
+        """Internal/Paywall-only price display."""
         if self.price_inr == 0:
             return "Free"
         return f"₹{self.price_inr}"
@@ -149,6 +165,7 @@ class DocumentMetadata:
             "order": self.order,
             "tier": self.tier,
             "price_inr": self.price_inr,
+            "access_label": self.access_label,
             "formatted_price": self.formatted_price,
             "reading_time": self.reading_time,
             "description": self.description,

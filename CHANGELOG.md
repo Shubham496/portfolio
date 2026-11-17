@@ -5,6 +5,34 @@ This serves as an audit trail and system log (similar to GitHub releases/commit 
 
 ---
 
+## [Latest Updates] - 2026-11-18 (Phase 1.5: Inter-Page Top Nav, Left In-Page Rails, Zero-Upfront Pricing & Icon Library Hub)
+
+### Added, Updated & Refactored
+- **Multi-Page Top Navigation with Hover Dropdowns (`app/templates/partials/navbar.html`)**:
+  - Transformed the top navbar from intra-page section anchors into true multi-page navigation:
+    - **Courses & Cohorts**: Hover dropdown with links to Track 1 (Performance Marketing), Track 2 (SEO & Growth), and Track 3 (Data Analytics & BI).
+    - **Notes & Guides**: Hover dropdown for SQL, Python, Power BI, and Digital Marketing notes.
+    - **Interview & Viva**: Direct dropdown for top viva banks and examiner trap banks.
+    - **Datasets**: One-click link to clean real-world CSV portfolios (`/library?vertical=datasets`).
+    - **Admissions**: Dedicated link to `/register`.
+- **Universal Left-Side In-Page Section Navigator (`app/templates/partials/in_page_nav.html`)**:
+  - Implemented glassmorphism docked left navigation rail with active scroll-spy and tooltip labels.
+  - Allows 1-click jumping between page sections (`#hero`, `#engine`, `#programs`, `#methodology`, `#projects`, `#admission`, `#career`, `#syllabus`, `#about`).
+  - Added responsive mobile in-page jump menu button.
+- **Strict Zero-Upfront Pricing Rule Enforcement**:
+  - Codified Rule 3 in `docs/AGENT_GUIDE.md`: Zero prices are displayed on browse surfaces, subject hubs, or reader sidebars.
+  - Purged all upfront "₹10", "₹20", "₹99" badges across browse pages and replaced them with access status tags ("Free Access", "Student Account", "Viva Bank", "Complete Handbook").
+  - Prices are only revealed when a student hits an access paywall or clicks to unlock a product.
+- **Strictly Zero Code Execution Rule (Rule 7)**:
+  - Codified immutable policy that the platform will never provide runtime code execution or interactive REPL consoles for students; all code remains static, copy-only syntax.
+- **Minimalist Icon-First Library Hub (`app/templates/library/index.html`)**:
+  - Completely decluttered `/library` by removing long text blocks and card clutter.
+  - Replaced with a high-impact technology logo grid displaying big official symbols (MySQL, PostgreSQL, SQLite, Python, Pandas, NumPy, Power BI, Tableau, Excel, Google Ads/GA4, Meta Ads, Technical SEO) with clear names and quick-filter category pills.
+- **Automated Verification**:
+  - All 24 automated tests in `tests/test_courses.py`, `tests/test_library.py`, and `tests/test_main.py` passing cleanly (100%).
+
+---
+
 ## [Latest Updates] - 2026-11-18 (Phase 1: Core Library Engine, Base Routing & Technical Docs UI Completed)
 
 ### Added, Configured & Implemented

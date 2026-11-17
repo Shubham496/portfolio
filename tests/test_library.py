@@ -18,14 +18,15 @@ client = TestClient(app)
 
 
 def test_library_home_page():
-    """Verify the /library main hub renders successfully with subjects and verticals."""
+    """Verify the /library main hub renders successfully with technology logo grid."""
     response = client.get("/library")
     assert response.status_code == 200
     html = response.text
     assert "Resource Library" in html
-    assert "SQL &amp; Relational Databases" in html or "SQL & Relational Databases" in html
-    assert "Python &amp; Data Engineering" in html or "Python & Data Engineering" in html
-    assert "Business Intelligence" in html
+    assert "MySQL" in html
+    assert "PostgreSQL" in html
+    assert "Python" in html
+    assert "Power BI" in html
 
 
 def test_library_subject_hub():

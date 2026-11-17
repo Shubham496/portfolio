@@ -1,0 +1,157 @@
+<!-- ══════════════════════════════════════════════════════════════
+     UNIVERSAL IN-PAGE SECTION NAVIGATOR (LEFT RAIL)
+     Allows 1-click smooth jumping between page sections with scroll-spy.
+     ══════════════════════════════════════════════════════════════ -->
+
+<nav id="in-page-nav" aria-label="Page Sections Navigator" class="fixed left-3 xl:left-5 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col items-center p-2 bg-white/90 dark:bg-[#0B1120]/90 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl transition-all duration-300 space-y-1.5 group/dock hover:shadow-blue-500/10">
+    
+    <div class="text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 py-1 select-none border-b border-slate-200 dark:border-slate-800/80 w-full text-center mb-0.5">
+        SECT
+    </div>
+
+    <!-- 1. Hero / Overview -->
+    <a href="#hero" data-section="hero" 
+       class="in-page-link group relative flex items-center justify-center w-9 h-9 rounded-xl text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-all">
+        <i data-lucide="sparkles" class="w-4 h-4"></i>
+        <span class="absolute left-full ml-3 px-2.5 py-1 rounded-lg bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-xs font-semibold whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 shadow-lg pointer-events-none">
+            Overview &amp; Hero
+        </span>
+    </a>
+
+    <!-- 2. Learning Engine -->
+    <a href="#engine" data-section="engine" 
+       class="in-page-link group relative flex items-center justify-center w-9 h-9 rounded-xl text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-all">
+        <i data-lucide="cpu" class="w-4 h-4"></i>
+        <span class="absolute left-full ml-3 px-2.5 py-1 rounded-lg bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-xs font-semibold whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 shadow-lg pointer-events-none">
+            Learning Engine
+        </span>
+    </a>
+
+    <!-- 3. Cohort Programs -->
+    <a href="#programs" data-section="programs" 
+       class="in-page-link group relative flex items-center justify-center w-9 h-9 rounded-xl text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-all">
+        <i data-lucide="layers" class="w-4 h-4"></i>
+        <span class="absolute left-full ml-3 px-2.5 py-1 rounded-lg bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-xs font-semibold whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 shadow-lg pointer-events-none">
+            Cohort Programs
+        </span>
+    </a>
+
+    <!-- 4. Methodology -->
+    <a href="#methodology" data-section="methodology" 
+       class="in-page-link group relative flex items-center justify-center w-9 h-9 rounded-xl text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-all">
+        <i data-lucide="check-square" class="w-4 h-4"></i>
+        <span class="absolute left-full ml-3 px-2.5 py-1 rounded-lg bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-xs font-semibold whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 shadow-lg pointer-events-none">
+            Methodology
+        </span>
+    </a>
+
+    <!-- 5. Capstone Projects -->
+    <a href="#projects" data-section="projects" 
+       class="in-page-link group relative flex items-center justify-center w-9 h-9 rounded-xl text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-all">
+        <i data-lucide="rocket" class="w-4 h-4"></i>
+        <span class="absolute left-full ml-3 px-2.5 py-1 rounded-lg bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-xs font-semibold whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 shadow-lg pointer-events-none">
+            Capstone Projects
+        </span>
+    </a>
+
+    <!-- 6. Outcomes & Admission -->
+    <a href="#admission" data-section="admission" 
+       class="in-page-link group relative flex items-center justify-center w-9 h-9 rounded-xl text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-all">
+        <i data-lucide="shield-check" class="w-4 h-4"></i>
+        <span class="absolute left-full ml-3 px-2.5 py-1 rounded-lg bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-xs font-semibold whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 shadow-lg pointer-events-none">
+            Admission Process
+        </span>
+    </a>
+
+    <!-- 7. Career Prep -->
+    <a href="#career" data-section="career" 
+       class="in-page-link group relative flex items-center justify-center w-9 h-9 rounded-xl text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-all">
+        <i data-lucide="briefcase" class="w-4 h-4"></i>
+        <span class="absolute left-full ml-3 px-2.5 py-1 rounded-lg bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-xs font-semibold whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 shadow-lg pointer-events-none">
+            Career Acceleration
+        </span>
+    </a>
+
+    <!-- 8. Full Syllabus -->
+    <a href="#syllabus" data-section="syllabus" 
+       class="in-page-link group relative flex items-center justify-center w-9 h-9 rounded-xl text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-all">
+        <i data-lucide="book-open" class="w-4 h-4"></i>
+        <span class="absolute left-full ml-3 px-2.5 py-1 rounded-lg bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-xs font-semibold whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 shadow-lg pointer-events-none">
+            Curriculum Breakdown
+        </span>
+    </a>
+
+    <!-- 9. Admissions Desk & WhatsApp -->
+    <a href="#about" data-section="about" 
+       class="in-page-link group relative flex items-center justify-center w-9 h-9 rounded-xl text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-all">
+        <i data-lucide="message-circle" class="w-4 h-4 text-emerald-500"></i>
+        <span class="absolute left-full ml-3 px-2.5 py-1 rounded-lg bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-xs font-semibold whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 shadow-lg pointer-events-none">
+            Counseling Desk
+        </span>
+    </a>
+
+</nav>
+
+<!-- Mobile Floating In-Page Menu Toggle Button -->
+<div class="fixed bottom-5 left-5 z-40 lg:hidden">
+    <button id="mobile-inpage-toggle" type="button" 
+            class="flex items-center gap-1.5 px-3 py-2 rounded-full bg-slate-900/90 text-white dark:bg-white/90 dark:text-slate-900 text-xs font-semibold shadow-lg backdrop-blur border border-slate-700/50"
+            onclick="toggleMobileInPageMenu()">
+        <i data-lucide="navigation" class="w-3.5 h-3.5 text-blue-500"></i>
+        <span>Jump to Section</span>
+    </button>
+
+    <!-- Mobile Popover -->
+    <div id="mobile-inpage-menu" class="hidden absolute bottom-12 left-0 w-56 p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl space-y-1 text-xs">
+        <a href="#hero" onclick="toggleMobileInPageMenu()" class="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200">1. Overview &amp; Hero</a>
+        <a href="#engine" onclick="toggleMobileInPageMenu()" class="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200">2. Learning Engine</a>
+        <a href="#programs" onclick="toggleMobileInPageMenu()" class="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200">3. Cohort Programs</a>
+        <a href="#methodology" onclick="toggleMobileInPageMenu()" class="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200">4. Methodology</a>
+        <a href="#projects" onclick="toggleMobileInPageMenu()" class="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200">5. Capstones</a>
+        <a href="#admission" onclick="toggleMobileInPageMenu()" class="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200">6. Admission Process</a>
+        <a href="#career" onclick="toggleMobileInPageMenu()" class="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200">7. Career Acceleration</a>
+        <a href="#syllabus" onclick="toggleMobileInPageMenu()" class="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200">8. Curriculum</a>
+        <a href="#about" onclick="toggleMobileInPageMenu()" class="block px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200">9. Counseling Desk</a>
+    </div>
+</div>
+
+<script>
+    // In-Page Scroll-Spy for Left Rail
+    document.addEventListener('DOMContentLoaded', () => {
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.in-page-link');
+
+        function updateActiveSection() {
+            let current = '';
+            const scrollPos = window.scrollY + (window.innerHeight * 0.35);
+
+            sections.forEach(section => {
+                const top = section.offsetTop;
+                const height = section.offsetHeight;
+                if (scrollPos >= top && scrollPos < top + height) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                if (link.getAttribute('data-section') === current) {
+                    link.classList.add('bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-500/20');
+                    link.classList.remove('text-slate-500', 'dark:text-slate-400');
+                } else {
+                    link.classList.remove('bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-500/20');
+                    link.classList.add('text-slate-500', 'dark:text-slate-400');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateActiveSection, { passive: true });
+        updateActiveSection();
+    });
+
+    function toggleMobileInPageMenu() {
+        const menu = document.getElementById('mobile-inpage-menu');
+        if (menu) {
+            menu.classList.toggle('hidden');
+        }
+    }
+</script>

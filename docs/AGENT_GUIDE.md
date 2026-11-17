@@ -27,9 +27,9 @@
    - **Timings**: **6:00 PM to 8:00 PM IST** (2 hours/day = 4 hours/week).
    - **Duration**: **8 to 10 Weeks Hands-On Mentorship**.
    - **Batches**: Live interactive weekend cohorts (`DA-WKND-2026-B1`, `DM-PERF-2026-B1`, `DM-GROWTH-2026-B1`).
-3. **Admissions & Pricing Architecture (Two Distinct Channels)**:
+3. **Admissions & Zero-Upfront Pricing Rule (NON-NEGOTIABLE)**:
    - **Live Cohort Offerings**: **NO tuition fees, pricing, discounts, currency symbols, or payment gateways appear on the public website for cohorts**. Do NOT display defensive payment disclaimers (e.g. "Zero-Fee Public Policy" or "Zero fees on this portal"). The site simply presents professional academic curriculum, with cohort admissions counseling and seat allocations handled privately during orientation.
-   - **Resource Library Digital Products (Micro-Monetization)**: Digital learning assets (e.g., ₹10 viva question sets, ₹20 semester notes bundles, ₹99–₹199 books, ₹149 capstone project source bundles) feature transparent, low-friction micro-pricing and instant 1-click UPI checkout.
+   - **Zero Upfront Pricing on Browse Surfaces**: We **never tell customers beforehand how much something will cost** on browse pages, category cards, subject hubs, or reader sidebars. No prices or currency symbols are shown in previews. **Pricing is ONLY shown at the moment a customer is blocked from accessing locked content (paywall modal/gate) or when they actively click to purchase/unlock a product**.
 4. **Optional Student Email**:
    - Email is **strictly optional** across all student-facing enrollment and inquiry forms (`/register`, homepage modals, `/api/courses/*`).
    - Only **Full Name** and **Phone / WhatsApp Number** are mandatory.
@@ -43,6 +43,11 @@
    - The working directory must always be kept clean (`git status` clean, no leftover untracked debug artifacts or temporary scripts).
    - **STRICT PRODUCTION PUSH RESTRICTION (OWNER ONLY)**: **Only the platform owner ("I") can push things to production or the remote repository (`origin/main`)**. AI agents and automated tools are **STRICTLY PROHIBITED** from running `git push` or triggering production deployments. Agents maintain local git repository hygiene (testing, staging, committing) so that the local repository is clean and ready for the platform owner to inspect, verify, and push to production.
    - **Zero-Secret Leak Guard**: Never stage or commit `.env`, plaintext passwords, authentication tokens, or SQLite databases (`*.db`). Always ensure `.gitignore` remains active.
+7. **Strictly Zero Code Execution on Platform**:
+   - The platform will **never provide an option for students to execute code on our site**. All code blocks are strictly static, copy-only text with syntax highlighting and copy buttons. No interactive consoles, sandbox runners, or server-side/client-side REPLs are permitted.
+8. **Standardized Navigation Pattern (Top Inter-Page + Left In-Page Rails)**:
+   - **Top Navigation Bar**: Dedicated primarily to moving between **different pages** across the platform (Courses, Notes, Interview Questions, Datasets, Admissions) with hover-expanding dropdown menus.
+   - **Left-Side In-Page Navigator**: Every page with multiple sections must feature a left-side in-page navigation system/dock allowing users to quickly jump between sections on the page they are on, with active scroll-spy indicators.
 
 ---
 
