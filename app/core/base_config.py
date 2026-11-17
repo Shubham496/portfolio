@@ -1,4 +1,4 @@
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class BaseConfig(BaseSettings):
     """Common configurations shared across environments."""
@@ -21,6 +21,4 @@ class BaseConfig(BaseSettings):
     RESUME_PATH: str = ""
     PROFILE_PHOTO_PATH: str = "/static/Images/mythos/mythos_icon_transparent.png"
 
-    class Config:
-        env_file = ".env"
-        extra = "ignore"
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")

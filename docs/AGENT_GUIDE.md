@@ -441,3 +441,22 @@ For brand consistency, marketing graphics, and certificate generation, all desig
 * 3-column layout: Left chapter tree, center reading canvas with Prism.js code styling, right sticky TOC with cohort conversion card.
 * In-memory LRU / TTL caching for parsed markdown documents to ensure sub-100ms response times.
 
+### Standard Markdown Frontmatter Schema (`app/content/{subject}/{slug}.md`)
+Every markdown file authored for the knowledge engine must include this YAML frontmatter for automated indexing, breadcrumbs, TOC, and SEO metadata:
+```yaml
+---
+title: "SQL Joins: What Textbooks Teach vs. How Databases Actually Work"
+slug: "sql-joins-textbook-vs-reality"
+subject: "sql"
+vertical: "notes" # notes | viva | datasets | books | projects
+category: "Relational Database Internals"
+order: 1
+tier: "free" # free | student_login | paid_micro | paid_premium
+price_inr: 0 # 0, 10, 20, 99
+reading_time: "8 min read"
+description: "Master SQL non-equi joins, hash vs merge joins, and NULL traps."
+tags: ["SQL", "Databases", "Performance", "Interviews"]
+last_updated: "2026-11-18"
+---
+```
+

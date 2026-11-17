@@ -12,6 +12,7 @@ Welcome to the central documentation index for the **Data Analysis Training & St
 | **[Documentation README](README.md)** *(This file)* | Developers & Reviewers | Detailed overview of current site capabilities, user journeys, and feature modules. |
 | **[User & Instructor Guide](USER_GUIDE.md)** | Shubham (Site Owner) | Plain-English non-technical guide explaining how to run the site, use the admin portal, and handle leads. |
 | **[Comprehensive Agent Guide](AGENT_GUIDE.md)** | AI Coding Assistants | Deep, exhaustive technical specification with data models, credentials, schemas, and guardrails. |
+| **[Resource Library & Content Roadmap](task_new.md)** | Developers & Product | Strategy, micro-pricing ladder, content verticals, and phased implementation guide for the knowledge engine. |
 | **[Platform Changelog](../CHANGELOG.md)** | All | Reverse-chronological GitHub-style log of all completed implementations, fixes, and updates. |
 
 ---
