@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block title %}{{ subject.title }} Resources & Guides | MYTHOS Library{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-[#f8fafc] dark:bg-[#070B14]">
+    <!-- Ambient Header Glow -->
+    <div class="relative bg-white dark:bg-slate-900/60 border-b border-slate-200 dark:border-slate-800/80 pt-10 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Breadcrumbs -->
+            <nav class="flex items-center space-x-2 text-sm text-slate-500 dark:text-slate-400 mb-6">
+                <a href="/" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Home</a>
+                <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                <a href="/library" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Resource Library</a>
+                <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                <span class="text-slate-900 dark:text-slate-200 font-medium">{{ subject.short_title }}</span>
+            </nav>
+
+            <!-- Subject Banner -->
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div class="flex items-start gap-4">
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br {{ subject.gradient }} text-white flex items-center justify-center shadow-lg shrink-0">
+                        <i data-lucide="{{ subject.icon }}" class="w-8 h-8"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+                                {{ subject.title }}
+                            </h1>
+                            <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                                {{ subject.total_resources }} Resources
+                            </span>
+                        </div>
+                        <p class="text-sm font-semibold text-blue-600 dark:text-blue-400 mb-1.5">{{ subject.tagline }}</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-300 max-w-2xl leading-relaxed">
+                            {{ subject.description }}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Live Cohort Apply Shortcut -->
+                <div class="shrink-0 bg-slate-50 dark:bg-slate-800/80 p-4 rounded-2xl border border-slate-200 dark:border-slate-700/80 flex flex-col sm:flex-row items-center gap-3">
+                    <div class="text-left text-xs">
+                        <p class="font-bold text-slate-900 dark:text-white">Weekend Live Cohort</p>
+                        <p class="text-slate-500 dark:text-slate-400">Sat & Sun · 6–8 PM IST</p>
+                    </div>
+                    <a href="/register" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs transition-colors shadow-sm whitespace-nowrap">
+                        Join Cohort
+                    </a>
+                </div>
+            </div>
+
+            <!-- Resource Vertical Filter Tabs -->
+            <div class="flex items-center gap-2 mt-8 overflow-x-auto pb-1 scrollbar-none border-t border-slate-100 dark:border-slate-800 pt-6">
+                <a href="/library/{{ subject.slug }}" 
+                   class="px-4 py-2 rounded-xl text-xs font-semibold transition-all whitespace-nowrap flex items-center gap-2 {% if active_vertical == 'all' %}bg-blue-600 text-white shadow-sm{% else %}bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700{% endif %}">
+                    <i data-lucide="grid" class="w-3.5 h-3.5"></i> All ({{ subject.total_resources }})
+                </a>
+                
+                {% for key, v in verticals.items() %}
+                <a href="/library/{{ subject.slug }}?vertical={{ key }}"
+                   class="px-4 py-2 rounded-xl text-xs font-semibold transition-all whitespace-nowrap flex items-center gap-2 {% if active_vertical == key %}bg-blue-600 text-white shadow-sm{% else %}bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700{% endif %}">
+                    <i data-lucide="{{ v.icon }}" class="w-3.5 h-3.5"></i> {{ v.title }} ({{ subject.counts[key] }})
+                </a>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Main Content List Area -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        
+        {% if grouped_docs and grouped_docs.items() %}
+            <div class="space-y-12">
+                {% for category, docs in grouped_docs.items() %}
+                <div>
+                    <div class="flex items-center gap-3 mb-5">
+                        <h2 class="text-xl font-bold text-slate-900 dark:text-white">{{ category }}</h2>
+                        <span class="text-xs px-2 py-0.5 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium">
+                            {{ docs|length }}
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                        {% for item in docs %}
+                        <div class="group relative flex flex-col justify-between p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500/50 dark:hover:border-blue-500/50 transition-all shadow-sm hover:shadow-lg">
+                            <div>
+                                <!-- Pill Badges Row -->
+                                <div class="flex items-center justify-between gap-2 mb-3">
+                                    <span class="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 capitalize flex items-center gap-1">
+                                        <i data-lucide="{{ verticals[item.vertical].icon if item.vertical in verticals else 'file' }}" class="w-3 h-3 text-blue-500"></i>
+                                        {{ verticals[item.vertical].singular if item.vertical in verticals else item.vertical }}
+                                    </span>
+                                    
+                                    <span class="text-[11px] font-bold px-2 py-0.5 rounded-md {% if item.is_free %}bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800{% else %}bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800{% endif %}">
+                                        {{ item.formatted_price }}
+                                    </span>
+                                </div>
+
+                                <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-2 leading-snug">
+                                    <a href="/library/{{ subject.slug }}/notes/{{ item.slug }}" class="focus:outline-none">
+                                        {{ item.title }}
+                                    </a>
+                                </h3>
+
+                                <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4 line-clamp-3">
+                                    {{ item.description }}
+                                </p>
+                            </div>
+
+                            <div>
+                                <!-- Tags -->
+                                {% if item.tags %}
+                                <div class="flex flex-wrap gap-1.5 mb-4">
+                                    {% for tag in item.tags[:3] %}
+                                    <span class="text-[10px] px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
+                                        #{{ tag }}
+                                    </span>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+
+                                <!-- Card Footer -->
+                                <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                                    <span class="flex items-center gap-1">
+                                        <i data-lucide="clock" class="w-3.5 h-3.5"></i> {{ item.reading_time }}
+                                    </span>
+                                    <a href="/library/{{ subject.slug }}/notes/{{ item.slug }}" class="font-semibold text-blue-600 dark:text-blue-400 flex items-center gap-1 hover:underline">
+                                        Read <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <!-- Empty State -->
+            <div class="text-center py-20 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 max-w-xl mx-auto shadow-sm">
+                <div class="w-14 h-14 rounded-2xl bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="book-marked" class="w-7 h-7"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Guides in Curation</h3>
+                <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+                    Our academic council is actively preparing and verifying production-tested guides and question banks for this vertical. Check back shortly or view our core track notes.
+                </p>
+                <a href="/library/{{ subject.slug }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs transition-colors">
+                    <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> View All {{ subject.short_title }} Resources
+                </a>
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

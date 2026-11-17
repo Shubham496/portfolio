@@ -5,6 +5,39 @@ This serves as an audit trail and system log (similar to GitHub releases/commit 
 
 ---
 
+## [Latest Updates] - 2026-11-18 (Phase 1: Core Library Engine, Base Routing & Technical Docs UI Completed)
+
+### Added, Configured & Implemented
+- **Granular Task Decomposition in `docs/task_new.md`**:
+  - Subdivided all 5 roadmap phases into granular, bite-sized tasks and subtasks for phased, deterministic execution.
+- **Dependency Specification (Task 1.1)**:
+  - Added `markdown>=3.6.0`, `python-frontmatter>=1.1.0`, and `pymdown-extensions>=10.7` to `requirements.txt`.
+- **Content Engine & Caching Services (`app/apps/library/services.py`) (Task 1.2)**:
+  - Built markdown file discovery and YAML frontmatter extraction (supporting `title`, `slug`, `subject`, `vertical`, `category`, `order`, `tier`, `price_inr`, `reading_time`, `description`, `tags`, `last_updated`).
+  - Added PyMdown extensions integration (fenced code, highlight, tables, admonitions, and TOC tokens).
+  - Added preprocessor converting GitHub-style alerts (`> [!NOTE]`, `> [!TIP]`, `> [!WARNING]`, etc.) to standard admonitions.
+  - Implemented automatic reading time calculation and in-memory TTL/LRU caching with on-disk mtime invalidation.
+- **Library Web Routing & Application Mounting (`app/apps/library/router.py`) (Task 1.3)**:
+  - Added `GET /library` (main resource hub with subject cards and micro-pricing badges).
+  - Added `GET /library/{subject}` (subject portal with vertical tabs and category grouping).
+  - Added `GET /library/{subject}/notes/{slug}` (3-column reader view).
+  - Added JSON API endpoints: `GET /api/library/subjects` and `GET /api/library/{subject}/documents`.
+  - Mounted `library_router` into `app/main.py`.
+- **Documentation UI Templates & Styles (`app/templates/library/`) (Task 1.4)**:
+  - `app/templates/library/index.html`: Responsive resource hub with subject cards, 5 vertical breakdowns, and live cohort CTA.
+  - `app/templates/library/subject_hub.html`: Subject portal with vertical filter tabs, resource counter badges, and curriculum cards.
+  - `app/templates/library/reader.html`: 3-column technical docs reader layout (collapsible left tree, center canvas with Prism.js & copy buttons, sticky TOC with scroll-spy, and WhatsApp/Telegram 1-click sharing).
+  - Added complete typography, admonition styles, and responsive table styling in `app/static/css/style.css`.
+- **Navigation & Footer Integration (Task 1.5)**:
+  - Added Library link with active indicator in `app/templates/partials/navbar.html` (desktop & mobile menus).
+  - Added Resource Library links in `app/templates/partials/footer.html` under Academics.
+- **Flagship Seed Note & Comprehensive Test Suite (Task 1.6)**:
+  - Authored starter flagship note `app/content/sql/sql-joins-textbook-vs-reality.md` following the 5-part content blueprint.
+  - Created `tests/test_library.py` with 9 automated tests verifying routes, 404 boundaries, TOC extraction, caching, and JSON APIs.
+  - Total automated tests expanded to 24 tests. All 24/24 passing (100%).
+
+---
+
 ## [Latest Updates] - 2026-11-18 (Knowledge Engine Blueprint, Decoupled Assets Vault & Micro-Monetization Architecture)
 
 ### Added, Configured & Documented

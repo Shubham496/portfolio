@@ -1,0 +1,354 @@
+{% extends "base.html" %}
+
+{% block title %}{{ meta.title }} | {{ subject.short_title }} | MYTHOS Library{% endblock %}
+
+{% block extra_head %}
+<!-- Prism.js Dark Theme for Syntax Highlighting -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+<style>
+    /* Reader Layout Overrides */
+    .docs-sidebar-scroll {
+        max-height: calc(100vh - 5rem);
+    }
+    /* Sticky TOC active link style */
+    .toc-link.active {
+        color: #2563EB;
+        font-weight: 600;
+        border-left-color: #2563EB;
+    }
+    html.dark .toc-link.active {
+        color: #60a5fa;
+        border-left-color: #60a5fa;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-[#f8fafc] dark:bg-[#070B14]">
+    
+    <!-- Top Progress Bar -->
+    <div id="reading-progress" class="fixed top-0 left-0 h-1 bg-gradient-to-r from-blue-600 via-purple-600 to-orange-500 z-50 transition-all duration-150" style="width: 0%;"></div>
+
+    <div class="max-w-[92rem] mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        
+        <div class="lg:grid lg:grid-cols-12 lg:gap-8">
+            
+            <!-- ══════════════════════════════════════════════════════════
+                 COLUMN 1: LEFT NAVIGATION TREE (3 cols on lg, 2 cols on xl)
+                 ══════════════════════════════════════════════════════════ -->
+            <aside class="hidden lg:block lg:col-span-3 xl:col-span-2.5 sticky top-20 self-start docs-sidebar-scroll overflow-y-auto pr-3">
+                <div class="pb-8">
+                    <!-- Subject Back Link -->
+                    <a href="/library/{{ subject.slug }}" class="inline-flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 mb-6 transition-colors">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to {{ subject.short_title }} Hub
+                    </a>
+
+                    <!-- Subject Header Badge -->
+                    <div class="flex items-center gap-2.5 mb-6 pb-4 border-b border-slate-200 dark:border-slate-800">
+                        <div class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center shrink-0">
+                            <i data-lucide="{{ subject.icon }}" class="w-4 h-4"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">{{ subject.title }}</h3>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400 capitalize">{{ meta.vertical }} Curriculum</p>
+                        </div>
+                    </div>
+
+                    <!-- Category Grouped Navigation Links -->
+                    <div class="space-y-6">
+                        {% for cat_name, cat_docs in sidebar_grouped.items() %}
+                        <div>
+                            <h4 class="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2 px-2">
+                                {{ cat_name }}
+                            </h4>
+                            <ul class="space-y-1">
+                                {% for nav_doc in cat_docs %}
+                                <li>
+                                    <a href="/library/{{ subject.slug }}/notes/{{ nav_doc.slug }}" 
+                                       class="group flex items-center justify-between text-xs px-2.5 py-2 rounded-lg transition-colors {% if nav_doc.slug == meta.slug %}bg-blue-50 dark:bg-blue-950/70 text-blue-600 dark:text-blue-400 font-semibold border-l-2 border-blue-600 dark:border-blue-400{% else %}text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200{% endif %}">
+                                        <span class="truncate">{{ nav_doc.title }}</span>
+                                        {% if not nav_doc.is_free %}
+                                        <span class="text-[10px] px-1.5 py-0.2 rounded bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-400 shrink-0 font-medium">₹{{ nav_doc.price_inr }}</span>
+                                        {% endif %}
+                                    </a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </aside>
+
+            <!-- ══════════════════════════════════════════════════════════
+                 COLUMN 2: CENTER READING CANVAS (7 cols on lg, 7 cols on xl)
+                 ══════════════════════════════════════════════════════════ -->
+            <main class="lg:col-span-6 xl:col-span-7 bg-white dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-10 shadow-sm">
+                
+                <!-- Breadcrumbs -->
+                <nav class="flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 mb-6 overflow-x-auto whitespace-nowrap">
+                    <a href="/library" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Library</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <a href="/library/{{ subject.slug }}" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{{ subject.short_title }}</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <span class="text-slate-900 dark:text-slate-200 font-medium truncate">{{ meta.category }}</span>
+                </nav>
+
+                <!-- Article Header -->
+                <header class="mb-8 pb-6 border-b border-slate-200 dark:border-slate-800">
+                    <div class="flex flex-wrap items-center gap-2 mb-3">
+                        <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-400 uppercase tracking-wide">
+                            {{ meta.category }}
+                        </span>
+                        {% if meta.is_free %}
+                        <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400">
+                            100% Free Public Note
+                        </span>
+                        {% else %}
+                        <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-400">
+                            {{ meta.formatted_price }}
+                        </span>
+                        {% endif %}
+                    </div>
+
+                    <h1 class="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight mb-4">
+                        {{ meta.title }}
+                    </h1>
+
+                    {% if meta.description %}
+                    <p class="text-base text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+                        {{ meta.description }}
+                    </p>
+                    {% endif %}
+
+                    <!-- Meta & Social Sharing Bar -->
+                    <div class="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-slate-100 dark:border-slate-800/80 text-xs text-slate-500 dark:text-slate-400">
+                        <div class="flex items-center gap-4">
+                            <span class="flex items-center gap-1.5">
+                                <i data-lucide="clock" class="w-3.5 h-3.5 text-blue-500"></i> {{ meta.reading_time }}
+                            </span>
+                            {% if meta.last_updated %}
+                            <span class="flex items-center gap-1.5">
+                                <i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-400"></i> Updated {{ meta.last_updated }}
+                            </span>
+                            {% endif %}
+                        </div>
+
+                        <!-- 1-Click Viral Sharing Buttons -->
+                        <div class="flex items-center gap-2">
+                            <a id="share-whatsapp" href="#" target="_blank" rel="noopener noreferrer" 
+                               class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 transition-colors font-medium text-xs">
+                                <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> WhatsApp Class Group
+                            </a>
+                            <a id="share-telegram" href="#" target="_blank" rel="noopener noreferrer" 
+                               class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-sky-50 dark:bg-sky-950/60 hover:bg-sky-100 dark:hover:bg-sky-900/60 text-sky-700 dark:text-sky-400 border border-sky-200 dark:border-sky-800 transition-colors font-medium text-xs">
+                                <i data-lucide="send" class="w-3.5 h-3.5"></i> Telegram
+                            </a>
+                            <button id="copy-link-btn" onclick="copyCurrentURL()" 
+                                    class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition-colors text-xs">
+                                <i data-lucide="link" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Rendered Markdown Body -->
+                <article class="markdown-body text-slate-800 dark:text-slate-200">
+                    {{ doc.html_content|safe }}
+                </article>
+
+                <!-- Mentorship Bridge Card -->
+                <div class="mt-12 p-6 sm:p-8 rounded-2xl bg-gradient-to-r from-blue-900/20 via-purple-900/20 to-slate-900 border border-blue-500/20 text-left">
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 text-[11px] font-semibold mb-3">
+                        <i data-lucide="terminal" class="w-3 h-3"></i> MYTHOS Production Mentorship Bridge
+                    </span>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">
+                        Stop Learning in Silos. Build Live Systems This Weekend.
+                    </h3>
+                    <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mb-5 leading-relaxed">
+                        In our selective live weekend cohorts, you do not memorize syntax. You build production-grade query pipelines, data warehouses, and high-converting marketing funnels under direct review.
+                    </p>
+                    <div class="flex flex-wrap items-center gap-3">
+                        <a href="/register?source=library_{{ subject.slug }}_{{ meta.slug }}" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs transition-colors shadow-sm flex items-center gap-2">
+                            Apply for Live Cohort <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                        <a href="https://wa.me/918727864157" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-semibold text-xs transition-colors flex items-center gap-1.5">
+                            <i data-lucide="message-circle" class="w-3.5 h-3.5 text-emerald-500"></i> Ask Counselor
+                        </a>
+                    </div>
+                </div>
+
+            </main>
+
+            <!-- ══════════════════════════════════════════════════════════
+                 COLUMN 3: RIGHT STICKY SIDEBAR (TOC + COHORT CARD)
+                 (3 cols on lg, 2.5 cols on xl)
+                 ══════════════════════════════════════════════════════════ -->
+            <aside class="hidden lg:block lg:col-span-3 xl:col-span-2.5 sticky top-20 self-start docs-sidebar-scroll overflow-y-auto pl-2">
+                <div class="space-y-6 pb-8">
+                    
+                    <!-- Table of Contents -->
+                    {% if doc.toc_tokens %}
+                    <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-3">
+                            <i data-lucide="list" class="w-4 h-4 text-blue-500"></i> On This Page
+                        </div>
+                        <nav id="toc-nav" class="space-y-1 text-xs">
+                            {% for token in doc.toc_tokens %}
+                                {% if token.level >= 2 %}
+                                <a href="#{{ token.id }}" class="toc-link block py-1.5 pl-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 border-l-2 border-transparent transition-colors">
+                                    {{ token.name }}
+                                </a>
+                                {% endif %}
+                                {% for child in token.children %}
+                                    {% if child.level >= 2 %}
+                                    <a href="#{{ child.id }}" class="toc-link block py-1 pl-4 text-[11px] text-slate-500 dark:text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 border-l-2 border-transparent transition-colors">
+                                        {{ child.name }}
+                                    </a>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        </nav>
+                    </div>
+                    {% endif %}
+
+                    <!-- Contextual Weekend Cohort Card -->
+                    <div class="p-5 rounded-2xl bg-gradient-to-br from-blue-900/30 to-slate-900 border border-blue-800/40 shadow-sm text-left">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300">LIVE COHORT</span>
+                            <span class="text-[10px] text-emerald-400 font-semibold flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Weekend Only
+                            </span>
+                        </div>
+                        <h4 class="text-sm font-bold text-white mb-1.5">Weekend Masterclass</h4>
+                        <p class="text-xs text-slate-300 mb-4 leading-relaxed">
+                            Saturday & Sunday, 6:00 PM – 8:00 PM IST. Live interactive mentorship with hands-on capstone builds.
+                        </p>
+                        <a href="/register?source=reader_{{ subject.slug }}" class="block w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs text-center transition-colors shadow-sm mb-2">
+                            Apply for Admission
+                        </a>
+                        <p class="text-[10px] text-slate-400 text-center">Zero defensive fee traps · Pure merit counseling</p>
+                    </div>
+
+                    <!-- Digital Asset Micro-Monetization Card -->
+                    <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-xs">
+                        <div class="flex items-center gap-2 mb-1.5 text-slate-900 dark:text-white font-semibold">
+                            <i data-lucide="help-circle" class="w-4 h-4 text-amber-500"></i> Need Lab Viva Traps?
+                        </div>
+                        <p class="text-slate-600 dark:text-slate-400 text-[11px] mb-3 leading-relaxed">
+                            Unlock our curated bank of 45+ oral exam traps and examiner questions for just ₹10.
+                        </p>
+                        <a href="/library/{{ subject.slug }}?vertical=viva" class="inline-flex items-center gap-1 font-semibold text-blue-600 dark:text-blue-400 hover:underline text-xs">
+                            Browse Viva Banks <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                        </a>
+                    </div>
+
+                </div>
+            </aside>
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<!-- Prism.js Script for Syntax Highlighting -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
+<script>
+    // 1. Reading Progress Bar & Scroll Spy for TOC
+    window.addEventListener('scroll', () => {
+        const docElem = document.documentElement;
+        const totalHeight = docElem.scrollHeight - docElem.clientHeight;
+        if (totalHeight > 0) {
+            const progress = (window.scrollY / totalHeight) * 100;
+            document.getElementById('reading-progress').style.width = progress + '%';
+        }
+
+        // Active heading tracking
+        const headings = document.querySelectorAll('.markdown-body h2, .markdown-body h3');
+        const scrollPos = window.scrollY + 120;
+        let currentHeading = null;
+
+        headings.forEach(h => {
+            if (h.offsetTop <= scrollPos) {
+                currentHeading = h;
+            }
+        });
+
+        if (currentHeading) {
+            document.querySelectorAll('.toc-link').forEach(link => {
+                if (link.getAttribute('href') === '#' + currentHeading.id) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        }
+    });
+
+    // 2. Setup Social Share Links with current full URL
+    document.addEventListener('DOMContentLoaded', () => {
+        const currentUrl = encodeURIComponent(window.location.href);
+        const titleText = encodeURIComponent("Check out this technical guide on Mythos: {{ meta.title }}");
+        
+        const waLink = document.getElementById('share-whatsapp');
+        if (waLink) {
+            waLink.href = `https://api.whatsapp.com/send?text=${titleText}%20${currentUrl}`;
+        }
+
+        const tgLink = document.getElementById('share-telegram');
+        if (tgLink) {
+            tgLink.href = `https://t.me/share/url?url=${currentUrl}&text=${titleText}`;
+        }
+
+        // 3. Add Copy Button to All Code Blocks
+        document.querySelectorAll('.markdown-body pre').forEach((preBlock) => {
+            preBlock.style.position = 'relative';
+
+            const copyBtn = document.createElement('button');
+            copyBtn.className = 'absolute top-2.5 right-2.5 px-2 py-1 text-[11px] font-medium rounded-md bg-slate-800 text-slate-300 hover:bg-slate-700 transition-colors border border-slate-700 flex items-center gap-1 focus:outline-none';
+            copyBtn.innerHTML = '<i data-lucide="copy" class="w-3 h-3"></i> Copy';
+            
+            copyBtn.addEventListener('click', async () => {
+                const codeElem = preBlock.querySelector('code');
+                const textToCopy = codeElem ? codeElem.innerText : preBlock.innerText;
+                try {
+                    await navigator.clipboard.writeText(textToCopy);
+                    copyBtn.innerHTML = '<i data-lucide="check" class="w-3 h-3 text-emerald-400"></i> Copied!';
+                    setTimeout(() => {
+                        copyBtn.innerHTML = '<i data-lucide="copy" class="w-3 h-3"></i> Copy';
+                        lucide.createIcons();
+                    }, 2000);
+                } catch (e) {
+                    copyBtn.innerText = 'Failed';
+                }
+            });
+
+            preBlock.appendChild(copyBtn);
+        });
+
+        lucide.createIcons();
+    });
+
+    // 4. Copy URL helper
+    async function copyCurrentURL() {
+        try {
+            await navigator.clipboard.writeText(window.location.href);
+            const btn = document.getElementById('copy-link-btn');
+            btn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500"></i>';
+            setTimeout(() => {
+                btn.innerHTML = '<i data-lucide="link" class="w-3.5 h-3.5"></i>';
+                lucide.createIcons();
+            }, 2000);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+</script>
+{% endblock %}

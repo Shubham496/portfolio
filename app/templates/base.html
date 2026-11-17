@@ -75,6 +75,7 @@
     
     <!-- Custom Mythos CSS -->
     <link rel="stylesheet" href="/static/css/style.css">
+    {% block extra_head %}{% endblock %}
 </head>
 <body class="bg-[#f8fafc] text-slate-900 dark:bg-[#070B14] dark:text-slate-100 min-h-screen flex flex-col font-sans antialiased transition-colors duration-200 selection:bg-blue-600 selection:text-white">
 
@@ -94,5 +95,6 @@
     <script>
         lucide.createIcons();
     </script>
+    {% block extra_scripts %}{% endblock %}
 </body>
 </html>

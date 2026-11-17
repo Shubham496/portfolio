@@ -190,51 +190,108 @@ Tracks engagement to inform future content decisions and identify high-intent co
 
 ---
 
-## 6. Phased Implementation Roadmap
+## 6. Phased Implementation Roadmap (Granular Task Breakdown)
 
 ### Phase 1: Core Library Engine, Base Routing & Technical Docs UI
-* [ ] **Task 1.1**: Add lightweight Markdown parsing dependencies (`markdown`, `python-frontmatter`, `pymdown-extensions`) to `requirements.txt`.
-* [ ] **Task 1.2**: Implement `app/apps/library/` module:
-  * `GET /library` → Main Resource Hub (featured topics, top datasets, popular notes).
-  * `GET /library/{subject}` → Subject hub with tabs (`Notes`, `Practice`, `Datasets`, `Books`, `Projects`).
-  * `GET /library/{subject}/notes/{slug}` → Technical docs reader view.
-* [ ] **Task 1.3**: Build high-performance in-memory caching (LRU / TTL) for parsed markdown files.
-* [ ] **Task 1.4**: Design Jinja2 templates extending `base.html`:
-  * `app/templates/library/reader.html`: Clean 3-column technical documentation layout with Prism.js CDN code highlighting, copy button, sticky TOC, and WhatsApp/Telegram share buttons.
-  * `app/templates/library/subject_hub.html`: Subject overview and tabbed resource explorer.
-* [ ] **Task 1.5**: Update `app/templates/partials/navbar.html` to include the **Library** / **Resources** navigation menu.
+* [x] **Task 1.1: Dependency Specification**
+  * Add `markdown>=3.6.0`, `python-frontmatter>=1.1.0`, and `pymdown-extensions>=10.7` to `requirements.txt`.
+  * Ensure consistent dependencies across local development and Render.io production blueprints.
+* [x] **Task 1.2: Content Discovery, Frontmatter Parsing & Caching Engine (`app/apps/library/services.py`)**
+  * Implement frontmatter extraction (validates `title`, `slug`, `subject`, `vertical`, `category`, `order`, `tier`, `price_inr`, `reading_time`, `description`, `tags`).
+  * Implement Markdown-to-HTML parser with `pymdownx` extensions: fenced code, syntax highlighting classes, tables, admonitions/callouts (`> [!NOTE]`, `> [!EXAM]`, `> [!PRO-TIP]`), and header anchor IDs.
+  * Implement hierarchical Table of Contents (TOC) extractor parsing `<h2>` and `<h3>` tags with anchor links.
+  * Implement filesystem content indexer scanning `app/content/{subject}/*.md` with category grouping and order sorting.
+  * Implement in-memory TTL/LRU caching layer so parsed HTML and TOC are cached for fast (<50ms) retrieval on Render.io.
+* [x] **Task 1.3: Library Web Routing (`app/apps/library/router.py`) & Application Mounting**
+  * Create `app/apps/library/__init__.py` and `app/apps/library/router.py`.
+  * Route 1: `GET /library` → Main Resource Hub (featured topics, subject cards, resource counts).
+  * Route 2: `GET /library/{subject}` → Subject portal with vertical filter tabs (`notes`, `viva`, `datasets`, `books`, `projects`).
+  * Route 3: `GET /library/{subject}/notes/{slug}` → 3-column technical docs reader view.
+  * Handle edge cases: 404 for unknown subjects or invalid slugs with friendly fallback templates.
+  * Mount router into `app/main.py`.
+* [x] **Task 1.4: Documentation UI Templates (`app/templates/library/`)**
+  * `app/templates/library/index.html`: Resource hub landing page showing subject cards (SQL, Python, Business Intelligence, Digital Marketing) with icon badges and resource count pills.
+  * `app/templates/library/subject_hub.html`: Subject dashboard featuring vertical filter tabs, search/filter, and cards for Notes, Viva Banks, Datasets, and Handbooks.
+  * `app/templates/library/reader.html`: 3-column technical docs reader:
+    * Left Sidebar: Collapsible subject tree with active article highlight.
+    * Center Canvas: Clean Poppins/Inter typography, Prism.js code blocks with "Copy Code" button, responsive tables, and styled callout boxes.
+    * Right Sidebar: Sticky Table of Contents (TOC) with scroll spy and contextual Cohort CTA card.
+    * Social Share Bar: WhatsApp ("Share with Class Group") and Telegram 1-click share buttons.
+* [x] **Task 1.5: Navigation & Header Integration**
+  * Update `app/templates/partials/navbar.html`: Add "Library" link in desktop & mobile menus.
+  * Update `app/templates/partials/footer.html`: Add Resource Library links under quick resources.
+* [x] **Task 1.6: Flagship Seed Article & Comprehensive Test Suite**
+  * Author starter flagship note `app/content/sql/sql-joins-textbook-vs-reality.md` strictly following the 5-part blueprint.
+  * Write `tests/test_library.py` verifying:
+    * `/library` renders 200 with subject listings.
+    * `/library/sql` renders 200 with tabs.
+    * `/library/sql/notes/sql-joins-textbook-vs-reality` renders 200 with TOC, rendered code blocks, and frontmatter metadata.
+    * Invalid subject or slug returns 404.
+    * Caching correctly prevents redundant disk reads.
+  * Verify full test suite passes (all 15 existing tests + new library tests).
+  * Run local git status check, stage, and commit with descriptive commit message.
+
+---
 
 ### Phase 2: Student Authentication, Access Control & Activity Logging
-* [ ] **Task 2.1**: Implement `users` and `user_activity_logs` models and migrations in `app/apps/courses/models.py` or new `app/apps/users/` module.
-* [ ] **Task 2.2**: Implement student auth routes:
-  * `GET /student/login`, `POST /student/login`
-  * `GET /student/register`, `POST /student/register` (Phone/WhatsApp required, Email optional)
-  * Session-based authentication via signed cookies.
-* [ ] **Task 2.3**: Implement background / lightweight activity logging middleware or service to record page views, reading depth, and CTA interactions into `user_activity_logs`.
-* [ ] **Task 2.4**: Implement dataset download gating: guest users see sample preview; logged-in users get instant one-click download.
+* [ ] **Task 2.1: Student User & Activity Logging Database Models**
+  * Implement `users` model in `app/apps/courses/models.py` (or `app/apps/users/models.py`) with `phone` (mandatory/unique), `full_name` (mandatory), `email` (optional), `hashed_password`, `user_type`, and `college_or_company`.
+  * Implement `user_activity_logs` model tracking `user_id`, `session_id`, `event_type`, `resource_type`, `resource_slug`, `referrer`, `ip_address`, and timestamp.
+  * Run database migration / table initialization.
+* [ ] **Task 2.2: Student Session Authentication**
+  * Implement `GET /student/login`, `POST /student/login`.
+  * Implement `GET /student/register`, `POST /student/register` (Phone/WhatsApp mandatory, email optional).
+  * Implement `GET /student/logout`.
+  * Signed HTTP-only cookie session management (`student_session`).
+* [ ] **Task 2.3: Engagement Tracking & Activity Logger Service**
+  * Implement lightweight logging helper to record `page_view`, `note_read`, `cohort_apply_click`, and `dataset_download_click`.
+  * Track guest sessions via signed anonymous cookie UUID and link upon student login.
+* [ ] **Task 2.4: Free Dataset Gating & Access Control**
+  * Implement preview vs full download logic for datasets:
+    * Guest users: Preview schema, sample top 10 rows, "Login to Download Full Dataset" CTA.
+    * Authenticated students: One-click instant direct download link.
+
+---
 
 ### Phase 3: Flagship Launch Content (High-Value Ingestion)
-* [ ] **Task 3.1: SQL Masterclass Note (Free)**:
-  * *Title:* "SQL Joins: What Textbooks Teach vs. How Production Databases Actually Work"
-  * *Covers:* Non-equi joins (`BETWEEN`, `<`, `>`), expression joins, `NULL` equality fallacy, and planner execution strategies (Hash vs. Nested Loop vs. Merge Join).
-* [ ] **Task 3.2: SQL Viva & Interview Bank (Preview Free + ₹10 Full)**:
-  * *Title:* "Top 45 SQL Viva Practical & Junior Interview Traps"
-  * *Covers:* Index internals, clustered vs non-clustered, execution order of `GROUP BY` vs `WHERE`, practical query traps.
-* [ ] **Task 3.3: Production Dataset 1 (Free with Login)**:
-  * *Title:* "Indian E-Commerce 50,000 Orders Analytics Dataset"
-  * Cleaned CSV, schema definition, and 10 real-world business analysis practice questions.
-* [ ] **Task 3.4: Python Real-World Foundations (Free)**:
-  * *Title:* "Python Memory, References & The Mutable Default Argument Trap".
+* [ ] **Task 3.1: Complete SQL Masterclass Note (Free Tier)**
+  * Finalize `app/content/sql/sql-joins-textbook-vs-reality.md` with complete diagrams, non-equi joins, planner hash vs merge joins, and interview traps.
+* [ ] **Task 3.2: SQL Viva & Interview Bank (Preview Free + ₹10 Unlock Gate)**
+  * Author `app/content/sql/viva-top-45-interview-traps.md` with 45 solved questions.
+  * Configure frontmatter `tier: "paid_micro"`, `price_inr: 10`.
+  * Show questions 1–10 free; gate questions 11–45 behind ₹10 unlock prompt.
+* [ ] **Task 3.3: Production Dataset 1 (Indian E-Commerce Orders)**
+  * Create `datasets/indian_ecommerce_50k_orders.csv` in `external_assets/` and sync with CDN/GitHub Raw.
+  * Author metadata document `app/content/sql/dataset-indian-ecommerce.md` with data dictionary, ER diagram, and 10 real-world business analytics challenge queries.
+* [ ] **Task 3.4: Python Foundation Masterclass Note (Free Tier)**
+  * Author `app/content/python/python-memory-and-mutable-traps.md` exploring mutable default arguments, `id()`, shallow vs deep copy, and interview gotchas.
+
+---
 
 ### Phase 4: UPI Micro-Purchases & Checkout Pipeline
-* [ ] **Task 4.1**: Set up `digital_products` and `user_purchases` tables.
-* [ ] **Task 4.2**: Integrate a frictionless Indian payment gateway (Razorpay / Cashfree) supporting 1-click UPI QR and UPI app intents for ₹10 / ₹20 / ₹99 transactions.
-* [ ] **Task 4.3**: Add purchase confirmation and instant digital delivery/unlock view.
+* [ ] **Task 4.1: Digital Products & Purchases Database Models**
+  * Implement `digital_products` and `user_purchases` tables.
+  * Seed initial products: SQL Viva Bank (₹10), SQL Notes Bundle (₹20), Full Handbook (₹99).
+* [ ] **Task 4.2: UPI Payment Gateway Integration (Razorpay / Cashfree)**
+  * Implement checkout initialization route `POST /api/library/purchase/initiate`.
+  * Implement UPI QR modal and mobile UPI intent link (Google Pay, PhonePe, Paytm).
+  * Implement webhook / verification endpoint `POST /api/library/purchase/verify`.
+* [ ] **Task 4.3: Instant Digital Unlock & Delivery Experience**
+  * Implement instant access grant: upon successful payment, unlock content and display confirmation receipt.
+  * Provide downloadable asset link and email receipt if email was provided.
+
+---
 
 ### Phase 5: Cohort Funnel Attribution & SEO Automation
-* [ ] **Task 5.1**: Build contextual cohort callout partials (`app/templates/library/partials/cohort_card.html`) with dynamic attribution parameters (e.g., `/register?source=library_sql_joins`).
-* [ ] **Task 5.2**: Generate dynamic `sitemap.xml` automatically indexing all library notes, practice sets, and datasets.
-* [ ] **Task 5.3**: Inject JSON-LD structured schemas (`TechArticle`, `FAQPage`, and `Dataset`) for rich Google search snippets.
+* [ ] **Task 5.1: Contextual Cohort Callout Partials & UTM Attribution**
+  * Build `app/templates/library/partials/cohort_card.html` with dynamic topic-aware copy (e.g. on SQL articles: "Ready to master SQL & Database Engineering live?").
+  * Link directly to `/register?source=library_{subject}_{slug}` with prefilled track selection.
+* [ ] **Task 5.2: Dynamic Sitemap Generation (`/sitemap.xml`)**
+  * Build dynamic `GET /sitemap.xml` listing all landing pages, library hub, subject hubs, notes, viva banks, and datasets with `<lastmod>` and `<changefreq>`.
+* [ ] **Task 5.3: Rich SEO Metadata & JSON-LD Structured Data**
+  * Inject `TechArticle` schema into note reader pages.
+  * Inject `FAQPage` schema into viva bank pages.
+  * Inject `Dataset` schema into dataset pages for Google Dataset Search discovery.
 
 ---
 

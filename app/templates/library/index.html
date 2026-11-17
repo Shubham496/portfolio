@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+
+{% block title %}Resource Library & Knowledge Hub | MYTHOS Online Institute{% endblock %}
+
+{% block content %}
+<div class="relative min-h-screen bg-[#f8fafc] dark:bg-[#070B14]">
+    <!-- Ambient Background Glows -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-blue-600/10 via-purple-600/5 to-transparent blur-3xl pointer-events-none"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-20">
+        
+        <!-- Breadcrumb -->
+        <nav class="flex items-center space-x-2 text-sm text-slate-500 dark:text-slate-400 mb-8">
+            <a href="/" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-1">
+                <i data-lucide="home" class="w-4 h-4"></i> Home
+            </a>
+            <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+            <span class="text-slate-900 dark:text-slate-200 font-medium">Resource Library</span>
+        </nav>
+
+        <!-- Hero Header -->
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800/60 text-xs font-semibold text-blue-700 dark:text-blue-400 mb-5 shadow-sm">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5 text-blue-500"></i>
+                Mythos Academic Knowledge Engine & Dataset Vault
+            </div>
+            <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight mb-5">
+                Technical Depth Built for <span class="text-gradient-mythos">Exams, Vivas & Production</span>
+            </h1>
+            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-8">
+                Textbooks teach simplified theory. Mythos delivers rigorous academic notes, solved interview traps, real-world 50K+ row datasets, and full capstone repositories.
+            </p>
+
+            <!-- Funnel & Micro-Pricing Badges -->
+            <div class="flex flex-wrap items-center justify-center gap-3">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-xs font-medium text-emerald-700 dark:text-emerald-400">
+                    <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> 100% Free Public Notes
+                </div>
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 text-xs font-medium text-blue-700 dark:text-blue-400">
+                    <i data-lucide="help-circle" class="w-3.5 h-3.5"></i> Solved Viva Banks from ₹10
+                </div>
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-xs font-medium text-amber-700 dark:text-amber-400">
+                    <i data-lucide="layers" class="w-3.5 h-3.5"></i> Datasets (Free Student Account)
+                </div>
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800 text-xs font-medium text-purple-700 dark:text-purple-400">
+                    <i data-lucide="book-open" class="w-3.5 h-3.5"></i> Handbooks ₹99–₹199
+                </div>
+            </div>
+        </div>
+
+        <!-- Subjects Grid -->
+        <div class="mb-20">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Explore by Core Discipline</h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Select a subject track to browse documentation, viva banks, and practice datasets.</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {% for sub in subjects %}
+                <a href="/library/{{ sub.slug }}" class="group block relative p-7 rounded-2xl bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 hover:border-blue-500/50 dark:hover:border-blue-500/50 transition-all duration-300 shadow-sm hover:shadow-xl hover:-translate-y-1">
+                    <div class="flex items-start justify-between mb-5">
+                        <div class="w-13 h-13 p-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white group-hover:scale-105 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                            <i data-lucide="{{ sub.icon }}" class="w-7 h-7"></i>
+                        </div>
+                        <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                            {{ sub.badge }}
+                        </span>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-2">
+                        {{ sub.title }}
+                    </h3>
+                    <p class="text-xs font-semibold text-blue-600 dark:text-blue-400 mb-3">{{ sub.tagline }}</p>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-6 line-clamp-2">
+                        {{ sub.description }}
+                    </p>
+
+                    <!-- Counts Footer -->
+                    <div class="pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                        <div class="flex items-center gap-4">
+                            <span class="flex items-center gap-1.5"><i data-lucide="file-text" class="w-3.5 h-3.5 text-blue-500"></i> {{ sub.counts.notes }} Notes</span>
+                            <span class="flex items-center gap-1.5"><i data-lucide="help-circle" class="w-3.5 h-3.5 text-amber-500"></i> {{ sub.counts.viva }} Viva</span>
+                            <span class="flex items-center gap-1.5"><i data-lucide="layers" class="w-3.5 h-3.5 text-emerald-500"></i> {{ sub.counts.datasets }} Datasets</span>
+                        </div>
+                        <span class="font-semibold text-blue-600 dark:text-blue-400 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                            Explore <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </span>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Five Content Verticals Breakdown -->
+        <div class="mb-20">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">Five Purpose-Built Learning Verticals</h2>
+                <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400 mt-2">Every asset is engineered to solve a specific academic or career hurdle.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                <!-- 1. Notes -->
+                <div class="p-5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-3">
+                            <i data-lucide="file-text" class="w-5 h-5"></i>
+                        </div>
+                        <span class="inline-block text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-1">100% Free</span>
+                        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-1.5">Academic Notes</h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Full textbook definitions coupled with production realities that textbooks skip.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-[11px] text-slate-500 font-medium">No Login Needed</div>
+                </div>
+
+                <!-- 2. Viva -->
+                <div class="p-5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-lg bg-amber-100 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-3">
+                            <i data-lucide="help-circle" class="w-5 h-5"></i>
+                        </div>
+                        <span class="inline-block text-[10px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 mb-1">Preview Free · ₹10 Full</span>
+                        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-1.5">Practice & Viva</h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                            University oral exam question banks, trap scenarios, and junior interview gotchas.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-[11px] text-slate-500 font-medium">Instant 1-Click UPI</div>
+                </div>
+
+                <!-- 3. Datasets -->
+                <div class="p-5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-lg bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-3">
+                            <i data-lucide="layers" class="w-5 h-5"></i>
+                        </div>
+                        <span class="inline-block text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-1">Free with Account</span>
+                        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-1.5">Clean Datasets</h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                            50K+ real-world CSVs with schemas & business questions to build standout portfolios.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-[11px] text-slate-500 font-medium">WhatsApp / Mobile Login</div>
+                </div>
+
+                <!-- 4. Books -->
+                <div class="p-5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-lg bg-purple-100 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center mb-3">
+                            <i data-lucide="book-open" class="w-5 h-5"></i>
+                        </div>
+                        <span class="inline-block text-[10px] font-bold uppercase tracking-wider text-purple-600 dark:text-purple-400 mb-1">₹99 – ₹199</span>
+                        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-1.5">Handbooks</h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Definitive offline PDF guides with complete reference diagrams and code architectures.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-[11px] text-slate-500 font-medium">Lifetime PDF Download</div>
+                </div>
+
+                <!-- 5. Projects -->
+                <div class="p-5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-lg bg-pink-100 dark:bg-pink-950/60 text-pink-600 dark:text-pink-400 flex items-center justify-center mb-3">
+                            <i data-lucide="rocket" class="w-5 h-5"></i>
+                        </div>
+                        <span class="inline-block text-[10px] font-bold uppercase tracking-wider text-pink-600 dark:text-pink-400 mb-1">₹149 – ₹249</span>
+                        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-1.5">Capstones</h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                            End-to-end production repos, cleaned schemas, data pipelines, and video walkthroughs.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-[11px] text-slate-500 font-medium">Full Source Code</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contextual Live Mentorship Strip -->
+        <div class="p-8 sm:p-10 rounded-3xl bg-gradient-to-r from-blue-900/40 via-purple-900/30 to-slate-900 border border-blue-800/40 text-center relative overflow-hidden">
+            <div class="relative z-10 max-w-2xl mx-auto">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-semibold mb-4">
+                    <i data-lucide="calendar" class="w-3.5 h-3.5"></i> Saturday & Sunday Cohorts ONLY
+                </span>
+                <h3 class="text-2xl sm:text-3xl font-extrabold text-white mb-3">
+                    Want Live 1-on-1 Mentorship & System Builds?
+                </h3>
+                <p class="text-sm text-slate-300 mb-6 leading-relaxed">
+                    Join our selective weekend live cohorts. Build real production data warehouses, analytics dashboards, and growth engines with senior practitioners.
+                </p>
+                <div class="flex flex-wrap items-center justify-center gap-3">
+                    <a href="/register" class="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm transition-all shadow-lg hover:shadow-blue-500/30 flex items-center gap-2">
+                        Apply for Live Cohort <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                    <a href="https://wa.me/918727864157" target="_blank" rel="noopener noreferrer" class="px-6 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-sm transition-all border border-slate-700 flex items-center gap-2">
+                        <i data-lucide="message-circle" class="w-4 h-4 text-emerald-400"></i> WhatsApp Admissions Desk
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
