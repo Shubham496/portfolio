@@ -5,7 +5,39 @@ This serves as an audit trail and system log (similar to GitHub releases/commit 
 
 ---
 
-## [Latest Updates] - 2026-11-18 (Phase 1.6: W3Schools Panel Architecture, Hierarchical Topic Sidebar & Sequential Navigation)
+## [Latest Updates] - 2026-11-18 (Phase 1.7: W3Schools Sequential SQL Study Track & Topic Progression)
+
+### Added, Updated & Refactored
+- **W3Schools Sequential SQL Curriculum Architecture**:
+  - Re-architected `/library/sql` so that visitors begin learning from foundational basics rather than advanced joins, B-Trees, or interview questions.
+  - Formulated a 38-topic curriculum across 11 clean pedagogical categories mirroring W3Schools MySQL/SQL standards:
+    1. **1. SQL Basics**: What is a Database & RDBMS?, SQL Introduction & Syntax.
+    2. **2. Database & Table Management (DDL)**: SQL CREATE & DROP DATABASE, SQL CREATE & DROP TABLE, SQL ALTER TABLE & TRUNCATE TABLE.
+    3. **3. Querying & Filtering (DQL)**: SQL SELECT & SELECT DISTINCT, SQL WHERE Clause & Comparison Operators, SQL AND, OR & NOT Operators, SQL ORDER BY (Sorting Data).
+    4. **4. Data Manipulation (DML)**: SQL INSERT INTO (Adding Rows), SQL NULL Values (IS NULL & IS NOT NULL), SQL UPDATE (Modifying Records), SQL DELETE (Removing Records), SQL LIMIT & TOP Records.
+    5. **5. Aggregations & Grouping**: SQL Aggregate Functions (COUNT, SUM, AVG, MIN, MAX), SQL GROUP BY Statement, SQL HAVING Clause.
+    6. **6. Advanced Filtering & Operators**: SQL LIKE Operator & Wildcards, SQL IN & BETWEEN Operators, SQL Aliases (Column & Table AS).
+    7. **7. Constraints & Keys**: SQL Constraints (NOT NULL, UNIQUE, CHECK, DEFAULT), SQL PRIMARY KEY & FOREIGN KEY, SQL AUTO_INCREMENT & Identity.
+    8. **8. SQL Joins**: SQL Joins Overview & Venn Diagrams, SQL INNER JOIN, SQL LEFT JOIN (Outer Join), SQL RIGHT JOIN & FULL OUTER JOIN, SQL Joins: Textbook vs Reality.
+    9. **9. Advanced SQL & Analysis**: SQL UNION & UNION ALL, SQL CASE Statement, SQL Subqueries & Nested Queries, SQL Views (CREATE & DROP VIEW), Window Functions Masterclass, Common Table Expressions (CTEs), ACID Properties & Transactions.
+    10. **10. Query Optimization**: B-Tree vs Hash Indexing, Database Normalization (1NF to BCNF) vs Star Schema.
+    11. **11. Interview Prep**: Top 45 SQL Viva Practical & Junior Interview Traps.
+- **Dedicated Study Track Isolation in `All Topics` Panel**:
+  - Filtered `All Topics` workspace so that standalone viva interview question banks do not pollute the study track, keeping the tutorial focused strictly on learning SQL step-by-step.
+  - Standalone viva question banks remain fully accessible in the dedicated `Interview Questions` panel (`?tab=interview_questions`).
+  - Deep-dive architectural analyses remain accessible in the `Notes` panel (`?tab=notes`).
+- **Sequential `< Previous Topic` & `Next Topic >` Navigation**:
+  - Added `get_adjacent_topics_from_list` in `services.py` and integrated into `router.py`.
+  - Visiting `/library/sql` defaults cleanly to Topic 1 (`What is a Database & RDBMS?`), with `< Previous Topic` hidden and `Next Topic: SQL Introduction & Syntax >` leading directly to Topic 2, continuing step-by-step through CREATE, DROP, SELECT, and beyond.
+- **Specialized Foundational SQL Blueprints**:
+  - Authored comprehensive, production-grounded blueprints for SQL basics (`sql-what-is-database`, `sql-intro-syntax`, `sql-create-drop-database`, `sql-create-drop-table`, `sql-alter-truncate-table`, `sql-select-distinct`, `sql-where-clause`, `sql-insert-into`, `sql-update`, `sql-delete`) with real-world schemas, copyable syntax, production realities, and interview traps.
+- **Automated Verification**:
+  - Added 3 new tests in `tests/test_library.py` verifying SQL foundational starting topic, sequential next/prev progression, and interview panel isolation.
+  - Full automated test suite expanded to **32/32 tests passing cleanly (100%)**.
+
+---
+
+## [2026-11-18] (Phase 1.6: W3Schools Panel Architecture, Hierarchical Topic Sidebar & Sequential Navigation)
 
 ### Added, Updated & Refactored
 - **W3Schools-Style 4-Panel Architecture on Subject Hubs (`/library/{subject}`)**:

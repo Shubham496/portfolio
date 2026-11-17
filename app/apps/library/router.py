@@ -19,6 +19,7 @@ from app.apps.library.services import (
     get_subject_summary,
     get_all_subjects_summary,
     get_adjacent_topics,
+    get_adjacent_topics_from_list,
     get_subject_videos,
 )
 
@@ -91,20 +92,31 @@ async def library_subject_hub(
 
     summary = get_subject_summary(subject_lower)
     all_docs = list_documents_for_subject(subject_lower)
-    grouped_docs = get_subject_grouped_by_category(subject_lower)
-
-    # Determine active topic for "all_topics" panel
-    active_slug = topic
-    if not active_slug and all_docs:
-        active_slug = all_docs[0].slug
-
-    active_doc = get_document(subject_lower, active_slug) if active_slug else None
-    prev_topic, next_topic = get_adjacent_topics(subject_lower, active_slug) if active_slug else (None, None)
 
     # Segment documents for dedicated panels
     notes_docs = [d for d in all_docs if d.vertical == "notes"]
     interview_docs = [d for d in all_docs if d.vertical in ("viva", "interview")]
     video_lectures = get_subject_videos(subject_lower)
+
+    # For the All Topics study workspace: study track only (excluding standalone viva interview banks)
+    study_docs = [d for d in all_docs if d.vertical not in ("viva", "interview")]
+    study_grouped_docs: dict = {}
+    for doc in study_docs:
+        study_grouped_docs.setdefault(doc.category, []).append(doc)
+
+    full_grouped_docs = get_subject_grouped_by_category(subject_lower)
+
+    # In "all_topics" panel, use the pure study curriculum
+    active_docs_list = study_docs if active_tab == "all_topics" else all_docs
+    grouped_docs = study_grouped_docs if active_tab == "all_topics" else full_grouped_docs
+
+    # Determine active topic for "all_topics" panel
+    active_slug = topic
+    if not active_slug and active_docs_list:
+        active_slug = active_docs_list[0].slug
+
+    active_doc = get_document(subject_lower, active_slug) if active_slug else None
+    prev_topic, next_topic = get_adjacent_topics_from_list(active_docs_list, active_slug) if active_slug else (None, None)
 
     page_title = (
         f"{active_doc.metadata.title} | {summary['short_title']} Topics | MYTHOS"

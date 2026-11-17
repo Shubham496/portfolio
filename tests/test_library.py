@@ -35,8 +35,8 @@ def test_library_subject_hub():
     assert response.status_code == 200
     html = response.text
     assert "SQL &amp; Relational Databases" in html or "SQL & Relational Databases" in html
-    assert "Relational Database Internals" in html
-    assert "SQL Joins" in html
+    assert "SQL Basics" in html
+    assert "What is a Database" in html
     assert "Weekend Live Cohort" in html
 
 
@@ -62,7 +62,7 @@ def test_library_reader_page():
     
     # 1. Header & Metadata
     assert "SQL Joins: What Textbooks Teach vs. How Production Databases Actually Work" in html
-    assert "Relational Database Internals" in html
+    assert "SQL Joins" in html
     assert "100% Free Public Note" in html
     
     # 2. Content Sections
@@ -225,3 +225,70 @@ def test_adjacent_topics_service():
     assert prev_mid.slug == "python-syntax-comments"
     assert next_mid is not None
     assert next_mid.slug == "python-numbers-casting"
+
+
+def test_library_sql_w3schools_study_track():
+    """Verify /library/sql defaults to foundational Topic 1 (What is a Database & RDBMS?) without interview mixing."""
+    response = client.get("/library/sql")
+    assert response.status_code == 200
+    html = response.text
+
+    # 1. Default active topic must be What is a Database & RDBMS?
+    assert "What is a Database &amp; RDBMS?" in html or "What is a Database & RDBMS?" in html
+    assert "Relational Database Model" in html or "RELATIONAL DATABASE MODEL" in html
+
+    # 2. Sequential Next Topic button must point to Topic 2 (SQL Introduction & Syntax)
+    assert "Next Topic" in html
+    assert "sql-intro-syntax" in html
+    assert "Previous Topic" not in html  # First topic should not have a previous button
+
+    # 3. Sidebar contains pure study categories in pedagogical sequence
+    assert "1. SQL Basics" in html
+    assert "2. Database &amp; Table Management" in html or "2. Database & Table Management" in html
+    assert "3. Querying &amp; Filtering" in html or "3. Querying & Filtering" in html
+    assert "4. Data Manipulation" in html
+
+    # 4. Standalone viva interview traps category must not be in the All Topics study sidebar
+    assert "11. Interview Prep" not in html
+
+
+def test_library_sql_sequential_progression():
+    """Verify sequential next/previous topic progression across SQL foundational curriculum."""
+    # Step 1 -> Step 2
+    res2 = client.get("/library/sql?tab=all_topics&topic=sql-intro-syntax")
+    assert res2.status_code == 200
+    html2 = res2.text
+    assert "SQL Introduction &amp; Syntax" in html2 or "SQL Introduction & Syntax" in html2
+    assert "Previous Topic" in html2
+    assert "sql-what-is-database" in html2
+    assert "Next Topic" in html2
+    assert "sql-create-drop-database" in html2
+
+    # Step 2 -> Step 3
+    res3 = client.get("/library/sql?tab=all_topics&topic=sql-create-drop-database")
+    assert res3.status_code == 200
+    html3 = res3.text
+    assert "SQL CREATE &amp; DROP DATABASE" in html3 or "SQL CREATE & DROP DATABASE" in html3
+    assert "Previous Topic" in html3
+    assert "sql-intro-syntax" in html3
+    assert "Next Topic" in html3
+    assert "sql-create-drop-table" in html3
+
+    # Step 3 -> Step 4
+    res4 = client.get("/library/sql?tab=all_topics&topic=sql-create-drop-table")
+    assert res4.status_code == 200
+    html4 = res4.text
+    assert "SQL CREATE &amp; DROP TABLE" in html4 or "SQL CREATE & DROP TABLE" in html4
+    assert "Previous Topic" in html4
+    assert "sql-create-drop-database" in html4
+    assert "Next Topic" in html4
+    assert "sql-alter-truncate-table" in html4
+
+
+def test_library_sql_interview_panel_isolation():
+    """Verify viva interview traps remain in the dedicated Interview Questions panel."""
+    response = client.get("/library/sql?tab=interview_questions")
+    assert response.status_code == 200
+    html = response.text
+    assert "Top 45 SQL Viva" in html
+    assert "Interview Questions (" in html

@@ -48,13 +48,65 @@ SUBJECTS: Dict[str, Dict[str, Any]] = {
         "icon": "devicon-azuresqldatabase-plain colored",
         "badge": "Core Track",
         "topics": [
-            {"title": "SQL Joins: What Textbooks Teach vs. How Production Databases Actually Work", "slug": "sql-joins-textbook-vs-reality", "category": "Relational Database Internals", "vertical": "notes", "reading_time": "8 min read"},
-            {"title": "Top 45 SQL Viva Practical & Junior Interview Traps", "slug": "sql-viva-top-45-interview-traps", "category": "Oral Exam & Interview Prep", "vertical": "viva", "reading_time": "12 min read"},
-            {"title": "B-Tree vs Hash Indexing: Internals, Clustered Indexes & Scans", "slug": "sql-indexing-btree-hash-internals", "category": "Query Optimization", "vertical": "notes", "reading_time": "10 min read"},
-            {"title": "Window Functions Masterclass: ROW_NUMBER, RANK, DENSE_RANK & LEAD/LAG", "slug": "sql-window-functions-deep-dive", "category": "Analytical SQL", "vertical": "notes", "reading_time": "9 min read"},
-            {"title": "Common Table Expressions (CTEs) & Recursive Hierarchical Queries", "slug": "sql-recursive-ctes-and-hierarchies", "category": "Analytical SQL", "vertical": "notes", "reading_time": "7 min read"},
-            {"title": "Database Normalization (1NF to BCNF) vs. Star Schema Denormalization", "slug": "sql-database-normalization-vs-star-schema", "category": "Database Architecture", "vertical": "notes", "reading_time": "11 min read"},
-            {"title": "ACID Properties & Transaction Isolation Levels (Dirty Read vs Phantom Read)", "slug": "sql-acid-transactions-and-isolation-levels", "category": "Database Architecture", "vertical": "notes", "reading_time": "10 min read"},
+            # 1. SQL Basics
+            {"title": "What is a Database & RDBMS?", "slug": "sql-what-is-database", "category": "1. SQL Basics", "vertical": "notes", "reading_time": "5 min read", "order": 1},
+            {"title": "SQL Introduction & Syntax", "slug": "sql-intro-syntax", "category": "1. SQL Basics", "vertical": "notes", "reading_time": "6 min read", "order": 2},
+
+            # 2. Database & Table Management (DDL)
+            {"title": "SQL CREATE & DROP DATABASE", "slug": "sql-create-drop-database", "category": "2. Database & Table Management", "vertical": "notes", "reading_time": "5 min read", "order": 3},
+            {"title": "SQL CREATE & DROP TABLE", "slug": "sql-create-drop-table", "category": "2. Database & Table Management", "vertical": "notes", "reading_time": "6 min read", "order": 4},
+            {"title": "SQL ALTER TABLE & TRUNCATE TABLE", "slug": "sql-alter-truncate-table", "category": "2. Database & Table Management", "vertical": "notes", "reading_time": "6 min read", "order": 5},
+
+            # 3. Querying & Filtering (DQL)
+            {"title": "SQL SELECT & SELECT DISTINCT", "slug": "sql-select-distinct", "category": "3. Querying & Filtering", "vertical": "notes", "reading_time": "6 min read", "order": 6},
+            {"title": "SQL WHERE Clause & Comparison Operators", "slug": "sql-where-clause", "category": "3. Querying & Filtering", "vertical": "notes", "reading_time": "6 min read", "order": 7},
+            {"title": "SQL AND, OR & NOT Operators", "slug": "sql-and-or-not", "category": "3. Querying & Filtering", "vertical": "notes", "reading_time": "5 min read", "order": 8},
+            {"title": "SQL ORDER BY (Sorting Data)", "slug": "sql-order-by", "category": "3. Querying & Filtering", "vertical": "notes", "reading_time": "5 min read", "order": 9},
+
+            # 4. Data Manipulation (DML)
+            {"title": "SQL INSERT INTO (Adding Rows)", "slug": "sql-insert-into", "category": "4. Data Manipulation", "vertical": "notes", "reading_time": "6 min read", "order": 10},
+            {"title": "SQL NULL Values (IS NULL & IS NOT NULL)", "slug": "sql-null-values", "category": "4. Data Manipulation", "vertical": "notes", "reading_time": "6 min read", "order": 11},
+            {"title": "SQL UPDATE (Modifying Records)", "slug": "sql-update", "category": "4. Data Manipulation", "vertical": "notes", "reading_time": "6 min read", "order": 12},
+            {"title": "SQL DELETE (Removing Records)", "slug": "sql-delete", "category": "4. Data Manipulation", "vertical": "notes", "reading_time": "6 min read", "order": 13},
+            {"title": "SQL LIMIT & TOP Records", "slug": "sql-limit-top", "category": "4. Data Manipulation", "vertical": "notes", "reading_time": "5 min read", "order": 14},
+
+            # 5. Aggregations & Grouping
+            {"title": "SQL Aggregate Functions (COUNT, SUM, AVG, MIN, MAX)", "slug": "sql-aggregate-functions", "category": "5. Aggregations & Grouping", "vertical": "notes", "reading_time": "7 min read", "order": 15},
+            {"title": "SQL GROUP BY Statement", "slug": "sql-group-by", "category": "5. Aggregations & Grouping", "vertical": "notes", "reading_time": "7 min read", "order": 16},
+            {"title": "SQL HAVING Clause", "slug": "sql-having", "category": "5. Aggregations & Grouping", "vertical": "notes", "reading_time": "6 min read", "order": 17},
+
+            # 6. Advanced Filtering & Operators
+            {"title": "SQL LIKE Operator & Wildcards", "slug": "sql-like-wildcards", "category": "6. Advanced Filtering", "vertical": "notes", "reading_time": "6 min read", "order": 18},
+            {"title": "SQL IN & BETWEEN Operators", "slug": "sql-in-between", "category": "6. Advanced Filtering", "vertical": "notes", "reading_time": "6 min read", "order": 19},
+            {"title": "SQL Aliases (Column & Table AS)", "slug": "sql-aliases", "category": "6. Advanced Filtering", "vertical": "notes", "reading_time": "5 min read", "order": 20},
+
+            # 7. Constraints & Keys
+            {"title": "SQL Constraints (NOT NULL, UNIQUE, CHECK, DEFAULT)", "slug": "sql-constraints-overview", "category": "7. Constraints & Keys", "vertical": "notes", "reading_time": "7 min read", "order": 21},
+            {"title": "SQL PRIMARY KEY & FOREIGN KEY", "slug": "sql-primary-foreign-key", "category": "7. Constraints & Keys", "vertical": "notes", "reading_time": "7 min read", "order": 22},
+            {"title": "SQL AUTO_INCREMENT & Identity", "slug": "sql-auto-increment", "category": "7. Constraints & Keys", "vertical": "notes", "reading_time": "5 min read", "order": 23},
+
+            # 8. SQL Joins
+            {"title": "SQL Joins Overview & Venn Diagrams", "slug": "sql-joins-introduction", "category": "8. SQL Joins", "vertical": "notes", "reading_time": "6 min read", "order": 24},
+            {"title": "SQL INNER JOIN", "slug": "sql-inner-join", "category": "8. SQL Joins", "vertical": "notes", "reading_time": "7 min read", "order": 25},
+            {"title": "SQL LEFT JOIN (Outer Join)", "slug": "sql-left-join", "category": "8. SQL Joins", "vertical": "notes", "reading_time": "7 min read", "order": 26},
+            {"title": "SQL RIGHT JOIN & FULL OUTER JOIN", "slug": "sql-right-full-join", "category": "8. SQL Joins", "vertical": "notes", "reading_time": "7 min read", "order": 27},
+            {"title": "SQL Joins: What Textbooks Teach vs. Production Reality", "slug": "sql-joins-textbook-vs-reality", "category": "8. SQL Joins", "vertical": "notes", "reading_time": "8 min read", "order": 28},
+
+            # 9. Advanced SQL & Analysis
+            {"title": "SQL UNION & UNION ALL", "slug": "sql-union-all", "category": "9. Advanced SQL", "vertical": "notes", "reading_time": "6 min read", "order": 29},
+            {"title": "SQL CASE Statement", "slug": "sql-case-expression", "category": "9. Advanced SQL", "vertical": "notes", "reading_time": "6 min read", "order": 30},
+            {"title": "SQL Subqueries & Nested Queries", "slug": "sql-subqueries", "category": "9. Advanced SQL", "vertical": "notes", "reading_time": "8 min read", "order": 31},
+            {"title": "SQL Views (CREATE & DROP VIEW)", "slug": "sql-views", "category": "9. Advanced SQL", "vertical": "notes", "reading_time": "6 min read", "order": 32},
+            {"title": "Window Functions Masterclass: ROW_NUMBER, RANK, DENSE_RANK & LEAD/LAG", "slug": "sql-window-functions-deep-dive", "category": "9. Advanced SQL", "vertical": "notes", "reading_time": "9 min read", "order": 33},
+            {"title": "Common Table Expressions (CTEs) & Recursive Hierarchical Queries", "slug": "sql-recursive-ctes-and-hierarchies", "category": "9. Advanced SQL", "vertical": "notes", "reading_time": "7 min read", "order": 34},
+            {"title": "ACID Properties & Transaction Isolation Levels (Dirty Read vs Phantom Read)", "slug": "sql-acid-transactions-and-isolation-levels", "category": "9. Advanced SQL", "vertical": "notes", "reading_time": "10 min read", "order": 35},
+
+            # 10. Query Optimization & Internals (Featured in Notes)
+            {"title": "B-Tree vs Hash Indexing: Internals, Clustered Indexes & Scans", "slug": "sql-indexing-btree-hash-internals", "category": "10. Query Optimization", "vertical": "notes", "reading_time": "10 min read", "order": 36},
+            {"title": "Database Normalization (1NF to BCNF) vs. Star Schema Denormalization", "slug": "sql-database-normalization-vs-star-schema", "category": "10. Query Optimization", "vertical": "notes", "reading_time": "11 min read", "order": 37},
+
+            # 11. Interview Prep (Featured in Interview Questions)
+            {"title": "Top 45 SQL Viva Practical & Junior Interview Traps", "slug": "sql-viva-top-45-interview-traps", "category": "11. Interview Prep", "vertical": "viva", "reading_time": "12 min read", "order": 38},
         ],
     },
     "mysql": {
@@ -1405,9 +1457,827 @@ else:
 Learn to build high-performance data transformation loops and vectorization workflows in the **[MYTHOS Live Weekend Cohort](/register?source=library_python_for)**.
 """
 
-    return None
+    elif subject == "sql":
+        if slug == "sql-what-is-database":
+            return """
+## 1. Academic Definition & Objectives
+
+A **Database** is an organized, structured collection of digital data stored electronically in a computer system, managed by a dedicated software suite called a **Database Management System (DBMS)**.
+
+In relational systems (RDBMS) formulated by Dr. Edgar F. Codd (1970), data is structured into **Relations** (commonly called **Tables**), consisting of:
+* **Attributes (Columns / Fields)**: Named properties with defined data types (e.g., `student_id INT`, `email VARCHAR(100)`).
+* **Tuples (Rows / Records)**: Individual entity entries conforming to the table schema.
+* **Domain**: The set of permissible atomic values for a given column.
+
+Key Competencies:
+* The difference between flat files (CSV, JSON, Excel) and an RDBMS (concurrency, crash recovery, ACID transactions).
+* Client-Server Architecture: Database engine listening on a TCP port (e.g. MySQL `3306`, PostgreSQL `5432`) receiving SQL queries from client applications.
+* Relational terminology: Relation = Table, Tuple = Row, Attribute = Column, Cardinality = Number of Rows, Degree (Arity) = Number of Columns.
+
+---
+
+## 2. Core Concepts & Implementation Blueprint
+
+```text
++-------------------------------------------------------------------------+
+|                       RELATIONAL DATABASE MODEL                         |
++-------------------------------------------------------------------------+
+| DATABASE: mythos_institute                                              |
+|                                                                         |
+|  TABLE: students (Degree/Arity = 4 Attributes)                          |
+|  +------------+------------------+---------------------+--------------+  |
+|  | student_id | full_name        | email               | phone        |  |
+|  +------------+------------------+---------------------+--------------+  |
+|  | 101        | Aditya Sharma    | aditya@example.com  | 9876543210   |  |
+|  | 102        | Priya Patel      | priya@example.com   | 9876543211   |  |
+|  | 103        | Rohan Verma      | rohan@example.com   | 9876543212   |  |
+|  +------------+------------------+---------------------+--------------+  |
+|  (Cardinality = 3 Tuples/Rows)                                          |
++-------------------------------------------------------------------------+
+
+CLIENT-SERVER ARCHITECTURE PIPELINE:
+[ Backend App / API ] ---> [ Connection Pool ] ---> [ SQL Parser ] ---> [ Query Planner ] ---> [ Storage Engine (B-Tree / Disk) ]
+```
+
+```sql
+-- Conceptual database verification queries
+-- 1. Inspect existing databases on the server
+SHOW DATABASES;
+
+-- 2. View active connection status
+SELECT current_user, version();
+```
+
+---
+
+## 3. The Production Reality ("What Textbooks Skip")
+
+Textbooks explain databases as simple storage boxes. In enterprise production systems:
+
+* **Connection Pool Saturation**: Every incoming API worker opens a TCP socket to the database. Without connection pooling (such as PgBouncer or HikariCP), 500 concurrent HTTP requests will spawn 500 OS processes/threads on PostgreSQL, exhausting server RAM and leading to `FATAL: remaining connection slots are reserved for non-replication superuser connections`.
+* **ACID vs. BASE Trade-Offs**: Relational databases guarantee ACID (Atomicity, Consistency, Isolation, Durability) at the expense of horizontal write scalability. NoSQL databases (like Cassandra or DynamoDB) sacrifice strong consistency for distributed horizontal scaling.
+* **Disk IOPS & WAL**: Updates in an RDBMS do not immediately rewrite table files on SSDs; they append to a sequential Write-Ahead Log (WAL / Redo Log) in memory before asynchronous flush to minimize random disk I/O.
+
+> [!NOTE]
+> **Production Rule**: Never store binary media files (PDFs, images, videos) inside an RDBMS as `BLOB` columns. Store the binary file in cloud object storage (Amazon S3, Google Cloud Storage) and save only the resulting CDN URL string in the database column.
+
+---
+
+## 4. Exam & Technical Interview Gotchas
+
+1. **Cardinality vs. Arity (Degree)**: In written exams, 80% of students confuse these terms:
+   - **Cardinality** = Total number of **Rows (Tuples)** in a table.
+   - **Degree (Arity)** = Total number of **Columns (Attributes)** in a table.
+2. **Data Redundancy vs. Inconsistency**: Redundancy means duplicate data stored in multiple places. Inconsistency occurs when one copy is updated and another copy remains outdated.
+3. **Data Independence**: Logical Data Independence means modifying conceptual schemas (adding a column) without breaking user applications. Physical Data Independence means modifying storage structures (switching from B-Tree to Hash index) without modifying SQL queries.
+
+---
+
+## 5. Mythos Mentorship Bridge
+
+Learn to design normalized schemas, tune connection pools, and deploy cloud PostgreSQL clusters in the **[MYTHOS Live Weekend Cohort](/register?source=library_sql_what_is_database)**.
+"""
+
+        elif slug == "sql-intro-syntax":
+            return """
+## 1. Academic Definition & Objectives
+
+**SQL (Structured Query Language)** is the international standard declarative domain-specific language (ANSI/ISO) used to communicate with, query, and manipulate relational database management systems.
+
+Unlike imperative languages (like Python or Java) where you write step-by-step instructions on *how* to calculate an outcome, SQL is **declarative**: you specify *what* data you need, and the database query engine's cost-based optimizer determines the most efficient execution plan.
+
+Key Competencies:
+* The 5 functional sublanguages of SQL.
+* Case-insensitivity rules: Keywords are case-insensitive (`SELECT` vs `select`), but identifier case-sensitivity depends on the underlying OS and database configuration.
+* Semicolons: The standard SQL statement terminator required in multi-statement scripts.
+* Comments: Single-line (`--`) and multi-line (`/* ... */`).
+
+### The 5 SQL Sublanguages Taxonomy
+
+| Sublanguage | Full Name | Core Commands | Purpose |
+| :--- | :--- | :--- | :--- |
+| **DQL** | Data Query Language | `SELECT` | Retrieve data tuples matching criteria |
+| **DDL** | Data Definition Language | `CREATE`, `ALTER`, `DROP`, `TRUNCATE`, `RENAME` | Define, alter, and destroy schemas & tables |
+| **DML** | Data Manipulation Language | `INSERT`, `UPDATE`, `DELETE` | Mutate row data within tables |
+| **DCL** | Data Control Language | `GRANT`, `REVOKE` | Manage security privileges and user roles |
+| **TCL** | Transaction Control Language | `COMMIT`, `ROLLBACK`, `SAVEPOINT` | Manage atomic transaction boundaries |
+
+---
+
+## 2. Core Concepts & Implementation Blueprint
+
+```sql
+-- ==============================================================================
+-- 1. SQL SYNTAX STANDARD CONVENTIONS
+-- ==============================================================================
+
+-- Best Practice: UPPERCASE for SQL keywords, lowercase for table and column names
+-- Single-line comment starts with double hyphen (--)
+
+/*
+   Multi-line block comment:
+   This script demonstrates standard DDL, DML, and DQL query structures.
+*/
+
+-- DDL: Create a schema structure
+CREATE TABLE IF NOT EXISTS courses (
+    course_id INT PRIMARY KEY,
+    course_name VARCHAR(100) NOT NULL,
+    track VARCHAR(50) NOT NULL,
+    is_active BOOLEAN DEFAULT TRUE
+);
+
+-- DML: Insert tuple records
+INSERT INTO courses (course_id, course_name, track)
+VALUES 
+    (1, 'Performance Marketing & Paid Ads', 'Digital Marketing'),
+    (2, 'Data Analysis Masterclass', 'Data Analytics');
+
+-- DQL: Query projected attributes
+SELECT 
+    course_id,
+    course_name,
+    track
+FROM courses
+WHERE is_active = TRUE
+ORDER BY course_id ASC;
+```
+
+---
+
+## 3. The Production Reality ("What Textbooks Skip")
+
+* **Table Name Case Sensitivity on Linux**: On Windows, MySQL table names are case-insensitive because NTFS filesystem paths are case-insensitive. On Linux (production servers), MySQL uses the case-sensitive ext4 filesystem by default! A query like `SELECT * FROM Courses;` that works on your local Windows laptop will crash with `Table 'mythos.Courses' doesn't exist` when deployed to Linux. Always use strictly lowercase identifiers (`lower_case_table_names`).
+* **SQL Injection Vulnerabilities**: String concatenation (`f"SELECT * FROM users WHERE email = '{user_email}'"`) allows malicious attackers to enter `' OR 1=1 --` to dump entire databases. In production, **always** use parameterized queries / prepared statements (`cursor.execute("SELECT * FROM users WHERE email = %s", (user_email,))`).
+* **Semicolon Mandatory in Scripts**: While some GUI tools let you run a single query without a trailing semicolon, automated CI/CD migration runners (like Flyway, Alembic, or Liquibase) require semicolons to parse statement boundaries.
+
+> [!WARNING]
+> **Production Gotcha**: Never execute ad-hoc, untracked DDL statements directly in production terminals. Always version-control all database schema changes inside migration files (`versions/001_initial_tables.sql`).
+
+---
+
+## 4. Exam & Technical Interview Gotchas
+
+1. **Is `TRUNCATE` DDL or DML?**: High-frequency exam question! `DELETE` is DML (it scans rows and can be rolled back in some engines). `TRUNCATE` is strictly **DDL** because it deallocates the table's underlying storage pages and resets high-water marks.
+2. **Which sublanguage does `SELECT` belong to?**: In textbook classification, `SELECT` belongs to **DQL (Data Query Language)**, though some older university syllabi group it under DML.
+3. **Keyword Precedence**: SQL execution order is **NOT** the same as written syntax order! Written order starts with `SELECT`, but the engine executes `FROM` and `WHERE` first.
+
+---
+
+## 5. Mythos Mentorship Bridge
+
+Master production SQL query design, migration tools, and query plan profiling in the **[MYTHOS Live Weekend Cohort](/register?source=library_sql_intro_syntax)**.
+"""
+
+        elif slug == "sql-create-drop-database":
+            return """
+## 1. Academic Definition & Objectives
+
+In SQL systems, a **Database** (or **Catalog**) is a named namespace container that encapsulates tables, views, stored routines, indexes, and user permissions.
+
+DDL database management commands initialize, configure, and destroy these database catalog namespaces:
+* `CREATE DATABASE`: Allocates a new physical directory and catalog registry on the storage engine.
+* `DROP DATABASE`: Deletes the database catalog and permanently unlinks all underlying data files, tables, and indexes from disk.
+* `USE`: Sets the active working database context for subsequent queries in the current session.
+
+Key Competencies:
+* Idempotency with `IF NOT EXISTS` and `IF EXISTS`.
+* Character sets (`utf8mb4`) and collation sequences (`utf8mb4_unicode_ci`).
+* Server privilege requirements (`CREATE` and `DROP` privileges).
+
+---
+
+## 2. Core Concepts & Implementation Blueprint
+
+```sql
+-- ==============================================================================
+-- 1. CREATING DATABASES IDEMPOTENTLY WITH CHARACTER SETS
+-- ==============================================================================
+
+-- Create database only if it does not already exist
+-- utf8mb4 supports full 4-byte UTF-8, including emojis and international characters
+CREATE DATABASE IF NOT EXISTS mythos_academy
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_unicode_ci;
+
+-- View all databases on the database instance
+SHOW DATABASES;
+
+-- Switch session context to the new database
+USE mythos_academy;
+
+-- Inspect currently selected database
+SELECT DATABASE();
+
+-- ==============================================================================
+-- 2. DROPPING DATABASES SAFELY
+-- ==============================================================================
+
+-- Dropping a database permanently removes all contained tables and data
+DROP DATABASE IF EXISTS test_staging_db;
+```
+
+---
+
+## 3. The Production Reality ("What Textbooks Skip")
+
+* **The Disaster of `DROP DATABASE`**: In production environments, running `DROP DATABASE` is instantaneous and unrecoverable without restoring Point-In-Time Backups (PITR) from WAL logs. Production application database users must **never** have the `DROP` privilege granted to their service credentials.
+* **Character Set Trap (`utf8` vs `utf8mb4`)**: In MySQL, the legacy `utf8` character set only supports up to 3 bytes per character. Inserting a 4-byte character (such as an emoji 🚀 or certain Asian language glyphs) will cause queries to crash with `Incorrect string value`. Always specify `utf8mb4`.
+* **Collation and Sorting**: Collation defines how strings are compared and sorted. `utf8mb4_bin` performs exact binary comparisons (case-sensitive), whereas `utf8mb4_unicode_ci` performs case-insensitive comparisons where `'admin'` equals `'Admin'`.
+
+> [!WARNING]
+> **Production Gotcha**: Cloud databases (like AWS RDS, Azure Database, Render PostgreSQL) do not allow running `CREATE DATABASE` from ordinary user accounts. The database is provisioned through cloud console or Terraform blueprints.
+
+---
+
+## 4. Exam & Technical Interview Gotchas
+
+1. **What happens to active client connections when `DROP DATABASE` executes?**: In PostgreSQL and MySQL, if clients are connected to the target database, dropping it will either fail with `database is being accessed by other users` or forcibly sever all active TCP sockets.
+2. **Database vs Schema in PostgreSQL vs MySQL**:
+   - In **MySQL**, `DATABASE` and `SCHEMA` are exact synonyms (`CREATE SCHEMA` is identical to `CREATE DATABASE`).
+   - In **PostgreSQL**, a single Database can contain multiple isolated `Schemas` (namespaces), commonly defaulting to the `public` schema.
+3. **`SHOW DATABASES` Permission Filtering**: Non-superuser accounts only see databases they have explicit privileges to access.
+
+---
+
+## 5. Mythos Mentorship Bridge
+
+Learn to provision secure cloud databases, configure replication clusters, and automate backups in the **[MYTHOS Live Weekend Cohort](/register?source=library_sql_create_drop_database)**.
+"""
+
+        elif slug == "sql-create-drop-table":
+            return """
+## 1. Academic Definition & Objectives
+
+The `CREATE TABLE` statement is the core DDL command used to establish a new relation in the active database. It declares the table name, its constituent attributes (columns), their data types, default values, and column/table-level integrity constraints.
+
+`DROP TABLE` destroys the table definition and all row data stored within it, removing the catalog metadata entry.
+
+Key Competencies:
+* Fundamental SQL Data Types:
+  - Exact Numerics: `INT`, `BIGINT`, `SMALLINT`, `DECIMAL(precision, scale)`
+  - Strings: `VARCHAR(length)`, `CHAR(length)`, `TEXT`
+  - Dates & Times: `DATE`, `TIME`, `TIMESTAMP`, `DATETIME`
+  - Booleans: `BOOLEAN`
+* Idempotent operations: `CREATE TABLE IF NOT EXISTS` and `DROP TABLE IF EXISTS`.
+* Defining Primary Keys and column constraints inline.
+
+---
+
+## 2. Core Concepts & Implementation Blueprint
+
+```sql
+-- ==============================================================================
+-- 1. COMPLETE PRODUCTION DDL TABLE SCHEMA
+-- ==============================================================================
+
+CREATE TABLE IF NOT EXISTS students (
+    student_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(150) NULL UNIQUE,
+    phone VARCHAR(20) NOT NULL,
+    enrollment_fee DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    status VARCHAR(20) NOT NULL DEFAULT 'active',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- ==============================================================================
+-- 2. VIEWING TABLE STRUCTURE
+-- ==============================================================================
+
+-- In MySQL: Inspect column data types, keys, and nullability
+DESCRIBE students;
+
+-- In ANSI SQL: Query information_schema catalog
+SELECT column_name, data_type, is_nullable, column_default
+FROM information_schema.columns
+WHERE table_name = 'students';
+
+-- ==============================================================================
+-- 3. DROPPING TABLES SAFELY
+-- ==============================================================================
+
+-- Permanently drop the table if it exists
+DROP TABLE IF EXISTS temp_student_imports;
+```
+
+---
+
+## 3. The Production Reality ("What Textbooks Skip")
+
+* **`DECIMAL` vs `FLOAT`**: Textbooks often use `FLOAT` or `DOUBLE` for financial data. In production, this causes catastrophic floating-point rounding errors (e.g. `0.1 + 0.2 = 0.30000000000000004`). Always use `DECIMAL(precision, scale)` (such as `DECIMAL(12, 2)`) for money and transactions to ensure exact mathematical precision.
+* **`BIGINT` vs `INT` for Primary Keys**: A standard 4-byte signed `INT` tops out at 2,147,483,647 (2.14 billion rows). Fast-growing systems (events, clickstreams, audit logs) that use `INT` for primary keys will crash when IDs overflow. Always declare auto-increment IDs as `BIGINT` (8 bytes, up to 9 quintillion).
+* **`VARCHAR(255)` Myth**: Many tutorials blindly set every string to `VARCHAR(255)`. In modern databases (like MySQL InnoDB and PostgreSQL), `VARCHAR(n)` only consumes storage for the actual characters stored plus 1 or 2 bytes of length prefix. However, setting overly large column widths causes in-memory temporary tables to allocate excessive RAM during sorts.
+
+> [!WARNING]
+> **Production Gotcha**: Dropping a table that is referenced by a Foreign Key in another table will be blocked with a foreign key constraint violation error. You must either drop the referencing child table first or drop the foreign key constraint.
+
+---
+
+## 4. Exam & Technical Interview Gotchas
+
+1. **`CHAR` vs `VARCHAR`**:
+   - `CHAR(n)` is fixed-length: values shorter than n are right-padded with spaces. Ideal for fixed-length codes (e.g. `country_code CHAR(2)`, SHA-256 hashes `CHAR(64)`).
+   - `VARCHAR(n)` is variable-length: stores only the actual characters + 1-2 length bytes.
+2. **`DROP TABLE` vs `TRUNCATE TABLE` vs `DELETE FROM`**:
+   - `DROP TABLE`: Removes table definition + all data + indexes + triggers from the catalog.
+   - `TRUNCATE TABLE`: Retains table definition and structure, but wipes all rows by deallocating storage pages. Resets auto-increment IDs.
+   - `DELETE FROM`: DML row-by-row removal; logs individual row deletions and can be rolled back.
+3. **`TIMESTAMP` vs `DATETIME`**:
+   - `TIMESTAMP`: Stored as UTC seconds since Unix Epoch (1970); converts automatically to session timezone on retrieval. Maximum year: 2038 (on 32-bit representations).
+   - `DATETIME`: Stores raw date and time as written, independent of server timezone.
+
+---
+
+## 5. Mythos Mentorship Bridge
+
+Learn production schema design, data modeling, and automated database migration pipelines in the **[MYTHOS Live Weekend Cohort](/register?source=library_sql_create_drop_table)**.
+"""
+
+        elif slug == "sql-alter-truncate-table":
+            return """
+## 1. Academic Definition & Objectives
+
+As software applications evolve, database structures must adapt without destroying existing historical data. The `ALTER TABLE` DDL statement provides mechanisms to modify the schema of an existing relation.
+
+Core operations include:
+* Adding new columns (`ADD COLUMN`).
+* Removing obsolete columns (`DROP COLUMN`).
+* Changing column data types or constraints (`MODIFY / ALTER COLUMN`).
+* Renaming columns or tables (`RENAME`).
+* Wiping all data rows while keeping schema intact (`TRUNCATE TABLE`).
+
+---
+
+## 2. Core Concepts & Implementation Blueprint
+
+```sql
+-- ==============================================================================
+-- 1. EVOLVING EXISTING TABLE SCHEMAS WITH ALTER TABLE
+-- ==============================================================================
+
+-- Add a new column with default value
+ALTER TABLE students 
+ADD COLUMN linkedin_profile VARCHAR(255) NULL;
+
+-- Modify existing column data type (expanding width)
+ALTER TABLE students 
+MODIFY COLUMN phone VARCHAR(30) NOT NULL;
+
+-- Drop an unwanted column
+ALTER TABLE students 
+DROP COLUMN status;
+
+-- Add a new index for faster lookups
+ALTER TABLE students 
+ADD INDEX idx_students_phone (phone);
+
+-- ==============================================================================
+-- 2. TRUNCATE TABLE: INSTANT ROW PURGING
+-- ==============================================================================
+
+-- Truncate resets the table to zero rows while preserving structure
+TRUNCATE TABLE temp_student_imports;
+```
+
+---
+
+## 3. The Production Reality ("What Textbooks Skip")
+
+* **Exclusive Metadata Table Locks**: In production databases with millions of rows, running `ALTER TABLE students ADD COLUMN ...` can acquire an exclusive table lock (`AccessExclusiveLock` in PostgreSQL or `Metadata Lock` in MySQL). While locked, all incoming `SELECT`, `INSERT`, and `UPDATE` queries queue up and timeout, causing a total application outage!
+* **Online DDL Tools**: High-traffic systems use online schema migration tools like `gh-ost` (GitHub's Online Schema Transmogrifier) or `pt-online-schema-change` which create ghost tables, mirror live writes via binlogs/triggers, and swap tables in milliseconds without locking.
+* **Why `TRUNCATE` is O(1) Lightning Fast**: `DELETE FROM table;` reads each row individually, writes undo/redo log records, and updates index trees (O(N) operations). `TRUNCATE TABLE` bypasses row scanning and simply deallocates the underlying data extents and pages on disk, returning in milliseconds regardless of table size.
+
+> [!WARNING]
+> **Production Gotcha**: In MySQL, `TRUNCATE` cannot be rolled back even inside a `START TRANSACTION` block because DDL statements issue an implicit commit! In PostgreSQL, `TRUNCATE` is transaction-safe and can be rolled back.
+
+---
+
+## 4. Exam & Technical Interview Gotchas
+
+1. **The Classic 3-Way Comparison Table (Memorize for Viva & Written Exams)**:
+
+| Feature | `DELETE` | `TRUNCATE` | `DROP` |
+| :--- | :--- | :--- | :--- |
+| **Category** | DML | DDL | DDL |
+| **`WHERE` Clause?** | Yes (optional) | No (all rows wiped) | No |
+| **Performance** | Slow (O(N) row-by-row) | Fast (O(1) page wipe) | Instantaneous |
+| **Rollback in Txn** | Yes (all engines) | Engine-dependent | Engine-dependent |
+| **Auto-Increment** | Preserved | Reset to seed (1) | Destroyed |
+| **Table Structure** | Remains | Remains | Destroyed |
+| **Fires Triggers?** | Yes (`BEFORE/AFTER DELETE`) | No | No |
+
+2. **Dropping Column Constraints**: You cannot simply drop a column if a foreign key or index depends on it; you must drop the foreign key constraint first.
+
+---
+
+## 5. Mythos Mentorship Bridge
+
+Learn zero-downtime database migration strategies used by high-scale tech firms in the **[MYTHOS Live Weekend Cohort](/register?source=library_sql_alter_truncate_table)**.
+"""
+
+        elif slug == "sql-select-distinct":
+            return """
+## 1. Academic Definition & Objectives
+
+The `SELECT` statement implements the fundamental relational algebra **Projection Operator**, extracting specified attributes from a relation.
+
+`SELECT DISTINCT` applies deduplication on the projected tuple set, returning only unique combinations of values.
+
+Key Competencies:
+* Projecting specific columns vs wildcard (`SELECT *`).
+* Calculating derived expressions and constants.
+* Applying column aliases (`AS`).
+* Deduplicating rows with `DISTINCT`.
+
+---
+
+## 2. Core Concepts & Implementation Blueprint
+
+```sql
+-- ==============================================================================
+-- 1. RELATIONAL PROJECTION (SELECT)
+-- ==============================================================================
+
+-- Explicit projection: Only retrieve the attributes needed by your application
+SELECT 
+    student_id, 
+    first_name, 
+    last_name, 
+    email 
+FROM students;
+
+-- Calculated columns with aliases
+SELECT 
+    first_name,
+    last_name,
+    enrollment_fee,
+    enrollment_fee * 0.18 AS gst_tax_amount,
+    enrollment_fee * 1.18 AS total_payable
+FROM students;
+
+-- ==============================================================================
+-- 2. DEDUPLICATION (SELECT DISTINCT)
+-- ==============================================================================
+
+-- Get unique cities where our enrolled students live
+SELECT DISTINCT city 
+FROM students;
+
+-- DISTINCT across multiple columns: evaluates uniqueness on the combination
+SELECT DISTINCT track, status 
+FROM courses;
+```
+
+---
+
+## 3. The Production Reality ("What Textbooks Skip")
+
+* **The Anti-Pattern of `SELECT *`**: Never write `SELECT *` in production backend code:
+  1. **Network Overhead**: Transmits unused columns (like heavy JSON, TEXT, or audit metadata) over the network.
+  2. **Breaks Index-Only Covering Scans**: An index containing `(status, email)` can answer `SELECT email FROM users WHERE status = 'active'` entirely from RAM cache. Using `SELECT *` forces the engine to perform expensive disk lookups for every matching row.
+  3. **Fragile Schemas**: Adding a column to a table alters the tuple layout and breaks positional API deserializers.
+* **Cost of `DISTINCT`**: To evaluate `DISTINCT`, the database engine must sort the result set in memory or build an in-memory hash table. On large result sets, this causes heavy CPU spikes and spills temporary sort runs to disk (`temporary tables on disk`).
+
+> [!NOTE]
+> **Production Tip**: If you find yourself writing `SELECT DISTINCT` to fix duplicate rows in a query with multiple `JOIN`s, your join predicate is probably missing a key condition! Fix the join condition instead of masking it with `DISTINCT`.
+
+---
+
+## 4. Exam & Technical Interview Gotchas
+
+1. **How does `DISTINCT` handle `NULL` values?**: In SQL standard, all `NULL` values are treated as duplicate entries under `DISTINCT`. If a column contains 10 rows with `NULL`, `SELECT DISTINCT` returns exactly one `NULL` row.
+2. **`DISTINCT` Scope**: Many junior developers mistakenly think `SELECT DISTINCT col1, col2` only deduplicates `col1`. In SQL, `DISTINCT` applies to the **entire row tuple** `(col1, col2)` combined!
+3. **Execution Order**: `SELECT` is evaluated **after** `FROM`, `WHERE`, `GROUP BY`, and `HAVING`, but **before** `ORDER BY` and `LIMIT`.
+
+---
+
+## 5. Mythos Mentorship Bridge
+
+Learn to write high-efficiency, index-friendly analytical SQL queries in the **[MYTHOS Live Weekend Cohort](/register?source=library_sql_select_distinct)**.
+"""
+
+        elif slug == "sql-where-clause":
+            return """
+## 1. Academic Definition & Objectives
+
+The `WHERE` clause implements the relational algebra **Selection Operator**, filtering tuples from a relation based on a specified boolean predicate. Only tuples for which the predicate evaluates to `TRUE` are returned.
+
+Key Competencies:
+* Comparison operators: `=`, `<>`, `!=`, `>`, `<`, `>=`, `<=`.
+* Text string comparisons (enclosed in single quotes `'value'`) vs numerical comparisons.
+* Date filtering syntax.
+* Understanding SQL's Three-Valued Logic (TRUE, FALSE, UNKNOWN).
+
+---
+
+## 2. Core Concepts & Implementation Blueprint
+
+```sql
+-- ==============================================================================
+-- 1. BASIC RELATIONAL SELECTION
+-- ==============================================================================
+
+-- Equality on strings (case-insensitive in default MySQL collations)
+SELECT student_id, first_name, email
+FROM students
+WHERE status = 'enrolled';
+
+-- Numerical comparison
+SELECT student_id, first_name, enrollment_fee
+FROM students
+WHERE enrollment_fee >= 5000.00;
+
+-- Inequality operators (<> is standard ANSI; != is also supported)
+SELECT course_id, course_name, track
+FROM courses
+WHERE track <> 'Archived';
+
+-- Date comparisons (Standard ISO format: YYYY-MM-DD)
+SELECT student_id, full_name, created_at
+FROM students
+WHERE created_at >= '2026-01-01';
+```
+
+---
+
+## 3. The Production Reality ("What Textbooks Skip")
+
+* **SARGable Queries (Search Argument Able)**: For a database engine to use an index on a column, the query must be **SARGable**. Wrapping a column inside a function prevents index usage and triggers catastrophic full table scans:
+  ```sql
+  -- BAD (Non-SARGable): Disables index on created_at, scans 5 million rows!
+  SELECT * FROM orders WHERE YEAR(created_at) = 2026;
+
+  -- GOOD (SARGable): High-speed B-Tree index range scan!
+  SELECT * FROM orders 
+  WHERE created_at >= '2026-01-01' AND created_at < '2027-01-01';
+  ```
+* **Implicit Type Coercion Trap**: If `phone` is defined as `VARCHAR(20)` and you query `WHERE phone = 9876543210` (as an integer without quotes), MySQL implicitly converts every single stored string to an integer before comparing, causing a full table scan and ignoring the index! Always quote string parameters: `WHERE phone = '9876543210'`.
+
+> [!WARNING]
+> **Production Gotcha**: Never test for NULL values with `= NULL` (e.g. `WHERE email = NULL`). In SQL, comparing anything to NULL using `=` evaluates to `UNKNOWN` (falsy), returning zero rows. You must strictly use `IS NULL` or `IS NOT NULL`.
+
+---
+
+## 4. Exam & Technical Interview Gotchas
+
+1. **Standard Inequality Operator**: While `!=` is widely supported, `<>` is the official ISO/ANSI SQL standard operator for inequality.
+2. **Three-Valued Logic**: In SQL, conditional predicates evaluate to one of three states:
+   - `TRUE` (included in result)
+   - `FALSE` (excluded)
+   - `UNKNOWN` (excluded)
+3. **Execution Order**: `WHERE` filters rows **before** any grouping or aggregation takes place. You cannot use aggregate functions (`SUM`, `AVG`, `COUNT`) inside a `WHERE` clause.
+
+---
+
+## 5. Mythos Mentorship Bridge
+
+Learn query execution planning and indexing strategies in the **[MYTHOS Live Weekend Cohort](/register?source=library_sql_where_clause)**.
+"""
+
+        elif slug == "sql-insert-into":
+            return """
+## 1. Academic Definition & Objectives
+
+The `INSERT INTO` statement is the primary DML command used to add new tuples (rows) into an existing database table.
+
+Syntactic variations include:
+* Inserting with explicit column declarations (recommended standard).
+* Inserting into all table columns positionally.
+* Batch inserting multiple rows in a single atomic SQL statement.
+* Inserting the result of a subquery (`INSERT INTO ... SELECT`).
+
+---
+
+## 2. Core Concepts & Implementation Blueprint
+
+```sql
+-- ==============================================================================
+-- 1. EXPLICIT COLUMN INSERTION (PRODUCTION BEST PRACTICE)
+-- ==============================================================================
+
+-- Explicitly naming columns protects your code if table schema changes later
+INSERT INTO students (first_name, last_name, email, phone, status)
+VALUES ('Vikram', 'Malhotra', 'vikram@example.com', '9811223344', 'new');
+
+-- ==============================================================================
+-- 2. BULK MULTI-ROW INSERTION
+-- ==============================================================================
+
+-- Inserting multiple records in a single round-trip is 50x faster than single inserts
+INSERT INTO courses (course_id, course_name, track)
+VALUES 
+    (10, 'Advanced SQL Query Tuning', 'Data Analytics'),
+    (11, 'Meta Ads Manager Scaling', 'Digital Marketing'),
+    (12, 'Power BI DAX Architectures', 'Data Analytics');
+
+-- ==============================================================================
+-- 3. INSERTING INTO ... SELECT
+-- ==============================================================================
+
+-- Copying data from a staging table into production
+INSERT INTO alumni_archive (student_id, full_name, completion_date)
+SELECT student_id, CONCAT(first_name, ' ', last_name), CURRENT_DATE
+FROM students
+WHERE status = 'graduated';
+```
+
+---
+
+## 3. The Production Reality ("What Textbooks Skip")
+
+* **The Round-Trip Latency Penalty**: Executing 1,000 separate `INSERT INTO ...` statements inside an application `for` loop incurs 1,000 network round-trips and 1,000 separate disk sync operations (fsync). Combining them into one batch insert (`INSERT INTO ... VALUES (...), (...), (...)`) or wrapping them in a single transaction (`BEGIN ... COMMIT`) reduces execution time from 30 seconds to 100 milliseconds.
+* **Idempotent Inserts / Upserts**: In production APIs, duplicate webhook deliveries or retried requests will fail with `Duplicate entry '...' for key 'PRIMARY'`. Modern databases provide Upsert patterns:
+  - MySQL: `INSERT INTO ... ON DUPLICATE KEY UPDATE updated_at = NOW();`
+  - PostgreSQL / SQLite: `INSERT INTO ... ON CONFLICT (id) DO UPDATE SET ...;`
+
+> [!NOTE]
+> **Production Tip**: For multi-million row data ingestion, bypass standard SQL `INSERT` statements entirely and use native bulk loaders like MySQL's `LOAD DATA INFILE` or PostgreSQL's `COPY` command.
+
+---
+
+## 4. Exam & Technical Interview Gotchas
+
+1. **Default Column Values**: If an inserted row omits a column:
+   - If the column has a `DEFAULT` or allows `NULL`, the database populates it automatically.
+   - If the column is `NOT NULL` without a default value, the database raises an error (`Field 'phone' doesn't have a default value`).
+2. **Retrieving the Auto-Generated Key**: How do you know what ID was assigned to an auto-increment column?
+   - MySQL: `SELECT LAST_INSERT_ID();`
+   - PostgreSQL: Append `RETURNING student_id;` to the `INSERT` statement.
+3. **Transaction Rollback on Failed Batch**: If row 95 of a 100-row bulk insert violates a constraint, the entire statement fails and none of the 100 rows are inserted.
+
+---
+
+## 5. Mythos Mentorship Bridge
+
+Learn high-speed data ingestion and ETL pipeline architecture in the **[MYTHOS Live Weekend Cohort](/register?source=library_sql_insert_into)**.
+"""
+
+        elif slug == "sql-update":
+            return """
+## 1. Academic Definition & Objectives
+
+The `UPDATE` statement is the DML command used to mutate one or more existing records within a table. It modifies column values based on conditions specified in an optional `WHERE` clause.
+
+Key Competencies:
+* Updating single or multiple columns in a single statement.
+* The critical importance of the `WHERE` clause.
+* Performing arithmetic updates (e.g. `salary = salary * 1.10`).
+* Safe update modes in database servers.
+
+---
+
+## 2. Core Concepts & Implementation Blueprint
+
+```sql
+-- ==============================================================================
+-- 1. TARGETED RECORD UPDATES
+-- ==============================================================================
+
+-- Update single column for a specific student
+UPDATE students 
+SET status = 'enrolled'
+WHERE student_id = 101;
+
+-- Update multiple columns simultaneously
+UPDATE students
+SET 
+    email = 'priya.new@example.com',
+    phone = '9876500000',
+    updated_at = CURRENT_TIMESTAMP
+WHERE student_id = 102;
+
+-- ==============================================================================
+-- 2. COMPUTED ARITHMETIC UPDATES
+-- ==============================================================================
+
+-- Give a 10% fee discount to all students in the weekend batch
+UPDATE students
+SET enrollment_fee = enrollment_fee * 0.90
+WHERE status = 'early_bird';
+```
+
+---
+
+## 3. The Production Reality ("What Textbooks Skip")
+
+* **The Nightmare of `UPDATE` Without `WHERE`**: Omitting the `WHERE` clause will update **every single row** in the table! In production, this can accidentally overwrite all user emails or set all bank balances to zero.
+* **MySQL Safe Updates (`SQL_SAFE_UPDATES`)**: Production databases and workbench clients enable safe update mode:
+  ```sql
+  SET SQL_SAFE_UPDATES = 1;
+  ```
+  In this mode, any `UPDATE` or `DELETE` that does not use a key column (like a `PRIMARY KEY`) in its `WHERE` clause is blocked with `Error Code: 1175. You are using safe update mode...`.
+* **Atomic Transactions**: In mission-critical systems, always wrap manual updates in transactions so you can inspect the affected row count before making changes permanent:
+  ```sql
+  START TRANSACTION;
+  UPDATE accounts SET balance = balance - 500 WHERE account_id = 42;
+  -- Verify affected row count and balance:
+  SELECT balance FROM accounts WHERE account_id = 42;
+  -- If correct: COMMIT; Otherwise: ROLLBACK;
+  ```
+
+> [!WARNING]
+> **Production Gotcha**: An `UPDATE` query acquires exclusive row-level locks on all matching rows. If two transactions update the same rows in opposite orders (Txn 1 updates A then B; Txn 2 updates B then A), a **Deadlock** occurs and the database aborts one transaction.
+
+---
+
+## 4. Exam & Technical Interview Gotchas
+
+1. **Affected Rows vs Found Rows**: In MySQL, if an `UPDATE` query matches a row where the new value is identical to the current value, MySQL reports `Rows matched: 1  Changed: 0`.
+2. **What if condition matches zero rows?**: The query succeeds with `Query OK, 0 rows affected`. It does NOT raise an error.
+3. **Updating with a Subquery**: You can update values based on calculations from another table:
+   ```sql
+   UPDATE employees e
+   SET e.department_name = (SELECT d.name FROM departments d WHERE d.id = e.dept_id)
+   WHERE e.dept_id IS NOT NULL;
+   ```
+
+---
+
+## 5. Mythos Mentorship Bridge
+
+Master transaction management, concurrency locks, and enterprise database safeguards in the **[MYTHOS Live Weekend Cohort](/register?source=library_sql_update)**.
+"""
+
+        elif slug == "sql-delete":
+            return """
+## 1. Academic Definition & Objectives
+
+The `DELETE` statement is the DML command used to remove existing rows (tuples) from a table based on conditions specified in an optional `WHERE` clause.
+
+Key Competencies:
+* Removing specific rows matching a predicate.
+* Removing all rows vs `TRUNCATE TABLE`.
+* Referential integrity and `CASCADE DELETE` actions.
+* Soft deletion vs Hard physical deletion patterns.
+
+---
+
+## 2. Core Concepts & Implementation Blueprint
+
+```sql
+-- ==============================================================================
+-- 1. TARGETED ROW DELETION
+-- ==============================================================================
+
+-- Delete a specific record by primary key
+DELETE FROM students 
+WHERE student_id = 999;
+
+-- Delete records matching conditional criteria
+DELETE FROM students
+WHERE status = 'unverified' AND created_at < '2025-01-01';
+
+-- ==============================================================================
+-- 2. DELETING ALL ROWS (DML)
+-- ==============================================================================
+
+-- Wipes all rows while logging each deletion in transaction log
+DELETE FROM temp_logs;
+```
+
+---
+
+## 3. The Production Reality ("What Textbooks Skip")
+
+* **The Soft Delete Pattern**: In enterprise applications (financial services, SaaS platforms, healthcare), data is **almost never physically deleted** with `DELETE FROM`. Instead, companies use **Soft Deletion**:
+  ```sql
+  -- Add a deleted_at timestamp column
+  ALTER TABLE users ADD COLUMN deleted_at TIMESTAMP NULL;
+
+  -- "Delete" a user by marking the timestamp
+  UPDATE users SET deleted_at = CURRENT_TIMESTAMP WHERE user_id = 42;
+
+  -- Active query filter
+  SELECT * FROM users WHERE deleted_at IS NULL;
+  ```
+  Soft deletion preserves audit trails, allows 1-click user recovery, and prevents foreign key cascading deletions from corrupting historical invoices.
+* **Table Bloat in MVCC Databases**: In PostgreSQL, running `DELETE FROM large_table` does not free disk space back to the operating system! It marks dead tuples in data blocks that must later be cleaned up by the `VACUUM` process.
+
+> [!WARNING]
+> **Production Gotcha**: If a parent table has `ON DELETE CASCADE` configured on its foreign keys, deleting a single record from the parent table can silently wipe thousands of child records across connected tables. Always check table constraint definitions before executing deletions.
+
+---
+
+## 4. Exam & Technical Interview Gotchas
+
+1. **`DELETE` vs `TRUNCATE` (High-Frequency Exam Question)**:
+   - `DELETE` is a DML statement that can filter rows with `WHERE`, activates `DELETE` triggers, and logs every row removal.
+   - `TRUNCATE` is a DDL statement that deallocates storage pages, does not accept a `WHERE` clause, does not fire triggers, and resets auto-increment sequences.
+2. **Can you rollback a `DELETE`?**: Yes! A `DELETE` statement executed inside an active transaction (`START TRANSACTION; DELETE FROM ...; ROLLBACK;`) can be completely undone.
+3. **Foreign Key Restraints**: If child rows reference a parent row with `ON DELETE RESTRICT` (the default), deleting the parent row will fail with a foreign key violation error.
+
+---
+
+## 5. Mythos Mentorship Bridge
+
+Learn database disaster recovery, audit log architecture, and high-concurrency data engineering in the **[MYTHOS Live Weekend Cohort](/register?source=library_sql_delete)**.
+"""
 
     return None
+
 
 
 def _generate_topic_outline_document(subject: str, slug: str, topic_meta: Dict[str, Any]) -> ParsedDocument:
@@ -1672,14 +2542,10 @@ def get_subject_grouped_by_category(
     return grouped
 
 
-def get_adjacent_topics(
-    subject: str, current_slug: str, vertical: Optional[str] = None
+def get_adjacent_topics_from_list(
+    docs: List[DocumentMetadata], current_slug: str
 ) -> tuple[Optional[DocumentMetadata], Optional[DocumentMetadata]]:
-    """
-    Finds the adjacent previous and next topics in curriculum order.
-    Returns (prev_topic, next_topic).
-    """
-    docs = list_documents_for_subject(subject, vertical)
+    """Finds previous and next topics within an explicit list of documents."""
     if not docs:
         return None, None
 
@@ -1690,6 +2556,17 @@ def get_adjacent_topics(
             return prev_doc, next_doc
 
     return None, None
+
+
+def get_adjacent_topics(
+    subject: str, current_slug: str, vertical: Optional[str] = None
+) -> tuple[Optional[DocumentMetadata], Optional[DocumentMetadata]]:
+    """
+    Finds the adjacent previous and next topics in curriculum order.
+    Returns (prev_topic, next_topic).
+    """
+    docs = list_documents_for_subject(subject, vertical)
+    return get_adjacent_topics_from_list(docs, current_slug)
 
 
 def get_subject_videos(subject: str) -> List[Dict[str, Any]]:

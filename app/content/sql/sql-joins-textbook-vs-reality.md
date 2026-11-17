@@ -3,8 +3,8 @@ title: "SQL Joins: What Textbooks Teach vs. How Production Databases Actually Wo
 slug: "sql-joins-textbook-vs-reality"
 subject: "sql"
 vertical: "notes"
-category: "Relational Database Internals"
-order: 1
+category: "SQL Joins"
+order: 28
 tier: "free"
 price_inr: 0
 reading_time: "8 min read"
