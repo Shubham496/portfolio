@@ -1,7 +1,12 @@
 # Platform Changelog & Implementation History
 
-All notable changes, updates, feature implementations, and bug fixes for the **MYTHOS Online Institute Platform** are documented in this file.
-This serves as an audit trail and system log (similar to GitHub releases/commit logs) for developers, agents, and maintainers to immediately check what is already built, configured, and verified.
+> [!NOTE]
+> **Documentation System Notice**:
+> Development history for this repository is now actively maintained under a scalable 2-tier system:
+> 1. **[`Changeslog.md`](file:///f:/Projects/coding/Changeslog.md)**: Strictly the latest 15 meaningful development entries with standardized metadata.
+> 2. **[`CHANGELOG_ARCHIVE.md`](file:///f:/Projects/coding/CHANGELOG_ARCHIVE.md)**: Historical changelog records organized chronologically by Year and Month.
+> 
+> This legacy file is preserved for historical backwards compatibility.
 
 ---
 

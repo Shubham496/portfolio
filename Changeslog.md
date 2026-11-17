@@ -1,0 +1,161 @@
+# Recent Development History (Changeslog.md)
+
+This file contains the **latest 15 meaningful development entries** for the **MYTHOS Online Institute** platform.
+Historical records prior to these entries are archived in [`CHANGELOG_ARCHIVE.md`](file:///f:/Projects/coding/CHANGELOG_ARCHIVE.md).
+
+---
+
+## [Entry 15] - 2026-11-18 (Phase 1.7: W3Schools Sequential SQL Study Track & Topic Progression)
+- **Feature Added / Modified**: Re-architected `/library/sql` into a 38-topic sequential study track across 11 categories mirroring W3Schools MySQL/SQL standards; added `< Previous Topic` and `Next Topic >` sequential navigation; isolated viva interview question banks into the dedicated Interview Questions tab (`?tab=interview_questions`).
+- **Files Affected**: `app/apps/library/router.py`, `app/apps/library/services.py`, `app/content/sql/sql-joins-textbook-vs-reality.md`, `tests/test_library.py`.
+- **Important API Changes**: Added `get_adjacent_topics_from_list()` in `app/apps/library/services.py`; updated `/library/{subject}` route handling.
+- **Database / Schema Changes**: None.
+- **Bugs Fixed**: Prevented standalone viva question banks from polluting the step-by-step SQL tutorial progression.
+- **Breaking Changes**: None.
+
+---
+
+## [Entry 14] - 2026-11-18 (Phase 1.6: W3Schools Panel Architecture, Hierarchical Topic Sidebar & Sequential Navigation)
+- **Feature Added / Modified**: Transformed `/library/{subject}` into a 4-panel workspace (All Topics, Notes, Interview Questions, Video Lectures); implemented a left hierarchical topic sidebar with instant topic switching; authored Python foundational blueprints.
+- **Files Affected**: `app/apps/library/router.py`, `app/apps/library/services.py`, `app/templates/library/reader.html`, `app/templates/library/subject_hub.html`, `tests/test_library.py`.
+- **Important API Changes**: Implemented `get_adjacent_topics(subject, slug)`; added `?tab=` query parameter routing on subject hubs.
+- **Database / Schema Changes**: None.
+- **Bugs Fixed**: None.
+- **Breaking Changes**: None.
+
+---
+
+## [Entry 13] - 2026-11-18 (Phase 1.5: 34 Major Languages & Tools Catalog, Topic Curricula & Navigation Polish)
+- **Feature Added / Modified**: Expanded resource catalog to index 34 major programming languages, databases, data tools, frameworks, and cloud platforms; dynamically synthesized 5-part blueprint guides with Table of Contents; added minimalist icon grid with category filter tabs; added universal left in-page navigator rail (`in_page_nav.html`).
+- **Files Affected**: `app/apps/library/services.py`, `app/templates/library/index.html`, `app/templates/library/reader.html`, `app/templates/library/subject_hub.html`, `app/templates/partials/navbar.html`, `app/templates/partials/in_page_nav.html`, `tests/test_library.py`.
+- **Important API Changes**: Synthesized 5-part curriculum generator in `app/apps/library/services.py`.
+- **Database / Schema Changes**: None.
+- **Bugs Fixed**: Eliminated 404 errors for topics under active curation.
+- **Breaking Changes**: None.
+
+---
+
+## [Entry 12] - 2026-11-18 (Phase 1: Core Library Engine, Base Routing & Technical Docs UI Completed)
+- **Feature Added / Modified**: Implemented core Knowledge Engine; Markdown parser with PyMdown extensions (admonitions, code highlight, tables); in-memory LRU/TTL caching with file mtime invalidation; 3-column docs reader layout (`reader.html`).
+- **Files Affected**: `requirements.txt`, `app/apps/library/__init__.py`, `app/apps/library/router.py`, `app/apps/library/services.py`, `app/content/sql/sql-joins-textbook-vs-reality.md`, `app/main.py`, `app/static/css/style.css`, `app/templates/base.html`, `app/templates/library/index.html`, `app/templates/library/reader.html`, `app/templates/library/subject_hub.html`, `app/templates/partials/footer.html`, `app/templates/partials/navbar.html`, `tests/test_library.py`.
+- **Important API Changes**: Mounted `GET /library`, `GET /library/{subject}`, `GET /library/{subject}/notes/{slug}`, `GET /api/library/subjects`, `GET /api/library/{subject}/documents`.
+- **Database / Schema Changes**: Established YAML frontmatter schema (`title`, `slug`, `subject`, `vertical`, `tier`, `price_inr`, `tags`).
+- **Bugs Fixed**: None.
+- **Breaking Changes**: None.
+
+---
+
+## [Entry 11] - 2026-11-18 (Knowledge Engine Blueprint, Decoupled Assets Vault & Micro-Monetization Architecture)
+- **Feature Added / Modified**: Designed 5-phase educational platform roadmap (`docs/task_new.md`); established decoupled secondary asset vault (`external_assets/` linked to `https://github.com/Shubham496/mythos-assets`); formulated 4-tier micro-monetization ladder (free core notes, free student datasets, ₹10–₹49 micro-assets, unadvertised live cohorts).
+- **Files Affected**: `external_assets/`, `.gitignore`, `docs/task_new.md`, `docs/AGENT_GUIDE.md`.
+- **Important API Changes**: None.
+- **Database / Schema Changes**: None.
+- **Bugs Fixed**: Prevented Render.io container slug size and RAM bloat by isolating media/datasets from Git tracking.
+- **Breaking Changes**: None.
+
+---
+
+## [Entry 10] - 2026-11-15 (Transition to Multi-Course Online Educational Institute & Complete Removal of Payment Mentions)
+- **Feature Added / Modified**: Re-architected platform identity into MYTHOS Online Institute with multiple cohort offerings (Performance Marketing Track 1, SEO & Growth Track 2, Data Analysis & BI Track 3); completely removed defensive payment and fee disclaimers across all pages; added dynamic course track selection in enrollment forms and modals.
+- **Files Affected**: `app/templates/sections/mentor.html`, `app/templates/sections/modals.html`, `app/templates/sections/syllabus.html`, `app/templates/register.html`, `app/templates/confirmation.html`, `app/static/js/main.js`, `app/apps/courses/generate_syllabus_pdf.py`, `app/apps/courses/schemas.py`, `app/apps/courses/router.py`.
+- **Important API Changes**: Updated `POST /api/courses/register` and `POST /api/courses/enquiry` to accept `course_name` and `course_interest`.
+- **Database / Schema Changes**: Pydantic schemas updated for course selection.
+- **Bugs Fixed**: Eliminated awkward defensive payment disclaimers across templates.
+- **Breaking Changes**: None.
+
+---
+
+## [Entry 9] - 2026-11-12 (High-Definition Design Assets & Brand Master Overhaul)
+- **Feature Added / Modified**: Replaced pixelated assets with 1376x768 3D studio renders (illuminated circular neon podium, gradient 'M' ribbon sculpture); created zero-halo transparent icons (`mythos_icon_transparent.png`, `mythos_icon_2048.png`); built precision vector SVG emblem (`mythos_emblem.svg`); updated certificate generator to modern FPDF2 coordinates.
+- **Files Affected**: `design/assets/`, `app/static/Images/mythos/`, `design/certificate_generator_template.py`, `design/GUIDELINES.md`.
+- **Important API Changes**: Modernized `fpdf2` coordinate calls (`new_x`, `new_y`).
+- **Database / Schema Changes**: None.
+- **Bugs Fixed**: Eliminated alpha halo fringing; resolved FPDF2 deprecation warnings.
+- **Breaking Changes**: None.
+
+---
+
+## [Entry 8] - 2026-11-12 (Production Push Authority, Brand Anonymization, Paired Syllabus, Design System & Styled Brochure)
+- **Feature Added / Modified**: Codified immutable policy that ONLY the human platform owner can execute `git push`; replaced personal instructor photos with high-tech Mythos Data Systems Pipeline card; redesigned `#about` into Direct Admissions & Mentorship Desk; implemented paired laptop accordion expansion for curriculum modules ([1,2], [3,4], [5,6]); established `design/` repository; rebuilt 2-page syllabus PDF.
+- **Files Affected**: `docs/AGENT_GUIDE.md`, `app/templates/sections/syllabus.html`, `app/templates/sections/mentor.html`, `app/core/base_config.py`, `app/apps/courses/services.py`, `app/apps/courses/generate_syllabus_pdf.py`, `design/`.
+- **Important API Changes**: Updated `toggleSyllabus(index)` paired logic.
+- **Database / Schema Changes**: None.
+- **Bugs Fixed**: Mobile vs laptop syllabus expansion ergonomics.
+- **Breaking Changes**: None.
+
+---
+
+## [Entry 7] - 2026-11-12 (Frontend Architecture Modularization & Environment Template)
+- **Feature Added / Modified**: Decomposed monolithic 1,300-line `app/templates/index.html` into 10 maintainable Jinja2 section partials in `app/templates/sections/`; streamlined header navigation by removing redundant badges; created `.env.example` documenting all expected environment variables with safe dummy placeholders.
+- **Files Affected**: `app/templates/index.html`, `app/templates/sections/*.html`, `app/templates/partials/navbar.html`, `.env.example`, `docs/AGENT_GUIDE.md`.
+- **Important API Changes**: None.
+- **Database / Schema Changes**: None.
+- **Bugs Fixed**: Eliminated monolithic HTML maintenance issues with zero visual or UX regression.
+- **Breaking Changes**: None.
+
+---
+
+## [Entry 6] - 2026-11-12 (Security Hardening, Hero Card Redesign, WhatsApp Integration & Interactive Syllabus Fix)
+- **Feature Added / Modified**: Expunged plaintext passwords from all documentation and git history; provisioned high-entropy master password for `admin` in `.env`; created isolated `agent_admin` test profile (`agent@mythostech.in`) with `AGENT_PASSWORD` in `.env`; redesigned floating hero portrait card; integrated direct WhatsApp click-to-chat links (`wa.me/918727864157`).
+- **Files Affected**: `docs/AGENT_GUIDE.md`, `docs/USER_GUIDE.md`, `tests/test_courses.py`, `.env`, `app/templates/index.html`, `app/templates/partials/footer.html`, `app/templates/confirmation.html`, `app/static/js/main.js`, `app/static/pdf/Data_Analysis_Syllabus.pdf`.
+- **Important API Changes**: None.
+- **Database / Schema Changes**: Added `agent_admin` profile seeding in `app/apps/courses/services.py`.
+- **Bugs Fixed**: Resolved browser caching bug with syllabus accordion by inlining toggle logic and cache-busting `main.js?v=2.2`.
+- **Breaking Changes**: None.
+
+---
+
+## [Entry 5] - 2026-11-12 (Instructor Hero Showcase & Credibility Metric, Interactive Expandable Syllabus & Career Acceleration)
+- **Feature Added / Modified**: Embedded instructor photo in illuminated podium stage with floating "Students Trained: 550+" pulsing badge; added 4-card trust metric strip; converted static syllabus into interactive explorer with "Show More Details" and "Expand All / Collapse All"; detailed deep-dive competencies across Excel, SQL, Python, Power BI, and Tableau; introduced 4-pillar placement system (GitHub, ATS Resume, LinkedIn, Mock Interviews).
+- **Files Affected**: `app/templates/sections/hero.html`, `app/templates/sections/syllabus.html`, `app/templates/sections/career.html`, `app/apps/courses/generate_syllabus_pdf.py`.
+- **Important API Changes**: None.
+- **Database / Schema Changes**: None.
+- **Bugs Fixed**: None.
+- **Breaking Changes**: None.
+
+---
+
+## [Entry 4] - 2026-11-12 (Mythos Brand Theme Transformation & Complete Platform Redesign)
+- **Feature Added / Modified**: Overhauled design system across all pages to Mythos brand ("BUILD SKILLS. BUILD SYSTEMS. BUILD THE FUTURE.") using Google Fonts Poppins, Deep Navy (`#070B14`), Electric Blue (`#2563EB`), Cyan (`#06B6D4`), and Split Orange (`#F97316`); rebuilt landing page with hero, problem vs solution, capability programs, methodology, capstones, and admission desk; updated cohort views.
+- **Files Affected**: `app/templates/base.html`, `app/templates/index.html`, `app/templates/register.html`, `app/templates/confirmation.html`, `app/templates/admin/login.html`, `app/templates/admin/dashboard.html`, `app/static/css/style.css`.
+- **Important API Changes**: None.
+- **Database / Schema Changes**: None.
+- **Bugs Fixed**: None.
+- **Breaking Changes**: None.
+
+---
+
+## [Entry 3] - 2026-11-11 (Admin Dashboard Pagination, Date/Status Separation, Environment Auto-Loading & Security Fixes)
+- **Feature Added / Modified**: Implemented SQL-level pagination in `get_leads_paginated()` with configurable `per_page` (10, 25, 50); restructured leads table into 7 distinct columns (Type, Submitted Date, Student, Contact, Message, Status, Admin Notes & Action); integrated `python-dotenv` for auto-loading `.env` variables (`ADMIN_PASSWORD`, `SECRET_KEY`, `DATABASE_URL`); purged 17 obsolete standalone attendance analysis scripts.
+- **Files Affected**: `app/apps/courses/services.py`, `app/apps/courses/models.py`, `app/templates/admin/dashboard.html`, `app/core/config.py`, `requirements.txt`, `tests/test_courses.py`.
+- **Important API Changes**: Added query parameters (`page`, `per_page`, `lead_type`, `status`, `search`) to `/admin/dashboard`.
+- **Database / Schema Changes**: Added `created_date` and `created_time` IST formatting attributes to `StudentLead.to_dict()`.
+- **Bugs Fixed**: Resolved critical test bug where test runner overwrote production admin password hash when run without environment variables.
+- **Breaking Changes**: None.
+
+---
+
+## [Entry 2] - 2026-11-11 (Commit c3eb35f: Syllabus PDF Generation & Delivery, Optional Student Email, Admin Portal Security Hardening)
+- **Feature Added / Modified**: Dynamic generation of 2-page Data Analysis syllabus brochure via `fpdf2`; added routes for PDF download and inline browser preview; made student email optional across registration and inquiry forms; disabled public admin registration with 303 redirect to `/admin/login`; implemented signed HTTP-only cookie-based session management (`admin_session`) with 7-day expiration.
+- **Files Affected**: `app/apps/courses/generate_syllabus_pdf.py`, `app/apps/courses/schemas.py`, `app/apps/courses/models.py`, `app/apps/courses/admin_router.py`, `app/main.py`.
+- **Important API Changes**: Added `GET /course/syllabus/download`, `GET /course/syllabus`, `GET /admin/logout`.
+- **Database / Schema Changes**: `StudentLead.email` set to `nullable=True`; Pydantic schemas updated with `email: Optional[str] = None`.
+- **Bugs Fixed**: Fixed security loophole allowing public account creation on admin routes.
+- **Breaking Changes**: None.
+
+---
+
+## [Entry 1] - 2026-11-11 (Commit 9b8f2a1: Course & Student Admission Engine, Frontend Pages & Interactive Modals, Automated Test Suite)
+- **Feature Added / Modified**: Initialized Course & Student Admission Engine (`app/apps/courses/`); established SQLAlchemy models (`Batch`, `StudentLead`, `AdminUser`); dual-database architecture (SQLite local, PostgreSQL cloud); dedicated registration page (`/register`), success page (`/registration-success`), and homepage inquiry modals; created 15 automated test cases in `tests/test_courses.py` and `tests/test_main.py`.
+- **Files Affected**: `app/apps/courses/models.py`, `app/apps/courses/database.py`, `app/apps/courses/router.py`, `app/apps/courses/services.py`, `app/templates/index.html`, `app/templates/register.html`, `app/templates/confirmation.html`, `tests/test_courses.py`, `tests/test_main.py`.
+- **Important API Changes**: Created `GET /api/courses/instructor`, `GET /api/courses/batches`, `GET /api/courses/batches/{id}`, `POST /api/courses/enquiry`, `POST /api/courses/register`, `GET /api/courses/leads`, `GET /api/courses/leads/summary`, `GET /api/courses/leads/export.csv`, `PATCH /api/courses/leads/{id}/status`.
+- **Database / Schema Changes**: Created `batches`, `student_leads`, and `admin_users` tables.
+- **Bugs Fixed**: Initial core admissions implementation.
+- **Breaking Changes**: None.
+
+---
+
+## Historical Changelog Archive Reference
+
+For the complete archive of development history and foundations prior to these 15 entries, see:  
+**[`CHANGELOG_ARCHIVE.md`](file:///f:/Projects/coding/CHANGELOG_ARCHIVE.md)**

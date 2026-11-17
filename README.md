@@ -6,10 +6,15 @@ A modern, high-performance web platform built with **FastAPI** powering **MYTHOS
 
 ## 📌 Quick Navigation & Documentation
 
-- 📖 **[Documentation README](docs/README.md)**: Secondary in-depth site guide covering student workflows, architecture, and deployment.
-- 👤 **[User & Instructor Guide](docs/USER_GUIDE.md)**: Simple guide explaining how to run locally, manage student leads, export CSVs, and configure cloud databases.
-- 🤖 **[Comprehensive Agent Guide](docs/AGENT_GUIDE.md)**: Exhaustive technical specification and single-source-of-truth reference for AI coding agents.
-- 📋 **[Changelog & Updates Log](CHANGELOG.md)**: Audit trail of all implementations, fixes, and GitHub-style release logs.
+- 📖 **[System Guide (GUIDE.md)](GUIDE.md)**: Current system knowledge manual, tech stack, APIs, schemas, and operational constraints.
+- 🤖 **[AI Agent Directives (AGENTS.md)](AGENTS.md)**: 15 Golden Rules, git operational lifecycle, and documentation maintenance workflows for AI agents.
+- 📋 **[Recent Changelog (Changeslog.md)](Changeslog.md)**: Latest 15 meaningful development milestones with standardized metadata schema.
+- 🗄️ **[Historical Changelog Archive (CHANGELOG_ARCHIVE.md)](CHANGELOG_ARCHIVE.md)**: Historical records organized chronologically by Year and Month.
+- 🏛️ **[Application Architecture (docs/architecture.md)](docs/architecture.md)**: Modular sub-app layout, request lifecycle, and UI component decomposition.
+- 🗄️ **[Database Architecture (docs/database.md)](docs/database.md)**: Dual-engine strategy (SQLite local / PostgreSQL cloud), connection pooling, ER model, and schemas.
+- 🚀 **[Cloud Deployment (docs/deployment.md)](docs/deployment.md)**: Render.io deployment pipeline, build/start commands, environment variables, health checks, and rollback.
+- 👤 **[User & Instructor Guide (docs/USER_GUIDE.md)](docs/USER_GUIDE.md)**: Simple guide explaining how to run locally, manage student leads, export CSVs, and configure cloud databases.
+- 📚 **[Documentation Index (docs/README.md)](docs/README.md)**: Central documentation index.
 
 ---
 

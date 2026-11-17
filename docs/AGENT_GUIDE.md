@@ -1,8 +1,13 @@
 # AGENT PROJECT GUIDE & CONTEXT SPECIFICATION (DEFINITIVE REFERENCE)
 
-> **PRIMARY DIRECTIVE FOR AI AGENTS**:
-> This document is the **single-source-of-truth reference manual** for the entire codebase.
-> It contains exhaustive architectural details, exact schemas, credentials, routes, business constraints, and implementation specifics so that you **do not have to inspect raw files** before making decisions or answering technical questions.
+> [!NOTE]
+> **Active Documentation System Notice**:
+> This document is preserved for historical backwards compatibility. The active system documentation has been modularized and standardized:
+> - **Current System Manual**: [`../GUIDE.md`](file:///f:/Projects/coding/GUIDE.md) (Single source of truth for current state)
+> - **AI Agent Directives & 15 Rules**: [`../AGENTS.md`](file:///f:/Projects/coding/AGENTS.md)
+> - **Recent Development History**: [`../Changeslog.md`](file:///f:/Projects/coding/Changeslog.md) (Latest 15 entries)
+> - **Historical Changelog Archive**: [`../CHANGELOG_ARCHIVE.md`](file:///f:/Projects/coding/CHANGELOG_ARCHIVE.md)
+> - **Deep-Dives**: [`architecture.md`](file:///f:/Projects/coding/docs/architecture.md) | [`database.md`](file:///f:/Projects/coding/docs/database.md) | [`deployment.md`](file:///f:/Projects/coding/docs/deployment.md)
 
 ---
 

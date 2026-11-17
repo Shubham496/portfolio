@@ -1,0 +1,76 @@
+# Historical Changelog Archive (CHANGELOG_ARCHIVE.md)
+
+This file stores **historical changelog entries** transferred from [`Changeslog.md`](file:///f:/Projects/coding/Changeslog.md) as development progresses.
+Entries are organized chronologically by **Year** and **Month**, preserving original dates, descriptions, affected files, technical decisions, database schemas, and API changes.
+
+---
+
+## Archiving Policy & Maintenance Protocol
+1. **15-Entry Retention Limit**: [`Changeslog.md`](file:///f:/Projects/coding/Changeslog.md) holds strictly the latest 15 development entries.
+2. **Transfer on Overflow**: When a new meaningful task is completed and added to `Changeslog.md` (pushing the count to 16), the oldest entry is transferred completely to this archive under the appropriate Year & Month section.
+3. **Information Preservation**: Never delete, shorten, or discard technical details during archiving. Original dates, filenames, schemas, and rationale must be preserved intact.
+4. **Duplicate Prevention**: Verify that entries exist in either `Changeslog.md` or `CHANGELOG_ARCHIVE.md`, never duplicated across both.
+
+---
+
+## 2026
+
+### November 2026
+
+#### [Historical Foundation: Commits 1c231b6 through 4347a5e] - 2026-11-02 to 2026-11-11
+
+- **Commit 4347a5e (2026-11-11)**:
+  - **Feature**: Hardened admin authentication integration test to be strictly idempotent across test runner environments.
+  - **Files**: `tests/test_courses.py`.
+  - **Technical Decision**: Prevented test environment runs from mutating production password hashes when executed without explicit environment credentials.
+
+- **Commit b1d7df3 (2026-11-11)**:
+  - **Feature**: Added dedicated full-page batch registration view (`/register`), post-registration confirmation view (`/registration-success`), direct syllabus PDF download endpoints (`/course/syllabus/download` and `/course/syllabus`), and secret instructor monitoring portal (`/admin`).
+  - **Files**: `app/main.py`, `app/templates/register.html`, `app/templates/confirmation.html`, `app/apps/courses/admin_router.py`, `app/templates/admin/login.html`, `app/templates/admin/dashboard.html`.
+  - **API Changes**: Introduced `/admin/login`, `/admin/dashboard`, `/admin/leads/{id}/status`.
+  - **Security Decision**: Implemented HTTP-only session cookies and permanently disabled public signup routes.
+
+- **Commit b0da854 (2026-11-11)**:
+  - **Feature**: Added temporary batch attendance analysis scripts and historical enrollment spreadsheets for initial batch audits (later cleaned in commit `05e052c`).
+  - **Files**: `analyze_attendance.py`, `check_att.py`, `Repeated_Batches_Analysis.xlsx`.
+
+- **Commit 0e6e320 (2026-11-11)**:
+  - **Feature**: Transformed developer portfolio landing page into an interactive Data Analysis teaching and student enrollment platform.
+  - **Files**: `app/templates/index.html`, `app/static/css/style.css`, `app/static/js/main.js`.
+  - **UI Additions**: Added interactive batch enrollment modal (`#modal-enroll`), curriculum inquiry modal (`#modal-enquiry`), expandable 6-module curriculum accordion, and weekend schedule highlights (Saturday & Sunday, 6:00 PM – 8:00 PM IST).
+
+- **Commit af37f5a (2026-11-11)**:
+  - **Feature**: Established initial comprehensive documentation hub.
+  - **Files**: `docs/AGENT_GUIDE.md`, `docs/USER_GUIDE.md`, `docs/README.md`.
+  - **Technical Decision**: Formulated the AI agent technical specification to provide context without requiring manual file inspection.
+
+- **Commit 705109c (2026-11-10)**:
+  - **Feature**: Implemented core backend models and REST endpoints for weekend Data Analysis batch registration and prospective student inquiries.
+  - **Files**: `app/apps/courses/models.py`, `app/apps/courses/database.py`, `app/apps/courses/router.py`, `app/apps/courses/schemas.py`.
+  - **Database Changes**: Provisioned initial `batches` and `student_leads` tables with SQLite fallback.
+
+- **Commit e9047fc & 433f02d (2026-11-02)**:
+  - **Feature**: Added inset margins and custom webkit scrollbar styling for floating scrollbars across light and dark themes; fixed theme toggle icon inversion bug.
+  - **Files**: `app/static/css/style.css`, `app/static/js/main.js`.
+
+- **Commit b739938 & d3d21e1 (2026-11-02)**:
+  - **Feature**: Implemented client-side dark/light theme switcher with persistent localStorage; increased sun/moon toggle icon size; boosted light theme contrast; integrated verified SVGs and Devicons for Power BI, Tableau, Snowflake, and n8n; added phone contact details.
+  - **Files**: `app/templates/base.html`, `app/static/css/style.css`, `app/static/js/main.js`.
+
+- **Commit 485356a & 1f1e482 (2026-11-02)**:
+  - **Feature**: Toned down ambient neon glow; refined minimalist developer UI; converted skill badges to interactive button-style tech icons; added compact hero spacing and inline career experience timeline strip.
+  - **Files**: `app/templates/index.html`, `app/static/css/style.css`.
+
+- **Commit 997b5a5 (2026-11-02)**:
+  - **Feature**: Restructured landing page hierarchy to feature prominent "Try My Apps" showcase directly below skills.
+  - **Files**: `app/templates/index.html`.
+
+- **Commit baf41d3 (2026-11-02)**:
+  - **Feature**: Implemented interactive SQLite-backed Project Task and Sprint Tracker mini-app mounted at `/apps/todos`.
+  - **Files**: `app/apps/todos/__init__.py`, `app/apps/todos/models.py`, `app/apps/todos/router.py`, `app/apps/todos/templates/todos.html`, `portfolio.db`.
+  - **Database Changes**: Provisioned `project_todos` table in `portfolio.db`.
+
+- **Commit 1c231b6 (2026-11-02)**:
+  - **Feature**: Initial platform repository setup; established FastAPI ASGI application; configured settings separation between `LocalSettings` and `DeploymentSettings`.
+  - **Files**: `app/main.py`, `app/core/base_config.py`, `app/core/config.py`, `app/core/local.py`, `app/core/deployment.py`, `Procfile`, `render.yaml`, `requirements.txt`.
+  - **Architectural Decision**: Bound dynamic cloud `$PORT` for Render compatibility while maintaining zero-setup SQLite execution locally.
