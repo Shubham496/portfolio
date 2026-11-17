@@ -27,10 +27,9 @@
    - **Timings**: **6:00 PM to 8:00 PM IST** (2 hours/day = 4 hours/week).
    - **Duration**: **8 to 10 Weeks Hands-On Mentorship**.
    - **Batches**: Live interactive weekend cohorts (`DA-WKND-2026-B1`, `DM-PERF-2026-B1`, `DM-GROWTH-2026-B1`).
-3. **Pure Educational Admissions Model (No Online Pricing & No Defensive Disclaimers)**:
-   - **NO pricing, tuition fees, discounts, currency symbols, or payment gateways appear on the public website**.
-   - **NO defensive payment disclaimers**: Do NOT display phrases like "payments will not be shown online", "Zero-Fee Public Policy: No prices or payments are taken online", or "Zero fees on this portal". The site simply presents professional academic curriculum and admissions enrollment without mentioning payment processing.
-   - Admissions counseling and cohort placements are handled privately during orientation.
+3. **Admissions & Pricing Architecture (Two Distinct Channels)**:
+   - **Live Cohort Offerings**: **NO tuition fees, pricing, discounts, currency symbols, or payment gateways appear on the public website for cohorts**. Do NOT display defensive payment disclaimers (e.g. "Zero-Fee Public Policy" or "Zero fees on this portal"). The site simply presents professional academic curriculum, with cohort admissions counseling and seat allocations handled privately during orientation.
+   - **Resource Library Digital Products (Micro-Monetization)**: Digital learning assets (e.g., ₹10 viva question sets, ₹20 semester notes bundles, ₹99–₹199 books, ₹149 capstone project source bundles) feature transparent, low-friction micro-pricing and instant 1-click UPI checkout.
 4. **Optional Student Email**:
    - Email is **strictly optional** across all student-facing enrollment and inquiry forms (`/register`, homepage modals, `/api/courses/*`).
    - Only **Full Name** and **Phone / WhatsApp Number** are mandatory.
@@ -89,6 +88,10 @@ coding/
 ├── requirements.txt                    # Production dependencies (FastAPI, Uvicorn, SQLAlchemy, etc.)
 ├── requirements-dev.txt                # Testing & dev dependencies (pytest, httpx)
 │
+├── external_assets/                    # [DECOUPLED VAULT] Git-ignored submodule / separate repo
+│                                       # https://github.com/Shubham496/mythos-assets
+│                                       # Houses images, datasets, and downloadable bundles
+│
 ├── design/                             # Design system, brand tokens, logos & certificate specs
 │   ├── GUIDELINES.md                   # Complete brand guide (colors, typography, certificate specs)
 │   ├── tokens.json                     # Programmatic design tokens (JSON format)
@@ -98,6 +101,11 @@ coding/
 ├── app/
 │   ├── main.py                         # Primary application entrypoint; mounts routers, static files, home routes
 │   │
+│   ├── content/                        # Markdown files for notes, viva sets, and study guides
+│   │   ├── sql/                        # SQL notes and viva banks
+│   │   ├── python/                     # Python core and gotchas
+│   │   └── bi/                         # Power BI, Tableau, Analytics
+│   │
 │   ├── core/
 │   │   ├── base_config.py              # Pydantic BaseSettings containing personal info, social links, bio
 │   │   ├── config.py                   # Calls load_dotenv() and switches between Local/Deployment settings
@@ -105,6 +113,12 @@ coding/
 │   │   └── local.py                    # Local debug settings
 │   │
 │   ├── apps/
+│   │   ├── library/                    # [EXPANSION MODULE] Knowledge Engine, Notes & Datasets
+│   │   │   ├── __init__.py             # Exposes library module
+│   │   │   ├── services.py             # Markdown rendering, caching, TOC generation, dataset lookups
+│   │   │   ├── router.py               # Public routes: /library, /library/{subject}, /library/{subject}/notes/{slug}
+│   │   │   └── models.py               # Activity logs, digital products & purchases (Phase 2 & 4)
+│   │   │
 │   │   ├── courses/                    # [CORE MODULE] Course & Student Admission Engine
 │   │   │   ├── __init__.py             # Exposes courses module
 │   │   │   ├── database.py             # Dual-engine SQLAlchemy connection (PostgreSQL/SQLite)
@@ -134,6 +148,10 @@ coding/
 │       ├── index.html                  # Landing page orchestrator (includes sections/* partials)
 │       ├── register.html               # Dedicated full-page weekend batch enrollment form
 │       ├── confirmation.html           # Post-registration student confirmation page
+│       ├── library/                    # Technical documentation engine & resource hub templates
+│       │   ├── subject_hub.html        # Subject overview with resource tabs (Notes, Viva, Datasets, Books)
+│       │   ├── reader.html             # 3-Column docs reader with TOC, Prism.js syntax, share buttons
+│       │   └── partials/               # Reusable library callouts & cohort cards
 │       ├── sections/                   # Modular landing page section partials
 │       │   ├── hero.html               # Hero headline, CTAs, trust metric bar & floating photo card
 │       │   ├── engine.html             # The Problem vs. Mythos Learning Engine 4-step pipeline
@@ -391,3 +409,35 @@ For brand consistency, marketing graphics, and certificate generation, all desig
 * `design/tokens.json`: Machine-readable design tokens for automated generation tools (scripts, ReportLab/PIL, web components).
 * `design/assets/`: Scalable SVG vectors and transparent PNG logos (`mythos_icon.svg`, `mythos_logo.svg`, `mythos_icon_transparent.png`, `mythos_full_transparent.png`).
 * `design/certificate_generator_template.py`: Python script template demonstrating official completion certificate generation.
+
+---
+
+## 12. Resource Library, Knowledge Engine & Decoupled Assets Architecture
+
+### Decoupled Secondary Asset Vault (`external_assets/`)
+* **Repository**: `https://github.com/Shubham496/mythos-assets`
+* **Local Folder**: `F:\Projects\coding\external_assets` (strictly excluded by main `.gitignore`).
+* **Purpose**: Prevents Render.io free-tier memory and slug bloat. All high-resolution images, screenshots, large datasets (`.csv`, `.sqlite`, `.zip`), and downloadable product PDFs live here.
+* **Asset URL Standards**:
+  - **Images in Notes via jsDelivr CDN**:
+    `https://cdn.jsdelivr.net/gh/Shubham496/mythos-assets@main/images/<category>/<filename>`
+  - **Dataset Direct Downloads via GitHub Raw**:
+    `https://github.com/Shubham496/mythos-assets/raw/main/datasets/<filename>`
+* **Git Authority**: AI agents have explicit push permission for the `external_assets` repository to deploy assets. (The main `coding` application repository remains strictly Platform Owner push only).
+
+### Five Content Verticals
+1. **Notes (`app/content/{subject}/`)**: High-depth markdown articles blending academic syllabus definitions with production realities ("What Textbooks Skip").
+2. **Practice & Viva**: High-demand viva banks (preview free; full ₹10 unlock) and junior interview gotchas.
+3. **Practice Datasets**: Cleaned real-world data (50k+ rows) for student portfolio projects (preview free; full download requires free student login).
+4. **Books & Handbooks**: Comprehensive downloadable guides (₹99 – ₹199).
+5. **Capstone Projects**: Full-stack / BI production projects with source code, data, and video/doc walkthroughs (₹149 – ₹249).
+
+### Dual Admissions & Micro-Monetization Rules
+* **Cohort Admissions Funnel**: Live weekend cohorts never display prices online; admissions are handled through `/register` and personal orientation counseling.
+* **Digital Micro-Transactions**: Low-ticket student items (₹10 viva sets, ₹20 notes bundles) provide frictionless instant purchases via UPI, converting free readers into verified paying students with tracked WhatsApp contact records.
+
+### UI & Reader Architecture
+* Fast SSR with FastAPI + Jinja2 extending `app/templates/base.html`.
+* 3-column layout: Left chapter tree, center reading canvas with Prism.js code styling, right sticky TOC with cohort conversion card.
+* In-memory LRU / TTL caching for parsed markdown documents to ensure sub-100ms response times.
+
