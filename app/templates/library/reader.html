@@ -167,6 +167,35 @@
                     {{ doc.html_content|safe }}
                 </article>
 
+                <!-- Sequential Topic Navigation (W3Schools Style) -->
+                <div class="mt-10 pt-6 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between gap-4">
+                    {% if prev_topic %}
+                    <a href="/library/{{ subject.slug }}/notes/{{ prev_topic.slug }}" 
+                       class="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-semibold text-xs sm:text-sm transition-all shadow-sm group">
+                        <i data-lucide="chevron-left" class="w-4 h-4 text-blue-500 group-hover:-translate-x-0.5 transition-transform"></i>
+                        <span class="text-left">
+                            <span class="text-[10px] uppercase tracking-wider text-slate-400 block font-normal">Previous Topic</span>
+                            {{ prev_topic.title }}
+                        </span>
+                    </a>
+                    {% else %}
+                    <div></div>
+                    {% endif %}
+
+                    {% if next_topic %}
+                    <a href="/library/{{ subject.slug }}/notes/{{ next_topic.slug }}" 
+                       class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs sm:text-sm transition-all shadow-md ml-auto group text-right">
+                        <span class="text-right">
+                            <span class="text-[10px] uppercase tracking-wider text-blue-200 block font-normal">Next Topic</span>
+                            {{ next_topic.title }}
+                        </span>
+                        <i data-lucide="chevron-right" class="w-4 h-4 group-hover:translate-x-0.5 transition-transform"></i>
+                    </a>
+                    {% else %}
+                    <div></div>
+                    {% endif %}
+                </div>
+
                 <!-- Mentorship Bridge Card -->
                 <div class="mt-12 p-6 sm:p-8 rounded-2xl bg-gradient-to-r from-blue-900/20 via-purple-900/20 to-slate-900 border border-blue-500/20 text-left">
                     <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 text-[11px] font-semibold mb-3">

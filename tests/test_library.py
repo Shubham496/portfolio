@@ -147,14 +147,81 @@ def test_expanded_technology_hub_and_topics():
     assert "Namespaces" in res_docker.text
 
 
-def test_topic_outline_reader_page():
-    """Verify that clicking any curriculum topic loads a full, structured 5-part guide."""
-    response = client.get("/library/python/notes/python-mutable-default-argument-trap")
+def test_library_python_w3schools_panel_architecture():
+    """Verify /library/python loads with the 4 panels and W3Schools left-topic hierarchy."""
+    response = client.get("/library/python")
     assert response.status_code == 200
     html = response.text
-    assert "Mutable Default Argument" in html
-    assert "Academic Definition &amp; Objectives" in html or "Academic Definition & Objectives" in html
-    assert "The Production Reality" in html
-    assert "Exam &amp; Technical Interview Gotchas" in html or "Exam & Technical Interview Gotchas" in html
-    assert "Mythos Mentorship Bridge" in html
-    assert "On This Page" in html
+
+    # 1. Four Primary Panels
+    assert "All Topics" in html
+    assert "Notes (" in html
+    assert "Interview Questions (" in html
+    assert "Video Lectures (" in html
+
+    # 2. W3Schools-Style Left Sidebar Hierarchies
+    assert "Python Basics" in html
+    assert "Control Flow" in html
+    assert "Data Structures" in html
+    assert "Python Syntax &amp; Comments" in html or "Python Syntax & Comments" in html
+    assert "Python Variables &amp; Dynamic Typing" in html or "Python Variables & Dynamic Typing" in html
+    assert "Python Numbers &amp; Type Casting" in html or "Python Numbers & Type Casting" in html
+    assert "Python Booleans &amp; Logical Operators" in html or "Python Booleans & Logical Operators" in html
+    assert "Python While Loops, Break &amp; Continue" in html or "Python While Loops, Break & Continue" in html
+
+    # 3. Next Topic Navigation Button on default topic
+    assert "Next Topic" in html
+
+
+def test_library_python_sequential_navigation():
+    """Verify clicking a topic loads adjacent Previous and Next topic buttons."""
+    response = client.get("/library/python?tab=all_topics&topic=python-variables-datatypes")
+    assert response.status_code == 200
+    html = response.text
+
+    # Both previous and next should be present
+    assert "Previous Topic" in html
+    assert "python-syntax-comments" in html
+    assert "Next Topic" in html
+    assert "python-numbers-casting" in html
+
+
+def test_library_panel_switching():
+    """Verify switching across Notes, Interview Questions, and Video Lectures panels."""
+    # 1. Notes Panel
+    res_notes = client.get("/library/python?tab=notes")
+    assert res_notes.status_code == 200
+    assert "Curated Engineering Notes" in res_notes.text
+    assert "Read Note" in res_notes.text
+
+    # 2. Interview Questions Panel
+    res_interview = client.get("/library/python?tab=interview_questions")
+    assert res_interview.status_code == 200
+    assert "Oral Viva &amp; Senior Interview Traps" in res_interview.text or "Oral Viva & Senior Interview Traps" in res_interview.text
+    assert "Top 40 Python Viva" in res_interview.text
+
+    # 3. Video Lectures Panel
+    res_videos = client.get("/library/python?tab=video_lectures")
+    assert res_videos.status_code == 200
+    assert "Curated Video Masterclasses" in res_videos.text
+    assert "CPython Execution Engine" in res_videos.text
+    assert "Key Takeaways" in res_videos.text
+    assert "Access Lecture" in res_videos.text
+
+
+def test_adjacent_topics_service():
+    """Verify get_adjacent_topics returns correct sequence."""
+    from app.apps.library.services import get_adjacent_topics
+
+    # First topic: prev is None, next is variables
+    prev_doc, next_doc = get_adjacent_topics("python", "python-syntax-comments")
+    assert prev_doc is None
+    assert next_doc is not None
+    assert next_doc.slug == "python-variables-datatypes"
+
+    # Middle topic: prev is syntax, next is numbers
+    prev_mid, next_mid = get_adjacent_topics("python", "python-variables-datatypes")
+    assert prev_mid is not None
+    assert prev_mid.slug == "python-syntax-comments"
+    assert next_mid is not None
+    assert next_mid.slug == "python-numbers-casting"

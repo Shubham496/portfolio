@@ -5,6 +5,42 @@ This serves as an audit trail and system log (similar to GitHub releases/commit 
 
 ---
 
+## [Latest Updates] - 2026-11-18 (Phase 1.6: W3Schools Panel Architecture, Hierarchical Topic Sidebar & Sequential Navigation)
+
+### Added, Updated & Refactored
+- **W3Schools-Style 4-Panel Architecture on Subject Hubs (`/library/{subject}`)**:
+  - Transformed `/library/{subject}` (e.g. `/library/python`, `/library/sql`) from a simple list into a full documentation workspace with 4 dedicated panels:
+    1. **All Topics** (open by default, `?tab=all_topics`): W3Schools-style layout featuring a hierarchical left sidebar, center reading canvas, and sequential bottom navigation buttons.
+    2. **Notes** (`?tab=notes`): Deep-dive technical engineering notes and memory architectures.
+    3. **Interview Questions** (`?tab=interview_questions`): Curated viva questions and oral exam gotchas.
+    4. **Video Lectures** (`?tab=video_lectures`): Curated masterclass video sessions with duration badges, curriculum takeaways, and cohort live Q&A bridge.
+- **W3Schools Left Topic Sidebar with Granular Foundations**:
+  - Expanded Python's curriculum to include foundational topics requested by the student:
+    - **Python Basics**: Python Syntax & Comments, Python Variables & Dynamic Typing, Python Numbers & Type Casting, Python Booleans & Logical Operators, Python Strings & Slicing.
+    - **Control Flow**: Python If...Else & Conditionals, Python While Loops & Break/Continue, Python For Loops & Range Function.
+    - **Data Structures**: Lists & List Comprehensions, Tuples & Unpacking, Sets & Operations, Dictionaries & Hash Map Mechanics.
+    - **Functions & Modules**: Functions & `*args`/`**kwargs`, Lambda & Map/Filter, Modules & Virtualenvs.
+    - **OOP**: Classes & `__init__`, Inheritance & Polymorphism, Dunder Methods & Data Model.
+    - **Internals & Traps**: CPython Memory & GC, Mutable Default Argument Trap, Iterators & Generators, Decorators Deep Dive, GIL & Asyncio, File I/O.
+    - **Viva & Interview**: Top 40 Python Viva & Interview Traps, Closures & Scope Gotchas.
+  - Sidebar highlights the active topic and allows 1-click loading into the center canvas without leaving the subject hub.
+- **Sequential `< Previous Topic` & `Next Topic >` Navigation**:
+  - Implemented `get_adjacent_topics(subject, slug)` in `app/apps/library/services.py` to maintain pedagogical sequence across the curriculum.
+  - Added bottom navigation buttons:
+    - `< Previous Topic: [Previous Title]`
+    - `Next Topic: [Next Title] >`
+  - Integrated into both `subject_hub.html` (All Topics panel) and `reader.html` (full-screen reader).
+- **Specialized Topic Content Blueprints**:
+  - Authored rich, production-grounded, zero-code-execution content blueprints for Python foundational topics (`python-syntax-comments`, `python-variables-datatypes`, `python-numbers-casting`, `python-booleans-operators`, `python-while-loops`, `python-for-loops-range`) with copyable code snippets, production gotchas, and exam traps.
+- **Strict Constraints Enforced**:
+  - Zero code execution: strictly static, copy-only syntax.
+  - Zero upfront pricing: transparent curriculum breakdowns with zero advance fee barriers.
+- **Automated Verification**:
+  - Added 3 new test cases in `tests/test_library.py` verifying W3Schools panel architecture, left-side topic hierarchies, sequential navigation, and panel switching.
+  - Full test suite passing at **29/29 tests (100%)**.
+
+---
+
 ## [Latest Updates] - 2026-11-18 (Phase 1.5: 34 Major Languages & Tools Catalog, Topic Curricula & Navigation Polish)
 
 ### Added, Updated & Refactored

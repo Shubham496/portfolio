@@ -166,18 +166,50 @@ SUBJECTS: Dict[str, Dict[str, Any]] = {
         "short_title": "Python",
         "group": "languages",
         "tagline": "Modern Python Internals, OOP & ETL Pipelines",
-        "description": "In-depth explorations of Python memory management, mutable traps, generator pipelines, Pandas wrangling, and production automation.",
+        "description": "In-depth explorations of Python syntax, data types, control flow, data structures, OOP, CPython memory architecture, mutable traps, and production pipelines.",
         "icon_type": "devicon",
         "icon": "devicon-python-plain colored",
         "badge": "Core Track",
         "topics": [
+            # 1. Python Basics
+            {"title": "Python Syntax & Comments", "slug": "python-syntax-comments", "category": "Python Basics", "vertical": "notes", "reading_time": "5 min read"},
+            {"title": "Python Variables & Dynamic Typing", "slug": "python-variables-datatypes", "category": "Python Basics", "vertical": "notes", "reading_time": "6 min read"},
+            {"title": "Python Numbers & Type Casting", "slug": "python-numbers-casting", "category": "Python Basics", "vertical": "notes", "reading_time": "6 min read"},
+            {"title": "Python Booleans & Logical Operators", "slug": "python-booleans-operators", "category": "Python Basics", "vertical": "notes", "reading_time": "5 min read"},
+            {"title": "Python Strings, Slicing & F-Strings", "slug": "python-strings-formatting", "category": "Python Basics", "vertical": "notes", "reading_time": "7 min read"},
+
+            # 2. Control Flow
+            {"title": "Python If...Else & Conditional Logic", "slug": "python-if-else-conditionals", "category": "Control Flow", "vertical": "notes", "reading_time": "6 min read"},
+            {"title": "Python While Loops, Break & Continue", "slug": "python-while-loops", "category": "Control Flow", "vertical": "notes", "reading_time": "6 min read"},
+            {"title": "Python For Loops & Range Function", "slug": "python-for-loops-range", "category": "Control Flow", "vertical": "notes", "reading_time": "7 min read"},
+
+            # 3. Data Structures
+            {"title": "Python Lists & List Comprehensions", "slug": "python-lists-comprehensions", "category": "Data Structures", "vertical": "notes", "reading_time": "8 min read"},
+            {"title": "Python Tuples & Tuple Unpacking", "slug": "python-tuples-unpacking", "category": "Data Structures", "vertical": "notes", "reading_time": "6 min read"},
+            {"title": "Python Sets & Set Theory Operations", "slug": "python-sets-operations", "category": "Data Structures", "vertical": "notes", "reading_time": "6 min read"},
+            {"title": "Python Dictionaries & Hash Map Mechanics", "slug": "python-dictionaries-methods", "category": "Data Structures", "vertical": "notes", "reading_time": "8 min read"},
+
+            # 4. Functions & Modules
+            {"title": "Python Functions, Scope & *args / **kwargs", "slug": "python-functions-args-kwargs", "category": "Functions & Modules", "vertical": "notes", "reading_time": "8 min read"},
+            {"title": "Python Lambda Functions & Map/Filter", "slug": "python-lambda-map-filter", "category": "Functions & Modules", "vertical": "notes", "reading_time": "6 min read"},
+            {"title": "Python Modules, Packages & Virtual Environments", "slug": "python-modules-packages", "category": "Functions & Modules", "vertical": "notes", "reading_time": "7 min read"},
+
+            # 5. Object-Oriented Programming
+            {"title": "Classes, Objects & __init__ Constructor", "slug": "python-classes-objects-init", "category": "Object-Oriented Design", "vertical": "notes", "reading_time": "8 min read"},
+            {"title": "Inheritance, Polymorphism & super() Method", "slug": "python-inheritance-polymorphism", "category": "Object-Oriented Design", "vertical": "notes", "reading_time": "8 min read"},
+            {"title": "Dunder Methods & Python Data Model: Building Pythonic Classes", "slug": "python-dunder-methods-and-data-model", "category": "Object-Oriented Design", "vertical": "notes", "reading_time": "9 min read"},
+
+            # 6. Internals & Production Gotchas
             {"title": "CPython Memory Architecture: Heap, Stack, Reference Counting & Cyclic GC", "slug": "python-memory-model-and-gc", "category": "Core Architecture", "vertical": "notes", "reading_time": "10 min read"},
             {"title": "The Mutable Default Argument Trap & Object Identity in Python", "slug": "python-mutable-default-argument-trap", "category": "Core Gotchas", "vertical": "notes", "reading_time": "8 min read"},
-            {"title": "Dunder Methods & Python Data Model: Building Pythonic Classes", "slug": "python-dunder-methods-and-data-model", "category": "Object-Oriented Design", "vertical": "notes", "reading_time": "9 min read"},
             {"title": "Iterators, Generators & Memory-Efficient Stream Processing", "slug": "python-generators-and-stream-processing", "category": "Advanced Programming", "vertical": "notes", "reading_time": "9 min read"},
             {"title": "Decorators with Arguments, Wraps & Class Decorators", "slug": "python-decorators-deep-dive", "category": "Advanced Programming", "vertical": "notes", "reading_time": "8 min read"},
             {"title": "GIL Internals: Multithreading vs Multiprocessing vs Asyncio", "slug": "python-gil-threading-multiprocessing-asyncio", "category": "Concurrency & Parallelism", "vertical": "notes", "reading_time": "11 min read"},
+            {"title": "File I/O, Context Managers & With Statement Internals", "slug": "python-file-io-context-managers", "category": "System & File I/O", "vertical": "notes", "reading_time": "8 min read"},
+
+            # 7. Viva & Interview Prep
             {"title": "Top 40 Python Viva & Technical Interview Traps", "slug": "python-viva-top-40-traps", "category": "Interview Prep", "vertical": "viva", "reading_time": "12 min read"},
+            {"title": "Python Closures, Dynamic Binding & Scope Trap Questions", "slug": "python-trick-questions-closures", "category": "Interview Prep", "vertical": "viva", "reading_time": "10 min read"},
         ],
     },
     "javascript": {
@@ -843,10 +875,545 @@ def parse_markdown_file(file_path: Path) -> ParsedDocument:
     )
 
 
+def _get_specialized_topic_content(subject: str, slug: str, title: str) -> Optional[str]:
+    """
+    Returns rich, practical code blueprints and explanations for foundational language topics.
+    Zero code execution: strictly static copy-friendly syntax.
+    """
+    if subject == "python":
+        if slug == "python-syntax-comments":
+            return """
+## 1. Academic Definition & Objectives
+
+In Python, code structure is defined by **whitespace indentation** rather than curly braces (`{}`) or `begin...end` blocks found in C, Java, or Pascal. A block of code begins with a colon (`:`) followed by indented statements.
+
+Key Competencies:
+* PEP 8 indentation standards (strictly 4 spaces per indentation level; never mix tabs and spaces).
+* Comment syntax: inline single-line comments (`#`) vs docstrings (`\"\"\"`).
+* The Python execution cycle: source code (`.py`) is compiled into bytecode (`.pyc`) and interpreted by the CPython virtual machine.
+
+> [!NOTE]
+> **PEP 8 Standard**: The official Python Style Guide mandates using 4 spaces per indentation level. Avoid using the Tab character in production codebases to prevent cross-platform syntax errors.
+
+---
+
+## 2. Core Concepts & Implementation Blueprint
+
+```python
+# ==============================================================================
+# 1. PYTHON SYNTAX & INDENTATION RULES
+# ==============================================================================
+
+# Statements do not require semicolons
+greeting = "Hello, Mythos Engineer"
+user_role = "Data Platform Architect"
+
+# Indentation defines scope blocks
+if user_role == "Data Platform Architect":
+    print(f"[ACCESS GRANTED] Role: {user_role}")
+    # Nested block requires 4 additional spaces (8 spaces total)
+    audit_logged = True
+    if audit_logged:
+        print("[AUDIT] Session recorded in security pipeline.")
+else:
+    print("[ACCESS DENIED]")
+
+# ==============================================================================
+# 2. COMMENT PATTERNS & DOCSTRINGS
+# ==============================================================================
+
+# Single-line comment: explain the "WHY", not the "WHAT"
+CACHE_TTL_SECONDS = 300  # Enforce 5-minute cache expiry for real-time dashboards
+
+def calculate_throughput(records_processed: int, elapsed_seconds: float) -> float:
+    \"\"\"
+    Compute records-per-second ingestion throughput.
+
+    Args:
+        records_processed: Total count of validated incoming records.
+        elapsed_seconds: Total wall-clock time spent in extraction pipeline.
+
+    Returns:
+        Throughput rate expressed in records per second.
+    \"\"\"
+    if elapsed_seconds <= 0:
+        return 0.0
+    return records_processed / elapsed_seconds
+```
+
+---
+
+## 3. The Production Reality ("What Textbooks Skip")
+
+Textbooks often say comments are always good. In enterprise repositories:
+
+* **Stale Comment Debt**: Code evolves during production incidents, but comments are frequently forgotten. A misleading comment is worse than no comment at all.
+* **Self-Documenting Code**: Senior engineers write expressive variable and function names (`is_transaction_settled` instead of `flag1`) so code reads like plain English.
+* **TabError in Multi-Developer Git Repositories**: When developers on Windows (using Notepad++ or legacy IDEs) push tabs into a file where Linux developers used spaces, Python raises `TabError: inconsistent use of tabs and spaces in indentation`. Always enforce automated linting (`ruff` or `flake8`) in your CI pipeline.
+
+> [!WARNING]
+> **Production Gotcha**: Never commit executable code commented out with `#`. Use Git version control for history; commented-out dead code creates clutter and confuses automated security scanners.
+
+---
+
+## 4. Exam & Technical Interview Gotchas
+
+1. **Tab vs Space Mixing**: Python 3 completely disallows mixing tabs and spaces for indentation within the same source file.
+2. **Docstrings are Stored at Runtime**: Unlike `#` comments which are discarded by the lexer, docstrings (`\"\"\"`) are compiled and accessible at runtime via `object.__doc__`.
+3. **Line Continuation**: Long statements can be broken across lines using parentheses `(...)` or explicit backslashes `\\`. Parenthesized continuation is strongly preferred in PEP 8.
+
+---
+
+## 5. Mythos Mentorship Bridge
+
+Mastering basic syntax is just step zero. In the **[MYTHOS Weekend Mentorship Cohort](/register?source=library_python_syntax)**, you will learn to structure production-grade Python packages, write automated PyTest suites, and deploy real-time ETL pipelines.
+"""
+
+        elif slug == "python-variables-datatypes":
+            return """
+## 1. Academic Definition & Objectives
+
+Python uses **dynamic typing** with **strong typing**.
+* **Dynamic Typing**: Variables do not have fixed types; variable names are simply pointers (references) in a namespace bound to objects living on the heap.
+* **Strong Typing**: The interpreter will not implicitly coerce incompatible types (e.g., `'10' + 5` raises `TypeError`, unlike JavaScript which produces `'105'`).
+
+Key Competencies:
+* Understanding `id()`, `type()`, and `isinstance()`.
+* Mutable types (lists, dictionaries, sets) vs Immutable types (integers, floats, strings, tuples, frozensets).
+* The concept of object reference binding: `a = b` never copies an object; it binds another name to the existing object.
+
+---
+
+## 2. Core Concepts & Implementation Blueprint
+
+```python
+# ==============================================================================
+# 1. VARIABLE LABELS & OBJECT REFERENCES
+# ==============================================================================
+
+# In C, 'x' is a memory box holding 42.
+# In Python, 42 is an int object on the heap, and 'x' is a pointer referencing it.
+x = 42
+y = x  # y now points to the exact same object as x
+
+print(f"id(x): {id(x)} == id(y): {id(y)} -> {x is y}")  # True
+
+# Rebinding 'x' creates or points to a new object
+x = 100
+print(f"After x = 100: x={x}, y={y}")  # x=100, y=42 (y still references 42)
+
+# ==============================================================================
+# 2. MUTABLE VS IMMUTABLE REFERENCE BEHAVIOR
+# ==============================================================================
+
+# Mutable example: Lists
+list_a = [1, 2, 3]
+list_b = list_a  # Both variables point to the exact same list in memory!
+
+list_b.append(99)
+print(f"list_a after modifying list_b: {list_a}")  # [1, 2, 3, 99]
+
+# To create a true independent clone:
+list_c = list_a.copy()  # Shallow copy
+list_c.append(500)
+print(f"list_a remains unaffected by list_c: {list_a}")  # [1, 2, 3, 99]
+
+# ==============================================================================
+# 3. CORE BUILT-IN DATA TYPES
+# ==============================================================================
+server_id = 101                 # int
+cpu_utilization = 84.75         # float
+is_active = True                # bool (subclass of int)
+hostname = "worker-node-04"     # str (immutable)
+ip_whitelist = ("10.0.0.1", "10.0.0.2") # tuple (immutable)
+metrics = {"req_count": 1420}   # dict (mutable)
+```
+
+---
+
+## 3. The Production Reality ("What Textbooks Skip")
+
+In production backend microservices:
+
+* **CPython Small Integer Caching**: CPython pre-allocates an array of integer objects for values between `-5` and `256` at startup. Any code assigning `a = 250; b = 250` will result in `a is b` being `True`. For integers outside this range (e.g. `1000`), `a is b` may be `False`. Never use `is` for value equality; always use `==`.
+* **Unexpected Mutation in Data Pipelines**: Passing a dictionary or list into third-party functions can result in in-place mutations that silently corrupt global state. Prefer frozen dataclasses or defensive shallow/deep copies.
+
+> [!WARNING]
+> **Production Gotcha**: Never use `type(obj) == TargetType` for type checks. Always use `isinstance(obj, TargetType)` to properly respect subclassing and inheritance.
+
+---
+
+## 4. Exam & Technical Interview Gotchas
+
+1. **Identity vs. Equality**: `==` checks value equality (invoking `__eq__`), while `is` checks memory address identity (`id(a) == id(b)`).
+2. **String Immutability**: Modifying a string (e.g. `s += "text"`) creates a brand-new string object on the heap. In loops, this creates $O(N^2)$ memory churn; always use `''.join(list_of_strings)` for $O(N)$ efficiency.
+3. **Walrus Operator (`:=`)**: Introduced in Python 3.8, assignment expressions allow assigning values to variables inside expressions: `if (n := len(data)) > 100: print(n)`.
+
+---
+
+## 5. Mythos Mentorship Bridge
+
+Understanding pointers and memory references is what separates script kiddies from senior backend engineers. Build resilient data architectures in the **[MYTHOS Live Weekend Cohort](/register?source=library_python_datatypes)**.
+"""
+
+        elif slug == "python-numbers-casting":
+            return """
+## 1. Academic Definition & Objectives
+
+Python provides three distinct numerical types:
+1. **Integers (`int`)**: Arbitrary precision in Python 3 (there is no 32-bit or 64-bit integer overflow limit).
+2. **Floating-Point (`float`)**: Implemented using C's `double` (64-bit IEEE 754 binary floating-point).
+3. **Complex Numbers (`complex`)**: Stored as real and imaginary float components (e.g., `3 + 4j`).
+
+Key Competencies:
+* Type casting functions: `int()`, `float()`, `complex()`, `str()`.
+* Integer division (`//`) vs True division (`/`).
+* Precision limitations of binary floating-point arithmetic (`0.1 + 0.2 != 0.3`) and the standard `decimal` module for financial applications.
+
+---
+
+## 2. Core Concepts & Implementation Blueprint
+
+```python
+# ==============================================================================
+# 1. NUMERICAL TYPES & OPERATIONS
+# ==============================================================================
+
+count = 1_000_000  # Underscore visual separators for readability (PEP 515)
+ratio = 7 / 2      # True division -> 3.5 (always returns float)
+quotient = 7 // 2  # Floor division -> 3 (returns int)
+remainder = 7 % 2  # Modulo -> 1
+power = 2 ** 8     # Exponentiation -> 256
+
+# Arbitrary Precision Integer demonstration
+huge_number = 10 ** 100  # A googol (1 followed by 100 zeroes) - executes with zero overflow!
+print(f"Huge number length: {len(str(huge_number))} digits")
+
+# ==============================================================================
+# 2. TYPE CASTING & CONVERSIONS
+# ==============================================================================
+
+str_val = "1042"
+int_val = int(str_val)       # 1042
+float_val = float(str_val)   # 1042.0
+
+# Truncation behavior in int() casting
+truncated = int(9.99)        # 9 (truncates toward zero, does NOT round!)
+
+# ==============================================================================
+# 3. FLOATING POINT PRECISION TRAP & THE DECIMAL FIX
+# ==============================================================================
+
+print(0.1 + 0.2)             # 0.30000000000000004
+print(0.1 + 0.2 == 0.3)      # False!
+
+from decimal import Decimal
+
+# For banking and e-commerce transactions:
+price1 = Decimal("0.10")
+price2 = Decimal("0.20")
+total = price1 + price2
+print(f"Accurate financial decimal sum: {total}")  # 0.30 (Exact!)
+```
+
+---
+
+## 3. The Production Reality ("What Textbooks Skip")
+
+* **Financial Rounding Bugs**: Storing currencies as raw `float` in PostgreSQL or Python will cause rounding discrepancies in reconciliation ledgers. Always store monetary figures in base units (cents/paise) as integers, or use Python's `decimal.Decimal`.
+* **Casting Unsanitized User Input**: `int("12.5")` raises `ValueError: invalid literal for int() with base 10`. You must first cast to float: `int(float("12.5"))` or properly validate with schemas (e.g. Pydantic).
+
+> [!WARNING]
+> **Production Gotcha**: Floor division with negative numbers rounds down away from zero: `-7 // 2` is `-4`, not `-3`!
+
+---
+
+## 4. Exam & Technical Interview Gotchas
+
+1. **How `int()` Handles Different Radices**: `int("1010", 2)` parses binary to 10; `int("FF", 16)` parses hex to 255.
+2. **Boolean is an Integer Subclass**: `isinstance(True, int)` evaluates to `True`. Because `bool` inherits from `int`, `True + True == 2`.
+3. **Comparing Floats**: Never compare floats using `a == b`. Always use `math.isclose(a, b, rel_tol=1e-9)`.
+
+---
+
+## 5. Mythos Mentorship Bridge
+
+Learn how senior engineers design high-accuracy calculation engines in the **[MYTHOS Live Weekend Cohort](/register?source=library_python_numbers)**.
+"""
+
+        elif slug == "python-booleans-operators":
+            return """
+## 1. Academic Definition & Objectives
+
+The `bool` type represents truth values in Python. It has exactly two singleton instances: `True` and `False`.
+In Python, all objects can be tested for truth value (often referred to as **Truthy** vs. **Falsy**) when evaluated inside an `if` or `while` condition.
+
+Key Competencies:
+* The Falsy set: `None`, `False`, `0`, `0.0`, `""`, `[]`, `()`, `{}`, `set()`, `range(0)`.
+* Logical operators: `and`, `or`, `not`.
+* **Short-circuit evaluation**: Python stops evaluating logical expressions as soon as the outcome is deterministic.
+* Bitwise operators (`&`, `|`, `^`, `~`, `<<`, `>>`) vs Logical operators (`and`, `or`, `not`).
+
+---
+
+## 2. Core Concepts & Implementation Blueprint
+
+```python
+# ==============================================================================
+# 1. TRUTHY AND FALSY EVALUATION
+# ==============================================================================
+
+def validate_user_payload(payload: dict) -> bool:
+    # Direct pythonic check: empty dict evaluates to False
+    if not payload:
+        return False
+    
+    # Check required fields
+    has_email = bool(payload.get("email"))
+    has_valid_age = payload.get("age", 0) >= 18
+    return has_email and has_valid_age
+
+# ==============================================================================
+# 2. SHORT-CIRCUIT EVALUATION PATTERNS
+# ==============================================================================
+
+# 'or' returns the first Truthy operand, or the last operand if all are Falsy
+configured_port = None
+port = configured_port or 8080  # Defaults to 8080
+print(f"Target Port: {port}")
+
+# 'and' returns the first Falsy operand, or the last operand if all are Truthy
+user = {"name": "Aditya", "role": "admin"}
+is_admin = user and user.get("role") == "admin"
+print(f"Is Admin: {is_admin}")
+
+# ==============================================================================
+# 3. IDENTITY (is) VS EQUALITY (==)
+# ==============================================================================
+
+a = [10, 20]
+b = [10, 20]
+
+print(a == b)  # True: values are equal
+print(a is b)  # False: separate memory locations on heap!
+
+val = None
+# ALWAYS use 'is None' or 'is not None' for singleton checks
+if val is None:
+    print("Value is explicitly unassigned.")
+```
+
+---
+
+## 3. The Production Reality ("What Textbooks Skip")
+
+* **The Zero-Default Bug**: Using `port = input_port or 8080` fails when `input_port = 0` (a valid port for dynamic OS binding in networking) because `0` is Falsy. Use `input_port if input_port is not None else 8080`.
+* **Bitwise vs Logical Confusion**: Using `&` instead of `and` between booleans does not perform short-circuiting! If the right-hand operand causes an exception (e.g. `obj is not None & obj.is_valid()`), using `&` will crash with `AttributeError`.
+
+> [!WARNING]
+> **Production Gotcha**: Never write `if variable == True:`. Write `if variable:`. Comparing to `True` using `==` breaks custom classes implementing `__bool__` and exposes subtle typing bugs.
+
+---
+
+## 4. Exam & Technical Interview Gotchas
+
+1. **Return Values of `and` and `or`**: In Python, `and` and `or` do not return boolean `True` or `False`; they return the actual operand that determined the result! `("Mythos" or 50)` evaluates to `"Mythos"`.
+2. **Chained Comparison Operators**: Python supports mathematical chained comparisons: `1 < x < 10` is evaluated as `(1 < x) and (x < 10)`, evaluating `x` only once.
+3. **Operator Precedence**: `not` has higher precedence than `and`, and `and` has higher precedence than `or`.
+
+---
+
+## 5. Mythos Mentorship Bridge
+
+Step into professional software engineering with hands-on labs in the **[MYTHOS Live Weekend Cohort](/register?source=library_python_booleans)**.
+"""
+
+        elif slug == "python-while-loops":
+            return """
+## 1. Academic Definition & Objectives
+
+A `while` loop repeatedly executes a target block of statements as long as a given boolean condition remains `True`.
+
+Key Competencies:
+* Loop condition evaluation and loop termination mechanics.
+* `break` (immediate loop termination) vs `continue` (skip to the next iteration).
+* The unique Python `while ... else` construct: the `else` block executes when the loop condition becomes `False`, but is skipped if the loop is broken via `break`.
+
+---
+
+## 2. Core Concepts & Implementation Blueprint
+
+```python
+# ==============================================================================
+# 1. BASIC WHILE LOOP WITH ITERATOR STEP
+# ==============================================================================
+
+retry_count = 0
+MAX_RETRIES = 3
+
+while retry_count < MAX_RETRIES:
+    retry_count += 1
+    print(f"[RETRY ATTEMPT] {retry_count}/{MAX_RETRIES} attempting database connection...")
+
+# ==============================================================================
+# 2. BREAK AND CONTINUE IN POLLING LOOPS
+# ==============================================================================
+
+import time
+
+queue = ["job_1", "skip_me", "job_2", "STOP", "job_3"]
+
+while queue:
+    current_job = queue.pop(0)
+    
+    if current_job.startswith("skip_"):
+        print(f"[SKIPPED] {current_job}")
+        continue  # Skip processing and move to next item
+        
+    if current_job == "STOP":
+        print("[TERMINATING] Emergency stop signal received.")
+        break  # Exit loop immediately
+        
+    print(f"[PROCESSED] Successfully executed {current_job}")
+
+# ==============================================================================
+# 3. THE PYTHON 'WHILE ... ELSE' PATTERN
+# ==============================================================================
+
+# Search algorithm: find prime candidate
+number = 17
+divisor = 2
+is_prime = True
+
+while divisor * divisor <= number:
+    if number % divisor == 0:
+        print(f"{number} is composite (divisible by {divisor})")
+        break
+    divisor += 1
+else:
+    # Executes ONLY if loop finished without hitting a 'break'
+    print(f"{number} is confirmed a Prime Number!")
+```
+
+---
+
+## 3. The Production Reality ("What Textbooks Skip")
+
+* **Infinite Loop CPU Starvation**: Writing `while True:` without a blocking sleep (`time.sleep()`), socket poll, or async wait (`await asyncio.sleep()`) will peg the CPU core at 100% utilization.
+* **Exponential Backoff**: In production distributed systems, polling loops must implement exponential backoff with jitter to avoid hammering downstream services during outages.
+
+> [!WARNING]
+> **Production Gotcha**: Modifying a collection while iterating over it in a `while` loop can cause index drift or infinite loops. Always maintain explicit tracking variables.
+
+---
+
+## 4. Exam & Technical Interview Gotchas
+
+1. **`while ... else` Semantics**: In oral exams and viva questions, 90% of candidates mistakenly claim that the `else` block in a `while` loop executes if the condition is false initially. In fact, it executes whenever the loop finishes naturally without executing `break`.
+2. **Off-by-One Errors**: Be meticulous with `<` vs `<=`.
+3. **Condition Mutation**: Always ensure the variable governing the loop test is mutated inside the block, or the loop will never terminate.
+
+---
+
+## 5. Mythos Mentorship Bridge
+
+Build distributed job workers and streaming consumer loops in the **[MYTHOS Live Weekend Cohort](/register?source=library_python_while)**.
+"""
+
+        elif slug == "python-for-loops-range":
+            return """
+## 1. Academic Definition & Objectives
+
+Unlike traditional C or Java `for` loops that manipulate an index variable (`for (int i=0; i<n; i++)`), Python's `for` loop is a **collection iterator**. It iterates over items in any **iterable** (lists, tuples, strings, dictionaries, sets, generators) following the **Iterator Protocol** (`__iter__()` and `__next__()`).
+
+Key Competencies:
+* The `range(start, stop, step)` built-in sequence generator.
+* Built-in iteration helpers: `enumerate()`, `zip()`, `reversed()`, `sorted()`.
+* Dictionary iteration (`.keys()`, `.values()`, `.items()`).
+* The `for ... else` clause.
+
+---
+
+## 2. Core Concepts & Implementation Blueprint
+
+```python
+# ==============================================================================
+# 1. RANGE FUNCTION & ENUMERATE
+# ==============================================================================
+
+# range(start, stop, step) generates values on-demand without storing them in memory
+for i in range(1, 10, 2):
+    print(f"Odd step value: {i}")  # 1, 3, 5, 7, 9
+
+# Idiomatic index tracking with enumerate() - NEVER use range(len(items))!
+servers = ["web-01", "api-01", "db-primary", "cache-01"]
+
+for rank, server in enumerate(servers, start=1):
+    print(f"Priority #{rank}: {server}")
+
+# ==============================================================================
+# 2. PARALLEL ITERATION WITH ZIP()
+# ==============================================================================
+
+metrics = ["CPU", "Memory", "Disk I/O"]
+readings = [42.5, 78.1, 12.0]
+
+for metric, reading in zip(metrics, readings):
+    print(f"[TELEMETRY] {metric}: {reading}%")
+
+# ==============================================================================
+# 3. DICTIONARY UNPACKING & FOR...ELSE
+# ==============================================================================
+
+configs = {"host": "127.0.0.1", "port": 5432, "ssl_mode": "require"}
+
+for key, val in configs.items():
+    print(f"Configuration -> {key} = {val}")
+
+# Search with for...else
+forbidden_keys = ["admin_password", "secret_key"]
+for k in configs.keys():
+    if k in forbidden_keys:
+        print(f"[SECURITY ALERT] Leak detected: {k}")
+        break
+else:
+    print("[SECURITY CLEAR] No sensitive secrets in payload.")
+```
+
+---
+
+## 3. The Production Reality ("What Textbooks Skip")
+
+* **Range in Python 3 is Memory Efficient**: In Python 2, `range(1000000)` allocated a list of one million integers in RAM. In Python 3, `range()` is an immutable sequence object that computes elements lazily on demand in $O(1)$ memory.
+* **`zip()` Truncation Trap**: By default, `zip(list_a, list_b)` silently stops at the shortest list! If `list_a` has 10 items and `list_b` has 3, 7 items are silently ignored. In production, use `itertools.zip_longest()` when mismatched lengths indicate data loss.
+
+> [!WARNING]
+> **Production Gotcha**: Never write `for i in range(len(my_list)): val = my_list[i]`. It is an unpythonic anti-pattern. Use `for item in my_list:` or `for idx, item in enumerate(my_list):`.
+
+---
+
+## 4. Exam & Technical Interview Gotchas
+
+1. **Modifying an Iterable During Iteration**: Modifying a list (adding or deleting elements) while iterating over it causes skipped elements or infinite loops. Always iterate over a shallow copy (`for item in my_list.copy():`).
+2. **Unpacking with `zip(*matrix)`**: Used to transpose matrices in one line: `transposed = list(zip(*matrix))`.
+3. **`range()` Object Attributes**: `range` objects support $O(1)$ containment checks (`x in range(...)`) and index slicing without generating elements.
+
+---
+
+## 5. Mythos Mentorship Bridge
+
+Learn to build high-performance data transformation loops and vectorization workflows in the **[MYTHOS Live Weekend Cohort](/register?source=library_python_for)**.
+"""
+
+    return None
+
+    return None
+
+
 def _generate_topic_outline_document(subject: str, slug: str, topic_meta: Dict[str, Any]) -> ParsedDocument:
     """
     Synthesizes a structured topic syllabus guide when a custom .md file has not yet been authored.
-    Strictly adheres to the 5-part blueprint so every link in the curriculum loads smoothly.
+    Uses specialized rich code blueprints for foundational topics or falls back to the 5-part blueprint.
     """
     subject_info = SUBJECTS.get(subject, {})
     title = topic_meta.get("title", slug.replace("-", " ").title())
@@ -854,7 +1421,12 @@ def _generate_topic_outline_document(subject: str, slug: str, topic_meta: Dict[s
     vertical = topic_meta.get("vertical", "notes")
     reading_time = topic_meta.get("reading_time", "8 min read")
 
-    body = f"""
+    # Check for specialized educational blueprint
+    specialized_body = _get_specialized_topic_content(subject, slug, title)
+    if specialized_body:
+        body = specialized_body
+    else:
+        body = f"""
 ## 1. Academic Definition & Objectives
 
 This module explores **{title}** within the **{subject_info.get('title', subject.upper())}** engineering curriculum.
@@ -1084,20 +1656,183 @@ def list_documents_for_subject(
         docs.append(doc_meta)
         seen_slugs.add(t_slug)
 
-    # Sort primarily by category, then by order, then by title
-    docs.sort(key=lambda d: (d.category, d.order, d.title))
+    # Sort by curriculum sequence order, then by title
+    docs.sort(key=lambda d: (d.order, d.title))
     return docs
 
 
 def get_subject_grouped_by_category(
     subject: str, vertical: Optional[str] = None
 ) -> Dict[str, List[DocumentMetadata]]:
-    """Groups documents by their category for clean sidebar/hub rendering."""
+    """Groups documents by their category preserving chronological curriculum order."""
     docs = list_documents_for_subject(subject, vertical)
     grouped: Dict[str, List[DocumentMetadata]] = {}
     for doc in docs:
         grouped.setdefault(doc.category, []).append(doc)
     return grouped
+
+
+def get_adjacent_topics(
+    subject: str, current_slug: str, vertical: Optional[str] = None
+) -> tuple[Optional[DocumentMetadata], Optional[DocumentMetadata]]:
+    """
+    Finds the adjacent previous and next topics in curriculum order.
+    Returns (prev_topic, next_topic).
+    """
+    docs = list_documents_for_subject(subject, vertical)
+    if not docs:
+        return None, None
+
+    for idx, doc in enumerate(docs):
+        if doc.slug == current_slug:
+            prev_doc = docs[idx - 1] if idx > 0 else None
+            next_doc = docs[idx + 1] if idx < len(docs) - 1 else None
+            return prev_doc, next_doc
+
+    return None, None
+
+
+def get_subject_videos(subject: str) -> List[Dict[str, Any]]:
+    """
+    Returns structured masterclass video lecture modules for the Video Lectures panel.
+    Zero upfront pricing: transparent duration and curriculum takeaway breakdown.
+    """
+    subject_lower = subject.lower().strip()
+    info = SUBJECTS.get(subject_lower, {})
+    title = info.get("short_title", subject.title())
+
+    videos_db: Dict[str, List[Dict[str, Any]]] = {
+        "python": [
+            {
+                "title": "CPython Execution Engine & Bytecode Disassembly",
+                "duration": "54 min",
+                "level": "Intermediate",
+                "badge": "Core Architecture",
+                "description": "Step-by-step trace of how the CPython compiler turns source code into AST, bytecode opcodes, and frame execution in the evaluation loop.",
+                "takeaways": [
+                    "Visualizing stack frames and local namespace",
+                    "Using the 'dis' module to profile opcode performance",
+                    "Differences between Python 3.10 and 3.12 specializing adaptive interpreter",
+                ],
+            },
+            {
+                "title": "Object-Oriented Architecture & Dunder Protocol",
+                "duration": "48 min",
+                "level": "Foundational to Advanced",
+                "badge": "OOP Masterclass",
+                "description": "Deep dive into building idiomatic, robust classes with __repr__, __eq__, __hash__, and slot optimizations.",
+                "takeaways": [
+                    "Class namespace vs instance __dict__",
+                    "Designing immutability with dataclasses(frozen=True)",
+                    "__slots__ memory benchmarks for 1M+ objects",
+                ],
+            },
+            {
+                "title": "High-Throughput Concurrency: Asyncio vs ThreadPool vs Multiprocessing",
+                "duration": "62 min",
+                "level": "Production Systems",
+                "badge": "Systems Concurrency",
+                "description": "Hands-on architectural walkthrough comparing event loops, OS threads under GIL constraints, and shared-memory processes for CPU vs I/O bound pipelines.",
+                "takeaways": [
+                    "Architecting non-blocking HTTP and DB collectors with aiohttp & asyncpg",
+                    "How the GIL release mechanism operates during syscalls",
+                    "Avoiding blocking event-loop pitfalls in production",
+                ],
+            },
+            {
+                "title": "Production Python Code Review & Antipattern Refactoring",
+                "duration": "45 min",
+                "level": "Industry Best Practices",
+                "badge": "Code Review Lab",
+                "description": "Live refactoring of messy college scripts into modular, type-checked, tested, and linted packages ready for CI/CD.",
+                "takeaways": [
+                    "Static analysis with Ruff, Black, and Mypy",
+                    "Packaging with pyproject.toml & Poetry",
+                    "Dependency injection and testable function design",
+                ],
+            },
+        ],
+        "sql": [
+            {
+                "title": "Query Execution Engine: Reading EXPLAIN ANALYZE Like a DBA",
+                "duration": "58 min",
+                "level": "Intermediate to Advanced",
+                "badge": "DB Internals",
+                "description": "Visualizing query optimizer execution trees, sequential scans, index scans, bitmap heap scans, and sort-merge joins.",
+                "takeaways": [
+                    "Identifying catastrophic Cartesian products and spilled sorts",
+                    "Analyzing actual time vs estimated cost metrics",
+                    "How PostgreSQL autovacuum statistics influence query plans",
+                ],
+            },
+            {
+                "title": "Window Functions & Analytical Reporting Masterclass",
+                "duration": "46 min",
+                "level": "Analytical SQL",
+                "badge": "Core SQL",
+                "description": "Comprehensive tutorial on running totals, moving averages, MoM revenue metrics, and cohort retention using window frames.",
+                "takeaways": [
+                    "ROWS BETWEEN vs RANGE BETWEEN semantics",
+                    "Optimizing PARTITION BY performance with compound indexes",
+                    "Writing clean CTE pipelines for BI dashboards",
+                ],
+            },
+            {
+                "title": "B-Tree Index Internals, Bloat & Defragmentation",
+                "duration": "50 min",
+                "level": "Database Systems",
+                "badge": "Storage Architecture",
+                "description": "Understanding leaf nodes, root pages, high watermarks, and fill-factor tuning for write-heavy tables.",
+                "takeaways": [
+                    "Why unindexed foreign keys cause table-level locks",
+                    "Covering indexes (INCLUDE clause) to eliminate heap lookups",
+                    "Monitoring index bloat and running concurrent rebuilds",
+                ],
+            },
+        ],
+    }
+
+    if subject_lower in videos_db:
+        return videos_db[subject_lower]
+
+    return [
+        {
+            "title": f"{title} Core Architecture & Systems Walkthrough",
+            "duration": "50 min",
+            "level": "Foundational",
+            "badge": "Core Architecture",
+            "description": f"Comprehensive architectural overview of {title}, execution mechanics, memory lifecycle, and production design patterns.",
+            "takeaways": [
+                f"Core mental models for mastering {title}",
+                "Textbook syntax vs enterprise production standards",
+                "Common rookie bugs and diagnostic procedures",
+            ],
+        },
+        {
+            "title": f"Production Performance & Optimization in {title}",
+            "duration": "45 min",
+            "level": "Advanced",
+            "badge": "Performance Lab",
+            "description": f"Profiling, benchmarking, and identifying performance bottlenecks when scaling {title} under heavy workloads.",
+            "takeaways": [
+                "Profiling CPU and memory usage under load",
+                "Concurrency, resource locking, and I/O optimization",
+                "Monitoring metrics in production environments",
+            ],
+        },
+        {
+            "title": f"{title} Technical Interview & Viva Live Problem Solving",
+            "duration": "40 min",
+            "level": "Interview Prep",
+            "badge": "Viva & Interview",
+            "description": f"Live walkthrough of high-frequency interview traps, architectural whiteboard scenarios, and tricky viva questions in {title}.",
+            "takeaways": [
+                "Deconstructing senior interview questions",
+                "Edge cases, complexity trade-offs, and failure recovery",
+                "Live demonstration of optimal answers",
+            ],
+        },
+    ]
 
 
 def get_subject_summary(subject: str) -> Optional[Dict[str, Any]]:

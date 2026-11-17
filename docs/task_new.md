@@ -275,6 +275,35 @@ Tracks engagement to inform future content decisions and identify high-intent co
 
 ---
 
+### Phase 1.6: W3Schools Panel Architecture, Hierarchical Topic Sidebar & Sequential Navigation (Completed)
+* [x] **Task 1.6.1: 4-Panel Workspace Architecture on Subject Hubs (`/library/{subject}`)**
+  * Redesigned `/library/{subject}` into 4 distinct panels:
+    1. **All Topics** (open by default, `?tab=all_topics`): W3Schools-style layout featuring a hierarchical left sidebar, center reading canvas, and sequential bottom navigation buttons.
+    2. **Notes** (`?tab=notes`): Curated in-depth technical engineering notes and memory architectures.
+    3. **Interview Questions** (`?tab=interview_questions`): Curated viva questions and oral exam gotchas.
+    4. **Video Lectures** (`?tab=video_lectures`): Masterclass video workshop modules with duration badges and key takeaways.
+* [x] **Task 1.6.2: W3Schools-Style Left Sidebar Hierarchies with Granular Foundational Topics**
+  * Expanded curriculum outlines with granular subtopics:
+    * **Python Basics**: Syntax & Comments, Variables & Dynamic Typing, Numbers & Type Casting, Booleans & Logical Operators, Strings & Slicing.
+    * **Control Flow**: If...Else & Conditionals, While Loops & Break/Continue, For Loops & Range Function.
+    * **Data Structures**: Lists & Comprehensions, Tuples & Unpacking, Sets & Operations, Dictionaries & Hash Maps.
+    * **Functions & Modules**: Functions & Scope (`*args`, `**kwargs`), Lambda Functions, Modules & Virtualenvs.
+    * **OOP**: Classes & `__init__`, Inheritance & Polymorphism, Dunder Methods & Data Model.
+    * **Core Architecture**: CPython Memory & GC, Mutable Default Argument Trap, Generators, Decorators, GIL & Asyncio, File I/O.
+    * **Interview Prep**: Top 40 Python Viva Traps, Scope & Closure Gotchas.
+  * Active topic highlighting and seamless 1-click loading into the center canvas.
+* [x] **Task 1.6.3: Sequential Topic Navigation (`< Previous Topic` & `Next Topic >`)**
+  * Implemented `get_adjacent_topics(subject, slug)` in `app/apps/library/services.py` maintaining pedagogical curriculum order.
+  * Mounted `< Previous Topic: [Title]` and `Next Topic: [Title] >` buttons on both `subject_hub.html` (All Topics panel) and `reader.html`.
+* [x] **Task 1.6.4: Specialized Topic Content Blueprints**
+  * Authored rich, production-grounded blueprints for Python foundational topics (`python-syntax-comments`, `python-variables-datatypes`, `python-numbers-casting`, `python-booleans-operators`, `python-while-loops`, `python-for-loops-range`).
+  * Enforced strictly zero code execution (static copy-friendly code blocks) and zero upfront pricing.
+* [x] **Task 1.6.5: Automated Verification & Test Suite**
+  * Added 3 comprehensive test cases in `tests/test_library.py` covering W3Schools panel architecture, left-sidebar topic hierarchies, sequential navigation, and panel switching.
+  * All 29/29 tests passing (100%).
+
+---
+
 ### Phase 2: Student Authentication, Access Control & Activity Logging
 * [ ] **Task 2.1: Student User & Activity Logging Database Models**
   * Implement `users` model in `app/apps/courses/models.py` (or `app/apps/users/models.py`) with `phone` (mandatory/unique), `full_name` (mandatory), `email` (optional), `hashed_password`, `user_type`, and `college_or_company`.
