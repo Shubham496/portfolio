@@ -56,3 +56,6 @@ htmlcov/
 # Logs
 logs/
 *.log
+
+# External decoupled assets repository (decoupled from Render deployment)
+external_assets/
