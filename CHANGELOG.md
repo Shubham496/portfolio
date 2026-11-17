@@ -5,7 +5,36 @@ This serves as an audit trail and system log (similar to GitHub releases/commit 
 
 ---
 
-## [Latest Updates] - 2026-11-15 (Transition to Multi-Course Online Educational Institute & Complete Removal of Payment Mentions)
+## [Latest Updates] - 2026-11-18 (Knowledge Engine Blueprint, Decoupled Assets Vault & Micro-Monetization Architecture)
+
+### Added, Configured & Documented
+- **Architectural Roadmap & Task Guide (`docs/task_new.md`)**:
+  - Outlined comprehensive 5-phase blueprint to transform `mythostech.in` into an authoritative educational repository and dataset vault for Indian college students and junior developers.
+  - Defined 5 distinct content verticals under a unified **Resource Library** (`/library`): Notes, Practice & Viva Banks, Datasets, Books & Handbooks, and Capstone Projects.
+  - Formalized 5-part standard content blueprint for future technical guides: (1) Formal Exam Definition, (2) Interactive Query Examples, (3) Production Reality ("What Textbooks Skip"), (4) Exam & Interview Gotchas, and (5) Mythos Mentorship Bridge.
+- **Micro-Monetization & Admissions Dual Strategy**:
+  - Preserved the immutable rule that live weekend cohort tuition fees remain 100% unadvertised online (admissions and orientation counseling model via `/register`).
+  - Introduced friction-free micro-pricing for student digital study assets:
+    - Full solved viva & interview question banks: **₹10** (instant UPI unlock).
+    - Complete semester exam notes bundles: **₹20 – ₹29**.
+    - Full books & handbooks: **₹99 – ₹199**.
+    - Production capstone project bundles: **₹149 – ₹249**.
+    - Free student account tier for dataset downloads, reading progress tracking, and bookmarking.
+- **Decoupled Secondary Assets Vault (`https://github.com/Shubham496/mythos-assets`)**:
+  - Connected separate GitHub repository `mythos-assets` at `external_assets/` to shield Render.io free-tier deployment from image and dataset bloat.
+  - Added `external_assets/` to `.gitignore` in the core application repository.
+  - Initialized standardized directory structure (`images/sql`, `images/python`, `images/bi`, `datasets/`, `downloads/viva`, `downloads/books`).
+  - Standardized asset serving: jsDelivr CDN for notes imagery (`https://cdn.jsdelivr.net/gh/Shubham496/mythos-assets@main/...`) and GitHub Raw for direct dataset downloads.
+- **Synchronized System Documentation (`docs/AGENT_GUIDE.md`)**:
+  - Updated Section 2 to define the dual pricing architecture.
+  - Updated Section 4 Codebase File Map with `external_assets/`, `app/content/`, `app/apps/library/`, and `app/templates/library/`.
+  - Added Section 12 detailing the Resource Library architecture, 3-column technical docs reader UI, and activity logging specification.
+- **Automated Verification**:
+  - Full test suite verified: 15/15 tests passing cleanly with zero failures.
+
+---
+
+## [2026-11-15] (Transition to Multi-Course Online Educational Institute & Complete Removal of Payment Mentions)
 
 ### Added, Updated & Refactored
 - **Full Transformation to MYTHOS Online Institute**:
