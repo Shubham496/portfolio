@@ -5,31 +5,32 @@ This serves as an audit trail and system log (similar to GitHub releases/commit 
 
 ---
 
-## [Latest Updates] - 2026-11-18 (Phase 1.5: Inter-Page Top Nav, Left In-Page Rails, Zero-Upfront Pricing & Icon Library Hub)
+## [Latest Updates] - 2026-11-18 (Phase 1.5: 34 Major Languages & Tools Catalog, Topic Curricula & Navigation Polish)
 
 ### Added, Updated & Refactored
+- **Catalog Expansion: 34 Major Languages, Databases, Tools & Software**:
+  - Expanded `app/apps/library/services.py` to index every major programming language, database engine, data tool, framework, and cloud system:
+    - **Languages**: Python, JavaScript, TypeScript, Java, C++, C, Go (Golang), Rust, C#, PHP, HTML5/CSS3.
+    - **Databases**: SQL, MySQL, PostgreSQL, SQLite, MongoDB, Redis, Snowflake.
+    - **Data Science & BI**: Pandas, NumPy, Power BI, Tableau, Advanced Excel & Power Query.
+    - **Web Frameworks**: FastAPI, Django, React, Node.js.
+    - **DevOps, Cloud & Systems**: Docker, Kubernetes, Git & GitHub, Linux & Bash, AWS.
+    - **Growth & Marketing**: Google Ads & GA4, Meta Ads Manager, Technical SEO & Semrush.
+- **Topic-Wise Curriculum Architecture**:
+  - Structured 4–8 essential curriculum topics for every single technology that students and junior developers want to understand (e.g. Memory Internals, OOP Models, Concurrency, Concurrency/Event Loops, Query Optimization, Interview Gotchas).
+  - Dynamically synthesizes complete 5-part blueprint guides (Exam Definition, Architecture Blueprint, Production Reality, Exam & Interview Gotchas, Mentorship Bridge) with full Table of Contents for topics in active curation, ensuring **zero 404s** and immediate usability across the platform.
+- **Minimalist Icon Grid with Filter Tabs (`app/templates/library/index.html`)**:
+  - Technology tiles featuring prominent official icons and clean labels.
+  - Interactive category filtering (All, Languages, Databases, Data & BI, Frameworks, DevOps, Marketing).
 - **Multi-Page Top Navigation with Hover Dropdowns (`app/templates/partials/navbar.html`)**:
-  - Transformed the top navbar from intra-page section anchors into true multi-page navigation:
-    - **Courses & Cohorts**: Hover dropdown with links to Track 1 (Performance Marketing), Track 2 (SEO & Growth), and Track 3 (Data Analytics & BI).
-    - **Notes & Guides**: Hover dropdown for SQL, Python, Power BI, and Digital Marketing notes.
-    - **Interview & Viva**: Direct dropdown for top viva banks and examiner trap banks.
-    - **Datasets**: One-click link to clean real-world CSV portfolios (`/library?vertical=datasets`).
-    - **Admissions**: Dedicated link to `/register`.
+  - Courses, Notes & Handbooks, Interview & Viva Banks, Datasets, and Admissions desk.
 - **Universal Left-Side In-Page Section Navigator (`app/templates/partials/in_page_nav.html`)**:
-  - Implemented glassmorphism docked left navigation rail with active scroll-spy and tooltip labels.
-  - Allows 1-click jumping between page sections (`#hero`, `#engine`, `#programs`, `#methodology`, `#projects`, `#admission`, `#career`, `#syllabus`, `#about`).
-  - Added responsive mobile in-page jump menu button.
-- **Strict Zero-Upfront Pricing Rule Enforcement**:
-  - Codified Rule 3 in `docs/AGENT_GUIDE.md`: Zero prices are displayed on browse surfaces, subject hubs, or reader sidebars.
-  - Purged all upfront "₹10", "₹20", "₹99" badges across browse pages and replaced them with access status tags ("Free Access", "Student Account", "Viva Bank", "Complete Handbook").
-  - Prices are only revealed when a student hits an access paywall or clicks to unlock a product.
-- **Strictly Zero Code Execution Rule (Rule 7)**:
-  - Codified immutable policy that the platform will never provide runtime code execution or interactive REPL consoles for students; all code remains static, copy-only syntax.
-- **Minimalist Icon-First Library Hub (`app/templates/library/index.html`)**:
-  - Completely decluttered `/library` by removing long text blocks and card clutter.
-  - Replaced with a high-impact technology logo grid displaying big official symbols (MySQL, PostgreSQL, SQLite, Python, Pandas, NumPy, Power BI, Tableau, Excel, Google Ads/GA4, Meta Ads, Technical SEO) with clear names and quick-filter category pills.
+  - Glassmorphism docked navigation rail with active scroll-spy.
+- **Strictly Zero Upfront Pricing & Zero Code Execution**:
+  - Zero upfront pricing badges; strictly static copy-only syntax code blocks.
 - **Automated Verification**:
-  - All 24 automated tests in `tests/test_courses.py`, `tests/test_library.py`, and `tests/test_main.py` passing cleanly (100%).
+  - Automated tests expanded to 26 tests in `tests/test_library.py`, `tests/test_courses.py`, `tests/test_main.py`. All 26/26 passing cleanly (100%).
+
 
 ---
 

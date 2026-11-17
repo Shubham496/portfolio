@@ -123,3 +123,38 @@ def test_service_caching_and_parsing():
     # Subsequent call should return cached instance
     doc2 = get_document("sql", "sql-joins-textbook-vs-reality")
     assert doc2 is doc1
+
+
+def test_expanded_technology_hub_and_topics():
+    """Verify expanded technologies (Python, JavaScript, Docker) show full topic curricula."""
+    response = client.get("/library/python")
+    assert response.status_code == 200
+    html = response.text
+    assert "Python &amp; Data Engineering" in html or "Python" in html
+    assert "CPython Memory Architecture" in html
+    assert "Mutable Default Argument" in html
+
+    # JavaScript hub
+    res_js = client.get("/library/javascript")
+    assert res_js.status_code == 200
+    assert "JavaScript" in res_js.text
+    assert "Event Loop" in res_js.text
+
+    # Docker hub
+    res_docker = client.get("/library/docker")
+    assert res_docker.status_code == 200
+    assert "Docker" in res_docker.text
+    assert "Namespaces" in res_docker.text
+
+
+def test_topic_outline_reader_page():
+    """Verify that clicking any curriculum topic loads a full, structured 5-part guide."""
+    response = client.get("/library/python/notes/python-mutable-default-argument-trap")
+    assert response.status_code == 200
+    html = response.text
+    assert "Mutable Default Argument" in html
+    assert "Academic Definition &amp; Objectives" in html or "Academic Definition & Objectives" in html
+    assert "The Production Reality" in html
+    assert "Exam &amp; Technical Interview Gotchas" in html or "Exam & Technical Interview Gotchas" in html
+    assert "Mythos Mentorship Bridge" in html
+    assert "On This Page" in html

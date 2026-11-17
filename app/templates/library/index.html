@@ -7,7 +7,7 @@
     <!-- Ambient Background Glows -->
     <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-blue-600/10 via-purple-600/5 to-transparent blur-3xl pointer-events-none"></div>
 
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-20 relative">
         
         <!-- Breadcrumb -->
         <nav class="flex items-center space-x-2 text-sm text-slate-500 dark:text-slate-400 mb-8">
@@ -19,213 +19,100 @@
         </nav>
 
         <!-- Minimalist Hero Header -->
-        <div class="text-center max-w-3xl mx-auto mb-12">
+        <div class="text-center max-w-3xl mx-auto mb-10">
             <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800/60 text-xs font-semibold text-blue-700 dark:text-blue-400 mb-4 shadow-sm">
                 <i data-lucide="sparkles" class="w-3.5 h-3.5 text-blue-500"></i>
-                Technical Knowledge Engine &amp; Dataset Vault
+                Technology &amp; Language Curriculum Index
             </div>
             <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight mb-4">
-                Select a <span class="text-gradient-mythos">Technology</span> to Begin
+                Select a <span class="text-gradient-mythos">Language or Tool</span> to Learn
             </h1>
-            <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-xl mx-auto">
-                Clean, production-depth study notes, oral viva trap banks, clean datasets, and capstone project blueprints.
+            <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+                Explore structured topic outlines, deep-dive academic notes, and high-frequency oral exam trap banks. Click any technology to view its full curriculum.
             </p>
         </div>
 
-        <!-- Filter Pills Bar -->
+        <!-- Category Filter Tabs -->
         <div class="flex items-center justify-center gap-2 mb-10 overflow-x-auto pb-2 scrollbar-none">
-            <button onclick="filterTech('all')" class="tech-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-blue-600 text-white shadow-sm transition-all" data-filter="all">
-                All Technologies
+            <button onclick="filterCatalog('all')" class="cat-btn px-4 py-2 rounded-xl text-xs font-semibold bg-blue-600 text-white shadow-sm transition-all whitespace-nowrap" data-cat="all">
+                All ({{ subjects|length }})
             </button>
-            <button onclick="filterTech('database')" class="tech-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all" data-filter="database">
-                Databases &amp; SQL
+            <button onclick="filterCatalog('languages')" class="cat-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all whitespace-nowrap" data-cat="languages">
+                Languages
             </button>
-            <button onclick="filterTech('programming')" class="tech-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all" data-filter="programming">
-                Python &amp; Engineering
+            <button onclick="filterCatalog('databases')" class="cat-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all whitespace-nowrap" data-cat="databases">
+                Databases
             </button>
-            <button onclick="filterTech('bi')" class="tech-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all" data-filter="bi">
-                BI &amp; Analytics
+            <button onclick="filterCatalog('data_bi')" class="cat-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all whitespace-nowrap" data-cat="data_bi">
+                Data &amp; BI
             </button>
-            <button onclick="filterTech('marketing')" class="tech-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all" data-filter="marketing">
-                Growth Marketing
+            <button onclick="filterCatalog('frameworks')" class="cat-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all whitespace-nowrap" data-cat="frameworks">
+                Frameworks
+            </button>
+            <button onclick="filterCatalog('devops')" class="cat-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all whitespace-nowrap" data-cat="devops">
+                DevOps &amp; Cloud
+            </button>
+            <button onclick="filterCatalog('marketing')" class="cat-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all whitespace-nowrap" data-cat="marketing">
+                Marketing &amp; SEO
             </button>
         </div>
 
         <!-- ══════════════════════════════════════════════════════════════
-             UNCLUTTERED TECHNOLOGY LOGO GRID
-             Focused purely on big logos and clear names
+             MINIMALIST TECHNOLOGY LOGO GRID
+             Big Official Icons & Crisp Typography
              ══════════════════════════════════════════════════════════════ -->
-        <div id="tech-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 mb-20">
-            
-            <!-- 1. MySQL -->
-            <a href="/library/sql" data-category="database" 
-               class="tech-card group p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500/60 dark:hover:border-blue-500/60 transition-all duration-200 shadow-sm hover:shadow-xl hover:-translate-y-1 flex flex-col items-center text-center">
-                <div class="w-16 h-16 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
-                    <i class="devicon-mysql-plain colored text-5xl"></i>
-                </div>
-                <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                    MySQL
-                </h3>
-                <span class="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-1">Relational Queries &amp; Joins</span>
-            </a>
-
-            <!-- 2. PostgreSQL -->
-            <a href="/library/sql" data-category="database" 
-               class="tech-card group p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500/60 dark:hover:border-blue-500/60 transition-all duration-200 shadow-sm hover:shadow-xl hover:-translate-y-1 flex flex-col items-center text-center">
-                <div class="w-16 h-16 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
-                    <i class="devicon-postgresql-plain colored text-5xl"></i>
-                </div>
-                <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                    PostgreSQL
-                </h3>
-                <span class="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-1">Planner, CTEs &amp; Indexes</span>
-            </a>
-
-            <!-- 3. SQLite -->
-            <a href="/library/sql" data-category="database" 
-               class="tech-card group p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500/60 dark:hover:border-blue-500/60 transition-all duration-200 shadow-sm hover:shadow-xl hover:-translate-y-1 flex flex-col items-center text-center">
-                <div class="w-16 h-16 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
-                    <i class="devicon-sqlite-plain colored text-5xl"></i>
-                </div>
-                <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                    SQLite
-                </h3>
-                <span class="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-1">Embedded &amp; Lab Queries</span>
-            </a>
-
-            <!-- 4. Python -->
-            <a href="/library/python" data-category="programming" 
-               class="tech-card group p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-amber-500/60 dark:hover:border-amber-500/60 transition-all duration-200 shadow-sm hover:shadow-xl hover:-translate-y-1 flex flex-col items-center text-center">
-                <div class="w-16 h-16 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
-                    <i class="devicon-python-plain colored text-5xl"></i>
-                </div>
-                <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-amber-500 transition-colors">
-                    Python
-                </h3>
-                <span class="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-1">Memory, OOP &amp; Traps</span>
-            </a>
-
-            <!-- 5. Pandas -->
-            <a href="/library/python" data-category="programming" 
-               class="tech-card group p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-amber-500/60 dark:hover:border-amber-500/60 transition-all duration-200 shadow-sm hover:shadow-xl hover:-translate-y-1 flex flex-col items-center text-center">
-                <div class="w-16 h-16 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
-                    <i class="devicon-pandas-plain colored text-5xl"></i>
-                </div>
-                <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-amber-500 transition-colors">
-                    Pandas
-                </h3>
-                <span class="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-1">Data Wrangling &amp; ETL</span>
-            </a>
-
-            <!-- 6. NumPy -->
-            <a href="/library/python" data-category="programming" 
-               class="tech-card group p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-amber-500/60 dark:hover:border-amber-500/60 transition-all duration-200 shadow-sm hover:shadow-xl hover:-translate-y-1 flex flex-col items-center text-center">
-                <div class="w-16 h-16 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
-                    <i class="devicon-numpy-plain colored text-5xl"></i>
-                </div>
-                <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-amber-500 transition-colors">
-                    NumPy
-                </h3>
-                <span class="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-1">Vectorized Arrays</span>
-            </a>
-
-            <!-- 7. Power BI -->
-            <a href="/library/bi" data-category="bi" 
-               class="tech-card group p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-emerald-500/60 dark:hover:border-emerald-500/60 transition-all duration-200 shadow-sm hover:shadow-xl hover:-translate-y-1 flex flex-col items-center text-center">
-                <div class="w-16 h-16 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
+        <div id="catalog-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-5 mb-20">
+            {% for item in subjects %}
+            <a href="/library/{{ item.slug }}" data-group="{{ item.group }}" 
+               class="catalog-card group relative p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500/60 dark:hover:border-blue-500/60 transition-all duration-200 shadow-sm hover:shadow-xl hover:-translate-y-1 flex flex-col items-center justify-between text-center min-h-[160px]">
+                
+                <!-- Logo Container -->
+                <div class="w-16 h-16 flex items-center justify-center my-auto group-hover:scale-110 transition-transform duration-200">
+                    {% if item.icon_type == 'svg' and item.icon == 'powerbi' %}
                     <svg viewBox="0 0 24 24" class="w-12 h-12" fill="none">
                         <path d="M4 14C4 12.8954 4.89543 12 6 12H8V20H6C4.89543 20 4 19.1046 4 18V14Z" fill="#F2C811"/>
                         <path d="M9 8C9 6.89543 9.89543 6 11 6H13V20H11C9.89543 20 9 19.1046 9 18V8Z" fill="#ECA500"/>
                         <path d="M14 4C14 2.89543 14.8954 2 16 2H18C19.1046 2 20 2.89543 20 4V18C20 19.1046 19.1046 20 18 20H16C14.8954 20 14 19.1046 14 18V4Z" fill="#C98A00"/>
                     </svg>
-                </div>
-                <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-emerald-500 transition-colors">
-                    Power BI
-                </h3>
-                <span class="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-1">DAX &amp; Star Schemas</span>
-            </a>
-
-            <!-- 8. Tableau -->
-            <a href="/library/bi" data-category="bi" 
-               class="tech-card group p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-emerald-500/60 dark:hover:border-emerald-500/60 transition-all duration-200 shadow-sm hover:shadow-xl hover:-translate-y-1 flex flex-col items-center text-center">
-                <div class="w-16 h-16 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
+                    {% elif item.icon_type == 'svg' and item.icon == 'tableau' %}
                     <svg viewBox="0 0 24 24" class="w-12 h-12" fill="#E97627">
                         <path d="M11.5 2H12.5V7H11.5V2ZM7 11.5H2V12.5H7V11.5ZM22 11.5H17V12.5H22V11.5ZM11.5 17H12.5V22H11.5V17ZM6 6H7.5V9.5H6V6ZM16.5 6H18V9.5H16.5V6ZM6 14.5H7.5V18H6V14.5ZM16.5 14.5H18V18H16.5V14.5ZM11 9H13V15H11V9Z"/>
                     </svg>
-                </div>
-                <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-emerald-500 transition-colors">
-                    Tableau
-                </h3>
-                <span class="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-1">LOD &amp; Visual Analytics</span>
-            </a>
-
-            <!-- 9. Excel & Power Query -->
-            <a href="/library/bi" data-category="bi" 
-               class="tech-card group p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-emerald-500/60 dark:hover:border-emerald-500/60 transition-all duration-200 shadow-sm hover:shadow-xl hover:-translate-y-1 flex flex-col items-center text-center">
-                <div class="w-16 h-16 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
+                    {% elif item.icon_type == 'svg' and item.icon == 'excel' %}
                     <svg viewBox="0 0 24 24" class="w-12 h-12" fill="none">
                         <rect x="3" y="3" width="18" height="18" rx="3" fill="#107C41"/>
                         <path d="M8 8L16 16M16 8L8 16" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
                     </svg>
+                    {% elif item.icon_type == 'devicon' %}
+                    <i class="{{ item.icon }} text-5xl"></i>
+                    {% else %}
+                    <i data-lucide="{{ item.icon }}" class="w-10 h-10 text-blue-500"></i>
+                    {% endif %}
                 </div>
-                <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-emerald-500 transition-colors">
-                    Excel &amp; Power Query
-                </h3>
-                <span class="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-1">Financial Models &amp; M Code</span>
-            </a>
 
-            <!-- 10. Google Ads & GA4 -->
-            <a href="/library/digital-marketing" data-category="marketing" 
-               class="tech-card group p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-purple-500/60 dark:hover:border-purple-500/60 transition-all duration-200 shadow-sm hover:shadow-xl hover:-translate-y-1 flex flex-col items-center text-center">
-                <div class="w-16 h-16 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
-                    <i class="devicon-google-plain colored text-5xl"></i>
+                <!-- Label & Topics Pill -->
+                <div class="mt-2 w-full">
+                    <h3 class="text-sm font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
+                        {{ item.short_title }}
+                    </h3>
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                        {{ item.total_resources }} Topics
+                    </p>
                 </div>
-                <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-purple-500 transition-colors">
-                    Google Ads &amp; GA4
-                </h3>
-                <span class="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-1">Search, PMax &amp; Attribution</span>
             </a>
-
-            <!-- 11. Meta Ads Manager -->
-            <a href="/library/digital-marketing" data-category="marketing" 
-               class="tech-card group p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-purple-500/60 dark:hover:border-purple-500/60 transition-all duration-200 shadow-sm hover:shadow-xl hover:-translate-y-1 flex flex-col items-center text-center">
-                <div class="w-16 h-16 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
-                    <svg viewBox="0 0 24 24" class="w-12 h-12" fill="#0668E1">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.8 14.5c-1.3 0-2.4-.8-3.1-1.9-.7 1.1-1.8 1.9-3.1 1.9-2.1 0-3.6-1.7-3.6-4s1.5-4 3.6-4c1.3 0 2.4.8 3.1 1.9.7-1.1 1.8-1.9 3.1-1.9 2.1 0 3.6 1.7 3.6 4s-1.5 4-3.6 4z"/>
-                    </svg>
-                </div>
-                <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-purple-500 transition-colors">
-                    Meta Ads Manager
-                </h3>
-                <span class="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-1">Creative Testing &amp; Scaling</span>
-            </a>
-
-            <!-- 12. Technical SEO & Semrush -->
-            <a href="/library/digital-marketing" data-category="marketing" 
-               class="tech-card group p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-purple-500/60 dark:hover:border-purple-500/60 transition-all duration-200 shadow-sm hover:shadow-xl hover:-translate-y-1 flex flex-col items-center text-center">
-                <div class="w-16 h-16 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
-                    <div class="w-12 h-12 rounded-xl bg-purple-600 text-white flex items-center justify-center shadow-md">
-                        <i data-lucide="search" class="w-7 h-7"></i>
-                    </div>
-                </div>
-                <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-purple-500 transition-colors">
-                    Technical SEO
-                </h3>
-                <span class="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-1">Audits, Schema &amp; Organic</span>
-            </a>
-
+            {% endfor %}
         </div>
 
-        <!-- Live Cohort Apply Banner -->
+        <!-- Live Mentorship Strip -->
         <div class="p-8 rounded-3xl bg-gradient-to-r from-blue-900/30 via-purple-900/20 to-slate-900 border border-blue-800/40 text-center max-w-4xl mx-auto">
             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-semibold mb-3">
-                <i data-lucide="calendar" class="w-3.5 h-3.5"></i> Live Weekend Mentorship
+                <i data-lucide="calendar" class="w-3.5 h-3.5"></i> Selective Weekend Mentorship
             </span>
             <h3 class="text-xl sm:text-2xl font-bold text-white mb-2">
-                Need Directed Cohort Mentorship?
+                Learn Systems Architecture Live
             </h3>
             <p class="text-xs sm:text-sm text-slate-300 mb-5 max-w-xl mx-auto">
-                Saturday &amp; Sunday live cohorts in Data Analysis &amp; Growth Marketing. Live systems coding and career placement prep.
+                Join our Saturday &amp; Sunday cohorts in Data Engineering, Python Analytics, and Growth Funnels. Live project reviews under direct mentorship.
             </p>
             <div class="flex flex-wrap items-center justify-center gap-3">
                 <a href="/register" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs transition-colors shadow-sm flex items-center gap-2">
@@ -241,19 +128,17 @@
 </div>
 
 <script>
-    function filterTech(category) {
-        // Toggle active button style
-        document.querySelectorAll('.tech-filter-btn').forEach(btn => {
-            if (btn.getAttribute('data-filter') === category) {
-                btn.className = 'tech-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-blue-600 text-white shadow-sm transition-all';
+    function filterCatalog(group) {
+        document.querySelectorAll('.cat-btn').forEach(btn => {
+            if (btn.getAttribute('data-cat') === group) {
+                btn.className = 'cat-btn px-4 py-2 rounded-xl text-xs font-semibold bg-blue-600 text-white shadow-sm transition-all whitespace-nowrap';
             } else {
-                btn.className = 'tech-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all';
+                btn.className = 'cat-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all whitespace-nowrap';
             }
         });
 
-        // Filter cards
-        document.querySelectorAll('.tech-card').forEach(card => {
-            if (category === 'all' || card.getAttribute('data-category') === category) {
+        document.querySelectorAll('.catalog-card').forEach(card => {
+            if (group === 'all' || card.getAttribute('data-group') === group) {
                 card.style.display = 'flex';
             } else {
                 card.style.display = 'none';
