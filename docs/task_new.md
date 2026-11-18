@@ -1,384 +1,312 @@
-# ARCHITECTURAL ROADMAP & TASK GUIDE: MYTHOS KNOWLEDGE & RESOURCE ENGINE
+# MYTHOS ONLINE INSTITUTE — MASTER ROADMAP & TASK GUIDE (task_new.md)
 
-## 1. Mission, Strategic Intent & Micro-Monetization Model
-
-### 1.1 Primary Objective
-Transform `mythostech.in` from a pure cohort landing page into an **authoritative educational repository, dataset vault, and practice hub** for Indian college students (B.Tech, BCA, MCA, BSc IT) and junior developers.
-
-### 1.2 The Problem We Solve
-College curricula and superficial online tutorials teach outdated theory and half-truths (e.g., teaching that SQL joins only happen on PK/FK using `=` equality, omitting non-equi joins, execution planners, and `NULL` traps). 
-Mythos bridges the gap: giving students the exact structured answers they need to **score top marks in university exams and vivas**, while equipping them with **real production depth** to pass technical interviews.
+> **CORE PURPOSE OF THE PLATFORM**:
+> The site is a **lead machine for live cohorts**, not a shop for ₹10 items.
+> Its job, in order: **Get found on Google &rarr; Build trust &rarr; Capture Name + WhatsApp number &rarr; Move people to a free demo class &rarr; Enroll them in a cohort.**
+> Small bundle sales are a bonus, deferred to Phase 6.
 
 ---
 
-### 1.3 Monetization Ladder & Micro-Pricing Strategy
+## 1. Immutable Operational & Platform Rules
 
-To maximize mass distribution across Indian university networks, we adopt a **Micro-Transaction Funnel**:
+These rules are non-negotiable across all development phases:
+
+1. **Strict Push Restriction (Platform Owner Only)**:
+   * Only the platform owner is authorized to execute `git push` or deploy to production.
+   * AI agents must test, stage, and commit locally with clean git status.
+2. **Never Expose Secrets or Commit Ignored Assets**:
+   * Never commit `.env`, passwords, tokens, API keys, or `*.db` files.
+   * Large binary assets, datasets, and high-res media must stay in `external_assets/`.
+3. **Zero Code Execution on Platform**:
+   * All code blocks remain static syntax-highlighted reference elements. No interactive consoles or execution runners.
+4. **Zero Public Cohort Pricing**:
+   * Live cohort tuition is **never displayed** on public browse pages. Cohort admissions are handled through counseling and free demo classes.
+   * A price may appear only at a future digital paywall or when someone explicitly clicks to buy.
+5. **Contact Fields Invariant**:
+   * **Full Name** and **WhatsApp/Phone** are mandatory on all student forms.
+   * **Email is strictly optional** across all student-facing forms.
+6. **Hidden Admin Portal**:
+   * Admin routes have no public header or footer links.
+   * Public administrative signup routes remain permanently disabled (redirecting to `/admin/login`).
+7. **Two-Tier Navigation Architecture**:
+   * Top navigation bar links exclusively between pages.
+   * Universal left rail navigates sections within a page.
+8. **No Invented Project Information or Fake Proof**:
+   * Ground every technical statement in verified code.
+   * Never fabricate names, numbers, credentials, or testimonials. Use a `[PLACEHOLDER]` token instead.
+
+---
+
+## 2. Owner-Approved Directives (Overriding Legacy Specs)
+
+These directives supersede prior specifications in `GUIDE.md` and legacy roadmaps:
+
+1. **Two Mentors (Clear Separation of Disciplines)**:
+   * **Digital Marketing Mentor**: The owner's partner, displayed with real name, photo, bio, and LinkedIn link via `[DM_MENTOR_NAME]`, `[DM_MENTOR_PHOTO]`, `[DM_MENTOR_BIO]`, and `[DM_MENTOR_LINKEDIN]`.
+   * **Data Analytics Mentor**: Strictly **anonymous** (no personal name, no photo), displayed as the *Mythos Data Analytics Mentor* with a grounded, neutral profile (3+ years teaching, 400+ learners taught, core tools covered).
+   * **Discipline Isolation**: The Digital Marketing mentor is never represented as teaching Data Analytics, and the Data Analytics mentor is never represented as teaching Digital Marketing.
+2. **One Subject at a Time (Data Analytics Track)**:
+   * The Data Analytics cohort runs **one subject per batch** (~8 weeks per subject): SQL, Excel, Power BI, Python, Tableau, Git & GitHub.
+   * The platform shows what subject is enrolling now and what comes next.
+3. **Track-Specific Cohort Schedules**:
+   * Data Analytics cohorts run **Saturday & Sunday, 6:00 PM – 8:00 PM IST**.
+   * Digital Marketing cohorts run on `[DM_SCHEDULE]`. Schedules are batch-specific attributes, not hardcoded global singletons.
+4. **Trust Claim Standardization**:
+   * Expunge all mentions of *"550+ Students Trained"*.
+   * Replace with `[TRUST_CLAIM]` (default: *"400+ learners taught by our mentors over 3+ years"*).
+5. **Dynamic Contact & Communication Details**:
+   * Business email and WhatsApp numbers must load from environment variables (`BUSINESS_EMAIL`, `BUSINESS_WHATSAPP`), never hardcoded.
+   * Purge legacy hardcoded personal email (`shubhamsinghh057@gmail.com`) and phone (`8727864157`).
+
+---
+
+## 3. Placeholders Inventory (Owner-Supplied Data)
+
+The following items are strictly provided by the platform owner. AI agents must use these exact bracketed identifiers until the owner provides verified production values:
+
+* `[DM_MENTOR_NAME]`: Digital Marketing mentor's full name.
+* `[DM_MENTOR_PHOTO]`: File path/URL for the DM mentor's professional photo.
+* `[DM_MENTOR_BIO]`: Verified professional background and track record for DM mentor.
+* `[DM_MENTOR_LINKEDIN]`: Verified LinkedIn profile URL for DM mentor.
+* `[DM_SCHEDULE]`: Schedule timings for Digital Marketing cohorts.
+* `[BUSINESS_EMAIL]`: Official institute business email address (env: `BUSINESS_EMAIL`).
+* `[BUSINESS_WHATSAPP]`: Official institute WhatsApp contact number (env: `BUSINESS_WHATSAPP`).
+* `[WHATSAPP_CHANNEL_URL]`: Public link to the Mythos WhatsApp community channel.
+* `[TELEGRAM_URL]`: Link to the student Telegram group/channel.
+* `[INSTAGRAM_URL]`: Official Mythos Instagram page.
+* `[LINKEDIN_PAGE_URL]`: Official Mythos LinkedIn company/institute page.
+* `[YOUTUBE_URL]`: Official Mythos YouTube channel.
+* `[GOOGLE_SITE_VERIFICATION]`: Google Search Console site verification token.
+* `[SUBJECT_ORDER]`: Curriculum sequence for Data Analytics (default: SQL, Excel, Power BI, Python, Tableau, Git and GitHub).
+* `[DEMO_CLASS_DATETIME]`: Scheduled date, time, and meeting link for the upcoming free demo class.
+* `[LEAD_MAGNET_FILES]`: Downloadable cheat sheets and practice datasets hosted in `external_assets/`.
+* `[TRUST_CLAIM]`: Standardized credibility statement (default: *"400+ learners taught by our mentors over 3+ years"*).
+* `[TESTIMONIALS]`: Real student reviews only. The testimonials UI component remains dormant/hidden until genuine submissions are supplied.
+
+---
+
+## 4. Completed Foundations & Existing Architecture
+
+The following infrastructure has been implemented, tested, and verified clean:
+* **FastAPI Core Engine**: Lightweight ASGI architecture running on Uvicorn with sub-100ms server-side rendering.
+* **Component-Decomposed Jinja2 Templates**: Modular sections (`hero.html`, `programs.html`, `syllabus.html`, etc.).
+* **Knowledge & Documentation Engine**: PyMdown markdown parsing, header anchor IDs, Table of Contents extraction, and LRU/TTL caching.
+* **Sequential W3Schools-Style Study Tracks**: Complete curriculum topic trees for SQL and Python with `< Previous Topic` and `Next Topic >` navigation.
+* **Dual-Engine Database Architecture**: SQLite for local zero-setup execution, PostgreSQL for cloud deployment.
+* **Protected Instructor Admin Portal**: Session cookie authentication, leads pipeline management, and CSV export.
+* **Automated Test Baseline**: 46 automated pytest test cases passing cleanly.
+
+---
+
+## 5. Master Implementation Roadmap (Phases 0 through 6)
+
+Development is conducted **one phase at a time**. Each phase is verified, tested, documented, and locally committed before advancing.
 
 ```
-┌────────────────────────────────────────────────────────────────────────┐
-│ TIER 1: 100% PUBLIC & FREE (NO LOGIN REQUIRED)                         │
-│ • Core Academic & Production Notes (SQL, Python, BI, SEO)              │
-│ • Preview Questions (Top 10-15 Viva & Interview gotchas)               │
-│ • Mini Data Snippets (for follow-along tutorials)                      │
-│ Strategy: Instant zero-friction access, WhatsApp/Telegram virality,    │
-│           and maximum Google SEO indexing.                             │
-└───────────────────────────────────┬────────────────────────────────────┘
-                                    │ Unlocks downloads & saved progress
-                                    ▼
-┌────────────────────────────────────────────────────────────────────────┐
-│ TIER 2: FREE REGISTERED STUDENT ACCOUNT (LOGIN REQUIRED)               │
-│ • Free Complete Datasets (.csv, .xlsx, .sqlite with data dictionaries) │
-│ • Reading progress tracking and bookmarking                            │
-│ • Access to community discussion / feedback                            │
-│ Strategy: Captures high-intent leads (Name, WhatsApp, Email, College). │
-└───────────────────────────────────┬────────────────────────────────────┘
-                                    │ Instant UPI micro-purchases
-                                    ▼
-┌────────────────────────────────────────────────────────────────────────┐
-│ TIER 3: MICRO-TRANSACTIONS (MASS STUDENT ADOPTION: ₹10 – ₹49)          │
-│ • Full Solved Viva & Interview Question Banks: ₹10                     │
-│ • Complete Semester Exam Notes Bundles: ₹20 – ₹29                      │
-│ • Quick Revision / Lab Manual Kits: ₹29 – ₹49                          │
-│ Strategy: Pocket-money impulse buys (cheaper than a chai/snack).       │
-│           Converts free readers into paying, verified customers via    │
-│           frictionless 1-click UPI payments.                           │
-└───────────────────────────────────┬────────────────────────────────────┘
-                                    │ Premium digital products & cohorts
-                                    ▼
-┌────────────────────────────────────────────────────────────────────────┐
-│ TIER 4: PREMIUM DIGITAL PRODUCTS & HIGH-TICKET COHORTS                 │
-│ • Full Books & Comprehensive Handbooks: ₹99 – ₹199                     │
-│ • End-to-End Downloadable Capstone Projects (code + data + docs): ₹149 │
-│ • MYTHOS Live Weekend Cohorts (Live Mentorship with Shubham Singh):    │
-│   - Tuition pricing is NEVER displayed online (remains pure admissions │
-│     orientation & counseling model via /register).                     │
-│   - Organic readers of notes & books convert directly to cohort leads. │
-└────────────────────────────────────────────────────────────────────────┘
+Phase 0: Security & Privacy (DO FIRST)
+  │
+Phase 1: Be Findable (SEO & Quality Gate)
+  │
+Phase 2: Trust & People (Mentors, Contact Cleanup, 400+ Trust Claim)
+  │
+Phase 3: Cohort Display (One Subject at a Time, Roadmap Strip, Batch CRUD)
+  │
+Phase 4: Lead Capture & Funnel (Demo Class, Lead Magnets, UTMs, Anti-Spam)
+  │
+Phase 5: Analytics (Privacy-Friendly Events & Admin Funnel Card)
+  │
+Phase 6: Later Only (Optional Paywalled Bundles via External Link)
 ```
 
 ---
 
-## 2. Platform Information Architecture & Content Verticals
+### Phase 0: Security & Privacy (DO FIRST)
+*The platform is about to scale student contact capture; privacy and access boundaries must be hardened first.*
 
-Content is organized under **5 distinct verticals**, accessible via a unified **Resource Hub** (`/library`):
-
-```
-                   ┌─────────────────────────────────────────┐
-                   │             MYTHOS LIBRARY              │
-                   └─────────────────────────────────────────┘
-                                        │
-         ┌──────────────┬───────────────┼───────────────┬──────────────┐
-         ▼              ▼               ▼               ▼              ▼
-     [Notes]       [Practice/Viva]  [Datasets]       [Books]       [Projects]
-    Deep theory    Oral exam Q&A,   Clean real-world Comprehensive Full source code,
-    vs. production lab codes, and   CSVs/databases   eBooks and    clean data, and
-    gotchas        interview prep   for portfolios   handbooks     case studies
-```
-
-### 2.1 The Unified Subject Hub (`/library/{subject}`)
-When a student selects a subject (e.g., `SQL`, `Python`, `PowerBI`, `Digital Marketing`), they land on a unified dashboard with intuitive resource tabs:
-* `[ 📝 Notes (15) ]`: Structured chapters from fundamentals to production internals.
-* `[ 🎯 Practice & Viva (45) ]`: University lab viva questions + junior interview traps.
-* `[ 📊 Datasets (6) ]`: Clean, ready-to-query practice datasets with sample business questions.
-* `[ 📚 Books & Guides (2) ]`: Downloadable PDF guides and comprehensive handbooks.
-* `[ 🚀 Capstone Projects (3) ]`: Real-world end-to-end portfolio projects.
-
----
-
-## 3. User Experience & UI Architecture
-
-### 3.1 Design Philosophy: Modern Technical Documentation Engine
-* **Lightweight Server-Side Rendering (SSR)**: Built natively with FastAPI + Jinja2 for sub-100ms TTFB on Render.io free tier. No heavy frontend SPA frameworks.
-* **Three-Column Reading Layout**:
-  1. **Left Navigation Tree**: Collapsible categories, topics, and chapters with completion indicators.
-  2. **Center Reading Canvas**: Wide, distraction-free typography using Mythos Poppins/Inter design tokens, copyable syntax-highlighted code blocks (Prism.js via CDN), and styled callout boxes (`> [!NOTE]`, `> [!EXAM]`, `> [!PRO-TIP]`).
-  3. **Right Sticky Sidebar**: On-page Table of Contents (TOC) + Contextual Cohort/Resource CTA card.
-* **Social Sharing Bar**: Sticky one-click "Share to WhatsApp Class Group" and "Share to Telegram" buttons on every note and viva set.
-* **Mobile Experience**: Clean off-canvas slide-out drawer for navigation and responsive typography.
+* [ ] **Task 0.1: Lock the Lead API Endpoints**
+  * Verify authentication guards on all `/api/courses/leads*` endpoints.
+  * Enforce `require_admin` on:
+    * `GET /api/courses/leads`
+    * `GET /api/courses/leads/summary`
+    * `GET /api/courses/leads/export.csv`
+    * `GET /api/courses/leads/{id}`
+    * `PATCH /api/courses/leads/{id}/status`
+  * Confirm that only public admissions actions stay unauthenticated: `POST /api/courses/enquiry`, `POST /api/courses/register`, `GET /api/courses/batches`, and `GET /api/courses/instructor`.
+  * Write automated tests proving anonymous requests to lead endpoints return HTTP 303 (redirect) or HTTP 401.
+* [ ] **Task 0.2: Enforce SECRET_KEY Discipline**
+  * Remove hardcoded default fallback secrets from `app/core/base_config.py`, `app/apps/courses/auth.py`, and documentation.
+  * In production mode (`ENVIRONMENT=production` or `deployment`), raise an immediate startup error if `SECRET_KEY` is absent or set to an insecure placeholder.
+  * Document secret generation command (`python -c "import secrets; print(secrets.token_hex(32))"`).
+* [ ] **Task 0.3: Consent Capture & Legal Policy Pages**
+  * Add policy pages with clear, plain-language placeholder text for owner review:
+    * `/privacy` (`app/templates/legal/privacy.html`): Data collection, WhatsApp communication policy, zero data-selling guarantee.
+    * `/terms` (`app/templates/legal/terms.html`): Terms of service, intellectual property, cohort enrollment guidelines.
+    * `/refund-policy` (`app/templates/legal/refund_policy.html`): Clear refund and rescheduling policies.
+  * Add a mandatory consent checkbox on all inquiry, registration, and lead capture forms:
+    > *"I agree to be contacted by phone or WhatsApp about this course."*
+  * Extend `StudentLead` database model to store:
+    * `consent_given`: `Boolean`, default `True`.
+    * `consent_at`: `DateTime`, timestamp of consent.
+  * Add `do_not_contact` to allowed lead statuses so counselors can immediately suppress outreach if requested.
+* [ ] **Task 0.4: Log Redaction & Zero PII in Logs**
+  * Audit all application loggers (`courses.services`, `courses.router`, `main`, etc.).
+  * Ensure phone numbers, email addresses, and student names are never emitted to standard output, file logs, or task logs. Mask sensitive tokens in logging statements (`phone[:3] + "****" + phone[-2:]`).
 
 ---
 
-## 4. Database Architecture & Customer Activity Tracking
+### Phase 1: Be Findable (SEO & Quality Gate)
+*Ensure search engines index high-quality content while excluding drafts and private surfaces.*
 
-### 4.1 Access Control Matrix
-| Resource | Public / Guest | Free Registered Student | Paid Micro-Purchase (₹10-₹49) | Paid Book / Project |
-| :--- | :---: | :---: | :---: | :---: |
-| Public Notes & Articles | ✅ Full Access | ✅ Full Access | ✅ Full Access | ✅ Full Access |
-| Preview Questions (Top 10) | ✅ Full Access | ✅ Full Access | ✅ Full Access | ✅ Full Access |
-| Full Viva/Interview Bank | ❌ Preview Only | ❌ Preview Only | ✅ Unlocked (₹10) | ✅ Full Access |
-| Basic Sample Data Snippets | ✅ View Online | ✅ View Online | ✅ View Online | ✅ View Online |
-| Full Downloadable Datasets | ❌ Locked | ✅ Instant Download | ✅ Instant Download | ✅ Instant Download |
-| Bookmark & Reading Progress | ❌ | ✅ Active | ✅ Active | ✅ Active |
-| Books & Capstone Projects | ❌ | ❌ | ❌ | ✅ Unlocked (₹99+) |
-
----
-
-### 4.2 Data Models Specification
-
-```
-                ┌──────────────────┐
-                │      users       │
-                └────────┬─────────┘
-                         │ 1:N
-         ┌───────────────┼───────────────┐
-         ▼                               ▼
-┌──────────────────┐           ┌──────────────────┐
-│user_activity_logs│           │  user_purchases  │
-└──────────────────┘           └────────┬─────────┘
-                                        │ N:1
-                               ┌────────▼─────────┐
-                               │ digital_products │
-                               └──────────────────┘
-```
-
-#### 1. `users` Table
-* `id`: `Integer`, Primary Key, Autoincrement.
-* `full_name`: `String(120)`, Not Null.
-* `phone`: `String(30)`, Unique, Indexed, Not Null (WhatsApp number for cohort counseling).
-* `email`: `String(150)`, Unique, Indexed, Nullable.
-* `hashed_password`: `String(255)`, Not Null.
-* `user_type`: `String(50)`, Default `"student"` (`"student"`, `"fresher"`, `"working_professional"`).
-* `college_or_company`: `String(150)`, Nullable.
-* `is_active`: `Boolean`, Default `True`.
-* `created_at`: `DateTime`, Default `utcnow`.
-
-#### 2. `user_activity_logs` Table (Behavior & Analytics Engine)
-Tracks engagement to inform future content decisions and identify high-intent cohort prospects:
-* `id`: `Integer`, Primary Key, Autoincrement.
-* `user_id`: `Integer`, FK -> `users.id`, Nullable (tracks both guest sessions and logged-in users).
-* `session_id`: `String(64)`, Indexed (cookie-based session ID linking guest behavior before login).
-* `event_type`: `String(50)`, Indexed (`page_view`, `note_read`, `dataset_download`, `question_unlocked`, `purchase_click`, `cohort_apply_click`).
-* `resource_type`: `String(50)` (`note`, `viva`, `dataset`, `book`, `project`).
-* `resource_slug`: `String(100)`, Indexed.
-* `referrer`: `String(255)`, Nullable (e.g., `whatsapp`, `telegram`, `google`).
-* `ip_address`: `String(50)`, Nullable.
-* `created_at`: `DateTime`, Default `utcnow`, Indexed.
-
-#### 3. `digital_products` Table
-* `id`: `Integer`, Primary Key, Autoincrement.
-* `slug`: `String(100)`, Unique, Indexed.
-* `title`: `String(200)`, Not Null.
-* `product_type`: `String(50)` (`viva_bank`, `notes_bundle`, `book`, `capstone_project`).
-* `price_inr`: `Integer`, Not Null (e.g., `10`, `20`, `99`, `149`).
-* `file_asset_url`: `String(255)`, Nullable (secure external CDN / Cloud storage download link).
-* `is_active`: `Boolean`, Default `True`.
-
-#### 4. `user_purchases` Table
-* `id`: `Integer`, Primary Key, Autoincrement.
-* `user_id`: `Integer`, FK -> `users.id`, Indexed.
-* `product_id`: `Integer`, FK -> `digital_products.id`, Indexed.
-* `amount_paid`: `Integer`, Not Null.
-* `payment_provider`: `String(50)`, Default `"razorpay"` / `"cashfree"`.
-* `transaction_ref`: `String(150)`, Unique, Indexed.
-* `status`: `String(50)`, Default `"completed"` (`pending`, `completed`, `failed`).
-* `created_at`: `DateTime`, Default `utcnow`.
+* [ ] **Task 1.1: Dynamic Sitemap & Search Directives**
+  * Implement dynamic `GET /sitemap.xml` listing the home page, `/about`, `/demo`, active subject hubs, and published notes with `<lastmod>` and `<changefreq>`.
+  * Implement dynamic `GET /robots.txt` disallowing `/admin/`, `/api/`, `/student/`, and pointing to `/sitemap.xml`.
+* [ ] **Task 1.2: Meta Tags, Open Graph & Canonical URLs**
+  * Add unique `<title>`, `<meta name="description">`, `<link rel="canonical">`, and Open Graph (`og:title`, `og:description`, `og:image`, `og:url`) tags to every template.
+  * Derive canonical URLs from `BASE_URL` loaded from environment (fallback: `https://mythostech.in`).
+* [ ] **Task 1.3: Google Search Console Verification Meta Tag**
+  * Support optional `GOOGLE_SITE_VERIFICATION` environment variable.
+  * Inject `<meta name="google-site-verification" content="...">` in `app/templates/base.html` when configured.
+* [ ] **Task 1.4: Schema.org JSON-LD Structured Data**
+  * Home page: `Organization` schema with name, URL, logo, and social profile links.
+  * Cohorts / Batches: `Course` schema with course name, description, provider, and schedule.
+  * Technical Notes: `TechArticle` schema on hand-written, published documentation articles only.
+* [ ] **Task 1.5: Content Quality Gate (Draft vs. Published Frontmatter)**
+  * Add `status: "published" | "draft"` frontmatter attribute to documentation metadata.
+  * Hand-authored articles are marked `published`.
+  * Placeholder catalog topics synthesized from blueprints are treated as `draft`:
+    * Injected with `<meta name="robots" content="noindex, nofollow">`.
+    * Excluded from `sitemap.xml`.
+    * Displayed in topic sidebars with a clean "Coming Soon" badge with no filler body.
+  * Resource counters across the library display only published articles.
+* [ ] **Task 1.6: Web Performance & Static Asset Caching**
+  * Configure HTTP cache-control headers on static assets (`max-age=31536000, immutable` for versioned CSS/JS/images).
+  * Enable GZip middleware on FastAPI application.
+  * Add `loading="lazy"` on all images.
+  * Verify `GET /health` responds in <20ms for external uptime pingers.
+* [ ] **Task 1.7: Breadcrumb & Contextual Funnel Integration**
+  * Include structured breadcrumb navigation on all library subpages.
+  * Mount contextual free demo-class CTA card on every note and study track page.
 
 ---
 
-## 5. Architectural Constraints & Non-Negotiables
+### Phase 2: Trust & People (Mentors & Brand Transparency)
+*Transform the platform's human credibility with clear mentor separation and honest claims.*
 
-1. **Render.io Free-Tier Discipline (Zero Asset Bloat)**:
-   * **No raw image assets, heavy PDFs, or massive datasets** committed to the core web repository.
-   * Dataset files (`.csv`, `.zip`) and product PDFs must be hosted on decoupled cloud storage (e.g., Cloudflare R2, AWS S3, or GitHub Releases/jsDelivr) and served via signed or redirect URLs.
-2. **Immutable Course Pricing Rule**:
-   * **Live cohort tuition fees are NEVER listed on the website**.
-   * Digital micro-products (₹10 viva sets, ₹20 notes, ₹99 books) have transparent, friction-free pricing with instant UPI checkout.
-3. **Strict Git Discipline & Production Authority**:
-   * Only the platform owner executes `git push` to `origin/main` or deploys to production.
-   * AI agents must verify test suites (`python -m pytest -v`), stage all changes, and create clean local commits.
-
----
-
-## 6. Phased Implementation Roadmap (Granular Task Breakdown)
-
-### Phase 1: Core Library Engine, Base Routing & Technical Docs UI (Completed)
-* [x] **Task 1.1: Dependency Specification**
-  * Add `markdown>=3.6.0`, `python-frontmatter>=1.1.0`, and `pymdown-extensions>=10.7` to `requirements.txt`.
-  * Ensure consistent dependencies across local development and Render.io production blueprints.
-* [x] **Task 1.2: Content Discovery, Frontmatter Parsing & Caching Engine (`app/apps/library/services.py`)**
-  * Implement frontmatter extraction (validates `title`, `slug`, `subject`, `vertical`, `category`, `order`, `tier`, `price_inr`, `reading_time`, `description`, `tags`).
-  * Implement Markdown-to-HTML parser with `pymdownx` extensions: fenced code, syntax highlighting classes, tables, admonitions/callouts (`> [!NOTE]`, `> [!EXAM]`, `> [!PRO-TIP]`), and header anchor IDs.
-  * Implement hierarchical Table of Contents (TOC) extractor parsing `<h2>` and `<h3>` tags with anchor links.
-  * Implement filesystem content indexer scanning `app/content/{subject}/*.md` with category grouping and order sorting.
-  * Implement in-memory TTL/LRU caching layer so parsed HTML and TOC are cached for fast (<50ms) retrieval on Render.io.
-* [x] **Task 1.3: Library Web Routing (`app/apps/library/router.py`) & Application Mounting**
-  * Create `app/apps/library/__init__.py` and `app/apps/library/router.py`.
-  * Route 1: `GET /library` → Main Resource Hub (featured topics, subject cards, resource counts).
-  * Route 2: `GET /library/{subject}` → Subject portal with vertical filter tabs (`notes`, `viva`, `datasets`, `books`, `projects`).
-  * Route 3: `GET /library/{subject}/notes/{slug}` → 3-column technical docs reader view.
-  * Handle edge cases: 404 for unknown subjects or invalid slugs with friendly fallback templates.
-  * Mount router into `app/main.py`.
-* [x] **Task 1.4: Documentation UI Templates (`app/templates/library/`)**
-  * `app/templates/library/index.html`: Resource hub landing page showing subject cards (SQL, Python, Business Intelligence, Digital Marketing) with icon badges and resource count pills.
-  * `app/templates/library/subject_hub.html`: Subject dashboard featuring vertical filter tabs, search/filter, and cards for Notes, Viva Banks, Datasets, and Handbooks.
-  * `app/templates/library/reader.html`: 3-column technical docs reader:
-    * Left Sidebar: Collapsible subject tree with active article highlight.
-    * Center Canvas: Clean Poppins/Inter typography, Prism.js code blocks with "Copy Code" button, responsive tables, and styled callout boxes.
-    * Right Sidebar: Sticky Table of Contents (TOC) with scroll spy and contextual Cohort CTA card.
-    * Social Share Bar: WhatsApp ("Share with Class Group") and Telegram 1-click share buttons.
-* [x] **Task 1.5: Navigation & Header Integration**
-  * Update `app/templates/partials/navbar.html`: Add "Library" link in desktop & mobile menus.
-  * Update `app/templates/partials/footer.html`: Add Resource Library links under quick resources.
-* [x] **Task 1.6: Flagship Seed Article & Comprehensive Test Suite**
-  * Author starter flagship note `app/content/sql/sql-joins-textbook-vs-reality.md` strictly following the 5-part blueprint.
-  * Write `tests/test_library.py` verifying:
-    * `/library` renders 200 with subject listings.
-    * `/library/sql` renders 200 with tabs.
-    * `/library/sql/notes/sql-joins-textbook-vs-reality` renders 200 with TOC, rendered code blocks, and frontmatter metadata.
-    * Invalid subject or slug returns 404.
-    * Caching correctly prevents redundant disk reads.
-  * Verify full test suite passes (all 15 existing tests + new library tests).
-  * Run local git status check, stage, and commit with descriptive commit message.
+* [ ] **Task 2.1: Dual-Mentor Showcase & Dedicated `/about` Page**
+  * Rebuild the Mentorship section on the landing page (`app/templates/sections/mentor.html`) and create a dedicated `/about` page (`app/templates/about.html`):
+    * **Digital Marketing Mentor**: Show `[DM_MENTOR_NAME]`, professional photo `[DM_MENTOR_PHOTO]`, verified bio `[DM_MENTOR_BIO]`, and LinkedIn `[DM_MENTOR_LINKEDIN]`.
+    * **Data Analytics Mentor**: Show as the *Mythos Data Analytics Mentor* (anonymous, no photo, high-tech emblem), with a grounded profile highlighting 3+ years teaching, 400+ learners taught, and practical tools covered.
+    * Maintain strict discipline separation: each mentor owns exclusively their subject domain.
+* [ ] **Task 2.2: Systematic Purge of the "550+" Metric**
+  * Search and replace every occurrence of "550+" students across all HTML templates, static files, Python services, PDF generators, and test assertions.
+  * Replace with `[TRUST_CLAIM]` (default: *"400+ learners taught by our mentors over 3+ years"*).
+* [ ] **Task 2.3: Contact Information Migration & PDF Brochure Regeneration**
+  * Move all support and admissions contacts to `BUSINESS_EMAIL` and `BUSINESS_WHATSAPP` loaded from `app/core/base_config.py`.
+  * Remove hardcoded `shubhamsinghh057@gmail.com` and `8727864157` from templates, footer, registration modals, syllabus generator, and documentation.
+  * Re-render `app/static/pdf/Data_Analysis_Syllabus.pdf` reflecting new mentor credentials and dynamic contact information.
+* [ ] **Task 2.4: Dormant Testimonials Component**
+  * Build a clean testimonials section partial (`app/templates/sections/testimonials.html`).
+  * If no real testimonials exist in the database or config, the component renders nothing (completely hidden).
+  * Never synthesize placeholder reviews, quotes, or fake corporate logos.
+* [ ] **Task 2.5: Compliance & Guarantee Audit**
+  * Audit all copy to eliminate any phrasing promising guaranteed jobs, placements, or specific salary figures.
+  * Frame all outcomes around practical skill mastery, portfolio readiness, and interview preparation.
 
 ---
 
-### Phase 1.5: Site-Wide Navigation Architecture, Zero-Upfront Pricing & Minimalist Icon Library Hub (Completed)
-* [x] **Task 1.5.1: Top Navigation Bar Redesign (Inter-Page Links & Hover Menus)**
-  * Restructure `app/templates/partials/navbar.html` so top navigation exclusively links to distinct pages:
-    * **Courses & Cohorts**: Hover dropdown with links to Track 1 (Performance Marketing), Track 2 (SEO & Growth), and Track 3 (Data Analytics & BI).
-    * **Notes & Handbooks**: Hover dropdown with links to `/library/sql?vertical=notes`, `/library/python?vertical=notes`, `/library/bi?vertical=notes`, and `/library/digital-marketing?vertical=notes`.
-    * **Interview & Viva Questions**: Direct link to `/library?vertical=viva` or subject viva banks.
-    * **Practice Datasets**: Direct link to `/library?vertical=datasets`.
-    * **Admissions**: Dedicated link to `/register`.
-  * Update mobile slide-out menu with matching multi-page navigation and accordion groups.
-* [x] **Task 1.5.2: Universal Left-Side In-Page Section Navigator**
-  * Implement standard left-side in-page navigation rail/dock with active scroll-spy:
-    * On the landing page (`/`): Floating left dock allowing 1-click jumping between `#programs`, `#syllabus`, `#projects`, `#methodology`, `#career`, and `#about`.
-    * On the documentation reader (`reader.html`): Preserved left chapter tree with active chapter indicator.
-    * Include smooth scroll, tooltips, and responsive layout handling (collapsible on mobile/tablet).
-* [x] **Task 1.5.3: Strict Zero-Upfront Pricing Audit & Enforcement**
-  * Purge all upfront price figures ("₹10", "₹20", "₹99", "₹149", etc.) across all browse surfaces, card badges, header chips, and reader sidebars.
-  * Replace with clear access status pills: "Free Guide", "Viva Bank", "Clean Dataset", "Capstone Repo".
-  * Guarantee that prices are ONLY displayed when a student reaches a gated/locked asset or clicks to unlock/purchase.
-* [x] **Task 1.5.4: Minimalist Icon-First Library Hub (`app/templates/library/index.html`)**
-  * Completely redesign `/library` to eliminate textual clutter and long paragraphs.
-  * Implement an uncluttered, high-impact grid of technology tiles displaying prominent official logos (MySQL, PostgreSQL, Python, Pandas, Power BI, Tableau, Excel, Google Ads/GA4, Meta Ads, SEO) and clean titles.
-  * Direct 1-click routing to the technology's resources.
-* [x] **Task 1.5.5: Non-Negotiable Enforcement: Strictly Zero Code Execution**
-  * Verify that all code blocks remain static copy-only syntax elements with zero execution runners or interactive consoles.
-* [x] **Task 1.5.6: Verification, Automated Tests & Git Hygiene**
-  * Update test cases to reflect new navigation links and zero-upfront pricing.
-  * Verify full test suite passes with 0 failures.
-  * Stage and commit locally.
-* [x] **Task 1.5.7: Exhaustive Major Languages & Tools Catalog with Topic-Wise Curriculum Outlines**
-  * Added 34 major technologies across 6 disciplines:
-    * Languages: Python, JavaScript, TypeScript, Java, C++, C, Go, Rust, C#, PHP, HTML5/CSS3.
-    * Databases: SQL, MySQL, PostgreSQL, SQLite, MongoDB, Redis, Snowflake.
-    * Data Science & BI: Pandas, NumPy, Power BI, Tableau, Advanced Excel & Power Query.
-    * Web Frameworks: FastAPI, Django, React, Node.js.
-    * DevOps & Cloud: Docker, Kubernetes, Git, Linux/Bash, AWS.
-    * Growth Marketing: Google Ads & GA4, Meta Ads Manager, Technical SEO.
-  * Formulated structured curriculum of key topics for every technology with zero broken links.
-  * Dynamically synthesized complete 5-part blueprint guides with interactive TOC for topics in active curation.
-  * Added automated tests verifying topic navigation across Python, JavaScript, and Docker. 26/26 tests passing.
+### Phase 3: Modular Cohort & Subject Display
+*Structure cohort offerings so students see clear track specialization and enrollment progression.*
+
+* [ ] **Task 3.1: Track-Grouped Cohort Explorer**
+  * Restructure cohort query and display (`app/templates/sections/programs.html` and `/register`):
+    * Group by Track: **Data Analytics & BI Track** vs. **Digital Marketing Track**.
+    * Group by Lifecycle: **Now Enrolling**, **Running**, and **Next**.
+    * Past cohorts archived to a collapsed historical drawer.
+* [ ] **Task 3.2: Data Analytics Roadmap Strip & Next-Subject Waitlist**
+  * Embed a horizontal curriculum roadmap strip for Data Analytics showing `[SUBJECT_ORDER]` (SQL &rarr; Excel &rarr; Power BI &rarr; Python &rarr; Tableau &rarr; Git/GitHub).
+  * Visually highlight the subject enrolling now with a badge: *"One subject per batch so you go deep."*
+  * Add a **"Notify Me for Next Batch"** button creating a `waitlist` lead tied to the selected subject.
+* [ ] **Task 3.3: Digital Marketing Track Schedule & Profile**
+  * Render Digital Marketing cohorts with `[DM_SCHEDULE]` and mentor attribution linked to the DM mentor profile.
+* [ ] **Task 3.4: Admin Cohort & Batch Manager**
+  * Add a management panel in `/admin/batches` allowing the platform owner to:
+    * Create, edit, and update batches (`batch_code`, `title`, `course_name`, `technologies`, `schedule_days`, `schedule_time`, `start_date`, `duration`, `max_seats`, `status`, `is_active`).
+    * Close or archive batches without modifying application code.
+* [ ] **Task 3.5: Public Seat Scarcity Display**
+  * Display available seats as an honest number calculated from remaining capacity.
+  * Strictly zero tuition pricing on browse cards.
 
 ---
 
-### Phase 1.6: W3Schools Panel Architecture, Hierarchical Topic Sidebar & Sequential Navigation (Completed)
-* [x] **Task 1.6.1: 4-Panel Workspace Architecture on Subject Hubs (`/library/{subject}`)**
-  * Redesigned `/library/{subject}` into 4 distinct panels:
-    1. **All Topics** (open by default, `?tab=all_topics`): W3Schools-style layout featuring a hierarchical left sidebar, center reading canvas, and sequential bottom navigation buttons.
-    2. **Notes** (`?tab=notes`): Curated in-depth technical engineering notes and memory architectures.
-    3. **Interview Questions** (`?tab=interview_questions`): Curated viva questions and oral exam gotchas.
-    4. **Video Lectures** (`?tab=video_lectures`): Masterclass video workshop modules with duration badges and key takeaways.
-* [x] **Task 1.6.2: W3Schools-Style Left Sidebar Hierarchies with Granular Foundational Topics**
-  * Expanded curriculum outlines with granular subtopics:
-    * **Python Basics**: Syntax & Comments, Variables & Dynamic Typing, Numbers & Type Casting, Booleans & Logical Operators, Strings & Slicing.
-    * **Control Flow**: If...Else & Conditionals, While Loops & Break/Continue, For Loops & Range Function.
-    * **Data Structures**: Lists & Comprehensions, Tuples & Unpacking, Sets & Operations, Dictionaries & Hash Maps.
-    * **Functions & Modules**: Functions & Scope (`*args`, `**kwargs`), Lambda Functions, Modules & Virtualenvs.
-    * **OOP**: Classes & `__init__`, Inheritance & Polymorphism, Dunder Methods & Data Model.
-    * **Core Architecture**: CPython Memory & GC, Mutable Default Argument Trap, Generators, Decorators, GIL & Asyncio, File I/O.
-    * **Interview Prep**: Top 40 Python Viva Traps, Scope & Closure Gotchas.
-  * Active topic highlighting and seamless 1-click loading into the center canvas.
-* [x] **Task 1.6.3: Sequential Topic Navigation (`< Previous Topic` & `Next Topic >`)**
-  * Implemented `get_adjacent_topics(subject, slug)` in `app/apps/library/services.py` maintaining pedagogical curriculum order.
-  * Mounted `< Previous Topic: [Title]` and `Next Topic: [Title] >` buttons on both `subject_hub.html` (All Topics panel) and `reader.html`.
-* [x] **Task 1.6.4: Specialized Topic Content Blueprints**
-  * Authored rich, production-grounded blueprints for Python foundational topics (`python-syntax-comments`, `python-variables-datatypes`, `python-numbers-casting`, `python-booleans-operators`, `python-while-loops`, `python-for-loops-range`).
-  * Enforced strictly zero code execution (static copy-friendly code blocks) and zero upfront pricing.
-* [x] **Task 1.6.5: Automated Verification & Test Suite**
-  * Added 3 comprehensive test cases in `tests/test_library.py` covering W3Schools panel architecture, left-sidebar topic hierarchies, sequential navigation, and panel switching.
-  * All 29/29 tests passing (100%).
+### Phase 4: Lead Capture, Demo Class & Funnel Optimization
+*Streamline the visitor-to-student journey with frictionless demo registration and lead magnets.*
+
+* [ ] **Task 4.1: Database Schema Expansion for Funnels & Attribution**
+  * Add lead types to `StudentLead`: `demo_class`, `waitlist`, `lead_magnet`, `enquiry`, `batch_registration`.
+  * Add tracking columns to `StudentLead`:
+    * `source_utm`: `String(255)` (concatenated or JSON of `utm_source`, `utm_medium`, `utm_campaign`).
+    * `referrer_url`: `String(255)`.
+    * `subject_interest`: `String(100)` (e.g., SQL, Power BI, Meta Ads).
+    * `consent_given`: `Boolean`, default `True`.
+    * `consent_at`: `DateTime`.
+    * `follow_up_date`: `Date`, nullable.
+  * Implement an idempotent startup migration checking and adding columns safely on SQLite and PostgreSQL.
+* [ ] **Task 4.2: Dedicated Free Demo Class Landing Page (`/demo`)**
+  * Build dedicated route `GET /demo` (`app/templates/demo.html`):
+    * Highlight date and time of next live demo session (`[DEMO_CLASS_DATETIME]`).
+    * Simple high-converting form: Full Name, WhatsApp Number, optional Email, Subject Interest, and mandatory Consent Checkbox.
+    * Confirmation screen with "Add to Google Calendar" button and link to join the WhatsApp Community Channel.
+* [ ] **Task 4.3: Free Lead Magnets (Cheat Sheets & Clean Datasets)**
+  * Add contextual lead magnet callouts on subject hubs and note sidebars:
+    * E.g., *"Download the Free SQL Interview Traps Cheat Sheet (PDF)"* or *"Download Indian E-Commerce 50k Dataset"*.
+  * Short modal/form (Name, WhatsApp, Consent) reveals the direct download link upon submission.
+  * Core notes remain 100% public with no login wall.
+* [ ] **Task 4.4: Community Channel Direct Action Links**
+  * Add prominent join buttons for the official **WhatsApp Community Channel** (`[WHATSAPP_CHANNEL_URL]`) and **Telegram Group** (`[TELEGRAM_URL]`) in footer, confirmation pages, and note reading sidebars.
+* [ ] **Task 4.5: First-Touch UTM Capture & Cookie Persistence**
+  * Implement lightweight middleware storing incoming `utm_source`, `utm_medium`, `utm_campaign`, and `ref` in a first-party cookie (`mythos_utm`, 30 days).
+  * Automatically attach captured UTM metadata whenever a visitor submits an inquiry, demo request, or registration.
+* [ ] **Task 4.6: Admin Pipeline Management Overhaul**
+  * Expand `/admin/dashboard` lead statuses: `new`, `contacted`, `demo_attended`, `enrolled`, `closed`, `do_not_contact`.
+  * Add multi-filter controls by Lead Type, Traffic Source, and Subject Interest.
+  * Add counselor follow-up date picker and notes updater.
+  * Update CSV export to include UTM source, subject interest, and consent timestamp.
+* [ ] **Task 4.7: Anti-Spam & Rate Limiting**
+  * Add invisible honeypot form fields (`website_url_hp`) on all public forms; reject submissions where the honeypot is filled.
+  * Implement in-memory IP rate limiting on public submission endpoints to prevent automated spam abuse.
 
 ---
 
-### Phase 2: Student Authentication, Access Control & Activity Logging (Completed)
-* [x] **Task 2.1: Student User & Activity Logging Database Models**
-  * Implemented `users` model in `app/apps/courses/models.py` (and re-exported in `app/apps/library/models.py`) with `phone` (mandatory/unique WhatsApp contact), `full_name` (mandatory), `email` (strictly optional), `hashed_password` (bcrypt 12 rounds), `user_type` (student, fresher, working_professional), and `college_or_company`.
-  * Implemented `user_activity_logs` model tracking `user_id`, `session_id`, `event_type`, `resource_type`, `resource_slug`, `referrer`, `ip_address`, and timestamp.
-  * Auto-created and verified tables in SQLite local and PostgreSQL cloud schemas.
-* [x] **Task 2.2: Student Session Authentication**
-  * Implemented `GET /student/login`, `POST /student/login` with flexible phone or email + password authentication.
-  * Implemented `GET /student/register`, `POST /student/register` (Phone/WhatsApp mandatory, email optional).
-  * Implemented `GET /student/logout` clearing session cookie.
-  * Implemented `GET /student/dashboard` displaying verified student status, unlocked datasets, and recent activity log.
-  * Signed HTTP-only cookie session management (`student_session`, 30-day persistence).
-  * Implemented JSON APIs: `POST /api/student/register`, `POST /api/student/login`, `GET /api/student/me`.
-* [x] **Task 2.3: Engagement Tracking & Activity Logger Service**
-  * Implemented `log_user_activity()` helper recording events (`page_view`, `note_read`, `dataset_download`, `student_registered`, `student_login`).
-  * Anonymous guest session tracking via `mythos_guest_id` cookie.
-  * Implemented `link_guest_activities_to_user()` linking prior guest interactions to the authenticated student account upon login or registration.
-  * Mounted client-side logging endpoint `POST /api/activity/log`.
-* [x] **Task 2.4: Free Dataset Gating & Access Control**
-  * Implemented preview vs full download logic for practice datasets:
-    * Public vault catalog at `GET /library/datasets` listing datasets with metadata.
-    * Schema and sample rows preview at `GET /library/datasets/{slug}`.
-    * Protected direct download endpoint at `GET /library/datasets/{slug}/download`.
-    * Guests attempting download are redirected to `/student/login?next=...`.
-    * Authenticated students receive instant RFC 4180 CSV attachment and download activity is logged.
+### Phase 5: Privacy-Friendly Analytics & Funnel Monitoring
+*Monitor acquisition channels and conversion rates without tracking cookies.*
+
+* [ ] **Task 5.1: Privacy-Friendly Analytics Integration**
+  * Support lightweight script injection via environment variable (`ANALYTICS_SCRIPT` for Plausible, Umami, or Cloudflare Web Analytics, or `GA4_MEASUREMENT_ID`).
+  * Track custom client events: `cta_click`, `form_submit`, `lead_magnet_download`, `whatsapp_join`.
+* [ ] **Task 5.2: Admin Funnel Summary Card**
+  * Add an executive conversion metric card on `/admin/dashboard`:
+    * Weekly leads by traffic source (WhatsApp, Google, Direct, Referral).
+    * Total demo class registrants vs. attended.
+    * Cohort enrollment conversion rate.
 
 ---
 
-### Phase 3: Flagship Launch Content (High-Value Ingestion)
-* [ ] **Task 3.1: Complete SQL Masterclass Note (Free Tier)**
-  * Finalize `app/content/sql/sql-joins-textbook-vs-reality.md` with complete diagrams, non-equi joins, planner hash vs merge joins, and interview traps.
-* [ ] **Task 3.2: SQL Viva & Interview Bank (Preview Free + ₹10 Unlock Gate)**
-  * Author `app/content/sql/viva-top-45-interview-traps.md` with 45 solved questions.
-  * Configure frontmatter `tier: "paid_micro"`, `price_inr: 10`.
-  * Show questions 1–10 free; gate questions 11–45 behind ₹10 unlock prompt.
-* [ ] **Task 3.3: Production Dataset 1 (Indian E-Commerce Orders)**
-  * Create `datasets/indian_ecommerce_50k_orders.csv` in `external_assets/` and sync with CDN/GitHub Raw.
-  * Author metadata document `app/content/sql/dataset-indian-ecommerce.md` with data dictionary, ER diagram, and 10 real-world business analytics challenge queries.
-* [ ] **Task 3.4: Python Foundation Masterclass Note (Free Tier)**
-  * Author `app/content/python/python-memory-and-mutable-traps.md` exploring mutable default arguments, `id()`, shallow vs deep copy, and interview gotchas.
+### Phase 6: Paywalls & Digital Bundles (LATER ONLY)
+*To be implemented only after steady organic traffic and cohort counseling volume are established, upon explicit platform owner directive.*
+
+* [ ] **Task 6.1: External Payment Link Integration**
+  * Support optional external UPI/Razorpay payment link from environment variables.
+  * Price is strictly shown only at the purchase gate (never on public browse surfaces).
+  * No complex custom payment gateway or wallet integration until required.
 
 ---
 
-### Phase 4: UPI Micro-Purchases & Checkout Pipeline
-* [ ] **Task 4.1: Digital Products & Purchases Database Models**
-  * Implement `digital_products` and `user_purchases` tables.
-  * Seed initial products: SQL Viva Bank (₹10), SQL Notes Bundle (₹20), Full Handbook (₹99).
-* [ ] **Task 4.2: UPI Payment Gateway Integration (Razorpay / Cashfree)**
-  * Implement checkout initialization route `POST /api/library/purchase/initiate`.
-  * Implement UPI QR modal and mobile UPI intent link (Google Pay, PhonePe, Paytm).
-  * Implement webhook / verification endpoint `POST /api/library/purchase/verify`.
-* [ ] **Task 4.3: Instant Digital Unlock & Delivery Experience**
-  * Implement instant access grant: upon successful payment, unlock content and display confirmation receipt.
-  * Provide downloadable asset link and email receipt if email was provided.
+## 6. Definition of Done
 
----
-
-### Phase 5: Cohort Funnel Attribution & SEO Automation
-* [ ] **Task 5.1: Contextual Cohort Callout Partials & UTM Attribution**
-  * Build `app/templates/library/partials/cohort_card.html` with dynamic topic-aware copy (e.g. on SQL articles: "Ready to master SQL & Database Engineering live?").
-  * Link directly to `/register?source=library_{subject}_{slug}` with prefilled track selection.
-* [ ] **Task 5.2: Dynamic Sitemap Generation (`/sitemap.xml`)**
-  * Build dynamic `GET /sitemap.xml` listing all landing pages, library hub, subject hubs, notes, viva banks, and datasets with `<lastmod>` and `<changefreq>`.
-* [ ] **Task 5.3: Rich SEO Metadata & JSON-LD Structured Data**
-  * Inject `TechArticle` schema into note reader pages.
-  * Inject `FAQPage` schema into viva bank pages.
-  * Inject `Dataset` schema into dataset pages for Google Dataset Search discovery.
-
----
-
-## 7. Standard 5-Part Content Blueprint (For Every Note)
-
-Whenever a note or guide is authored for the Mythos Library, it must follow this exact structure:
-
-1. **Academic Definition & Core Concept:** Rigorous, textbook-clean explanation suitable for scoring full marks in a university written exam.
-2. **Interactive Code & Query Examples:** Self-contained, copyable, syntax-highlighted examples with expected outputs.
-3. **The Production Reality ("What Textbooks Skip"):** Real-world edge cases, performance implications, memory/disk trade-offs, and how senior engineers handle it.
-4. **Exam & Interview Gotchas:** 3–5 high-frequency tricky questions examiners and interviewers ask to catch students off guard.
-5. **Mythos Mentorship Bridge:** A one-sentence contextual bridge inviting readers to apply for the live hands-on Weekend Cohort.
+Every phase is considered done when:
+1. **Automated Verification**: Full test suite passes cleanly (`python -m pytest -v`) with 0 failures, including new test cases for added features.
+2. **Quality Gate**: Only hand-authored, published articles are indexable; draft topics display "Coming Soon" with noindex tags.
+3. **Frictionless Funnel**: A visitor can register for a demo class or access a lead magnet in under 60 seconds.
+4. **Data Integrity**: Leads appear in the admin pipeline with traffic source, subject interest, and consent timestamp.
+5. **Brand Cleanliness**: Zero personal contact details, zero 550+ references, and zero unverified claims remain in code, templates, or tests.
+6. **Git Hygiene**: Changes staged, clean local commit created with conventional message, and zero untracked scratch files remaining. **NO `git push`**.
