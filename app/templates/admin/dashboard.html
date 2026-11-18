@@ -83,6 +83,7 @@
                         <option value="contacted" {% if current_status == 'contacted' %}selected{% endif %}>Contacted</option>
                         <option value="enrolled" {% if current_status == 'enrolled' %}selected{% endif %}>Enrolled</option>
                         <option value="closed" {% if current_status == 'closed' %}selected{% endif %}>Closed</option>
+                        <option value="do_not_contact" {% if current_status == 'do_not_contact' %}selected{% endif %}>Do Not Contact</option>
                     </select>
 
                     <!-- Per Page Selector -->
@@ -218,6 +219,10 @@
                                         <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                                             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>Enrolled
                                         </span>
+                                        {% elif lead.status == 'do_not_contact' %}
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-rose-100 dark:bg-rose-900/40 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-rose-500 mr-1.5"></span>Do Not Contact
+                                        </span>
                                         {% else %}
                                         <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700">
                                             <span class="w-1.5 h-1.5 rounded-full bg-slate-400 mr-1.5"></span>Closed
@@ -231,6 +236,7 @@
                                             <option value="contacted" {% if lead.status == 'contacted' %}selected{% endif %}>Contacted</option>
                                             <option value="enrolled" {% if lead.status == 'enrolled' %}selected{% endif %}>Enrolled</option>
                                             <option value="closed" {% if lead.status == 'closed' %}selected{% endif %}>Closed</option>
+                                            <option value="do_not_contact" {% if lead.status == 'do_not_contact' %}selected{% endif %}>Do Not Contact</option>
                                         </select>
                                     </div>
                                 </div>

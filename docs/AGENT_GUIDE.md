@@ -64,7 +64,7 @@ Auto-loaded via `python-dotenv` from `.env` in `app/core/config.py`:
 | :--- | :--- | :--- |
 | `ADMIN_PASSWORD` | Loaded from `.env` | Master instructor password for the `admin` account (never hardcoded in docs). |
 | `AGENT_PASSWORD` | Loaded from `.env` | Dedicated credentials for the exclusive `agent_admin` AI/test execution profile. |
-| `SECRET_KEY` | `shubham-data-analysis-secret-key-2026` | Cryptographic secret for signing session cookies via `itsdangerous`. |
+| `SECRET_KEY` | None (Must be supplied via `.env`) | Cryptographic 256-bit secret for signing session cookies via `itsdangerous`. Generate via: `python -c "import secrets; print(secrets.token_hex(32))"` |
 | `DATABASE_URL` | `""` (falls back to `sqlite:///./course_platform.db`) | External cloud PostgreSQL URI for Render.io deployments. |
 | `ENVIRONMENT` | `development` | Switch between `LocalSettings` and `DeploymentSettings`. |
 | `PORT` | `8000` | Port binding on cloud platforms. |

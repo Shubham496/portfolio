@@ -134,7 +134,18 @@
                                   class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#070B14] text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition resize-none"></textarea>
                     </div>
 
-                    <div class="pt-3">
+                    <!-- Required Communication & Privacy Consent -->
+                    <div class="p-3 rounded-xl bg-slate-50 dark:bg-[#070B14] border border-slate-200 dark:border-slate-800">
+                        <label class="flex items-start space-x-2.5 cursor-pointer">
+                            <input type="checkbox" name="consent" required checked
+                                   class="mt-0.5 w-4 h-4 rounded border-slate-300 dark:border-slate-700 text-blue-600 focus:ring-blue-500 bg-white dark:bg-[#0B1120] shrink-0">
+                            <span class="text-xs text-slate-600 dark:text-slate-300 leading-snug">
+                                I agree to be contacted by phone or WhatsApp about this course. View our <a href="/privacy" target="_blank" class="text-blue-600 dark:text-blue-400 underline font-medium hover:text-blue-500">Privacy Policy</a>.
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="pt-2">
                         <button type="submit"
                                 class="w-full flex items-center justify-center space-x-2 px-6 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm shadow-lg shadow-blue-500/25 transition active:scale-95">
                             <i data-lucide="user-plus" class="w-4 h-4"></i>

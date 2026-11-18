@@ -223,6 +223,42 @@ async def registration_success_page(request: Request):
         }
     )
 
+@app.get("/privacy", response_class=HTMLResponse)
+async def privacy_policy_page(request: Request):
+    """Privacy Policy page explaining student data protection and communication standards."""
+    return templates.TemplateResponse(
+        request=request,
+        name="legal/privacy.html",
+        context={
+            "settings": settings,
+            "title": "Privacy Policy",
+        }
+    )
+
+@app.get("/terms", response_class=HTMLResponse)
+async def terms_of_service_page(request: Request):
+    """Terms of Service covering educational use, academic integrity, and platform policies."""
+    return templates.TemplateResponse(
+        request=request,
+        name="legal/terms.html",
+        context={
+            "settings": settings,
+            "title": "Terms of Service",
+        }
+    )
+
+@app.get("/refund-policy", response_class=HTMLResponse)
+async def refund_policy_page(request: Request):
+    """Refund & Rescheduling Policy detailing demo sessions and cohort transfer terms."""
+    return templates.TemplateResponse(
+        request=request,
+        name="legal/refund_policy.html",
+        context={
+            "settings": settings,
+            "title": "Refund & Rescheduling Policy",
+        }
+    )
+
 @app.get("/course/syllabus/download", response_class=FileResponse)
 async def download_full_course_syllabus():
     """Download complete Data Analysis syllabus PDF brochure."""

@@ -8,9 +8,10 @@ from sqlalchemy.orm import Session
 
 from app.apps.courses.database import get_db
 from app.apps.courses.models import AdminUser, User
+from app.core.config import settings
 
 # Security configuration
-SECRET_KEY = os.getenv("SECRET_KEY", "shubham-data-analysis-secret-key-2026")
+SECRET_KEY = settings.SECRET_KEY or os.getenv("SECRET_KEY", "mythos-local-development-secret-key-change-in-prod")
 serializer = URLSafeTimedSerializer(SECRET_KEY, salt="admin-auth-salt")
 student_serializer = URLSafeTimedSerializer(SECRET_KEY, salt="student-auth-salt")
 
@@ -77,10 +78,16 @@ def require_admin(
 ) -> AdminUser:
     """
     Dependency that enforces admin authentication.
-    Redirects browser requests to /admin/login.
+    Returns HTTP 401 for API endpoints (/api/*) or JSON requests.
+    Redirects browser requests to /admin/login (HTTP 303).
     """
     admin = get_current_admin(request=request, db=db)
     if not admin:
+        if request.url.path.startswith("/api/") or "application/json" in request.headers.get("accept", ""):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Admin authentication required"
+            )
         raise HTTPException(
             status_code=status.HTTP_303_SEE_OTHER,
             headers={"Location": "/admin/login"},

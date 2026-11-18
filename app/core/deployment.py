@@ -15,3 +15,21 @@ class DeploymentSettings(BaseConfig):
     
     # Allowed hosts and security flags
     ALLOWED_HOSTS: list[str] = ["*"]
+
+    def __init__(self, **values):
+        super().__init__(**values)
+        insecure_keys = (
+            "",
+            "shubham-data-analysis-secret-key-2026",
+            "your_random_secret_key_here",
+            "changeme",
+            "secret",
+            "default",
+        )
+        if not self.SECRET_KEY or self.SECRET_KEY.strip() in insecure_keys:
+            raise RuntimeError(
+                "CRITICAL SECURITY CONFIGURATION ERROR: SECRET_KEY environment variable is required in production and must not be empty or a default placeholder. "
+                "Generate a cryptographically secure 256-bit key using: "
+                'python -c "import secrets; print(secrets.token_hex(32))"'
+            )
+

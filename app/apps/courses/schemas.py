@@ -28,6 +28,19 @@ class EnquiryCreate(BaseModel):
         default="Saturday & Sunday 6:00 PM – 8:00 PM IST",
         description="Schedule preference"
     )
+    consent: bool = Field(
+        default=True,
+        description="Consent to be contacted by phone or WhatsApp about this course"
+    )
+
+    @field_validator("consent", mode="before")
+    @classmethod
+    def validate_consent(cls, v) -> bool:
+        if isinstance(v, str):
+            v = v.strip().lower() in ("true", "1", "on", "yes")
+        if not bool(v):
+            raise ValueError("You must agree to be contacted by phone or WhatsApp about this course.")
+        return True
 
     @field_validator("email")
     @classmethod
@@ -69,6 +82,19 @@ class BatchRegistrationCreate(BaseModel):
     preferred_schedule: Optional[str] = Field(
         default="Saturday & Sunday 6:00 PM – 8:00 PM IST"
     )
+    consent: bool = Field(
+        default=True,
+        description="Consent to be contacted by phone or WhatsApp about this course"
+    )
+
+    @field_validator("consent", mode="before")
+    @classmethod
+    def validate_consent(cls, v) -> bool:
+        if isinstance(v, str):
+            v = v.strip().lower() in ("true", "1", "on", "yes")
+        if not bool(v):
+            raise ValueError("You must agree to be contacted by phone or WhatsApp about this course.")
+        return True
 
     @field_validator("email")
     @classmethod
@@ -83,8 +109,18 @@ class BatchRegistrationCreate(BaseModel):
 
 class LeadStatusUpdate(BaseModel):
     """Update lead pipeline stage and counseling notes."""
-    status: str = Field(..., description="'new', 'contacted', 'enrolled', or 'closed'")
+    status: str = Field(..., description="'new', 'contacted', 'enrolled', 'closed', or 'do_not_contact'")
     admin_notes: Optional[str] = Field(default="", description="Counselor or instructor internal notes")
+
+    @field_validator("status")
+    @classmethod
+    def validate_status(cls, v: str) -> str:
+        allowed = ("new", "contacted", "enrolled", "closed", "do_not_contact")
+        v_clean = v.strip().lower()
+        if v_clean not in allowed:
+            raise ValueError(f"Invalid status '{v}'. Allowed statuses: {', '.join(allowed)}")
+        return v_clean
+
 
 
 class BatchCreate(BaseModel):
@@ -138,6 +174,8 @@ class LeadOut(BaseModel):
     message: Optional[str]
     status: str
     admin_notes: Optional[str]
+    consent_given: bool = True
+    consent_at: Optional[str] = None
     created_at: Optional[str]
 
 

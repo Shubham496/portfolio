@@ -5,6 +5,8 @@ from sqlalchemy.orm import Session
 from pydantic import ValidationError
 
 from app.apps.courses.database import get_db
+from app.apps.courses.models import Batch, StudentLead, AdminUser
+from app.apps.courses.auth import require_admin
 from app.apps.courses.schemas import (
     EnquiryCreate,
     BatchRegistrationCreate,
@@ -95,6 +97,8 @@ async def submit_enquiry(
             enquiry_obj = EnquiryCreate(**raw_data)
         else:
             form = await request.form()
+            raw_consent = form.get("consent")
+            consent_flag = raw_consent in ("on", "true", "1", "yes", True) if raw_consent is not None else False
             enquiry_obj = EnquiryCreate(
                 full_name=str(form.get("full_name") or ""),
                 email=str(form.get("email") or ""),
@@ -102,7 +106,8 @@ async def submit_enquiry(
                 current_status=str(form.get("current_status") or "Working Professional"),
                 course_interest=str(form.get("course_interest") or "All Programs / Undecided"),
                 message=str(form.get("message") or ""),
-                preferred_schedule=str(form.get("preferred_schedule") or "Saturday & Sunday 6:00 PM – 8:00 PM IST")
+                preferred_schedule=str(form.get("preferred_schedule") or "Saturday & Sunday 6:00 PM – 8:00 PM IST"),
+                consent=consent_flag
             )
     except ValidationError as ve:
         raise HTTPException(
@@ -143,6 +148,8 @@ async def register_for_batch(
             form = await request.form()
             batch_id_raw = form.get("batch_id")
             batch_id = int(batch_id_raw) if batch_id_raw and str(batch_id_raw).isdigit() else None
+            raw_consent = form.get("consent")
+            consent_flag = raw_consent in ("on", "true", "1", "yes", True) if raw_consent is not None else False
             
             reg_obj = BatchRegistrationCreate(
                 full_name=str(form.get("full_name") or ""),
@@ -153,7 +160,8 @@ async def register_for_batch(
                 current_status=str(form.get("current_status") or "Working Professional"),
                 prior_experience=str(form.get("prior_experience") or "Beginner"),
                 message=str(form.get("message") or ""),
-                preferred_schedule=str(form.get("preferred_schedule") or "Saturday & Sunday 6:00 PM – 8:00 PM IST")
+                preferred_schedule=str(form.get("preferred_schedule") or "Saturday & Sunday 6:00 PM – 8:00 PM IST"),
+                consent=consent_flag
             )
     except ValidationError as ve:
         raise HTTPException(
@@ -175,18 +183,19 @@ async def register_for_batch(
 
 
 # -------------------------------------------------------------
-# Admin & Lead Management Endpoints
+# Admin & Lead Management Endpoints (Protected by require_admin)
 # -------------------------------------------------------------
 
 @router.get("/leads", response_model=List[LeadOut], summary="List all student leads and registrations")
 async def list_student_leads(
     lead_type: Optional[str] = Query(None, description="'enquiry' or 'batch_registration'"),
     batch_id: Optional[int] = Query(None, description="Filter by batch ID"),
-    lead_status: Optional[str] = Query(None, alias="status", description="'new', 'contacted', 'enrolled', 'closed'"),
+    lead_status: Optional[str] = Query(None, alias="status", description="'new', 'contacted', 'enrolled', 'closed', 'do_not_contact'"),
     search: Optional[str] = Query(None, description="Search by student name, email, or phone"),
+    admin: AdminUser = Depends(require_admin),
     db: Session = Depends(get_db)
 ):
-    """View student leads with filtering for enquiries and batch admissions."""
+    """View student leads with filtering for enquiries and batch admissions (Admin session required)."""
     return get_leads(
         db=db,
         lead_type=lead_type,
@@ -197,15 +206,21 @@ async def list_student_leads(
 
 
 @router.get("/leads/summary", summary="Lead pipeline metrics and admission counts")
-async def get_leads_summary_stats(db: Session = Depends(get_db)):
-    """Retrieve statistical breakdown of enquiries vs registrations."""
+async def get_leads_summary_stats(
+    admin: AdminUser = Depends(require_admin),
+    db: Session = Depends(get_db)
+):
+    """Retrieve statistical breakdown of enquiries vs registrations (Admin session required)."""
     return get_lead_summary(db=db)
 
 
 @router.get("/leads/export.csv", summary="Export student leads to CSV")
-async def export_leads(db: Session = Depends(get_db)):
+async def export_leads(
+    admin: AdminUser = Depends(require_admin),
+    db: Session = Depends(get_db)
+):
     """
-    Download CSV file of all student registrations and enquiries for spreadsheet analysis.
+    Download CSV file of all student registrations and enquiries for spreadsheet analysis (Admin session required).
     Defined before /leads/{lead_id} to prevent path collision.
     """
     csv_data = export_leads_csv(db=db)
@@ -219,9 +234,12 @@ async def export_leads(db: Session = Depends(get_db)):
 
 
 @router.get("/leads/{lead_id}", response_model=LeadOut, summary="Retrieve a single lead")
-async def get_lead_detail(lead_id: int, db: Session = Depends(get_db)):
-    """Retrieve specific student details."""
-    from app.apps.courses.models import StudentLead
+async def get_lead_detail(
+    lead_id: int,
+    admin: AdminUser = Depends(require_admin),
+    db: Session = Depends(get_db)
+):
+    """Retrieve specific student details (Admin session required)."""
     lead = db.query(StudentLead).filter(StudentLead.id == lead_id).first()
     if not lead:
         raise HTTPException(status_code=404, detail="Lead not found")
@@ -232,9 +250,10 @@ async def get_lead_detail(lead_id: int, db: Session = Depends(get_db)):
 async def update_lead_pipeline_status(
     lead_id: int,
     payload: LeadStatusUpdate,
+    admin: AdminUser = Depends(require_admin),
     db: Session = Depends(get_db)
 ):
-    """Update lead status ('contacted', 'enrolled', 'closed') and attach follow-up notes."""
+    """Update lead status ('contacted', 'enrolled', 'closed', 'do_not_contact') and attach follow-up notes (Admin session required)."""
     updated = update_lead_status(db=db, lead_id=lead_id, status_update=payload)
     if not updated:
         raise HTTPException(status_code=404, detail="Lead not found")
@@ -242,7 +261,11 @@ async def update_lead_pipeline_status(
 
 
 @router.post("/batches", response_model=BatchOut, status_code=status.HTTP_201_CREATED, summary="Create a new batch")
-async def add_new_batch(payload: BatchCreate, db: Session = Depends(get_db)):
-    """Admin endpoint to create a new batch schedule."""
+async def add_new_batch(
+    payload: BatchCreate,
+    admin: AdminUser = Depends(require_admin),
+    db: Session = Depends(get_db)
+):
+    """Admin endpoint to create a new batch schedule (Admin session required)."""
     batch = create_batch(db=db, batch_data=payload)
     return batch.to_dict()

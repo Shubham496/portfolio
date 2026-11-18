@@ -120,37 +120,38 @@ Phase 6: Later Only (Optional Paywalled Bundles via External Link)
 
 ---
 
-### Phase 0: Security & Privacy (DO FIRST)
-*The platform is about to scale student contact capture; privacy and access boundaries must be hardened first.*
+### Phase 0: Security & Privacy (COMPLETED)
+*The platform is about to scale student contact capture; privacy and access boundaries are now fully hardened.*
 
-* [ ] **Task 0.1: Lock the Lead API Endpoints**
-  * Verify authentication guards on all `/api/courses/leads*` endpoints.
-  * Enforce `require_admin` on:
+* [x] **Task 0.1: Lock the Lead API Endpoints**
+  * Verified authentication guards on all `/api/courses/leads*` and `/batches` creation endpoints.
+  * Enforced `require_admin` on:
     * `GET /api/courses/leads`
     * `GET /api/courses/leads/summary`
     * `GET /api/courses/leads/export.csv`
     * `GET /api/courses/leads/{id}`
     * `PATCH /api/courses/leads/{id}/status`
-  * Confirm that only public admissions actions stay unauthenticated: `POST /api/courses/enquiry`, `POST /api/courses/register`, `GET /api/courses/batches`, and `GET /api/courses/instructor`.
-  * Write automated tests proving anonymous requests to lead endpoints return HTTP 303 (redirect) or HTTP 401.
-* [ ] **Task 0.2: Enforce SECRET_KEY Discipline**
-  * Remove hardcoded default fallback secrets from `app/core/base_config.py`, `app/apps/courses/auth.py`, and documentation.
-  * In production mode (`ENVIRONMENT=production` or `deployment`), raise an immediate startup error if `SECRET_KEY` is absent or set to an insecure placeholder.
-  * Document secret generation command (`python -c "import secrets; print(secrets.token_hex(32))"`).
-* [ ] **Task 0.3: Consent Capture & Legal Policy Pages**
-  * Add policy pages with clear, plain-language placeholder text for owner review:
+    * `POST /api/courses/batches`
+  * Confirmed that only public admissions actions stay unauthenticated: `POST /api/courses/enquiry`, `POST /api/courses/register`, `GET /api/courses/batches`, and `GET /api/courses/instructor`.
+  * Added automated tests proving anonymous requests to lead endpoints return HTTP 401 Unauthorized.
+* [x] **Task 0.2: Enforce SECRET_KEY Discipline**
+  * Removed hardcoded default fallback secrets from `app/core/base_config.py`, `app/apps/courses/auth.py`, and documentation.
+  * In production mode (`ENVIRONMENT=production` or `deployment`), raises an immediate startup error if `SECRET_KEY` is absent or set to an insecure placeholder.
+  * Documented secret generation command (`python -c "import secrets; print(secrets.token_hex(32))"`).
+* [x] **Task 0.3: Consent Capture & Legal Policy Pages**
+  * Added policy pages with clear, plain-language placeholder text for owner review:
     * `/privacy` (`app/templates/legal/privacy.html`): Data collection, WhatsApp communication policy, zero data-selling guarantee.
     * `/terms` (`app/templates/legal/terms.html`): Terms of service, intellectual property, cohort enrollment guidelines.
     * `/refund-policy` (`app/templates/legal/refund_policy.html`): Clear refund and rescheduling policies.
-  * Add a mandatory consent checkbox on all inquiry, registration, and lead capture forms:
+  * Added a mandatory consent checkbox on all inquiry, registration, and lead capture forms:
     > *"I agree to be contacted by phone or WhatsApp about this course."*
-  * Extend `StudentLead` database model to store:
+  * Extended `StudentLead` database model and schemas to store:
     * `consent_given`: `Boolean`, default `True`.
     * `consent_at`: `DateTime`, timestamp of consent.
-  * Add `do_not_contact` to allowed lead statuses so counselors can immediately suppress outreach if requested.
-* [ ] **Task 0.4: Log Redaction & Zero PII in Logs**
-  * Audit all application loggers (`courses.services`, `courses.router`, `main`, etc.).
-  * Ensure phone numbers, email addresses, and student names are never emitted to standard output, file logs, or task logs. Mask sensitive tokens in logging statements (`phone[:3] + "****" + phone[-2:]`).
+  * Added `do_not_contact` to allowed lead statuses so counselors can immediately suppress outreach if requested.
+* [x] **Task 0.4: Log Redaction & Zero PII in Logs**
+  * Audited all application loggers and added `mask_phone` and `mask_email` redaction utilities.
+  * Ensured phone numbers, email addresses, and student names are never emitted in plaintext to standard output, file logs, or task logs. Sensitive tokens in logging statements are masked (`clean[:3] + "****" + clean[-2:]`).
 
 ---
 

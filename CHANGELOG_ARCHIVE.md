@@ -17,7 +17,15 @@ Entries are organized chronologically by **Year** and **Month**, preserving orig
 
 ### November 2026
 
-#### [Historical Foundation: Commits 1c231b6 through 4347a5e] - 2026-11-02 to 2026-11-11
+#### [Historical Foundation: Commits 1c231b6 through c3eb35f] - 2026-11-02 to 2026-11-11
+
+- **Commit c3eb35f (2026-11-11) [Archived from Changeslog.md Entry 2]**:
+  - **Feature**: Dynamic generation of 2-page Data Analysis syllabus brochure via `fpdf2`; added routes for PDF download and inline browser preview; made student email optional across registration and inquiry forms; disabled public admin registration with 303 redirect to `/admin/login`; implemented signed HTTP-only cookie-based session management (`admin_session`) with 7-day expiration.
+  - **Files**: `app/apps/courses/generate_syllabus_pdf.py`, `app/apps/courses/schemas.py`, `app/apps/courses/models.py`, `app/apps/courses/admin_router.py`, `app/main.py`.
+  - **API Changes**: Added `GET /course/syllabus/download`, `GET /course/syllabus`, `GET /admin/logout`.
+  - **Database Changes**: `StudentLead.email` set to `nullable=True`; Pydantic schemas updated with `email: Optional[str] = None`.
+  - **Bugs Fixed**: Fixed security loophole allowing public account creation on admin routes.
+  - **Breaking Changes**: None.
 
 - **Commit 4347a5e (2026-11-11)**:
   - **Feature**: Hardened admin authentication integration test to be strictly idempotent across test runner environments.

@@ -178,6 +178,9 @@ Navigation features a top inter-page bar (`navbar.html`) and a left in-page dock
 | `GET` | `/` | HTML (`index.html`) | Primary landing page orchestrating all section partials. |
 | `GET` | `/register` | HTML (`register.html`) | Dedicated weekend cohort registration form. |
 | `GET` | `/registration-success` | HTML (`confirmation.html`) | Post-enrollment confirmation page. |
+| `GET` | `/privacy` | HTML (`legal/privacy.html`) | Data protection, WhatsApp outreach terms, and zero data-selling policy. |
+| `GET` | `/terms` | HTML (`legal/terms.html`) | Academic guidelines, static code execution invariant, and IP protections. |
+| `GET` | `/refund-policy` | HTML (`legal/refund_policy.html`) | Free demo guarantee, cohort rescheduling, and refund terms. |
 | `GET` | `/course/syllabus/download` | File (`Data_Analysis_Syllabus.pdf`) | Direct attachment download of syllabus brochure. |
 | `GET` | `/course/syllabus` | File (Inline PDF) | Inline browser preview of syllabus brochure. |
 | `GET` | `/resume` | File (Inline PDF) | Serves the instructor's technical resume PDF. |
@@ -195,19 +198,20 @@ Navigation features a top inter-page bar (`navbar.html`) and a left in-page dock
 | `POST` | `/admin/leads/{id}/status`| **`require_admin`** | Updates lead status & counseling notes; preserves active page. |
 | `GET` | `/admin/logout` | No | Clears `admin_session` cookie and redirects to `/admin/login`. |
 
-### 5.3 Public Course Admissions API (`app/apps/courses/router.py`)
-| Method | Path | Request Body | Description |
+### 5.3 Course Admissions API (`app/apps/courses/router.py`)
+| Method | Path | Auth Guard | Description |
 | :--- | :--- | :--- | :--- |
-| `GET` | `/api/courses/instructor` | None | Instructor profile, tools, credentials, and highlights. |
-| `GET` | `/api/courses/batches` | None | Returns active cohorts with available seat metrics. |
-| `GET` | `/api/courses/batches/{id}` | Path param | Detailed information for a single batch. |
-| `POST` | `/api/courses/enquiry` | JSON or Form (`EnquiryCreate`) | Submits a general inquiry or callback request. |
-| `POST` | `/api/courses/register` | JSON or Form (`BatchRegistrationCreate`) | Enrolls a student in a cohort. Email is optional. |
-| `GET` | `/api/courses/leads` | Query params | Filtered lead records (by type, status, search term). |
-| `GET` | `/api/courses/leads/summary`| None | KPI metrics (`total_leads`, `registrations`, `enquiries`, `new`). |
-| `GET` | `/api/courses/leads/export.csv`| None | Downloads student lead database as a clean CSV file. |
-| `GET` | `/api/courses/leads/{id}` | Path param | Single lead detail lookup. |
-| `PATCH`| `/api/courses/leads/{id}/status`| JSON (`LeadStatusUpdate`) | Updates status and notes via JSON API. |
+| `GET` | `/api/courses/instructor` | Public | Instructor profile, tools, credentials, and highlights. |
+| `GET` | `/api/courses/batches` | Public | Returns active cohorts with available seat metrics. |
+| `GET` | `/api/courses/batches/{id}` | Public | Detailed information for a single batch. |
+| `POST` | `/api/courses/enquiry` | Public | Submits a general inquiry or callback request (mandatory consent). |
+| `POST` | `/api/courses/register` | Public | Enrolls a student in a cohort. Email is optional (mandatory consent). |
+| `GET` | `/api/courses/leads` | **`require_admin`** | Filtered lead records (returns 401 for anonymous access). |
+| `GET` | `/api/courses/leads/summary`| **`require_admin`** | KPI metrics (`total_leads`, `registrations`, `enquiries`, `do_not_contact`). |
+| `GET` | `/api/courses/leads/export.csv`| **`require_admin`** | Downloads student lead database with consent timestamps as clean CSV. |
+| `GET` | `/api/courses/leads/{id}` | **`require_admin`** | Single lead detail lookup. |
+| `PATCH`| `/api/courses/leads/{id}/status`| **`require_admin`** | Updates pipeline status (`contacted`, `enrolled`, `closed`, `do_not_contact`). |
+| `POST` | `/api/courses/batches` | **`require_admin`** | Creates new cohort batch. |
 
 ### 5.4 Knowledge Engine & Library API (`app/apps/library/router.py`)
 | Method | Path | Response Type | Description |
@@ -267,7 +271,7 @@ Auto-loaded via `python-dotenv` from `.env` in [`app/core/config.py`](file:///f:
 | :--- | :--- | :--- | :--- |
 | `ADMIN_PASSWORD` | Recommended | Loaded from `.env` | Master instructor password for `admin` account (`admin@mythostech.in`). |
 | `AGENT_PASSWORD` | Recommended | Loaded from `.env` | Isolated password for automated test runs (`agent@mythostech.in`). |
-| `SECRET_KEY` | Recommended | Safe default fallback | Cryptographic secret for signing session cookies via `itsdangerous`. |
+| `SECRET_KEY` | Mandatory in Prod | Dev fallback only | Cryptographic 256-bit secret for signing cookies; app refuses to start in production if absent or default. Generate via: `python -c "import secrets; print(secrets.token_hex(32))"` |
 | `ENVIRONMENT` | Yes | `development` | Toggles between `LocalSettings` and `DeploymentSettings`. |
 | `PORT` | Auto | `8000` (dev) / `10000` (cloud)| Injected by cloud host; bound dynamically by Uvicorn. |
 | `DATABASE_URL` | Cloud Prod | `""` (falls back to SQLite)| External PostgreSQL connection URI (Neon / Supabase / Render Postgres). |

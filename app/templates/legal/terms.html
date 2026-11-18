@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Terms of Service | MYTHOS Online Institute{% endblock %}
+
+{% block content %}
+<section class="py-12 sm:py-16 border-b border-slate-200 dark:border-slate-800/80 transition-colors">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+
+        <!-- Top Breadcrumb -->
+        <div class="mb-8">
+            <a href="/" class="inline-flex items-center space-x-1.5 text-xs text-blue-600 dark:text-blue-400 font-bold hover:underline mb-3">
+                <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+                <span>Back to Homepage</span>
+            </a>
+            <div class="flex items-center space-x-2 text-xs text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wider mb-1">
+                <i data-lucide="file-text" class="w-4 h-4"></i>
+                <span>Academic &amp; Institute Guidelines</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-950 dark:text-white tracking-tight">
+                Terms of Service
+            </h1>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">
+                Last updated: November 19, 2026 · Governs platform usage, course registrations, and educational materials.
+            </p>
+        </div>
+
+        <!-- Terms Body Card -->
+        <div class="bg-white dark:bg-[#0B1120] border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm p-6 sm:p-10 space-y-8 text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+
+            <!-- Section 1: Institute Purpose -->
+            <div>
+                <h2 class="text-base font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 text-xs font-bold flex items-center justify-center">1</span>
+                    Institute Purpose &amp; Educational Scope
+                </h2>
+                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                    <strong>MYTHOS Online Institute</strong> provides live weekend cohort mentorship in Digital Marketing and Data Analytics, alongside self-paced technical documentation and reference curricula in the Resource Library. The platform is designed to impart practical, industry-aligned engineering and marketing competency.
+                </p>
+            </div>
+
+            <!-- Section 2: Zero Code Execution Invariant -->
+            <div>
+                <h2 class="text-base font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 text-xs font-bold flex items-center justify-center">2</span>
+                    Static Reference &amp; Zero Code Execution Platform Rule
+                </h2>
+                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                    All technical examples, SQL scripts, Python routines, and code snippets displayed on the platform are purely educational reference materials. The platform does not provide remote code execution environments, interactive consoles, or cloud sandboxes. Students are expected to configure and maintain their own local development environments (e.g. Python, MySQL, PostgreSQL, Power BI Desktop, VS Code) in accordance with curriculum guidance.
+                </p>
+            </div>
+
+            <!-- Section 3: Admissions & Enrollment -->
+            <div>
+                <h2 class="text-base font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 text-xs font-bold flex items-center justify-center">3</span>
+                    Admissions, Cohort Capacity &amp; No Public Pricing
+                </h2>
+                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-2">
+                    Live cohorts maintain strictly capped batch sizes (typically 20–25 seats) to ensure individualized mentorship. Submitting a registration or enquiry form does not constitute a guaranteed seat until verified by our admissions counseling desk.
+                </p>
+                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                    In accordance with institute policy, live cohort tuition is never displayed as fixed public prices on browse surfaces; tuition details and scholarship eligibility are discussed transparently during personal counseling and following free demo class participation.
+                </p>
+            </div>
+
+            <!-- Section 4: Intellectual Property -->
+            <div>
+                <h2 class="text-base font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 text-xs font-bold flex items-center justify-center">4</span>
+                    Intellectual Property Rights
+                </h2>
+                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                    All original curriculum outlines, syllabus brochures, viva interview banks, and pedagogical articles hosted on MYTHOS are proprietary educational assets. Learners are granted a personal, non-transferable license to read, copy, and practice with the code for personal study and career transition. Redistribution, bulk scraping, or commercial resale of institute assets is prohibited.
+                </p>
+            </div>
+
+            <!-- Section 5: Academic Conduct -->
+            <div>
+                <h2 class="text-base font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 text-xs font-bold flex items-center justify-center">5</span>
+                    Code of Conduct in Live Cohorts
+                </h2>
+                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                    Students participating in live weekend sessions, breakout discussions, or institute community channels are expected to maintain professional courtesy, punctuality, and mutual respect. Disruptive, abusive, or unauthorized promotional behavior may result in immediate revocation of batch access.
+                </p>
+            </div>
+
+            <!-- Contact Box -->
+            <div class="pt-4 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400">
+                For legal inquiries regarding terms of service, reach out to <a href="mailto:{{ settings.EMAIL }}" class="text-blue-600 dark:text-blue-400 underline">{{ settings.EMAIL }}</a>.
+            </div>
+
+        </div>
+
+    </div>
+</section>
+{% endblock %}

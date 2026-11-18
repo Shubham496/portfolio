@@ -2,7 +2,8 @@ import pytest
 from fastapi.testclient import TestClient
 from app.main import app
 from app.apps.courses.database import Base, engine, SessionLocal
-from app.apps.courses.models import Batch, StudentLead
+from app.apps.courses.models import Batch, StudentLead, AdminUser
+from app.apps.courses.auth import create_session_token, SESSION_COOKIE_NAME
 from app.apps.courses.services import init_courses_db
 import os
 
@@ -13,6 +14,17 @@ def setup_function():
     """Ensure clean test state before tests."""
     Base.metadata.create_all(bind=engine)
     init_courses_db()
+
+
+def get_admin_cookies():
+    """Helper to generate signed admin session cookies for protected test operations."""
+    with SessionLocal() as db:
+        admin = db.query(AdminUser).filter(AdminUser.username == "agent_admin").first()
+        if not admin:
+            admin = db.query(AdminUser).first()
+        token = create_session_token(admin_id=admin.id, username=admin.username)
+        return {SESSION_COOKIE_NAME: token}
+
 
 
 def test_instructor_endpoint():
@@ -123,7 +135,8 @@ def test_form_data_enquiry_submission():
         "email": "amit.patel@example.com",
         "phone": "+91 9988776655",
         "current_status": "Fresher",
-        "message": "Looking for syllabus details"
+        "message": "Looking for syllabus details",
+        "consent": "on"
     }
     response = client.post("/api/courses/enquiry", data=form_data)
     assert response.status_code == 201
@@ -131,9 +144,10 @@ def test_form_data_enquiry_submission():
 
 
 def test_lead_pipeline_and_summary():
-    """Admin can view lead summaries and update lead counseling statuses."""
+    """Admin can view lead summaries and update lead counseling statuses when authenticated."""
+    cookies = get_admin_cookies()
     # Fetch summary stats
-    summary_resp = client.get("/api/courses/leads/summary")
+    summary_resp = client.get("/api/courses/leads/summary", cookies=cookies)
     assert summary_resp.status_code == 200
     summary = summary_resp.json()
     assert summary["total_leads"] >= 2
@@ -141,7 +155,7 @@ def test_lead_pipeline_and_summary():
     assert summary["batch_registrations"] >= 1
 
     # Fetch leads list filtered by type
-    leads_resp = client.get("/api/courses/leads?lead_type=batch_registration")
+    leads_resp = client.get("/api/courses/leads?lead_type=batch_registration", cookies=cookies)
     assert leads_resp.status_code == 200
     reg_leads = leads_resp.json()
     assert len(reg_leads) >= 1
@@ -150,7 +164,8 @@ def test_lead_pipeline_and_summary():
     # Update pipeline status
     patch_resp = client.patch(
         f"/api/courses/leads/{reg_id}/status",
-        json={"status": "contacted", "admin_notes": "Spoke on call; confirmed weekend schedule."}
+        json={"status": "contacted", "admin_notes": "Spoke on call; confirmed weekend schedule."},
+        cookies=cookies
     )
     assert patch_resp.status_code == 200
     assert patch_resp.json()["lead"]["status"] == "contacted"
@@ -158,8 +173,9 @@ def test_lead_pipeline_and_summary():
 
 
 def test_csv_export():
-    """Admin can download leads as CSV."""
-    response = client.get("/api/courses/leads/export.csv")
+    """Admin can download leads as CSV when authenticated."""
+    cookies = get_admin_cookies()
+    response = client.get("/api/courses/leads/export.csv", cookies=cookies)
     assert response.status_code == 200
     assert "text/csv" in response.headers["content-type"]
     assert "attachment; filename=student_leads_and_registrations.csv" in response.headers["content-disposition"]
@@ -168,6 +184,7 @@ def test_csv_export():
     assert "Email" in csv_text
     assert "Phone" in csv_text
     assert "Batch Title" in csv_text
+    assert "Consent Given" in csv_text
 
 
 
@@ -265,3 +282,147 @@ def test_admin_auth_and_dashboard_flow():
     logout_resp = client.get("/admin/logout", follow_redirects=False)
     assert logout_resp.status_code == 303
     assert "/admin/login" in logout_resp.headers["location"]
+
+
+def test_anonymous_lead_endpoints_rejected():
+    """Anonymous/unauthenticated requests to lead and batch admin endpoints must be rejected with 401."""
+    # Lead list
+    resp = client.get("/api/courses/leads")
+    assert resp.status_code == 401
+    assert "Admin authentication required" in resp.json()["detail"]
+
+    # Lead summary
+    resp = client.get("/api/courses/leads/summary")
+    assert resp.status_code == 401
+
+    # CSV export
+    resp = client.get("/api/courses/leads/export.csv")
+    assert resp.status_code == 401
+
+    # Single lead detail
+    resp = client.get("/api/courses/leads/1")
+    assert resp.status_code == 401
+
+    # Patch lead status
+    resp = client.patch("/api/courses/leads/1/status", json={"status": "contacted"})
+    assert resp.status_code == 401
+
+    # Create batch
+    resp = client.post("/api/courses/batches", json={
+        "batch_code": "TEST-BATCH-2026",
+        "title": "Test Batch",
+    })
+    assert resp.status_code == 401
+
+
+def test_consent_enforcement_on_forms_and_api():
+    """Submissions without consent must fail validation (HTTP 422), while valid consent persists timestamp."""
+    # 1. API submission with explicit consent=False must fail
+    resp_false = client.post("/api/courses/enquiry", json={
+        "full_name": "No Consent Student",
+        "email": "noconsent@example.com",
+        "phone": "+91 9111122222",
+        "consent": False
+    })
+    assert resp_false.status_code == 422
+    assert "agree to be contacted" in resp_false.text
+
+    reg_false = client.post("/api/courses/register", json={
+        "full_name": "No Consent Enrollee",
+        "phone": "+91 9111122222",
+        "consent": False
+    })
+    assert reg_false.status_code == 422
+    assert "agree to be contacted" in reg_false.text
+
+    # 2. Form submission without consent (unchecked checkbox) must fail
+    form_resp_fail = client.post("/api/courses/enquiry", data={
+        "full_name": "Unchecked Consent",
+        "phone": "+91 9333344444"
+        # consent omitted
+    })
+    assert form_resp_fail.status_code == 422
+
+    # 3. Valid consent persists consent_given=True and consent_at timestamp
+    resp_success = client.post("/api/courses/enquiry", json={
+        "full_name": "Consenting Student",
+        "email": "consent@example.com",
+        "phone": "+91 9444455555",
+        "consent": True
+    })
+    assert resp_success.status_code == 201
+    lead_data = resp_success.json()["data"]
+    assert lead_data["consent_given"] is True
+    assert lead_data["consent_at"] is not None
+
+
+def test_do_not_contact_lead_status():
+    """Admins can update a student lead to 'do_not_contact' to suppress outreach."""
+    cookies = get_admin_cookies()
+    # Create a test lead
+    create_resp = client.post("/api/courses/enquiry", json={
+        "full_name": "Opt Out Learner",
+        "phone": "+91 9555566666",
+        "consent": True
+    })
+    assert create_resp.status_code == 201
+    lead_id = create_resp.json()["data"]["id"]
+
+    # Update status to do_not_contact
+    patch_resp = client.patch(
+        f"/api/courses/leads/{lead_id}/status",
+        json={"status": "do_not_contact", "admin_notes": "Student requested no further WhatsApp messages."},
+        cookies=cookies
+    )
+    assert patch_resp.status_code == 200
+    assert patch_resp.json()["lead"]["status"] == "do_not_contact"
+
+    # Verify summary reflects do_not_contact
+    summary_resp = client.get("/api/courses/leads/summary", cookies=cookies)
+    assert summary_resp.status_code == 200
+    assert summary_resp.json()["do_not_contact"] >= 1
+
+
+def test_secret_key_production_enforcement(monkeypatch):
+    """DeploymentSettings in production mode must refuse to start without a valid, secure SECRET_KEY."""
+    from app.core.deployment import DeploymentSettings
+
+    # Empty SECRET_KEY
+    monkeypatch.setenv("SECRET_KEY", "")
+    with pytest.raises(RuntimeError) as exc_info:
+        DeploymentSettings()
+    assert "SECRET_KEY environment variable is required in production" in str(exc_info.value)
+
+    # Insecure default placeholder
+    monkeypatch.setenv("SECRET_KEY", "shubham-data-analysis-secret-key-2026")
+    with pytest.raises(RuntimeError) as exc_info:
+        DeploymentSettings()
+    assert "SECRET_KEY environment variable is required in production" in str(exc_info.value)
+
+    # Valid cryptographically secure key
+    monkeypatch.setenv("SECRET_KEY", "b47c093a8126e0388d75cf82813123b34e2ab9030612c3f813c01287e07a3dfc")
+    settings = DeploymentSettings()
+    assert settings.SECRET_KEY == "b47c093a8126e0388d75cf82813123b34e2ab9030612c3f813c01287e07a3dfc"
+
+
+def test_legal_policy_pages():
+    """Verify that /privacy, /terms, and /refund-policy pages render with correct HTTP 200 responses."""
+    # Privacy Policy
+    priv_resp = client.get("/privacy")
+    assert priv_resp.status_code == 200
+    assert "Privacy Policy" in priv_resp.text
+    assert "WhatsApp" in priv_resp.text
+    assert "do_not_contact" in priv_resp.text
+
+    # Terms of Service
+    terms_resp = client.get("/terms")
+    assert terms_resp.status_code == 200
+    assert "Terms of Service" in terms_resp.text
+    assert "Zero Code Execution" in terms_resp.text
+
+    # Refund Policy
+    ref_resp = client.get("/refund-policy")
+    assert ref_resp.status_code == 200
+    assert "Refund &amp; Rescheduling Policy" in ref_resp.text or "Refund & Rescheduling Policy" in ref_resp.text
+    assert "Demo" in ref_resp.text
+

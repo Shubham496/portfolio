@@ -3,6 +3,7 @@ import csv
 import io
 import math
 import logging
+from datetime import datetime
 from typing import Optional, List, Dict, Any
 from sqlalchemy.orm import Session
 from sqlalchemy import or_, desc
@@ -22,10 +23,59 @@ from app.core.config import settings
 logger = logging.getLogger("courses.services")
 
 
+def mask_phone(phone: Optional[str]) -> str:
+    """Mask phone number for privacy in logs (e.g., +91 987****210)."""
+    if not phone:
+        return ""
+    clean = str(phone).strip()
+    if len(clean) <= 4:
+        return "****"
+    return f"{clean[:3]}****{clean[-2:]}"
+
+
+def mask_email(email: Optional[str]) -> str:
+    """Mask email address for privacy in logs (e.g., ro****@example.com)."""
+    if not email or "@" not in email:
+        return ""
+    parts = email.split("@", 1)
+    masked = parts[0][:2] + "****" if len(parts[0]) > 2 else "****"
+    return f"{masked}@{parts[1]}"
+
+
+def _run_startup_migrations(bind_engine):
+    """Idempotently add new columns to existing tables for SQLite and PostgreSQL."""
+    from sqlalchemy import text
+    try:
+        with bind_engine.connect() as conn:
+            # Check consent_given
+            try:
+                conn.execute(text("SELECT consent_given FROM student_leads LIMIT 1"))
+            except Exception:
+                try:
+                    conn.execute(text("ALTER TABLE student_leads ADD COLUMN consent_given BOOLEAN DEFAULT 1 NOT NULL"))
+                    conn.commit()
+                    logger.info("Migrated student_leads: added consent_given column.")
+                except Exception as e:
+                    logger.warning(f"Could not add consent_given column: {e}")
+            # Check consent_at
+            try:
+                conn.execute(text("SELECT consent_at FROM student_leads LIMIT 1"))
+            except Exception:
+                try:
+                    conn.execute(text("ALTER TABLE student_leads ADD COLUMN consent_at TIMESTAMP"))
+                    conn.commit()
+                    logger.info("Migrated student_leads: added consent_at column.")
+                except Exception as e:
+                    logger.warning(f"Could not add consent_at column: {e}")
+    except Exception as exc:
+        logger.warning(f"Startup migration check skipped or failed: {exc}")
+
+
 def init_courses_db():
     """Create courses tables if they don't exist and seed all institute weekend batches."""
     try:
         Base.metadata.create_all(bind=engine)
+        _run_startup_migrations(engine)
         logger.info("Course platform tables verified / created.")
         
         # Seed educational institute batches (2 Digital Marketing, 1 Data Analysis)
@@ -200,7 +250,9 @@ def create_student_enquiry(
         preferred_schedule=enquiry.preferred_schedule or "Saturday & Sunday 6:00 PM – 8:00 PM IST",
         message=enquiry.message.strip() if enquiry.message else "",
         status="new",
-        source_ip=client_ip
+        source_ip=client_ip,
+        consent_given=bool(getattr(enquiry, "consent", True)),
+        consent_at=datetime.utcnow()
     )
     db.add(lead)
     db.commit()
@@ -254,7 +306,9 @@ def create_batch_registration(
         preferred_schedule=pref_sched,
         message=reg.message.strip() if reg.message else "",
         status="new",
-        source_ip=client_ip
+        source_ip=client_ip,
+        consent_given=bool(getattr(reg, "consent", True)),
+        consent_at=datetime.utcnow()
     )
     db.add(lead)
     db.commit()
@@ -372,6 +426,8 @@ def get_lead_summary(db: Session) -> Dict[str, Any]:
     new_count = len([l for l in all_leads if l.status == "new"])
     contacted_count = len([l for l in all_leads if l.status == "contacted"])
     enrolled_count = len([l for l in all_leads if l.status == "enrolled"])
+    closed_count = len([l for l in all_leads if l.status == "closed"])
+    dnc_count = len([l for l in all_leads if l.status == "do_not_contact"])
 
     return {
         "total_leads": total,
@@ -380,6 +436,8 @@ def get_lead_summary(db: Session) -> Dict[str, Any]:
         "new": new_count,
         "contacted": contacted_count,
         "enrolled": enrolled_count,
+        "closed": closed_count,
+        "do_not_contact": dnc_count,
     }
 
 
@@ -424,6 +482,8 @@ def export_leads_csv(db: Session) -> str:
         "Message / Questions",
         "Status",
         "Admin Notes",
+        "Consent Given",
+        "Consent At",
         "Submitted At"
     ])
 
@@ -442,6 +502,8 @@ def export_leads_csv(db: Session) -> str:
             l.message or "",
             l.status,
             l.admin_notes or "",
+            "Yes" if l.consent_given else "No",
+            l.consent_at.strftime("%Y-%m-%d %H:%M:%S") if l.consent_at else "",
             l.created_at.strftime("%Y-%m-%d %H:%M:%S") if l.created_at else ""
         ])
 
@@ -1386,7 +1448,7 @@ def register_student(db: Session, student_in: StudentRegister) -> User:
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
-    logger.info(f"New student registered successfully: id={new_user.id}, phone={new_user.phone}")
+    logger.info(f"New student registered successfully: id={new_user.id}, phone={mask_phone(new_user.phone)}")
     return new_user
 
 

@@ -87,9 +87,13 @@ class StudentLead(Base):
     message = Column(Text, nullable=True)  # Student questions, notes, or expectations
     
     # Lead / Admission Pipeline Tracking
-    status = Column(String(30), nullable=False, default="new", index=True)  # new, contacted, enrolled, closed
+    status = Column(String(30), nullable=False, default="new", index=True)  # new, contacted, enrolled, closed, do_not_contact
     admin_notes = Column(Text, nullable=True)
     source_ip = Column(String(50), nullable=True)
+
+    # Privacy & Communication Consent
+    consent_given = Column(Boolean, default=True, nullable=False)
+    consent_at = Column(DateTime, default=datetime.utcnow, nullable=True)
     
     created_at = Column(DateTime, default=datetime.utcnow, server_default=func.now())
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -112,6 +116,8 @@ class StudentLead(Base):
             "message": self.message,
             "status": self.status,
             "admin_notes": self.admin_notes,
+            "consent_given": self.consent_given,
+            "consent_at": self.consent_at.isoformat() if self.consent_at else None,
             "created_at": self.created_at.isoformat() if self.created_at else None,
             "created_date": self.created_at.strftime("%b %d, %Y") if self.created_at else "",
             "created_time": self.created_at.strftime("%I:%M %p") if self.created_at else "",
