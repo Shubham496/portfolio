@@ -70,10 +70,12 @@ python-docx>=1.1.0
 ```text
 coding/
 │
-├── GUIDE.md                            # This document (Current system knowledge manual)
-├── Changeslog.md                       # Latest 15 development history entries
-├── CHANGELOG_ARCHIVE.md                # Historical changelog records
-├── AGENTS.md                           # 15 persistent golden rules for AI agents
+├── GUIDE.md                            # Definitive single-source-of-truth system manual & AI Accelerator
+├── AGENTS.md                           # 15 persistent golden rules & operational directives for AI agents
+├── agent.md                            # Standard alias mirroring AGENTS.md (resolves naming ambiguity)
+├── Changeslog.md                       # Latest 15 development history entries (active rolling log)
+├── task_new.md                         # Quick pointer referencing active master roadmap in docs/task_new.md
+├── CHANGELOG_ARCHIVE.md                # Quick pointer referencing historical archive in docs/
 ├── README.md                           # Top-level repository overview
 ├── render.yaml                         # Cloud deployment blueprint for Render.io
 ├── Procfile                            # Cloud process launcher (uvicorn app.main:app)
@@ -356,14 +358,18 @@ python -m pytest -v
 > **Use this index on every task to bypass redundant file searches, directory scans, and route guessing.**
 
 ### 10.1 Master Document Locator
-| Purpose | Exact Workspace Path | Notes |
-| :--- | :--- | :--- |
-| **Master Task Roadmap** | [`docs/task_new.md`](file:///f:/Projects/coding/docs/task_new.md) | **NOT in root**. Phases 0–6 task checklist & owner directives. |
-| **AI Operational Rules** | [`AGENTS.md`](file:///f:/Projects/coding/AGENTS.md) | 15 golden rules & push restrictions. |
-| **System Technical Guide** | [`GUIDE.md`](file:///f:/Projects/coding/GUIDE.md) | Single-source-of-truth manual (current file). |
-| **Recent Changelog** | [`Changeslog.md`](file:///f:/Projects/coding/Changeslog.md) | Strictly latest 15 development entries. |
-| **Changelog Archive** | [`CHANGELOG_ARCHIVE.md`](file:///f:/Projects/coding/CHANGELOG_ARCHIVE.md) | Permanent historical archive (Entry 4 and older). |
-| **Agent Operations Manual** | [`docs/AGENT_GUIDE.md`](file:///f:/Projects/coding/docs/AGENT_GUIDE.md) | Extended agent workflow & patterns guide. |
+| Purpose | Primary Workspace Path | Secondary / Alias Path | Notes |
+| :--- | :--- | :--- | :--- |
+| **Master Task Roadmap** | [`docs/task_new.md`](file:///f:/Projects/coding/docs/task_new.md) | [`task_new.md`](file:///f:/Projects/coding/task_new.md) (root pointer) | Active Phases 0–6 task checklist & owner directives. |
+| **AI Operational Rules** | [`AGENTS.md`](file:///f:/Projects/coding/AGENTS.md) | [`agent.md`](file:///f:/Projects/coding/agent.md) (root alias) | 15 golden rules & push restrictions. Auto-loaded by Antigravity. |
+| **System Technical Guide** | [`GUIDE.md`](file:///f:/Projects/coding/GUIDE.md) | — | Definitive single-source-of-truth manual (current file). |
+| **Recent Changelog** | [`Changeslog.md`](file:///f:/Projects/coding/Changeslog.md) | — | Strictly latest 15 development entries (rolling log). |
+| **Changelog Archive** | [`docs/CHANGELOG_ARCHIVE.md`](file:///f:/Projects/coding/docs/CHANGELOG_ARCHIVE.md) | [`CHANGELOG_ARCHIVE.md`](file:///f:/Projects/coding/CHANGELOG_ARCHIVE.md) (root pointer) | Permanent historical archive (Entry 4 and older). |
+| **Deep-Dive Architecture** | [`docs/architecture.md`](file:///f:/Projects/coding/docs/architecture.md) | — | Detailed sub-app modular layout & request lifecycle. |
+| **Database Blueprint** | [`docs/database.md`](file:///f:/Projects/coding/docs/database.md) | — | Schemas, connection pools, and dual-engine strategy. |
+| **Deployment Blueprint** | [`docs/deployment.md`](file:///f:/Projects/coding/docs/deployment.md) | — | Cloud hosting, Render build commands, and health pingers. |
+| **User Operations Manual** | [`docs/USER_GUIDE.md`](file:///f:/Projects/coding/docs/USER_GUIDE.md) | — | Human owner's operations & leads management manual. |
+| **Legacy Archives** | `docs/archive/` | — | Archived monolithic guides, original brief, and older changelogs. |
 
 ---
 

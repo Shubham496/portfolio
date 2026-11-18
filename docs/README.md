@@ -10,14 +10,15 @@ Welcome to the central documentation index for **MYTHOS Online Institute**.
 | :--- | :--- | :--- |
 | **[`../GUIDE.md`](file:///f:/Projects/coding/GUIDE.md)** | Developers & AI Agents | **Single-source-of-truth manual** describing current system state, tech stack, APIs, and business rules. |
 | **[`../Changeslog.md`](file:///f:/Projects/coding/Changeslog.md)** | Developers & AI Agents | **Recent development history** containing strictly the latest 15 meaningful entries. |
-| **[`../CHANGELOG_ARCHIVE.md`](file:///f:/Projects/coding/CHANGELOG_ARCHIVE.md)** | Developers & Maintainers | **Historical changelog archive** organized chronologically by Year and Month. |
-| **[`../AGENTS.md`](file:///f:/Projects/coding/AGENTS.md)** | AI Coding Assistants | **The 15 Golden Rules & operational directives** for AI agents working in this repository. |
+| **[`CHANGELOG_ARCHIVE.md`](file:///f:/Projects/coding/docs/CHANGELOG_ARCHIVE.md)** | Developers & Maintainers | **Historical changelog archive** organized chronologically by Year and Month. |
+| **[`../AGENTS.md`](file:///f:/Projects/coding/AGENTS.md)** / **[`../agent.md`](file:///f:/Projects/coding/agent.md)** | AI Coding Assistants | **The 15 Golden Rules & operational directives** for AI agents working in this repository. |
 | **[`architecture.md`](file:///f:/Projects/coding/docs/architecture.md)** | Architects & Engineers | Modular sub-app layout (`courses`, `library`, `todos`), request lifecycle, and UI component decomposition. |
 | **[`database.md`](file:///f:/Projects/coding/docs/database.md)** | Engineers & DBA | Dual-engine strategy (SQLite local / PostgreSQL cloud), connection pooling, ER model, and schemas. |
 | **[`deployment.md`](file:///f:/Projects/coding/docs/deployment.md)** | DevOps & Maintainers | Render.io deployment pipeline, build/start commands, environment variables, health checks, and rollback. |
 | **[`USER_GUIDE.md`](file:///f:/Projects/coding/docs/USER_GUIDE.md)** | Platform Owner (Shubham) | Plain-English non-technical guide explaining how to run locally, manage student leads, and export CSVs. |
 | **[`task_new.md`](file:///f:/Projects/coding/docs/task_new.md)** | Product & Engineering | Architectural roadmap and task tracker for the Knowledge & Resource Engine. |
 | **[`../README.md`](file:///f:/Projects/coding/README.md)** | Public & Developers | Top-level repository overview and quickstart instructions. |
+| **[`archive/`](file:///f:/Projects/coding/docs/archive/)** | Historical Reference | Legacy changelogs, initial briefs, and archived documentation assets. |
 
 ---
 

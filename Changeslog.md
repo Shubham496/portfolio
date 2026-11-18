@@ -1,7 +1,7 @@
 # Recent Development History (Changeslog.md)
 
 This file contains the **latest 15 meaningful development entries** for the **MYTHOS Online Institute** platform.
-Historical records prior to these entries are archived in [`CHANGELOG_ARCHIVE.md`](file:///f:/Projects/coding/CHANGELOG_ARCHIVE.md).
+Historical records prior to these entries are archived in [`docs/CHANGELOG_ARCHIVE.md`](file:///f:/Projects/coding/docs/CHANGELOG_ARCHIVE.md).
 
 ---
 
@@ -158,4 +158,4 @@ Historical records prior to these entries are archived in [`CHANGELOG_ARCHIVE.md
 ## Historical Changelog Archive Reference
 
 For the complete archive of development history and foundations prior to these 15 entries, see:  
-**[`CHANGELOG_ARCHIVE.md`](file:///f:/Projects/coding/CHANGELOG_ARCHIVE.md)**
+**[`docs/CHANGELOG_ARCHIVE.md`](file:///f:/Projects/coding/docs/CHANGELOG_ARCHIVE.md)**

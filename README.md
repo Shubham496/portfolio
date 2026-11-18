@@ -6,10 +6,11 @@ A modern, high-performance web platform built with **FastAPI** powering **MYTHOS
 
 ## 📌 Quick Navigation & Documentation
 
-- 📖 **[System Guide (GUIDE.md)](GUIDE.md)**: Current system knowledge manual, tech stack, APIs, schemas, and operational constraints.
-- 🤖 **[AI Agent Directives (AGENTS.md)](AGENTS.md)**: 15 Golden Rules, git operational lifecycle, and documentation maintenance workflows for AI agents.
+- 📖 **[System Guide (GUIDE.md)](GUIDE.md)**: Current system knowledge manual, tech stack, APIs, schemas, and AI Agent Accelerator.
+- 🤖 **[AI Agent Directives (AGENTS.md / agent.md)](AGENTS.md)**: 15 Golden Rules, git operational lifecycle, and documentation maintenance workflows for AI agents.
+- 🗺️ **[Master Task Roadmap (docs/task_new.md)](docs/task_new.md)**: Master implementation roadmap (Phases 0 through 6) and task checklists.
 - 📋 **[Recent Changelog (Changeslog.md)](Changeslog.md)**: Latest 15 meaningful development milestones with standardized metadata schema.
-- 🗄️ **[Historical Changelog Archive (CHANGELOG_ARCHIVE.md)](CHANGELOG_ARCHIVE.md)**: Historical records organized chronologically by Year and Month.
+- 🗄️ **[Historical Changelog Archive (docs/CHANGELOG_ARCHIVE.md)](docs/CHANGELOG_ARCHIVE.md)**: Historical records organized chronologically by Year and Month.
 - 🏛️ **[Application Architecture (docs/architecture.md)](docs/architecture.md)**: Modular sub-app layout, request lifecycle, and UI component decomposition.
 - 🗄️ **[Database Architecture (docs/database.md)](docs/database.md)**: Dual-engine strategy (SQLite local / PostgreSQL cloud), connection pooling, ER model, and schemas.
 - 🚀 **[Cloud Deployment (docs/deployment.md)](docs/deployment.md)**: Render.io deployment pipeline, build/start commands, environment variables, health checks, and rollback.

@@ -10,7 +10,7 @@
 
 1. **Read `GUIDE.md` before starting development**: Understand the current application state, purpose, tech stack, and constraints before proposing or writing code.
 2. **Read the latest 15 entries in `Changeslog.md`**: Familiarize yourself with recent feature additions, schema migrations, and architectural decisions.
-3. **Do not read the complete archive unless historical context is relevant**: Avoid context window pollution by reading `CHANGELOG_ARCHIVE.md` only when specifically debugging legacy behavior or historical decisions.
+3. **Do not read the complete archive unless historical context is relevant**: Avoid context window pollution by reading `docs/CHANGELOG_ARCHIVE.md` only when specifically debugging legacy behavior or historical decisions.
 4. **Inspect actual source code before making assumptions**: Never guess signatures, route paths, database columns, or template structures; always verify the current code directly.
 5. **Check Git status before modifying anything**: Inspect `git status` at the start of every session to ensure the working tree is clean and understand any unstaged work.
 6. **Follow the existing architecture and conventions**: Respect modular sub-app boundaries (`app/apps/`), dual-engine database design, and template section partial patterns.
@@ -20,7 +20,7 @@
 10. **Test important changes before declaring completion**: Always execute the automated test suite (`python -m pytest -v`) and verify that all tests pass cleanly before completing a task.
 11. **Update `Changeslog.md` after meaningful changes**: Document every meaningful feature, schema change, bug fix, or breaking change following the standardized changelog entry format.
 12. **Update `GUIDE.md` whenever current architecture or functionality changes**: Keep the single-source-of-truth manual aligned with the code.
-13. **Archive older entries when the 15-entry limit is exceeded**: Automatically transfer entries older than the latest 15 to `CHANGELOG_ARCHIVE.md` preserving all technical details.
+13. **Archive older entries when the 15-entry limit is exceeded**: Automatically transfer entries older than the latest 15 to `docs/CHANGELOG_ARCHIVE.md` preserving all technical details.
 14. **Never invent project information or document unverified functionality**: Ground every technical statement in verified code. Mark untested features clearly as unverified.
 15. **Never modify production data or perform destructive database operations without approval**: Do not drop tables, wipe rows, alter production databases, or execute destructive DDL commands.
 
@@ -62,7 +62,7 @@ Step 4: Post-Implementation Verification
 
 Step 5: Documentation Maintenance
   ├─ Update Changeslog.md with new entry (date, features, files, APIs, schemas, fixes)
-  ├─ If Changeslog.md exceeds 15 entries, transfer oldest to CHANGELOG_ARCHIVE.md
+  ├─ If Changeslog.md exceeds 15 entries, transfer oldest to docs/CHANGELOG_ARCHIVE.md
   └─ Update GUIDE.md if current architecture, endpoints, or schemas changed
 
 Step 6: Local Git Hygiene
