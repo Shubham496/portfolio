@@ -5,6 +5,16 @@ Historical records prior to these entries are archived in [`CHANGELOG_ARCHIVE.md
 
 ---
 
+## [Entry 16] - 2026-11-19 (Phase 2: Student Authentication, Access Control & Activity Logging)
+- **Feature Added / Modified**: Implemented complete student authentication system and activity logging engine; added `users` and `user_activity_logs` tables; created student registration view (`/student/register`) respecting the mandatory phone & optional email invariant; created student sign-in (`/student/login`) supporting phone or email login; implemented 30-day signed HTTP-only cookie session management (`student_session`); created student portal dashboard (`/student/dashboard`) displaying verified badge, activity history, and downloadable datasets; established Practice Datasets Vault (`/library/datasets`) and dataset detail view (`/library/datasets/{slug}`) with schema data dictionaries and preview rows; implemented protected dataset download gate (`/library/datasets/{slug}/download`) providing 1-click RFC 4180 CSV downloads for authenticated students while redirecting guests; created activity logging service linking anonymous guest reading trails to student accounts upon registration/login; added JSON APIs (`POST /api/student/register`, `POST /api/student/login`, `GET /api/student/me`, `POST /api/activity/log`); created comprehensive automated test suite with 14 test cases (`tests/test_student_auth.py`).
+- **Files Affected**: `app/apps/courses/models.py`, `app/apps/courses/schemas.py`, `app/apps/courses/auth.py`, `app/apps/courses/services.py`, `app/apps/courses/student_router.py`, `app/apps/library/models.py`, `app/apps/library/services.py`, `app/apps/library/router.py`, `app/main.py`, `app/templates/partials/navbar.html`, `app/templates/student/login.html`, `app/templates/student/register.html`, `app/templates/student/dashboard.html`, `app/templates/library/datasets.html`, `app/templates/library/dataset_detail.html`, `tests/test_student_auth.py`, `docs/task_new.md`, `GUIDE.md`, `Changeslog.md`, `CHANGELOG_ARCHIVE.md`.
+- **Important API Changes**: Mounted `/student/login`, `/student/register`, `/student/logout`, `/student/dashboard`, `/library/datasets`, `/library/datasets/{slug}`, `/library/datasets/{slug}/download`, `/api/student/register`, `/api/student/login`, `/api/student/me`, `/api/activity/log`.
+- **Database / Schema Changes**: Added `users` table (`id`, `full_name`, `phone` [unique], `email`, `hashed_password`, `user_type`, `college_or_company`, `is_active`, `created_at`, `updated_at`); added `user_activity_logs` table (`id`, `user_id` [FK users.id], `session_id`, `event_type`, `resource_type`, `resource_slug`, `referrer`, `ip_address`, `created_at`).
+- **Bugs Fixed**: Resolved TestClient cookie persistence across session boundary tests in test fixtures.
+- **Breaking Changes**: None.
+
+---
+
 ## [Entry 15] - 2026-11-18 (Phase 1.7: W3Schools Sequential SQL Study Track & Topic Progression)
 - **Feature Added / Modified**: Re-architected `/library/sql` into a 38-topic sequential study track across 11 categories mirroring W3Schools MySQL/SQL standards; added `< Previous Topic` and `Next Topic >` sequential navigation; isolated viva interview question banks into the dedicated Interview Questions tab (`?tab=interview_questions`).
 - **Files Affected**: `app/apps/library/router.py`, `app/apps/library/services.py`, `app/content/sql/sql-joins-textbook-vs-reality.md`, `tests/test_library.py`.
@@ -141,16 +151,6 @@ Historical records prior to these entries are archived in [`CHANGELOG_ARCHIVE.md
 - **Important API Changes**: Added `GET /course/syllabus/download`, `GET /course/syllabus`, `GET /admin/logout`.
 - **Database / Schema Changes**: `StudentLead.email` set to `nullable=True`; Pydantic schemas updated with `email: Optional[str] = None`.
 - **Bugs Fixed**: Fixed security loophole allowing public account creation on admin routes.
-- **Breaking Changes**: None.
-
----
-
-## [Entry 1] - 2026-11-11 (Commit 9b8f2a1: Course & Student Admission Engine, Frontend Pages & Interactive Modals, Automated Test Suite)
-- **Feature Added / Modified**: Initialized Course & Student Admission Engine (`app/apps/courses/`); established SQLAlchemy models (`Batch`, `StudentLead`, `AdminUser`); dual-database architecture (SQLite local, PostgreSQL cloud); dedicated registration page (`/register`), success page (`/registration-success`), and homepage inquiry modals; created 15 automated test cases in `tests/test_courses.py` and `tests/test_main.py`.
-- **Files Affected**: `app/apps/courses/models.py`, `app/apps/courses/database.py`, `app/apps/courses/router.py`, `app/apps/courses/services.py`, `app/templates/index.html`, `app/templates/register.html`, `app/templates/confirmation.html`, `tests/test_courses.py`, `tests/test_main.py`.
-- **Important API Changes**: Created `GET /api/courses/instructor`, `GET /api/courses/batches`, `GET /api/courses/batches/{id}`, `POST /api/courses/enquiry`, `POST /api/courses/register`, `GET /api/courses/leads`, `GET /api/courses/leads/summary`, `GET /api/courses/leads/export.csv`, `PATCH /api/courses/leads/{id}/status`.
-- **Database / Schema Changes**: Created `batches`, `student_leads`, and `admin_users` tables.
-- **Bugs Fixed**: Initial core admissions implementation.
 - **Breaking Changes**: None.
 
 ---

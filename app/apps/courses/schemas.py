@@ -139,3 +139,54 @@ class LeadOut(BaseModel):
     status: str
     admin_notes: Optional[str]
     created_at: Optional[str]
+
+
+class StudentRegister(BaseModel):
+    """Schema for student registration / account creation."""
+    full_name: str = Field(..., min_length=2, max_length=120, description="Full name of student")
+    phone: str = Field(..., min_length=7, max_length=25, description="Mobile / WhatsApp contact number (mandatory)")
+    password: str = Field(..., min_length=6, max_length=100, description="Account password (min 6 chars)")
+    email: Optional[str] = Field(default="", description="Email address (strictly optional)")
+    user_type: Optional[str] = Field(
+        default="student",
+        description="Background: student, fresher, working_professional"
+    )
+    college_or_company: Optional[str] = Field(default="", description="College, university, or company name")
+
+    @field_validator("email")
+    @classmethod
+    def validate_email(cls, v: Optional[str]) -> Optional[str]:
+        if not v:
+            return ""
+        v = v.strip().lower()
+        if v and not EMAIL_REGEX.match(v):
+            raise ValueError("Invalid email format")
+        return v
+
+
+class StudentLogin(BaseModel):
+    """Schema for student login via phone or email."""
+    identifier: str = Field(..., min_length=3, max_length=150, description="Registered phone number or email")
+    password: str = Field(..., min_length=1, description="Account password")
+
+
+class StudentOut(BaseModel):
+    """Safe public representation of a registered student."""
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    full_name: str
+    phone: str
+    email: Optional[str] = ""
+    user_type: str
+    college_or_company: Optional[str] = ""
+    is_active: bool
+    created_at: Optional[str] = None
+
+
+class ActivityLogCreate(BaseModel):
+    """Schema for recording user or guest interaction events."""
+    event_type: str = Field(..., description="page_view, note_read, dataset_download, etc.")
+    resource_type: Optional[str] = Field(default="general", description="note, viva, dataset, book, project")
+    resource_slug: Optional[str] = Field(default="", description="Identifier or slug of resource")
+    referrer: Optional[str] = Field(default="", description="Traffic origin or referrer URL")

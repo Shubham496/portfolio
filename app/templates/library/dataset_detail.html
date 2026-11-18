@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block title %}{{ dataset.title }} — Data Dictionary & Sample Preview | MYTHOS{% endblock %}
+
+{% block content %}
+<div class="relative min-h-screen bg-[#f8fafc] dark:bg-[#070B14] py-10">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Breadcrumb -->
+        <nav class="flex items-center space-x-2 text-sm text-slate-500 dark:text-slate-400 mb-6">
+            <a href="/" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-1">
+                <i data-lucide="home" class="w-4 h-4"></i> Home
+            </a>
+            <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+            <a href="/library" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Library</a>
+            <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+            <a href="/library/datasets" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Datasets</a>
+            <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+            <span class="text-slate-900 dark:text-slate-200 font-medium truncate">{{ dataset.short_title }}</span>
+        </nav>
+
+        <!-- Main Dataset Card -->
+        <div class="bg-white dark:bg-[#0B1120] border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 mb-8 shadow-sm">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-6 border-b border-slate-100 dark:border-slate-800">
+                <div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800">
+                            {{ dataset.category }}
+                        </span>
+                        <span class="text-[10px] font-bold px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+                            {{ dataset.format }} &bull; {{ dataset.total_rows }}
+                        </span>
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
+                        {{ dataset.title }}
+                    </h1>
+                    <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-2 max-w-2xl leading-relaxed">
+                        {{ dataset.description }}
+                    </p>
+                </div>
+
+                <!-- Download Card / Gate -->
+                <div class="bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shrink-0 w-full md:w-72 text-center">
+                    {% if current_student %}
+                    <div class="mb-3">
+                        <span class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 dark:text-emerald-400">
+                            <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> Unlocked Student Access
+                        </span>
+                        <p class="text-[10px] text-slate-500 mt-0.5">Click below to start instant CSV download.</p>
+                    </div>
+                    <a href="/library/datasets/{{ dataset.slug }}/download" 
+                       class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-md shadow-blue-500/20 transition active:scale-95">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                        <span>Download Full CSV</span>
+                    </a>
+                    {% else %}
+                    <div class="mb-3">
+                        <span class="inline-flex items-center gap-1 text-[11px] font-bold text-amber-600 dark:text-amber-400">
+                            <i data-lucide="lock" class="w-3.5 h-3.5"></i> Free Student Account Required
+                        </span>
+                        <p class="text-[10px] text-slate-500 mt-0.5">Login with phone or email to unlock instant download.</p>
+                    </div>
+                    <div class="space-y-2">
+                        <a href="/student/login?next=/library/datasets/{{ dataset.slug }}/download" 
+                           class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition">
+                            <i data-lucide="log-in" class="w-3.5 h-3.5"></i>
+                            <span>Sign In to Download</span>
+                        </a>
+                        <a href="/student/register?next=/library/datasets/{{ dataset.slug }}/download" 
+                           class="w-full inline-flex items-center justify-center px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-semibold transition">
+                            <span>Create Free Account</span>
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Recommended Analytical Use Cases -->
+            <div class="mt-6 pt-2">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Portfolio Analysis Use Cases</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    {% for uc in dataset.use_cases %}
+                    <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
+                        <i data-lucide="arrow-right-circle" class="w-4 h-4 text-blue-500 shrink-0 mt-0.5"></i>
+                        <span>{{ uc }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 1: Data Dictionary -->
+        <div class="bg-white dark:bg-[#0B1120] border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 mb-8 shadow-sm">
+            <h2 class="text-lg font-black text-slate-900 dark:text-white mb-1 flex items-center gap-2">
+                <i data-lucide="table" class="w-5 h-5 text-blue-500"></i>
+                Data Dictionary &amp; Column Specifications
+            </h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mb-6">
+                Technical schema description for relational SQL table creation and Power BI data modeling.
+            </p>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-200 dark:border-slate-800 text-slate-400 uppercase tracking-wider text-[10px]">
+                            <th class="py-3 px-4 font-bold">Column Name</th>
+                            <th class="py-3 px-4 font-bold">Data Type</th>
+                            <th class="py-3 px-4 font-bold">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 dark:divide-slate-800/60">
+                        {% for col in dataset.columns %}
+                        <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition">
+                            <td class="py-3 px-4 font-mono font-bold text-blue-600 dark:text-blue-400">{{ col.name }}</td>
+                            <td class="py-3 px-4 font-mono text-purple-600 dark:text-purple-400">{{ col.type }}</td>
+                            <td class="py-3 px-4 text-slate-600 dark:text-slate-300">{{ col.description }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section 2: Sample Rows Preview -->
+        <div class="bg-white dark:bg-[#0B1120] border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h2 class="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
+                        <i data-lucide="eye" class="w-5 h-5 text-emerald-500"></i>
+                        Sample Data Preview
+                    </h2>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">First sample records from the dataset.</p>
+                </div>
+                <span class="text-[11px] font-bold text-slate-400">Showing top 5 rows</span>
+            </div>
+
+            <div class="overflow-x-auto border border-slate-200 dark:border-slate-800 rounded-xl">
+                <table class="w-full text-left text-xs border-collapse min-w-[700px]">
+                    <thead class="bg-slate-50 dark:bg-slate-900 text-slate-500 dark:text-slate-400 font-mono text-[10px] uppercase">
+                        <tr>
+                            {% for col in dataset.columns %}
+                            <th class="py-2.5 px-3 whitespace-nowrap">{{ col.name }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200 dark:divide-slate-800 font-mono text-[11px]">
+                        {% for row in dataset.sample_rows %}
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                            {% for col in dataset.columns %}
+                            <td class="py-2.5 px-3 text-slate-700 dark:text-slate-300 whitespace-nowrap">
+                                {{ row[col.name] }}
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

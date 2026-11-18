@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Practice Datasets Vault | MYTHOS Online Institute{% endblock %}
+
+{% block content %}
+<div class="relative min-h-screen bg-[#f8fafc] dark:bg-[#070B14] py-10">
+    <!-- Ambient Top Glow -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-blue-600/10 via-purple-600/5 to-transparent blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        
+        <!-- Breadcrumb -->
+        <nav class="flex items-center space-x-2 text-sm text-slate-500 dark:text-slate-400 mb-8">
+            <a href="/" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-1">
+                <i data-lucide="home" class="w-4 h-4"></i> Home
+            </a>
+            <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+            <a href="/library" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Resource Library</a>
+            <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+            <span class="text-slate-900 dark:text-slate-200 font-medium">Practice Datasets Vault</span>
+        </nav>
+
+        <!-- Header -->
+        <div class="text-center max-w-3xl mx-auto mb-12">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800/60 text-xs font-semibold text-blue-700 dark:text-blue-400 mb-4 shadow-sm">
+                <i data-lucide="database" class="w-3.5 h-3.5 text-blue-500"></i>
+                Decoupled Data Vault &bull; Zero Upfront Fees
+            </div>
+            <h1 class="text-3xl sm:text-5xl font-black tracking-tight text-slate-900 dark:text-white leading-tight mb-4">
+                Real-World <span class="text-gradient-mythos">Practice Datasets</span>
+            </h1>
+            <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+                Clean, production-grade datasets designed for SQL practice, Power BI dashboards, and data analysis portfolios. Free student account unlocks full instant download.
+            </p>
+        </div>
+
+        <!-- Datasets Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+            {% for ds in datasets %}
+            <div class="bg-white dark:bg-[#0B1120] border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm hover:border-blue-500/50 hover:shadow-xl transition-all duration-200 flex flex-col justify-between">
+                <div>
+                    <!-- Badges -->
+                    <div class="flex items-center justify-between gap-2 mb-3">
+                        <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+                            {{ ds.category }}
+                        </span>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/60">
+                            {{ ds.total_rows }}
+                        </span>
+                    </div>
+
+                    <!-- Title -->
+                    <h2 class="text-base font-bold text-slate-900 dark:text-white mb-2 leading-snug">
+                        {{ ds.title }}
+                    </h2>
+
+                    <!-- Description -->
+                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-4">
+                        {{ ds.description }}
+                    </p>
+
+                    <!-- Use cases list -->
+                    <div class="space-y-1.5 mb-6 text-[11px] text-slate-600 dark:text-slate-300">
+                        <div class="font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider text-[10px]">Recommended Portfolio Projects:</div>
+                        {% for uc in ds.use_cases %}
+                        <div class="flex items-start gap-1.5">
+                            <i data-lucide="check-circle" class="w-3.5 h-3.5 text-blue-500 shrink-0 mt-0.5"></i>
+                            <span>{{ uc }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Action CTAs -->
+                <div class="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-2">
+                    <a href="/library/datasets/{{ ds.slug }}" class="w-full text-center block px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 transition">
+                        View Data Dictionary &amp; Schema
+                    </a>
+
+                    {% if current_student %}
+                    <a href="/library/datasets/{{ ds.slug }}/download" class="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-md shadow-blue-500/20 transition active:scale-95">
+                        <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                        <span>Download Full CSV (Instant)</span>
+                    </a>
+                    {% else %}
+                    <a href="/student/login?next=/library/datasets/{{ ds.slug }}/download" class="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-900 dark:bg-slate-800 hover:bg-blue-600 dark:hover:bg-blue-600 text-white text-xs font-bold transition">
+                        <i data-lucide="lock" class="w-3.5 h-3.5 text-blue-400"></i>
+                        <span>Login to Download (Free)</span>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}

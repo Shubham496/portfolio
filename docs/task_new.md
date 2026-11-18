@@ -304,23 +304,30 @@ Tracks engagement to inform future content decisions and identify high-intent co
 
 ---
 
-### Phase 2: Student Authentication, Access Control & Activity Logging
-* [ ] **Task 2.1: Student User & Activity Logging Database Models**
-  * Implement `users` model in `app/apps/courses/models.py` (or `app/apps/users/models.py`) with `phone` (mandatory/unique), `full_name` (mandatory), `email` (optional), `hashed_password`, `user_type`, and `college_or_company`.
-  * Implement `user_activity_logs` model tracking `user_id`, `session_id`, `event_type`, `resource_type`, `resource_slug`, `referrer`, `ip_address`, and timestamp.
-  * Run database migration / table initialization.
-* [ ] **Task 2.2: Student Session Authentication**
-  * Implement `GET /student/login`, `POST /student/login`.
-  * Implement `GET /student/register`, `POST /student/register` (Phone/WhatsApp mandatory, email optional).
-  * Implement `GET /student/logout`.
-  * Signed HTTP-only cookie session management (`student_session`).
-* [ ] **Task 2.3: Engagement Tracking & Activity Logger Service**
-  * Implement lightweight logging helper to record `page_view`, `note_read`, `cohort_apply_click`, and `dataset_download_click`.
-  * Track guest sessions via signed anonymous cookie UUID and link upon student login.
-* [ ] **Task 2.4: Free Dataset Gating & Access Control**
-  * Implement preview vs full download logic for datasets:
-    * Guest users: Preview schema, sample top 10 rows, "Login to Download Full Dataset" CTA.
-    * Authenticated students: One-click instant direct download link.
+### Phase 2: Student Authentication, Access Control & Activity Logging (Completed)
+* [x] **Task 2.1: Student User & Activity Logging Database Models**
+  * Implemented `users` model in `app/apps/courses/models.py` (and re-exported in `app/apps/library/models.py`) with `phone` (mandatory/unique WhatsApp contact), `full_name` (mandatory), `email` (strictly optional), `hashed_password` (bcrypt 12 rounds), `user_type` (student, fresher, working_professional), and `college_or_company`.
+  * Implemented `user_activity_logs` model tracking `user_id`, `session_id`, `event_type`, `resource_type`, `resource_slug`, `referrer`, `ip_address`, and timestamp.
+  * Auto-created and verified tables in SQLite local and PostgreSQL cloud schemas.
+* [x] **Task 2.2: Student Session Authentication**
+  * Implemented `GET /student/login`, `POST /student/login` with flexible phone or email + password authentication.
+  * Implemented `GET /student/register`, `POST /student/register` (Phone/WhatsApp mandatory, email optional).
+  * Implemented `GET /student/logout` clearing session cookie.
+  * Implemented `GET /student/dashboard` displaying verified student status, unlocked datasets, and recent activity log.
+  * Signed HTTP-only cookie session management (`student_session`, 30-day persistence).
+  * Implemented JSON APIs: `POST /api/student/register`, `POST /api/student/login`, `GET /api/student/me`.
+* [x] **Task 2.3: Engagement Tracking & Activity Logger Service**
+  * Implemented `log_user_activity()` helper recording events (`page_view`, `note_read`, `dataset_download`, `student_registered`, `student_login`).
+  * Anonymous guest session tracking via `mythos_guest_id` cookie.
+  * Implemented `link_guest_activities_to_user()` linking prior guest interactions to the authenticated student account upon login or registration.
+  * Mounted client-side logging endpoint `POST /api/activity/log`.
+* [x] **Task 2.4: Free Dataset Gating & Access Control**
+  * Implemented preview vs full download logic for practice datasets:
+    * Public vault catalog at `GET /library/datasets` listing datasets with metadata.
+    * Schema and sample rows preview at `GET /library/datasets/{slug}`.
+    * Protected direct download endpoint at `GET /library/datasets/{slug}/download`.
+    * Guests attempting download are redirected to `/student/login?next=...`.
+    * Authenticated students receive instant RFC 4180 CSV attachment and download activity is logged.
 
 ---
 

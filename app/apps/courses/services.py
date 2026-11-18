@@ -8,13 +8,15 @@ from sqlalchemy.orm import Session
 from sqlalchemy import or_, desc
 
 from app.apps.courses.database import engine, Base
-from app.apps.courses.models import Batch, StudentLead, AdminUser
+from app.apps.courses.models import Batch, StudentLead, AdminUser, User, UserActivityLog
 from app.apps.courses.schemas import (
     EnquiryCreate,
     BatchRegistrationCreate,
     BatchCreate,
-    LeadStatusUpdate
+    LeadStatusUpdate,
+    StudentRegister,
 )
+from app.apps.courses.auth import hash_password, verify_password
 from app.core.config import settings
 
 logger = logging.getLogger("courses.services")
@@ -1346,3 +1348,128 @@ def generate_syllabus_html_brochure() -> str:
 </body>
 </html>"""
     return html
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# STUDENT USER SERVICES & ACTIVITY TRACKING ENGINE
+# ═══════════════════════════════════════════════════════════════════════════════
+
+def register_student(db: Session, student_in: StudentRegister) -> User:
+    """
+    Registers a new student, fresher, or professional on the platform.
+    Phone is mandatory & unique. Email is optional.
+    """
+    clean_phone = student_in.phone.strip()
+    
+    # 1. Check duplicate phone
+    existing_phone = db.query(User).filter(User.phone == clean_phone).first()
+    if existing_phone:
+        raise ValueError("A student with this phone/WhatsApp number is already registered.")
+
+    # 2. Check duplicate email (if provided)
+    clean_email = student_in.email.strip().lower() if student_in.email else None
+    if clean_email:
+        existing_email = db.query(User).filter(User.email == clean_email).first()
+        if existing_email:
+            raise ValueError("A student with this email address is already registered.")
+
+    # 3. Hash password and persist
+    new_user = User(
+        full_name=student_in.full_name.strip(),
+        phone=clean_phone,
+        email=clean_email if clean_email else None,
+        hashed_password=hash_password(student_in.password),
+        user_type=student_in.user_type or "student",
+        college_or_company=student_in.college_or_company.strip() if student_in.college_or_company else None,
+        is_active=True,
+    )
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    logger.info(f"New student registered successfully: id={new_user.id}, phone={new_user.phone}")
+    return new_user
+
+
+def authenticate_student(db: Session, identifier: str, password: str) -> Optional[User]:
+    """
+    Authenticates a student by either their registered Phone or Email.
+    Returns User if valid credentials and active, else None.
+    """
+    ident = identifier.strip()
+    if not ident or not password:
+        return None
+
+    # Query by phone or email
+    if "@" in ident:
+        user = db.query(User).filter(User.email == ident.lower(), User.is_active == True).first()
+    else:
+        user = db.query(User).filter(User.phone == ident, User.is_active == True).first()
+
+    if not user:
+        return None
+
+    if verify_password(password, user.hashed_password):
+        return user
+
+    return None
+
+
+def log_user_activity(
+    db: Session,
+    session_id: str,
+    event_type: str,
+    user_id: Optional[int] = None,
+    resource_type: Optional[str] = "general",
+    resource_slug: Optional[str] = None,
+    referrer: Optional[str] = None,
+    ip_address: Optional[str] = None,
+) -> UserActivityLog:
+    """
+    Records an engagement event (page_view, note_read, dataset_download, cohort_apply_click).
+    Works for both logged-in students and anonymous guests.
+    """
+    try:
+        activity = UserActivityLog(
+            user_id=user_id,
+            session_id=session_id or "anonymous",
+            event_type=event_type,
+            resource_type=resource_type,
+            resource_slug=resource_slug,
+            referrer=referrer[:250] if referrer else None,
+            ip_address=ip_address[:45] if ip_address else None,
+        )
+        db.add(activity)
+        db.commit()
+        db.refresh(activity)
+        return activity
+    except Exception as e:
+        db.rollback()
+        logger.warning(f"Failed to record activity log: {e}")
+        return None
+
+
+def link_guest_activities_to_user(db: Session, session_id: str, user_id: int) -> int:
+    """
+    Links past anonymous guest activities to a newly registered or authenticated student.
+    Returns number of records updated.
+    """
+    if not session_id or not user_id:
+        return 0
+    try:
+        updated = db.query(UserActivityLog).filter(
+            UserActivityLog.session_id == session_id,
+            UserActivityLog.user_id.is_(None)
+        ).update({"user_id": user_id}, synchronize_session=False)
+        db.commit()
+        return updated
+    except Exception as e:
+        db.rollback()
+        logger.warning(f"Failed to link guest activities: {e}")
+        return 0
+
+
+def get_student_activities(db: Session, user_id: int, limit: int = 20) -> List[UserActivityLog]:
+    """Retrieve recent activity history for a student."""
+    return db.query(UserActivityLog).filter(
+        UserActivityLog.user_id == user_id
+    ).order_by(desc(UserActivityLog.created_at)).limit(limit).all()

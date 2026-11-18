@@ -49,6 +49,14 @@ Entries are organized chronologically by **Year** and **Month**, preserving orig
   - **Files**: `app/apps/courses/models.py`, `app/apps/courses/database.py`, `app/apps/courses/router.py`, `app/apps/courses/schemas.py`.
   - **Database Changes**: Provisioned initial `batches` and `student_leads` tables with SQLite fallback.
 
+- **Commit 9b8f2a1 (2026-11-11) [Archived from Changeslog.md Entry 1]**:
+  - **Feature**: Initialized Course & Student Admission Engine (`app/apps/courses/`); established SQLAlchemy models (`Batch`, `StudentLead`, `AdminUser`); dual-database architecture (SQLite local, PostgreSQL cloud); dedicated registration page (`/register`), success page (`/registration-success`), and homepage inquiry modals; created 15 automated test cases in `tests/test_courses.py` and `tests/test_main.py`.
+  - **Files**: `app/apps/courses/models.py`, `app/apps/courses/database.py`, `app/apps/courses/router.py`, `app/apps/courses/services.py`, `app/templates/index.html`, `app/templates/register.html`, `app/templates/confirmation.html`, `tests/test_courses.py`, `tests/test_main.py`.
+  - **API Changes**: Created `GET /api/courses/instructor`, `GET /api/courses/batches`, `GET /api/courses/batches/{id}`, `POST /api/courses/enquiry`, `POST /api/courses/register`, `GET /api/courses/leads`, `GET /api/courses/leads/summary`, `GET /api/courses/leads/export.csv`, `PATCH /api/courses/leads/{id}/status`.
+  - **Database Changes**: Created `batches`, `student_leads`, and `admin_users` tables.
+  - **Bugs Fixed**: Initial core admissions implementation.
+  - **Breaking Changes**: None.
+
 - **Commit e9047fc & 433f02d (2026-11-02)**:
   - **Feature**: Added inset margins and custom webkit scrollbar styling for floating scrollbars across light and dark themes; fixed theme toggle icon inversion bug.
   - **Files**: `app/static/css/style.css`, `app/static/js/main.js`.

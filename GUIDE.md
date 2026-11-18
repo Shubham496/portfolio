@@ -89,19 +89,20 @@ coding/
 │   │
 │   ├── apps/                           # Modular application domains
 │   │   ├── courses/                    # Admissions & Cohort Management
-│   │   │   ├── models.py               # Entities: Batch, StudentLead, AdminUser
-│   │   │   ├── schemas.py              # Pydantic v2 schemas: EnquiryCreate, BatchRegistrationCreate
+│   │   │   ├── models.py               # Entities: Batch, StudentLead, AdminUser, User, UserActivityLog
+│   │   │   ├── schemas.py              # Pydantic v2 schemas: EnquiryCreate, BatchRegistrationCreate, StudentRegister
 │   │   │   ├── database.py             # Dual-engine connection pool (SQLite local, PostgreSQL cloud)
-│   │   │   ├── services.py             # CRUD, pagination math, CSV export, db seeding
-│   │   │   ├── auth.py                 # Bcrypt hashing, session cookies, require_admin dependency
+│   │   │   ├── services.py             # CRUD, pagination math, CSV export, db seeding, user & activity services
+│   │   │   ├── auth.py                 # Bcrypt hashing, session cookies (admin & student), auth dependencies
 │   │   │   ├── router.py               # Public API routes (/api/courses/*)
 │   │   │   ├── admin_router.py         # Protected admin portal (/admin/*)
+│   │   │   ├── student_router.py       # Student portal & auth routes (/student/*, /api/student/*, /api/activity/log)
 │   │   │   └── generate_syllabus_pdf.py# Dynamic 2-page syllabus PDF generator (fpdf2)
 │   │   │
 │   │   ├── library/                    # 34-Technology Knowledge & Documentation Engine
-│   │   │   ├── services.py             # PyMdown markdown parsing, LRU cache, topic trees, adjacent nav
-│   │   │   ├── router.py               # Web routes (/library/*) & JSON APIs (/api/library/*)
-│   │   │   └── models.py               # Future digital product models placeholder
+│   │   │   ├── services.py             # PyMdown markdown parsing, LRU cache, topic trees, practice datasets catalog
+│   │   │   ├── router.py               # Web routes (/library/*), datasets vault & JSON APIs (/api/library/*)
+│   │   │   └── models.py               # Re-exports User & UserActivityLog; future digital products
 │   │   │
 │   │   └── todos/                      # Supporting internal task tracking micro-app
 │   │       ├── models.py               # SQLite helpers for project_todos in portfolio.db
@@ -125,7 +126,8 @@ coding/
 │       ├── partials/                   # Global components (navbar.html, in_page_nav.html, footer.html)
 │       ├── sections/                   # 10 modular landing page section partials
 │       ├── admin/                      # Instructor portal views (login.html, dashboard.html)
-│       └── library/                    # Docs engine views (index.html, subject_hub.html, reader.html)
+│       ├── student/                    # Student portal views (login.html, register.html, dashboard.html)
+│       └── library/                    # Docs & dataset views (index.html, subject_hub.html, reader.html, datasets.html, dataset_detail.html)
 │
 ├── design/                             # Design system & brand asset repository
 │   ├── GUIDELINES.md                   # Brand identity, color tokens, typography, certificate specs
@@ -143,9 +145,10 @@ coding/
 ├── external_assets/                    # [DECOUPLED VAULT] Git-ignored submodule (mythos-assets)
 │                                       # Houses datasets, downloads, and large images via CDN
 │
-└── tests/                              # Automated test suite (32 tests passing cleanly)
+└── tests/                              # Automated test suite (46 tests passing cleanly)
     ├── test_courses.py                 # Admissions, registrations, auth, CSV export, PDF (13 tests)
     ├── test_library.py                 # W3Schools panels, sequential nav, reader, catalog (17 tests)
+    ├── test_student_auth.py            # Student auth, session cookies, activity logging, datasets (14 tests)
     └── test_main.py                    # Root health check and homepage integration (2 tests)
 ```
 
@@ -210,10 +213,27 @@ Navigation features a top inter-page bar (`navbar.html`) and a left in-page dock
 | Method | Path | Response Type | Description |
 | :--- | :--- | :--- | :--- |
 | `GET` | `/library` | HTML (`library/index.html`) | 34-Technology directory and category filter tabs. |
+| `GET` | `/library/datasets` | HTML (`library/datasets.html`) | Practice datasets vault listing clean datasets for SQL & BI. |
+| `GET` | `/library/datasets/{slug}` | HTML (`library/dataset_detail.html`) | Dataset inspection, data dictionary schema, and sample preview. |
+| `GET` | `/library/datasets/{slug}/download` | File (CSV) | **Protected Gate**: Download full RFC 4180 CSV (requires student login). |
 | `GET` | `/library/{subject}` | HTML (`library/subject_hub.html`) | W3Schools-style hub with 4-tab panels & topic sidebar. |
 | `GET` | `/library/{subject}/notes/{slug}`| HTML (`library/reader.html`) | 3-Column docs reader with TOC and Prism.js styling. |
 | `GET` | `/api/library/subjects` | JSON | List of all 34 supported subjects with topic counts. |
 | `GET` | `/api/library/{subject}/documents`| JSON | List of all markdown articles indexed for a subject. |
+
+### 5.5 Student Portal & Authentication API (`app/apps/courses/student_router.py`)
+| Method | Path | Auth Guard | Description |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/student/login` | No | Student sign-in page. Redirects to `/student/dashboard` if already authenticated. |
+| `POST` | `/student/login` | No | Authenticates student via phone or email + password; sets 30-day `student_session` cookie. |
+| `GET` | `/student/register` | No | Student registration form (Phone/WhatsApp mandatory, email strictly optional). |
+| `POST` | `/student/register` | No | Creates student record, links prior guest activities, sets session cookie. |
+| `GET` | `/student/logout` | No | Clears `student_session` cookie and redirects to `/`. |
+| `GET` | `/student/dashboard` | **`require_student`** | Personal student portal showing verified status, unlocked datasets, and activity history. |
+| `POST` | `/api/student/register` | No | JSON API: Registers student and returns safe `StudentOut` profile + session token. |
+| `POST` | `/api/student/login` | No | JSON API: Authenticates student and returns `StudentOut` profile + session token. |
+| `GET` | `/api/student/me` | **`require_student`** | JSON API: Returns current authenticated student profile. |
+| `POST` | `/api/activity/log` | No | JSON API: Records client interactions (`note_read`, `page_view`, etc.) for guests or students. |
 
 ---
 
@@ -233,7 +253,9 @@ For the exhaustive database specification, see [`docs/database.md`](file:///f:/P
 1. `batches`: Scheduled live cohorts (`batch_code`, `course_name`, `schedule_days`, `schedule_time`, `max_seats`, `is_active`).
 2. `student_leads`: Prospective student records (`full_name`, `email` [optional], `phone` [mandatory], `current_status`, `prior_experience`, `status`, `admin_notes`, foreign key to `batches.id`).
 3. `admin_users`: Administrative accounts (`username`, `email`, `hashed_password` [bcrypt 12 rounds], `is_active`).
-4. `project_todos`: Internal task tracker items stored inside `portfolio.db`.
+4. `users`: Registered student & professional platform accounts (`full_name`, `phone` [unique/mandatory], `email` [optional], `hashed_password` [bcrypt 12 rounds], `user_type`, `college_or_company`, `is_active`).
+5. `user_activity_logs`: High-resolution engagement logs (`user_id`, `session_id`, `event_type`, `resource_type`, `resource_slug`, `referrer`, `ip_address`).
+6. `project_todos`: Internal task tracker items stored inside `portfolio.db`.
 
 ---
 

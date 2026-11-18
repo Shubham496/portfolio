@@ -6,6 +6,7 @@ from app.core.config import settings
 from app.apps.todos.router import router as todos_router
 from app.apps.courses.router import router as courses_router
 from app.apps.courses.admin_router import router as admin_router
+from app.apps.courses.student_router import router as student_router
 from app.apps.library.router import router as library_router
 from app.apps.courses.services import get_instructor_curriculum_profile, generate_syllabus_html_brochure, list_batches
 from app.apps.courses.database import SessionLocal
@@ -24,6 +25,7 @@ app = FastAPI(
 app.include_router(todos_router)
 app.include_router(courses_router)
 app.include_router(admin_router)
+app.include_router(student_router)
 app.include_router(library_router)
 
 # Mount static files

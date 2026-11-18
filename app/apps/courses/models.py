@@ -136,3 +136,69 @@ class AdminUser(Base):
             "email": self.email,
             "created_at": self.created_at.isoformat() if self.created_at else None,
         }
+
+
+class User(Base):
+    """
+    Represents a registered student, fresher, or working professional on the platform.
+    """
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    full_name = Column(String(120), nullable=False)
+    phone = Column(String(30), unique=True, index=True, nullable=False)  # WhatsApp / primary contact
+    email = Column(String(150), unique=True, index=True, nullable=True)  # Optional
+    hashed_password = Column(String(255), nullable=False)
+    user_type = Column(String(50), nullable=False, default="student")  # student, fresher, working_professional
+    college_or_company = Column(String(150), nullable=True)
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.utcnow, server_default=func.now())
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    # Relationships
+    activity_logs = relationship("UserActivityLog", back_populates="user", cascade="all, delete-orphan")
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "full_name": self.full_name,
+            "phone": self.phone,
+            "email": self.email,
+            "user_type": self.user_type,
+            "college_or_company": self.college_or_company,
+            "is_active": self.is_active,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+        }
+
+
+class UserActivityLog(Base):
+    """
+    Tracks student and guest reader engagement across documentation, datasets, and admissions.
+    Informs content strategy and cohort counseling readiness.
+    """
+    __tablename__ = "user_activity_logs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True)
+    session_id = Column(String(64), index=True, nullable=False)  # Cookie-based session ID linking guest behavior
+    event_type = Column(String(50), index=True, nullable=False)  # page_view, note_read, dataset_download, cohort_apply_click, etc.
+    resource_type = Column(String(50), nullable=True)  # note, viva, dataset, book, project, general
+    resource_slug = Column(String(100), index=True, nullable=True)
+    referrer = Column(String(255), nullable=True)
+    ip_address = Column(String(50), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, server_default=func.now(), index=True)
+
+    user = relationship("User", back_populates="activity_logs")
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "session_id": self.session_id,
+            "event_type": self.event_type,
+            "resource_type": self.resource_type,
+            "resource_slug": self.resource_slug,
+            "referrer": self.referrer,
+            "ip_address": self.ip_address,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+        }

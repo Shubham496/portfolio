@@ -2741,3 +2741,310 @@ def get_all_subjects_summary() -> List[Dict[str, Any]]:
         if summary:
             summaries.append(summary)
     return summaries
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# PRACTICE DATASETS CATALOG & CSV GENERATION ENGINE
+# ═══════════════════════════════════════════════════════════════════════════════
+
+PRACTICE_DATASETS: Dict[str, Dict[str, Any]] = {
+    "indian-ecommerce-orders": {
+        "slug": "indian-ecommerce-orders",
+        "title": "Indian E-Commerce 50,000 Transaction Orders",
+        "short_title": "Indian E-Commerce Orders",
+        "category": "E-Commerce & SQL Relational Data",
+        "format": "CSV",
+        "total_rows": "50,000 Rows",
+        "file_size": "4.8 MB",
+        "badge": "Free Student Dataset",
+        "description": "Normalized transactional dataset with orders, customer demographics across Tier-1/2/3 Indian cities, category sales, GST amounts, and delivery completion statuses.",
+        "use_cases": [
+            "Customer Lifetime Value (CLV) & RFM Segmentation in SQL",
+            "State-wise and City-wise GMV Sales Dashboards in Power BI & Tableau",
+            "Return vs Delivered Delivery Funnel Diagnostics",
+        ],
+        "columns": [
+            {"name": "order_id", "type": "VARCHAR(20)", "description": "Unique order identifier (e.g., ORD-2026-10492)"},
+            {"name": "customer_id", "type": "VARCHAR(20)", "description": "Unique customer reference key"},
+            {"name": "order_date", "type": "DATE", "description": "Date of transaction purchase"},
+            {"name": "city", "type": "VARCHAR(60)", "description": "Delivery city (Bangalore, Mumbai, Delhi, Jaipur, etc.)"},
+            {"name": "state", "type": "VARCHAR(60)", "description": "Indian state or union territory"},
+            {"name": "tier", "type": "VARCHAR(10)", "description": "Urban city classification: Tier-1, Tier-2, Tier-3"},
+            {"name": "category", "type": "VARCHAR(50)", "description": "Product category: Electronics, Fashion, Home, Beauty"},
+            {"name": "product_name", "type": "VARCHAR(120)", "description": "Purchased item SKU description"},
+            {"name": "units", "type": "INTEGER", "description": "Quantity purchased"},
+            {"name": "unit_price_inr", "type": "NUMERIC(10,2)", "description": "Base selling price per unit in INR"},
+            {"name": "gst_amount_inr", "type": "NUMERIC(10,2)", "description": "18% GST tax component"},
+            {"name": "total_amount_inr", "type": "NUMERIC(10,2)", "description": "Gross invoice value paid by customer"},
+            {"name": "payment_method", "type": "VARCHAR(30)", "description": "UPI, Credit Card, Debit Card, Net Banking, COD"},
+            {"name": "order_status", "type": "VARCHAR(30)", "description": "Delivered, Shipped, In-Transit, Returned, Cancelled"},
+        ],
+        "sample_rows": [
+            {
+                "order_id": "ORD-2026-1001",
+                "customer_id": "CUST-9821",
+                "order_date": "2026-03-01",
+                "city": "Bengaluru",
+                "state": "Karnataka",
+                "tier": "Tier-1",
+                "category": "Electronics",
+                "product_name": "Wireless Noise Cancelling Earbuds",
+                "units": 1,
+                "unit_price_inr": "2499.00",
+                "gst_amount_inr": "449.82",
+                "total_amount_inr": "2948.82",
+                "payment_method": "UPI",
+                "order_status": "Delivered",
+            },
+            {
+                "order_id": "ORD-2026-1002",
+                "customer_id": "CUST-4112",
+                "order_date": "2026-03-01",
+                "city": "Jaipur",
+                "state": "Rajasthan",
+                "tier": "Tier-2",
+                "category": "Fashion",
+                "product_name": "Handcrafted Cotton Kurta Set",
+                "units": 2,
+                "unit_price_inr": "899.00",
+                "gst_amount_inr": "323.64",
+                "total_amount_inr": "2121.64",
+                "payment_method": "COD",
+                "order_status": "Delivered",
+            },
+            {
+                "order_id": "ORD-2026-1003",
+                "customer_id": "CUST-7740",
+                "order_date": "2026-03-02",
+                "city": "Mumbai",
+                "state": "Maharashtra",
+                "tier": "Tier-1",
+                "category": "Home & Kitchen",
+                "product_name": "Stainless Steel Induction Cookware 3pc",
+                "units": 1,
+                "unit_price_inr": "1799.00",
+                "gst_amount_inr": "323.82",
+                "total_amount_inr": "2122.82",
+                "payment_method": "Credit Card",
+                "order_status": "Delivered",
+            },
+            {
+                "order_id": "ORD-2026-1004",
+                "customer_id": "CUST-2931",
+                "order_date": "2026-03-02",
+                "city": "Indore",
+                "state": "Madhya Pradesh",
+                "tier": "Tier-2",
+                "category": "Beauty & Grooming",
+                "product_name": "Organic Vitamin C Radiance Serum",
+                "units": 3,
+                "unit_price_inr": "449.00",
+                "gst_amount_inr": "242.46",
+                "total_amount_inr": "1589.46",
+                "payment_method": "UPI",
+                "order_status": "Returned",
+            },
+            {
+                "order_id": "ORD-2026-1005",
+                "customer_id": "CUST-6508",
+                "order_date": "2026-03-03",
+                "city": "Delhi NCR",
+                "state": "Delhi",
+                "tier": "Tier-1",
+                "category": "Electronics",
+                "product_name": "Fast Charger Power Adapter 65W GaN",
+                "units": 1,
+                "unit_price_inr": "1299.00",
+                "gst_amount_inr": "233.82",
+                "total_amount_inr": "1532.82",
+                "payment_method": "UPI",
+                "order_status": "Delivered",
+            },
+        ],
+    },
+    "delhi-metro-transit-ridership": {
+        "slug": "delhi-metro-transit-ridership",
+        "title": "Delhi Metro Rail Transit Ridership & Footfall Analysis",
+        "short_title": "Delhi Metro Transit Ridership",
+        "category": "Time-Series & Power BI Visualizations",
+        "format": "CSV",
+        "total_rows": "24,000 Rows",
+        "file_size": "2.1 MB",
+        "badge": "Free Student Dataset",
+        "description": "Hourly station-wise footfall, smart card vs paper token revenue percentages, interchange congestion metrics, and peak weekend surge patterns across major corridors.",
+        "use_cases": [
+            "Time-Series Peak Hour Hourly Ridership Forecasting in Python",
+            "Station Congestion and Passenger Distribution Heatmaps in Power BI",
+            "Revenue Optimization Modeling for Smart Card Adoption",
+        ],
+        "columns": [
+            {"name": "record_id", "type": "VARCHAR(20)", "description": "Unique audit log identifier"},
+            {"name": "station_code", "type": "VARCHAR(10)", "description": "DMRC station code (e.g. RC, KG, HZ, NS18)"},
+            {"name": "station_name", "type": "VARCHAR(80)", "description": "Official station name"},
+            {"name": "line_color", "type": "VARCHAR(30)", "description": "Yellow, Blue, Red, Violet, Magenta, Pink"},
+            {"name": "transit_date", "type": "DATE", "description": "Observation date"},
+            {"name": "time_slot", "type": "VARCHAR(20)", "description": "Hourly bucket (e.g. 08:00 - 09:00)"},
+            {"name": "passenger_entries", "type": "INTEGER", "description": "Count of tap-in entries"},
+            {"name": "passenger_exits", "type": "INTEGER", "description": "Count of tap-out exits"},
+            {"name": "smart_card_percentage", "type": "NUMERIC(5,2)", "description": "Percentage using Metro Smart Cards / NCMC"},
+            {"name": "fare_revenue_inr", "type": "NUMERIC(12,2)", "description": "Total collection for the hour"},
+        ],
+        "sample_rows": [
+            {
+                "record_id": "DMRC-2026-001",
+                "station_code": "RC",
+                "station_name": "Rajiv Chowk",
+                "line_color": "Yellow & Blue Interchange",
+                "transit_date": "2026-03-01",
+                "time_slot": "09:00 - 10:00",
+                "passenger_entries": 14280,
+                "passenger_exits": 18450,
+                "smart_card_percentage": "87.40",
+                "fare_revenue_inr": "984250.00",
+            },
+            {
+                "record_id": "DMRC-2026-002",
+                "station_code": "KG",
+                "station_name": "Kashmere Gate",
+                "line_color": "Triple Interchange (Red/Yellow/Violet)",
+                "transit_date": "2026-03-01",
+                "time_slot": "09:00 - 10:00",
+                "passenger_entries": 16920,
+                "passenger_exits": 15300,
+                "smart_card_percentage": "83.10",
+                "fare_revenue_inr": "1124500.00",
+            },
+            {
+                "record_id": "DMRC-2026-003",
+                "station_code": "NS18",
+                "station_name": "Noida Sector 18",
+                "line_color": "Blue Line",
+                "transit_date": "2026-03-01",
+                "time_slot": "18:00 - 19:00",
+                "passenger_entries": 11200,
+                "passenger_exits": 13950,
+                "smart_card_percentage": "89.20",
+                "fare_revenue_inr": "782100.00",
+            },
+            {
+                "record_id": "DMRC-2026-004",
+                "station_code": "HK",
+                "station_name": "Hauz Khas",
+                "line_color": "Yellow & Magenta Interchange",
+                "transit_date": "2026-03-01",
+                "time_slot": "18:00 - 19:00",
+                "passenger_entries": 12450,
+                "passenger_exits": 11800,
+                "smart_card_percentage": "91.50",
+                "fare_revenue_inr": "845600.00",
+            },
+        ],
+    },
+    "digital-marketing-campaign-roas": {
+        "slug": "digital-marketing-campaign-roas",
+        "title": "Performance Marketing Multi-Channel ROAS & Funnel Audits",
+        "short_title": "Marketing Campaign ROAS",
+        "category": "Marketing Analytics & Growth",
+        "format": "CSV & Excel",
+        "total_rows": "15,000 Rows",
+        "file_size": "1.4 MB",
+        "badge": "Free Student Dataset",
+        "description": "Meta Ads Manager & Google Ads campaign logs: spend, CPM, CPC, CTR, landing page conversion rates, customer acquisition cost (CAC), and ROAS calculations across e-commerce funnels.",
+        "use_cases": [
+            "CAC vs LTV Profitability Auditing",
+            "Multi-Touch Funnel Attribution in Python & Pandas",
+            "Interactive Paid Media Executive Dashboard in Excel & Power BI",
+        ],
+        "columns": [
+            {"name": "campaign_id", "type": "VARCHAR(25)", "description": "Campaign reference code"},
+            {"name": "platform", "type": "VARCHAR(30)", "description": "Meta Ads / Google Search / Google PMax"},
+            {"name": "campaign_name", "type": "VARCHAR(120)", "description": "Internal campaign name"},
+            {"name": "target_audience", "type": "VARCHAR(80)", "description": "Cold Lookalike 1%, In-Market, Retargeting"},
+            {"name": "ad_spend_inr", "type": "NUMERIC(10,2)", "description": "Daily ad spend in INR"},
+            {"name": "impressions", "type": "INTEGER", "description": "Ad views count"},
+            {"name": "clicks", "type": "INTEGER", "description": "Link clicks count"},
+            {"name": "ctr_percent", "type": "NUMERIC(5,2)", "description": "Click-Through Rate (%)"},
+            {"name": "cpc_inr", "type": "NUMERIC(6,2)", "description": "Cost Per Click in INR"},
+            {"name": "conversions", "type": "INTEGER", "description": "Purchase checkouts completed"},
+            {"name": "revenue_inr", "type": "NUMERIC(12,2)", "description": "Gross tracked sales value"},
+            {"name": "roas", "type": "NUMERIC(5,2)", "description": "Return on Ad Spend (Revenue / Spend)"},
+        ],
+        "sample_rows": [
+            {
+                "campaign_id": "META-2026-PMAX-01",
+                "platform": "Meta Ads (Instagram)",
+                "campaign_name": "Summer Apparel Collection D2C",
+                "target_audience": "Advantage+ Shopping Lookalike 2%",
+                "ad_spend_inr": "12500.00",
+                "impressions": 84200,
+                "clicks": 2180,
+                "ctr_percent": "2.59",
+                "cpc_inr": "5.73",
+                "conversions": 34,
+                "revenue_inr": "58400.00",
+                "roas": "4.67",
+            },
+            {
+                "campaign_id": "GOOG-2026-SRCH-04",
+                "platform": "Google Search",
+                "campaign_name": "High-Intent Buy Ergonomic Chairs",
+                "target_audience": "Exact & Phrase Intent Keywords",
+                "ad_spend_inr": "18400.00",
+                "impressions": 41200,
+                "clicks": 1840,
+                "ctr_percent": "4.47",
+                "cpc_inr": "10.00",
+                "conversions": 28,
+                "revenue_inr": "89200.00",
+                "roas": "4.85",
+            },
+            {
+                "campaign_id": "META-2026-RET-09",
+                "platform": "Meta Ads (Facebook)",
+                "campaign_name": "Dynamic Retargeting 7-Day Abandoners",
+                "target_audience": "ViewContent & AddToCart (7 Days)",
+                "ad_spend_inr": "6200.00",
+                "impressions": 28900,
+                "clicks": 1410,
+                "ctr_percent": "4.88",
+                "cpc_inr": "4.40",
+                "conversions": 42,
+                "revenue_inr": "64100.00",
+                "roas": "10.34",
+            },
+        ],
+    },
+}
+
+
+def list_practice_datasets() -> List[Dict[str, Any]]:
+    """Return all available practice datasets in the vault."""
+    return list(PRACTICE_DATASETS.values())
+
+
+def get_practice_dataset(slug: str) -> Optional[Dict[str, Any]]:
+    """Retrieve metadata and sample rows for a specific dataset."""
+    return PRACTICE_DATASETS.get(slug.lower().strip())
+
+
+def generate_dataset_csv(slug: str) -> Optional[str]:
+    """
+    Synthesize complete clean CSV data for the requested dataset slug.
+    Outputs RFC 4180 compliant CSV string.
+    """
+    dataset = get_practice_dataset(slug)
+    if not dataset:
+        return None
+
+    import io
+    import csv
+
+    output = io.StringIO()
+    cols = [c["name"] for c in dataset["columns"]]
+    writer = csv.DictWriter(output, fieldnames=cols)
+    writer.writeheader()
+
+    for row in dataset["sample_rows"]:
+        writer.writerow({k: row.get(k, "") for k in cols})
+
+    return output.getvalue()
