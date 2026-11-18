@@ -43,6 +43,10 @@ document.addEventListener("DOMContentLoaded", () => {
         '✅ Enquiry Sent!',
         'Got your message! Our admissions advisor will get back to you shortly.');
 
+    bindForm('waitlist-form', '/api/courses/waitlist', 'waitlist-submit-btn',
+        '🚀 On the Waitlist!',
+        'You are on the priority waitlist! We will notify you via WhatsApp as soon as enrollment opens.');
+
     // ESC key closes modals
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeAllModals();
@@ -91,10 +95,21 @@ function openModalWithCourse(which, courseName) {
     }
 }
 
+function openWaitlistModal(subjectName) {
+    openModal('waitlist');
+    if (subjectName) {
+        const input = document.getElementById('waitlist-subject-input');
+        const badge = document.getElementById('waitlist-subject-badge');
+        if (input) input.value = subjectName;
+        if (badge) badge.textContent = subjectName;
+    }
+}
+
 function closeAllModals(restoreScroll = true) {
     document.getElementById('modal-backdrop')?.classList.add('hidden');
     document.getElementById('modal-enroll')?.classList.add('hidden');
     document.getElementById('modal-enquiry')?.classList.add('hidden');
+    document.getElementById('modal-waitlist')?.classList.add('hidden');
     if (restoreScroll) document.body.style.overflow = '';
 }
 

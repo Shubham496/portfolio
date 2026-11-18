@@ -43,6 +43,14 @@ Entries are organized chronologically by **Year** and **Month**, preserving orig
   - **Bugs Fixed**: None.
   - **Breaking Changes**: None.
 
+- **[Archived from Changeslog.md Entry 5] (2026-11-12)**:
+  - **Feature**: Embedded instructor photo in illuminated podium stage with floating "Students Trained: 550+" pulsing badge; added 4-card trust metric strip; converted static syllabus into interactive explorer with "Show More Details" and "Expand All / Collapse All"; detailed deep-dive competencies across Excel, SQL, Python, Power BI, and Tableau; introduced 4-pillar placement system (GitHub, ATS Resume, LinkedIn, Mock Interviews).
+  - **Files**: `app/templates/sections/hero.html`, `app/templates/sections/syllabus.html`, `app/templates/sections/career.html`, `app/apps/courses/generate_syllabus_pdf.py`.
+  - **API Changes**: None.
+  - **Database Changes**: None.
+  - **Bugs Fixed**: None.
+  - **Breaking Changes**: None.
+
 - **Commit 4347a5e (2026-11-11)**:
   - **Feature**: Hardened admin authentication integration test to be strictly idempotent across test runner environments.
   - **Files**: `tests/test_courses.py`.

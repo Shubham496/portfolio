@@ -9,7 +9,12 @@ from app.apps.courses.router import router as courses_router
 from app.apps.courses.admin_router import router as admin_router
 from app.apps.courses.student_router import router as student_router
 from app.apps.library.router import router as library_router
-from app.apps.courses.services import get_instructor_curriculum_profile, generate_syllabus_html_brochure, list_batches
+from app.apps.courses.services import (
+    get_instructor_curriculum_profile,
+    generate_syllabus_html_brochure,
+    list_batches,
+    get_grouped_batches
+)
 from app.apps.courses.database import SessionLocal
 from app.apps.library.services import SUBJECTS, list_documents_for_subject, list_practice_datasets
 import os
@@ -195,6 +200,7 @@ async def home(request: Request):
     """Render the primary educational institute homepage."""
     with SessionLocal() as db:
         active_batches = list_batches(db)
+        grouped_batches = get_grouped_batches(db)
     return templates.TemplateResponse(
         request=request,
         name="index.html",
@@ -207,6 +213,7 @@ async def home(request: Request):
             "education": EDUCATION_DATA,
             "course_profile": get_instructor_curriculum_profile(),
             "batches": active_batches,
+            "grouped_batches": grouped_batches,
         }
     )
 
@@ -215,6 +222,7 @@ async def register_page(request: Request):
     """Dedicated registration page for prospective students."""
     with SessionLocal() as db:
         active_batches = list_batches(db)
+        grouped_batches = get_grouped_batches(db)
     return templates.TemplateResponse(
         request=request,
         name="register.html",
@@ -223,6 +231,7 @@ async def register_page(request: Request):
             "title": "Register for Weekend Batch",
             "course_profile": get_instructor_curriculum_profile(),
             "batches": active_batches,
+            "grouped_batches": grouped_batches,
         }
     )
 
@@ -292,6 +301,7 @@ async def demo_page(request: Request):
     """Dedicated Free Live Demo Class reservation page."""
     with SessionLocal() as db:
         active_batches = list_batches(db)
+        grouped_batches = get_grouped_batches(db)
     return templates.TemplateResponse(
         request=request,
         name="demo.html",
@@ -299,6 +309,7 @@ async def demo_page(request: Request):
             "settings": settings,
             "title": "Free Live Weekend Demo Class | MYTHOS",
             "batches": active_batches,
+            "grouped_batches": grouped_batches,
         }
     )
 

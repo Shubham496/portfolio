@@ -393,6 +393,7 @@ Never guess route names or template locations:
 | `app/templates/library/dataset_detail.html` | `GET /library/datasets/{slug}`| `app/apps/library/router.py:practice_dataset_detail()` | `settings`, `dataset`, `current_user` |
 | `app/templates/admin/login.html` | `GET /admin/login` | `app/apps/courses/admin_router.py:admin_login_page()` | `settings`, `error` |
 | `app/templates/admin/dashboard.html` | `GET /admin/dashboard` | `app/apps/courses/admin_router.py:admin_dashboard()` | `settings`, `leads`, `summary`, `batches`, `current_admin` |
+| `app/templates/admin/batches.html` | `GET /admin/batches` | `app/apps/courses/admin_router.py:admin_batches_page()` | `settings`, `admin`, `batches`, `summary` |
 | `app/templates/student/login.html` | `GET /student/login` | `app/apps/courses/student_router.py:student_login_page()` | `settings`, `error`, `next` |
 | `app/templates/student/register.html` | `GET /student/register` | `app/apps/courses/student_router.py:student_register_page()` | `settings`, `error`, `next` |
 | `app/templates/student/dashboard.html` | `GET /student/dashboard` | `app/apps/courses/student_router.py:student_dashboard()` | `settings`, `current_user`, `activity_logs`, `datasets` |
@@ -428,6 +429,7 @@ Always use these exact attributes and tokens; **never hardcode strings**:
 | `DM_MENTOR_LINKEDIN` | `settings.DM_MENTOR_LINKEDIN` | `[DM_MENTOR_LINKEDIN]` | DM Mentor LinkedIn profile URL |
 | `DM_SCHEDULE` | `settings.DM_SCHEDULE` | `[DM_SCHEDULE]` | DM cohort days & timing |
 | DA Mentor Profile | Code / Template constant | *Mythos Data Analytics Mentor* | Anonymous DA Mentor (no photo, terminal emblem, 3+ yrs, 400+ taught, Sat & Sun 6–8 PM) |
+| `[SUBJECT_ORDER]` | `settings.SUBJECT_ORDER` | `SQL, Excel, Power BI, Python, Tableau, Git & GitHub` | Data Analytics curriculum sequence & roadmap strip |
 | `DEMO_CLASS_DATETIME`| Token | `[DEMO_CLASS_DATETIME]` | Free demo session schedule |
 
 > [!WARNING]
@@ -441,7 +443,7 @@ Always use these exact attributes and tokens; **never hardcode strings**:
 
 ### 10.4 Subsystem Test Suite Map & Fast Verification Commands
 
-Instead of running all 66 tests during rapid iterations, run targeted sub-suites:
+Instead of running all 70 tests during rapid iterations, run targeted sub-suites:
 
 ```powershell
 # 1. Frontend & Core Routing (SEO, sitemap, meta, mentors, contact, quality gate, 550+ purge)

@@ -102,6 +102,77 @@
     </div>
 </div>
 
+{# --- WAITLIST MODAL (Notify Me for Next Batch) --- #}
+<div id="modal-waitlist"
+     class="hidden fixed inset-0 z-50 flex items-center justify-center p-4"
+     role="dialog" aria-modal="true" aria-labelledby="waitlist-title">
+    <div class="relative w-full max-w-md bg-white dark:bg-[#0B1120] rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden"
+         onclick="event.stopPropagation()">
+
+        <div class="flex items-center justify-between p-5 border-b border-slate-200 dark:border-slate-800">
+            <div>
+                <div class="inline-flex items-center space-x-1.5 px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 text-[10px] font-bold uppercase tracking-wider mb-1">
+                    <span>Priority Queue</span>
+                </div>
+                <h3 id="waitlist-title" class="font-extrabold text-slate-900 dark:text-white text-base">Notify Me for Next Batch</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    Target Subject: <strong id="waitlist-subject-badge" class="text-blue-600 dark:text-blue-400">Next Subject</strong>
+                </p>
+            </div>
+            <button onclick="closeAllModals()" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+        </div>
+
+        <form id="waitlist-form" class="p-5 space-y-3.5">
+            <input type="hidden" name="subject_interest" id="waitlist-subject-input" value="Data Analytics Next Batch">
+
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Full Name <span class="text-red-500">*</span></label>
+                <input type="text" name="full_name" required placeholder="Your full name"
+                       class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Email <span class="text-slate-400 font-normal">(Optional)</span></label>
+                    <input type="email" name="email" placeholder="you@email.com"
+                           class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">WhatsApp No. <span class="text-red-500">*</span></label>
+                    <input type="tel" name="phone" required placeholder="+91 9XXXXXXXXX"
+                           class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Any specific topics or goals? (Optional)</label>
+                <textarea name="message" rows="2" placeholder="e.g. Interested in DAX modeling or advanced SQL queries..."
+                          class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition resize-none"></textarea>
+            </div>
+
+            <!-- Required Consent Checkbox -->
+            <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800">
+                <label class="flex items-start space-x-2 cursor-pointer">
+                    <input type="checkbox" name="consent" required checked
+                           class="mt-0.5 w-3.5 h-3.5 rounded border-slate-300 dark:border-slate-700 text-blue-600 focus:ring-blue-500 shrink-0">
+                    <span class="text-[11px] text-slate-600 dark:text-slate-400 leading-snug">
+                        I agree to be contacted by phone or WhatsApp about this course. View our <a href="/privacy" target="_blank" class="text-blue-600 dark:text-blue-400 underline hover:text-blue-500">Privacy Policy</a>.
+                    </span>
+                </label>
+            </div>
+
+            <button type="submit" id="waitlist-submit-btn"
+                    class="w-full flex items-center justify-center space-x-2 px-5 py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm rounded-xl shadow-lg shadow-blue-500/25 transition active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed">
+                <i data-lucide="bell" class="w-4 h-4"></i>
+                <span>Join Next Batch Waitlist</span>
+            </button>
+            <p class="text-center text-[11px] text-slate-500">We will notify you via WhatsApp the moment registrations open for this subject.</p>
+        </form>
+    </div>
+</div>
+
 {# --- ENQUIRY MODAL --- #}
 <div id="modal-enquiry"
      class="hidden fixed inset-0 z-50 flex items-center justify-center p-4"

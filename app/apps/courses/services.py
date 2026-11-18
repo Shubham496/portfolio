@@ -14,8 +14,10 @@ from app.apps.courses.schemas import (
     EnquiryCreate,
     BatchRegistrationCreate,
     BatchCreate,
+    BatchUpdate,
     LeadStatusUpdate,
     StudentRegister,
+    WaitlistCreate,
 )
 from app.apps.courses.auth import hash_password, verify_password
 from app.core.config import settings
@@ -67,6 +69,26 @@ def _run_startup_migrations(bind_engine):
                     logger.info("Migrated student_leads: added consent_at column.")
                 except Exception as e:
                     logger.warning(f"Could not add consent_at column: {e}")
+            # Check subject_interest in student_leads
+            try:
+                conn.execute(text("SELECT subject_interest FROM student_leads LIMIT 1"))
+            except Exception:
+                try:
+                    conn.execute(text("ALTER TABLE student_leads ADD COLUMN subject_interest VARCHAR(100)"))
+                    conn.commit()
+                    logger.info("Migrated student_leads: added subject_interest column.")
+                except Exception as e:
+                    logger.warning(f"Could not add subject_interest column: {e}")
+            # Check track in batches
+            try:
+                conn.execute(text("SELECT track FROM batches LIMIT 1"))
+            except Exception:
+                try:
+                    conn.execute(text("ALTER TABLE batches ADD COLUMN track VARCHAR(50) DEFAULT 'data_analytics' NOT NULL"))
+                    conn.commit()
+                    logger.info("Migrated batches: added track column.")
+                except Exception as e:
+                    logger.warning(f"Could not add track column: {e}")
     except Exception as exc:
         logger.warning(f"Startup migration check skipped or failed: {exc}")
 
@@ -86,6 +108,7 @@ def init_courses_db():
                     "batch_code": "DA-WKND-2026-B1",
                     "title": "Weekend Data Analysis Masterclass",
                     "course_name": "Data Analysis (Python, SQL, PowerBI, Excel, Tableau)",
+                    "track": "data_analytics",
                     "technologies": "Python, SQL, PowerBI, Excel, Tableau",
                     "schedule_days": "Saturday & Sunday",
                     "schedule_time": "6:00 PM – 8:00 PM IST",
@@ -104,6 +127,7 @@ def init_courses_db():
                     "batch_code": "DM-PERF-2026-B1",
                     "title": "Performance Marketing & Paid Advertising Masterclass",
                     "course_name": "Digital Marketing: Performance Marketing & Paid Ads",
+                    "track": "digital_marketing",
                     "technologies": "Google Ads, Meta Ads, GA4, GTM, Funnel CRO",
                     "schedule_days": "Saturday & Sunday",
                     "schedule_time": "3:00 PM – 5:00 PM IST",
@@ -121,12 +145,13 @@ def init_courses_db():
                     "batch_code": "DM-GROWTH-2026-B1",
                     "title": "SEO, Content Strategy & Social Media Growth Masterclass",
                     "course_name": "Digital Marketing: SEO & Growth Strategy",
+                    "track": "digital_marketing",
                     "technologies": "Technical SEO, Semrush, Content Marketing, Social Media, Email Automation",
                     "schedule_days": "Saturday & Sunday",
                     "schedule_time": "11:00 AM – 1:00 PM IST",
                     "start_date": "Upcoming Weekend",
                     "duration": "8-10 Weeks Hands-On Mentorship",
-                    "status": "enrolling",
+                    "status": "upcoming",
                     "max_seats": 25,
                     "description": (
                         "Full online practical masterclass in technical & on-page SEO, organic search ranking algorithms, "
@@ -141,6 +166,12 @@ def init_courses_db():
                 if not existing:
                     db.add(Batch(**b_spec))
                     logger.info(f"Seeded cohort batch {b_spec['batch_code']}.")
+                else:
+                    # Ensure track and status are synced if needed
+                    if not existing.track or existing.track != b_spec["track"]:
+                        existing.track = b_spec["track"]
+                    if existing.batch_code == "DM-GROWTH-2026-B1" and existing.status == "enrolling":
+                        existing.status = "upcoming"
             db.commit()
 
             # Seed / ensure default 'admin' user exists with updated password from .env
@@ -211,6 +242,61 @@ def list_batches(db: Session, active_only: bool = True) -> List[Dict[str, Any]]:
     return [b.to_dict() for b in batches]
 
 
+def get_grouped_batches(db: Session) -> Dict[str, Any]:
+    """
+    Returns batches categorized by Track and Lifecycle:
+    - Tracks: 'data_analytics' vs 'digital_marketing'
+    - Lifecycles:
+        - enrolling: Now Enrolling
+        - running: Running / Ongoing
+        - next: Next / Upcoming
+        - past: Archived / Completed / Inactive (for collapsed drawer)
+    """
+    all_batches = db.query(Batch).order_by(Batch.id.asc()).all()
+    grouped: Dict[str, Any] = {
+        "data_analytics": {
+            "title": "Data Analytics & BI Track",
+            "enrolling": [],
+            "running": [],
+            "next": [],
+            "past": []
+        },
+        "digital_marketing": {
+            "title": "Digital Marketing Track",
+            "enrolling": [],
+            "running": [],
+            "next": [],
+            "past": []
+        },
+        "all_active": [],
+        "all": []
+    }
+
+    for b in all_batches:
+        b_dict = b.to_dict()
+        grouped["all"].append(b_dict)
+        if b.is_active:
+            grouped["all_active"].append(b_dict)
+
+        track_key = b_dict.get("track") or "data_analytics"
+        if track_key not in grouped:
+            track_key = "data_analytics"
+
+        status_lower = (b.status or "enrolling").lower().strip()
+        if not b.is_active or status_lower in ("completed", "archived", "closed"):
+            grouped[track_key]["past"].append(b_dict)
+        elif status_lower in ("enrolling", "open"):
+            grouped[track_key]["enrolling"].append(b_dict)
+        elif status_lower in ("ongoing", "running"):
+            grouped[track_key]["running"].append(b_dict)
+        elif status_lower in ("upcoming", "next"):
+            grouped[track_key]["next"].append(b_dict)
+        else:
+            grouped[track_key]["enrolling"].append(b_dict)
+
+    return grouped
+
+
 def create_batch(db: Session, batch_data: BatchCreate) -> Batch:
     """Create a new batch."""
     batch = Batch(**batch_data.model_dump())
@@ -218,6 +304,78 @@ def create_batch(db: Session, batch_data: BatchCreate) -> Batch:
     db.commit()
     db.refresh(batch)
     return batch
+
+
+def update_batch(db: Session, batch_id: int, update_dict: Dict[str, Any]) -> Optional[Batch]:
+    """Update existing batch attributes."""
+    batch = db.query(Batch).filter(Batch.id == batch_id).first()
+    if not batch:
+        return None
+    for field, val in update_dict.items():
+        if val is not None and hasattr(batch, field):
+            setattr(batch, field, val)
+    db.commit()
+    db.refresh(batch)
+    return batch
+
+
+def toggle_batch_active(db: Session, batch_id: int) -> Optional[Batch]:
+    """Toggle active state or archive batch."""
+    batch = db.query(Batch).filter(Batch.id == batch_id).first()
+    if not batch:
+        return None
+    batch.is_active = not batch.is_active
+    db.commit()
+    db.refresh(batch)
+    return batch
+
+
+def create_waitlist_lead(
+    db: Session,
+    waitlist_data: WaitlistCreate,
+    client_ip: Optional[str] = None
+) -> Dict[str, Any]:
+    """Record a student waitlist submission for an upcoming subject or cohort."""
+    kw = (waitlist_data.subject_interest or "").lower()
+    target_batch = None
+    if "seo" in kw or "growth" in kw or "content" in kw:
+        target_batch = db.query(Batch).filter(Batch.batch_code == "DM-GROWTH-2026-B1").first()
+    elif "performance" in kw or "meta" in kw or "google ads" in kw:
+        target_batch = db.query(Batch).filter(Batch.batch_code == "DM-PERF-2026-B1").first()
+    else:
+        target_batch = db.query(Batch).filter(Batch.batch_code == "DA-WKND-2026-B1").first()
+
+    if not target_batch:
+        target_batch = get_default_active_batch(db)
+
+    lead = StudentLead(
+        lead_type="waitlist",
+        batch_id=target_batch.id if target_batch else None,
+        full_name=waitlist_data.full_name.strip(),
+        email=waitlist_data.email.strip().lower() if waitlist_data.email else "",
+        phone=waitlist_data.phone.strip(),
+        current_status="Waitlist Student",
+        prior_experience=None,
+        preferred_schedule="Saturday & Sunday 6:00 PM – 8:00 PM IST",
+        subject_interest=waitlist_data.subject_interest.strip(),
+        message=waitlist_data.message.strip() if waitlist_data.message else f"Waitlist interest for upcoming {waitlist_data.subject_interest} batch",
+        status="new",
+        source_ip=client_ip,
+        consent_given=bool(waitlist_data.consent),
+        consent_at=datetime.utcnow()
+    )
+    db.add(lead)
+    db.commit()
+    db.refresh(lead)
+
+    return {
+        "success": True,
+        "message": f"You are on the waitlist for {waitlist_data.subject_interest}! We will notify you via WhatsApp as soon as enrollment opens.",
+        "lead_id": lead.id,
+        "lead_type": lead.lead_type,
+        "subject_interest": lead.subject_interest,
+        "data": lead.to_dict()
+    }
 
 
 def create_student_enquiry(

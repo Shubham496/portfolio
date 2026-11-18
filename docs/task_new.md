@@ -214,26 +214,27 @@ Phase 6: Later Only (Optional Paywalled Bundles via External Link)
 
 ---
 
-### Phase 3: Modular Cohort & Subject Display
+### Phase 3: Modular Cohort & Subject Display (COMPLETED)
 *Structure cohort offerings so students see clear track specialization and enrollment progression.*
 
-* [ ] **Task 3.1: Track-Grouped Cohort Explorer**
-  * Restructure cohort query and display (`app/templates/sections/programs.html` and `/register`):
-    * Group by Track: **Data Analytics & BI Track** vs. **Digital Marketing Track**.
-    * Group by Lifecycle: **Now Enrolling**, **Running**, and **Next**.
-    * Past cohorts archived to a collapsed historical drawer.
-* [ ] **Task 3.2: Data Analytics Roadmap Strip & Next-Subject Waitlist**
-  * Embed a horizontal curriculum roadmap strip for Data Analytics showing `[SUBJECT_ORDER]` (SQL &rarr; Excel &rarr; Power BI &rarr; Python &rarr; Tableau &rarr; Git/GitHub).
-  * Visually highlight the subject enrolling now with a badge: *"One subject per batch so you go deep."*
-  * Add a **"Notify Me for Next Batch"** button creating a `waitlist` lead tied to the selected subject.
-* [ ] **Task 3.3: Digital Marketing Track Schedule & Profile**
-  * Render Digital Marketing cohorts with `[DM_SCHEDULE]` and mentor attribution linked to the DM mentor profile.
-* [ ] **Task 3.4: Admin Cohort & Batch Manager**
-  * Add a management panel in `/admin/batches` allowing the platform owner to:
-    * Create, edit, and update batches (`batch_code`, `title`, `course_name`, `technologies`, `schedule_days`, `schedule_time`, `start_date`, `duration`, `max_seats`, `status`, `is_active`).
+* [x] **Task 3.1: Track-Grouped Cohort Explorer**
+  * Restructured cohort query and display (`app/templates/sections/programs.html` and `/register`):
+    * Grouped by Track: **Data Analytics & BI Track** vs. **Digital Marketing Track**.
+    * Grouped by Lifecycle: **Now Enrolling**, **Running**, and **Next in Queue**.
+    * Past cohorts archived to a clean collapsed historical drawer.
+* [x] **Task 3.2: Data Analytics Roadmap Strip & Next-Subject Waitlist**
+  * Embedded horizontal curriculum roadmap strip for Data Analytics showing `[SUBJECT_ORDER]` (SQL &rarr; Excel &rarr; Power BI &rarr; Python &rarr; Tableau &rarr; Git/GitHub).
+  * Visually highlighted the subject enrolling now with a badge: *"One subject per batch so you go deep."*
+  * Added **"Notify Me for Next Batch"** button and modal creating a `waitlist` lead tied to the selected subject (`POST /api/courses/waitlist`).
+* [x] **Task 3.3: Digital Marketing Track Schedule & Profile**
+  * Rendered Digital Marketing cohorts with `[DM_SCHEDULE]` and mentor attribution linked to the DM mentor profile (`[DM_MENTOR_NAME]`, `/about#dm-mentor`).
+  * Isolated Data Analytics cohorts to the anonymous *Mythos Data Analytics Mentor* (Sat & Sun 6–8 PM IST).
+* [x] **Task 3.4: Admin Cohort & Batch Manager**
+  * Added dedicated management panel in `/admin/batches` (`app/templates/admin/batches.html`) allowing the platform owner to:
+    * Create, edit, and update batches (`batch_code`, `title`, `course_name`, `track`, `technologies`, `schedule_days`, `schedule_time`, `start_date`, `duration`, `max_seats`, `status`, `is_active`).
     * Close or archive batches without modifying application code.
-* [ ] **Task 3.5: Public Seat Scarcity Display**
-  * Display available seats as an honest number calculated from remaining capacity.
+* [x] **Task 3.5: Public Seat Scarcity Display**
+  * Displayed available seats as an honest number calculated from remaining capacity (`remaining_seats = max_seats - total_registrations`).
   * Strictly zero tuition pricing on browse cards.
 
 ---

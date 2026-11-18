@@ -1,0 +1,329 @@
+{% extends "base.html" %}
+
+{% block title %}Cohort &amp; Batch Manager | MYTHOS Admin{% endblock %}
+{% block meta_robots %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+
+{% block content %}
+<section class="py-8 border-b border-slate-200 dark:border-slate-800/80 transition-colors">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+
+        <!-- Top Header Bar -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200 dark:border-slate-800">
+            <div>
+                <div class="inline-flex items-center space-x-2 px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 text-xs font-semibold mb-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>Admin Cohort Operations</span>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                    Cohort &amp; Batch Manager
+                </h1>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    Configure weekend cohort schedules, capacity, and active enrollment without editing code.
+                </p>
+            </div>
+
+            <!-- Header Action Buttons -->
+            <div class="flex flex-wrap items-center gap-2">
+                <a href="/admin/dashboard" 
+                   class="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-semibold transition">
+                    <i data-lucide="users" class="w-4 h-4"></i>
+                    <span>Student Leads</span>
+                </a>
+                <a href="/admin/logout" 
+                   class="inline-flex items-center space-x-1.5 px-3 py-2 rounded-xl bg-white dark:bg-[#0B1120] hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 text-xs font-medium transition">
+                    <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- 4 Metric KPI Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 my-6">
+            <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0B1120] shadow-sm">
+                <div class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total Batches</div>
+                <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">{{ summary.total_batches }}</div>
+                <div class="text-[11px] text-slate-500 mt-1">Configured in system</div>
+            </div>
+
+            <div class="p-4 rounded-xl border border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/50 dark:bg-emerald-950/20 shadow-sm">
+                <div class="text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider">Now Enrolling</div>
+                <div class="text-2xl sm:text-3xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-1">{{ summary.enrolling_batches }}</div>
+                <div class="text-[11px] text-emerald-600/70 dark:text-emerald-400/70 mt-1">Accepting student seats</div>
+            </div>
+
+            <div class="p-4 rounded-xl border border-blue-200 dark:border-blue-900/60 bg-blue-50/50 dark:bg-blue-950/20 shadow-sm">
+                <div class="text-[11px] font-semibold text-blue-700 dark:text-blue-400 uppercase tracking-wider">Active Batches</div>
+                <div class="text-2xl sm:text-3xl font-extrabold text-blue-600 dark:text-blue-400 mt-1">{{ summary.active_batches }}</div>
+                <div class="text-[11px] text-blue-600/70 dark:text-blue-400/70 mt-1">Visible on platform</div>
+            </div>
+
+            <div class="p-4 rounded-xl border border-purple-200 dark:border-purple-900/60 bg-purple-50/50 dark:bg-purple-950/20 shadow-sm">
+                <div class="text-[11px] font-semibold text-purple-700 dark:text-purple-400 uppercase tracking-wider">Total Registrations</div>
+                <div class="text-2xl sm:text-3xl font-extrabold text-purple-600 dark:text-purple-400 mt-1">{{ summary.total_registrations }}</div>
+                <div class="text-[11px] text-purple-600/70 dark:text-purple-400/70 mt-1">Across all cohorts</div>
+            </div>
+        </div>
+
+        <!-- Add New Batch Accordion / Form -->
+        <div class="mb-8 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0B1120] shadow-sm overflow-hidden">
+            <details class="group">
+                <summary class="flex items-center justify-between p-5 cursor-pointer select-none hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-sm shadow">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-900 dark:text-white">Create New Cohort Batch</h3>
+                            <p class="text-xs text-slate-500">Add a new upcoming weekend cohort schedule to the institute catalog.</p>
+                        </div>
+                    </div>
+                    <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition-transform"></i>
+                </summary>
+
+                <form method="POST" action="/admin/batches/create" class="p-5 border-t border-slate-100 dark:border-slate-800 space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Batch Code *</label>
+                            <input type="text" name="batch_code" required placeholder="e.g. DA-SQL-2026-B2"
+                                   class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#070B14] text-slate-900 dark:text-white">
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Batch Title *</label>
+                            <input type="text" name="title" required placeholder="e.g. SQL &amp; Relational Database Mastery"
+                                   class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#070B14] text-slate-900 dark:text-white">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Track *</label>
+                            <select name="track" required
+                                    class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#070B14] text-slate-900 dark:text-white">
+                                <option value="data_analytics">Data Analytics &amp; BI Track</option>
+                                <option value="digital_marketing">Digital Marketing Track</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Course / Subject Name *</label>
+                            <input type="text" name="course_name" required placeholder="e.g. SQL for Data Analysis"
+                                   class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#070B14] text-slate-900 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Lifecycle Status *</label>
+                            <select name="status" required
+                                    class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#070B14] text-slate-900 dark:text-white">
+                                <option value="enrolling">Enrolling (Now Open)</option>
+                                <option value="upcoming">Upcoming (Next in Queue)</option>
+                                <option value="running">Running (Active Cohort)</option>
+                                <option value="completed">Completed (Archived)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Schedule Days *</label>
+                            <input type="text" name="schedule_days" value="Saturday &amp; Sunday" required
+                                   class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#070B14] text-slate-900 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Schedule Time *</label>
+                            <input type="text" name="schedule_time" value="6:00 PM – 8:00 PM IST" required
+                                   class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#070B14] text-slate-900 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Start Date *</label>
+                            <input type="text" name="start_date" value="Upcoming Weekend" required
+                                   class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#070B14] text-slate-900 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Max Seats Capacity *</label>
+                            <input type="number" name="max_seats" value="25" min="5" max="100" required
+                                   class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#070B14] text-slate-900 dark:text-white">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Technologies / Tools Covered</label>
+                            <input type="text" name="technologies" value="PostgreSQL, MySQL, DBeaver"
+                                   class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#070B14] text-slate-900 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Duration String</label>
+                            <input type="text" name="duration" value="8-10 Weeks Hands-On Mentorship"
+                                   class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#070B14] text-slate-900 dark:text-white">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Description</label>
+                        <textarea name="description" rows="2" placeholder="Course outline, audience, or prerequisites..."
+                                  class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#070B14] text-slate-900 dark:text-white"></textarea>
+                    </div>
+
+                    <div class="pt-2 flex justify-end">
+                        <button type="submit" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs shadow-md transition">
+                            Create Cohort Batch
+                        </button>
+                    </div>
+                </form>
+            </details>
+        </div>
+
+        <!-- Batches List -->
+        <div class="space-y-4">
+            <h2 class="text-base font-bold text-slate-900 dark:text-white flex items-center space-x-2">
+                <i data-lucide="layers" class="w-4 h-4 text-blue-500"></i>
+                <span>All Scheduled Institute Batches</span>
+            </h2>
+
+            {% for b in batches %}
+            <div class="rounded-2xl border {% if b.is_active %}border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0B1120]{% else %}border-slate-200 dark:border-slate-800/40 bg-slate-50 dark:bg-[#070B14] opacity-75{% endif %} p-5 shadow-sm transition">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-800">
+                    <div class="space-y-1">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200">
+                                {{ b.batch_code }}
+                            </span>
+
+                            <!-- Track Badge -->
+                            {% if b.track == 'digital_marketing' %}
+                            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20">
+                                Digital Marketing
+                            </span>
+                            {% else %}
+                            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+                                Data Analytics
+                            </span>
+                            {% endif %}
+
+                            <!-- Status Badge -->
+                            {% if b.status == 'enrolling' and b.is_active %}
+                            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                                Enrolling Now
+                            </span>
+                            {% elif b.status == 'upcoming' and b.is_active %}
+                            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+                                Next in Queue
+                            </span>
+                            {% elif b.status in ['running', 'ongoing'] and b.is_active %}
+                            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20">
+                                Running
+                            </span>
+                            {% else %}
+                            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-500/10 text-slate-500 dark:text-slate-400 border border-slate-500/20">
+                                Archived / Inactive
+                            </span>
+                            {% endif %}
+                        </div>
+
+                        <h3 class="text-base font-bold text-slate-900 dark:text-white">{{ b.title }}</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">{{ b.course_name }} · {{ b.duration }}</p>
+                    </div>
+
+                    <!-- Right Quick Actions -->
+                    <div class="flex items-center space-x-2">
+                        <!-- Toggle Active Form -->
+                        <form method="POST" action="/admin/batches/{{ b.id }}/toggle-active">
+                            <button type="submit" 
+                                    class="px-3 py-1.5 rounded-lg border text-xs font-semibold transition {% if b.is_active %}border-slate-300 dark:border-slate-700 bg-white dark:bg-[#070B14] hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300{% else %}border-emerald-500 bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20{% endif %}">
+                                {% if b.is_active %}Archive / Deactivate{% else %}Restore / Activate{% endif %}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Batch Details Row -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 text-xs">
+                    <div>
+                        <span class="text-[11px] text-slate-400 block">Schedule:</span>
+                        <span class="font-medium text-slate-800 dark:text-slate-200">{{ b.schedule_days }}</span>
+                        <span class="text-[11px] text-slate-500 block">{{ b.schedule_time }}</span>
+                    </div>
+                    <div>
+                        <span class="text-[11px] text-slate-400 block">Start Date:</span>
+                        <span class="font-medium text-slate-800 dark:text-slate-200">{{ b.start_date }}</span>
+                    </div>
+                    <div>
+                        <span class="text-[11px] text-slate-400 block">Capacity &amp; Enrolled:</span>
+                        <span class="font-bold text-slate-900 dark:text-white">{{ b.total_registrations }} / {{ b.max_seats or 25 }}</span>
+                        <span class="text-[11px] text-emerald-600 dark:text-emerald-400 block">{{ b.remaining_seats }} spots open</span>
+                    </div>
+                    <div>
+                        <span class="text-[11px] text-slate-400 block">Tools:</span>
+                        <div class="flex flex-wrap gap-1 mt-0.5">
+                            {% for tech in b.technologies %}
+                            <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">{{ tech }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Collapsible Edit Form for Batch -->
+                <details class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs">
+                    <summary class="cursor-pointer text-blue-600 dark:text-blue-400 font-semibold hover:underline inline-flex items-center space-x-1">
+                        <span>Edit Batch Parameters &amp; Schedule</span>
+                        <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+                    </summary>
+
+                    <form method="POST" action="/admin/batches/{{ b.id }}/update" class="mt-3 p-4 rounded-xl bg-slate-50 dark:bg-[#070B14] border border-slate-200 dark:border-slate-800 space-y-3">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div class="sm:col-span-2">
+                                <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1">Batch Title</label>
+                                <input type="text" name="title" value="{{ b.title }}" required
+                                       class="w-full px-2.5 py-1.5 text-xs rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#0B1120] text-slate-900 dark:text-white">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1">Track</label>
+                                <select name="track"
+                                        class="w-full px-2.5 py-1.5 text-xs rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#0B1120] text-slate-900 dark:text-white">
+                                    <option value="data_analytics" {% if b.track == 'data_analytics' %}selected{% endif %}>Data Analytics &amp; BI Track</option>
+                                    <option value="digital_marketing" {% if b.track == 'digital_marketing' %}selected{% endif %}>Digital Marketing Track</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                            <div>
+                                <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1">Status</label>
+                                <select name="status"
+                                        class="w-full px-2.5 py-1.5 text-xs rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#0B1120] text-slate-900 dark:text-white">
+                                    <option value="enrolling" {% if b.status == 'enrolling' %}selected{% endif %}>Enrolling</option>
+                                    <option value="upcoming" {% if b.status == 'upcoming' %}selected{% endif %}>Upcoming</option>
+                                    <option value="running" {% if b.status == 'running' %}selected{% endif %}>Running</option>
+                                    <option value="completed" {% if b.status == 'completed' %}selected{% endif %}>Completed</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1">Schedule Days</label>
+                                <input type="text" name="schedule_days" value="{{ b.schedule_days }}"
+                                       class="w-full px-2.5 py-1.5 text-xs rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#0B1120] text-slate-900 dark:text-white">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1">Schedule Time</label>
+                                <input type="text" name="schedule_time" value="{{ b.schedule_time }}"
+                                       class="w-full px-2.5 py-1.5 text-xs rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#0B1120] text-slate-900 dark:text-white">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1">Max Seats</label>
+                                <input type="number" name="max_seats" value="{{ b.max_seats or 25 }}" min="5" max="100"
+                                       class="w-full px-2.5 py-1.5 text-xs rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#0B1120] text-slate-900 dark:text-white">
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end pt-2">
+                            <button type="submit" class="px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs shadow transition">
+                                Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </details>
+
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+</section>
+{% endblock %}

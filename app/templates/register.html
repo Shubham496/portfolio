@@ -21,7 +21,7 @@
                     Weekend Batch Registration
                 </h1>
                 <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">
-                    Direct mentorship in Digital Marketing &amp; Data Analytics across weekend cohorts led by <strong class="text-slate-900 dark:text-slate-200">{{ settings.OWNER_NAME }}</strong>.
+                    Direct mentorship in Digital Marketing (led by <strong class="text-slate-900 dark:text-slate-200">{{ settings.DM_MENTOR_NAME }}</strong>) and Data Analytics (led by <strong class="text-slate-900 dark:text-slate-200">Mythos Data Analytics Mentor</strong>) across live weekend cohorts.
                 </p>
             </div>
             
@@ -56,9 +56,19 @@
                         </label>
                         <select name="course_name" required
                                 class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#070B14] text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
-                            <option value="Data Analysis & Business Intelligence Masterclass">Data Analysis & Business Intelligence Masterclass</option>
-                            <option value="Performance Marketing & Paid Advertising">Performance Marketing & Paid Advertising (Meta & Google Ads)</option>
-                            <option value="SEO, Content Strategy & Social Media Growth">SEO, Content Strategy & Social Media Growth</option>
+                            <optgroup label="Data Analytics &amp; BI Track (Sat &amp; Sun 6–8 PM IST)">
+                                <option value="Data Analysis (Python, SQL, PowerBI, Excel, Tableau)" selected>
+                                    Data Analysis Masterclass (Python, SQL, Power BI, Excel, Tableau)
+                                </option>
+                            </optgroup>
+                            <optgroup label="Digital Marketing Track">
+                                <option value="Digital Marketing: Performance Marketing & Paid Ads">
+                                    Performance Marketing &amp; Paid Advertising (Meta &amp; Google Ads)
+                                </option>
+                                <option value="Digital Marketing: SEO & Growth Strategy">
+                                    SEO, Content Strategy &amp; Social Media Growth
+                                </option>
+                            </optgroup>
                         </select>
                     </div>
 
@@ -192,11 +202,11 @@
                         </div>
                         <div class="flex items-start space-x-2 text-slate-600 dark:text-slate-300">
                             <i data-lucide="user-check" class="w-4 h-4 text-emerald-500 shrink-0 mt-0.5"></i>
-                            <span><strong>Mentorship:</strong> {{ settings.OWNER_NAME }}</span>
+                            <span><strong>Mentorship:</strong> Dual Specialized Mentors (Data Analytics: Anonymous Faculty · Digital Marketing: {{ settings.DM_MENTOR_NAME }})</span>
                         </div>
                         <div class="flex items-start space-x-2 text-slate-600 dark:text-slate-300">
                             <i data-lucide="users" class="w-4 h-4 text-emerald-500 shrink-0 mt-0.5"></i>
-                            <span><strong>Alumni:</strong> 400+ Learners Taught Over 3+ Years</span>
+                            <span><strong>Credibility:</strong> {{ settings.TRUST_CLAIM }}</span>
                         </div>
                         <div class="flex items-start space-x-2 text-slate-600 dark:text-slate-300">
                             <i data-lucide="briefcase" class="w-4 h-4 text-blue-500 shrink-0 mt-0.5"></i>

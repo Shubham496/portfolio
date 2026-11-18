@@ -41,9 +41,14 @@ class BaseConfig(BaseSettings):
     DM_MENTOR_LINKEDIN: str = os.getenv("DM_MENTOR_LINKEDIN", "[DM_MENTOR_LINKEDIN]")
     DM_SCHEDULE: str = os.getenv("DM_SCHEDULE", "[DM_SCHEDULE]")
     TRUST_CLAIM: str = os.getenv("TRUST_CLAIM", "400+ learners taught by our mentors over 3+ years")
+    SUBJECT_ORDER: str = os.getenv("SUBJECT_ORDER", "SQL, Excel, Power BI, Python, Tableau, Git & GitHub")
 
     RESUME_PATH: str = ""
     PROFILE_PHOTO_PATH: str = "/static/Images/mythos/mythos_icon_transparent.png"
+
+    @property
+    def subject_order_list(self) -> list:
+        return [s.strip() for s in self.SUBJECT_ORDER.split(",") if s.strip()]
 
     @property
     def whatsapp_url(self) -> str:

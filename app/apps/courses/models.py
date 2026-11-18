@@ -21,6 +21,7 @@ class Batch(Base):
     batch_code = Column(String(50), unique=True, index=True, nullable=False)
     title = Column(String(150), nullable=False)
     course_name = Column(String(150), nullable=False, default="Data Analysis")
+    track = Column(String(50), nullable=False, default="data_analytics")  # data_analytics, digital_marketing
     technologies = Column(
         String(255),
         nullable=False,
@@ -40,11 +41,20 @@ class Batch(Base):
     registrations = relationship("StudentLead", back_populates="batch", cascade="all, delete-orphan")
 
     def to_dict(self):
+        total_reg = len(self.registrations) if self.registrations else 0
+        max_seats = self.max_seats if self.max_seats is not None else 25
+        remaining_seats = max(0, max_seats - total_reg)
+        computed_track = self.track
+        if not computed_track:
+            cn = (self.course_name or "").lower()
+            computed_track = "digital_marketing" if ("digital marketing" in cn or "seo" in cn or "performance" in cn) else "data_analytics"
+
         return {
             "id": self.id,
             "batch_code": self.batch_code,
             "title": self.title,
             "course_name": self.course_name,
+            "track": computed_track,
             "technologies": [t.strip() for t in self.technologies.split(",") if t.strip()],
             "schedule_days": self.schedule_days,
             "schedule_time": self.schedule_time,
@@ -52,7 +62,8 @@ class Batch(Base):
             "duration": self.duration,
             "status": self.status,
             "max_seats": self.max_seats,
-            "total_registrations": len(self.registrations) if self.registrations else 0,
+            "total_registrations": total_reg,
+            "remaining_seats": remaining_seats,
             "is_active": self.is_active,
             "created_at": self.created_at.isoformat() if self.created_at else None,
         }
@@ -84,6 +95,7 @@ class StudentLead(Base):
         nullable=False,
         default="Saturday & Sunday 6:00 PM – 8:00 PM IST"
     )
+    subject_interest = Column(String(100), nullable=True, index=True)  # e.g., "SQL", "Power BI", "Excel", etc.
     message = Column(Text, nullable=True)  # Student questions, notes, or expectations
     
     # Lead / Admission Pipeline Tracking
@@ -113,6 +125,7 @@ class StudentLead(Base):
             "current_status": self.current_status,
             "prior_experience": self.prior_experience,
             "preferred_schedule": self.preferred_schedule,
+            "subject_interest": self.subject_interest,
             "message": self.message,
             "status": self.status,
             "admin_notes": self.admin_notes,

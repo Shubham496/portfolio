@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import or_
 
 from app.apps.courses.database import get_db
-from app.apps.courses.models import AdminUser, StudentLead
+from app.apps.courses.models import AdminUser, StudentLead, Batch
 from app.apps.courses.auth import (
     verify_password,
     create_session_token,
@@ -14,8 +14,17 @@ from app.apps.courses.auth import (
     require_admin,
     SESSION_COOKIE_NAME
 )
-from app.apps.courses.services import get_leads, get_leads_paginated, get_lead_summary, update_lead_status
-from app.apps.courses.schemas import LeadStatusUpdate
+from app.apps.courses.services import (
+    get_leads,
+    get_leads_paginated,
+    get_lead_summary,
+    update_lead_status,
+    list_batches,
+    create_batch,
+    update_batch,
+    toggle_batch_active
+)
+from app.apps.courses.schemas import LeadStatusUpdate, BatchCreate, BatchUpdate
 from app.core.config import settings
 
 templates = Jinja2Templates(directory="app/templates")
@@ -163,6 +172,136 @@ async def admin_update_lead(
     if search:
         redirect_url += f"&search={search}"
     return RedirectResponse(url=redirect_url, status_code=303)
+
+
+# -------------------------------------------------------------
+# Batch & Cohort Management
+# -------------------------------------------------------------
+
+@router.get("/batches", response_class=HTMLResponse)
+async def admin_batches_page(
+    request: Request,
+    admin: AdminUser = Depends(require_admin),
+    db: Session = Depends(get_db)
+):
+    """Protected cohort & batch management panel for creating, editing, and closing batches."""
+    batches = db.query(Batch).order_by(Batch.id.asc()).all()
+    batch_dicts = [b.to_dict() for b in batches]
+    
+    total_batches = len(batch_dicts)
+    active_batches = sum(1 for b in batch_dicts if b["is_active"])
+    enrolling_batches = sum(1 for b in batch_dicts if b["status"] == "enrolling" and b["is_active"])
+    total_registrations = sum(b["total_registrations"] for b in batch_dicts)
+
+    return templates.TemplateResponse(
+        request=request,
+        name="admin/batches.html",
+        context={
+            "settings": settings,
+            "admin": admin,
+            "batches": batch_dicts,
+            "summary": {
+                "total_batches": total_batches,
+                "active_batches": active_batches,
+                "enrolling_batches": enrolling_batches,
+                "total_registrations": total_registrations
+            }
+        }
+    )
+
+
+@router.post("/batches/create")
+async def admin_create_batch(
+    batch_code: str = Form(...),
+    title: str = Form(...),
+    course_name: str = Form("Data Analysis"),
+    track: str = Form("data_analytics"),
+    technologies: str = Form("Python, SQL, PowerBI, Excel, Tableau"),
+    schedule_days: str = Form("Saturday & Sunday"),
+    schedule_time: str = Form("6:00 PM – 8:00 PM IST"),
+    start_date: str = Form("Upcoming Weekend"),
+    duration: str = Form("8-10 Weeks Hands-On"),
+    status: str = Form("enrolling"),
+    max_seats: int = Form(25),
+    description: Optional[str] = Form(""),
+    admin: AdminUser = Depends(require_admin),
+    db: Session = Depends(get_db)
+):
+    """Create a new training batch schedule directly from the admin panel."""
+    payload = BatchCreate(
+        batch_code=batch_code.strip(),
+        title=title.strip(),
+        course_name=course_name.strip(),
+        track=track.strip(),
+        technologies=technologies.strip(),
+        schedule_days=schedule_days.strip(),
+        schedule_time=schedule_time.strip(),
+        start_date=start_date.strip(),
+        duration=duration.strip(),
+        status=status.strip(),
+        max_seats=max_seats,
+        description=(description or "").strip(),
+        is_active=True
+    )
+    create_batch(db=db, batch_data=payload)
+    return RedirectResponse(url="/admin/batches", status_code=303)
+
+
+@router.post("/batches/{batch_id}/update")
+async def admin_update_batch(
+    batch_id: int,
+    title: Optional[str] = Form(None),
+    course_name: Optional[str] = Form(None),
+    track: Optional[str] = Form(None),
+    technologies: Optional[str] = Form(None),
+    schedule_days: Optional[str] = Form(None),
+    schedule_time: Optional[str] = Form(None),
+    start_date: Optional[str] = Form(None),
+    duration: Optional[str] = Form(None),
+    status: Optional[str] = Form(None),
+    max_seats: Optional[int] = Form(None),
+    description: Optional[str] = Form(None),
+    admin: AdminUser = Depends(require_admin),
+    db: Session = Depends(get_db)
+):
+    """Update batch parameters, schedule, or lifecycle status."""
+    update_dict = {}
+    if title is not None:
+        update_dict["title"] = title.strip()
+    if course_name is not None:
+        update_dict["course_name"] = course_name.strip()
+    if track is not None:
+        update_dict["track"] = track.strip()
+    if technologies is not None:
+        update_dict["technologies"] = technologies.strip()
+    if schedule_days is not None:
+        update_dict["schedule_days"] = schedule_days.strip()
+    if schedule_time is not None:
+        update_dict["schedule_time"] = schedule_time.strip()
+    if start_date is not None:
+        update_dict["start_date"] = start_date.strip()
+    if duration is not None:
+        update_dict["duration"] = duration.strip()
+    if status is not None:
+        update_dict["status"] = status.strip()
+    if max_seats is not None:
+        update_dict["max_seats"] = max_seats
+    if description is not None:
+        update_dict["description"] = description.strip()
+
+    update_batch(db=db, batch_id=batch_id, update_dict=update_dict)
+    return RedirectResponse(url="/admin/batches", status_code=303)
+
+
+@router.post("/batches/{batch_id}/toggle-active")
+async def admin_toggle_batch_active(
+    batch_id: int,
+    admin: AdminUser = Depends(require_admin),
+    db: Session = Depends(get_db)
+):
+    """Toggle active state or archive batch without deleting registrations."""
+    toggle_batch_active(db=db, batch_id=batch_id)
+    return RedirectResponse(url="/admin/batches", status_code=303)
 
 
 @router.get("/logout")

@@ -19,6 +19,10 @@ class EnquiryCreate(BaseModel):
         default="All Programs / Undecided",
         description="Program of interest: Digital Marketing (Performance Ads), Digital Marketing (SEO & Growth), Data Analytics & BI"
     )
+    subject_interest: Optional[str] = Field(
+        default="",
+        description="Subject or topic of interest (e.g. SQL, Excel, Power BI, Python)"
+    )
     message: Optional[str] = Field(
         default="",
         max_length=2000,
@@ -128,6 +132,7 @@ class BatchCreate(BaseModel):
     batch_code: str = Field(..., min_length=3, max_length=50)
     title: str = Field(..., min_length=3, max_length=150)
     course_name: str = Field(default="Data Analysis")
+    track: Optional[str] = Field(default="data_analytics", description="Track: 'data_analytics' or 'digital_marketing'")
     technologies: str = Field(default="Python, SQL, PowerBI, Excel, Tableau")
     schedule_days: str = Field(default="Saturday & Sunday")
     schedule_time: str = Field(default="6:00 PM – 8:00 PM IST")
@@ -139,6 +144,22 @@ class BatchCreate(BaseModel):
     is_active: bool = Field(default=True)
 
 
+class BatchUpdate(BaseModel):
+    """Update existing batch attributes."""
+    title: Optional[str] = None
+    course_name: Optional[str] = None
+    track: Optional[str] = None
+    technologies: Optional[str] = None
+    schedule_days: Optional[str] = None
+    schedule_time: Optional[str] = None
+    start_date: Optional[str] = None
+    duration: Optional[str] = None
+    status: Optional[str] = None
+    max_seats: Optional[int] = None
+    description: Optional[str] = None
+    is_active: Optional[bool] = None
+
+
 class BatchOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
@@ -146,6 +167,7 @@ class BatchOut(BaseModel):
     batch_code: str
     title: str
     course_name: str
+    track: str = "data_analytics"
     technologies: List[str]
     schedule_days: str
     schedule_time: str
@@ -154,6 +176,7 @@ class BatchOut(BaseModel):
     status: str
     max_seats: Optional[int]
     total_registrations: int = 0
+    remaining_seats: int = 25
     is_active: bool
 
 
@@ -171,12 +194,42 @@ class LeadOut(BaseModel):
     current_status: Optional[str]
     prior_experience: Optional[str]
     preferred_schedule: str
+    subject_interest: Optional[str] = ""
     message: Optional[str]
     status: str
     admin_notes: Optional[str]
     consent_given: bool = True
     consent_at: Optional[str] = None
     created_at: Optional[str]
+
+
+class WaitlistCreate(BaseModel):
+    """Schema for 'Notify Me for Next Batch' waitlist registrations."""
+    full_name: str = Field(..., min_length=2, max_length=120, description="Full name of student")
+    phone: str = Field(..., min_length=7, max_length=25, description="Mobile / WhatsApp contact number")
+    email: Optional[str] = Field(default="", description="Student email address (optional)")
+    subject_interest: str = Field(..., min_length=1, max_length=100, description="Target subject (SQL, Excel, Power BI, Python, etc.)")
+    message: Optional[str] = Field(default="", max_length=1000, description="Optional notes or questions")
+    consent: bool = Field(default=True, description="Consent to be contacted")
+
+    @field_validator("consent", mode="before")
+    @classmethod
+    def validate_consent(cls, v) -> bool:
+        if isinstance(v, str):
+            v = v.strip().lower() in ("true", "1", "on", "yes")
+        if not bool(v):
+            raise ValueError("You must agree to be contacted by phone or WhatsApp about this course.")
+        return True
+
+    @field_validator("email")
+    @classmethod
+    def validate_email(cls, v: Optional[str]) -> Optional[str]:
+        if not v:
+            return ""
+        v = v.strip().lower()
+        if v and not EMAIL_REGEX.match(v):
+            raise ValueError("Invalid email format")
+        return v
 
 
 class StudentRegister(BaseModel):

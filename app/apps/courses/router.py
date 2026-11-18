@@ -11,16 +11,22 @@ from app.apps.courses.schemas import (
     EnquiryCreate,
     BatchRegistrationCreate,
     BatchCreate,
+    BatchUpdate,
     LeadStatusUpdate,
     LeadOut,
-    BatchOut
+    BatchOut,
+    WaitlistCreate
 )
 from app.apps.courses.services import (
     init_courses_db,
     create_student_enquiry,
     create_batch_registration,
+    create_waitlist_lead,
     list_batches,
+    get_grouped_batches,
     create_batch,
+    update_batch,
+    toggle_batch_active,
     get_leads,
     get_lead_summary,
     update_lead_status,
@@ -63,6 +69,12 @@ async def get_instructor_details():
 async def get_active_batches(db: Session = Depends(get_db)):
     """Returns available batches with schedule (Saturday & Sunday 6:00 PM – 8:00 PM IST)."""
     return list_batches(db=db, active_only=True)
+
+
+@router.get("/batches/grouped", summary="Get batches grouped by track and lifecycle")
+async def get_grouped_batches_endpoint(db: Session = Depends(get_db)):
+    """Returns batches grouped into data_analytics and digital_marketing with lifecycle stages (enrolling, running, next, past)."""
+    return get_grouped_batches(db=db)
 
 
 @router.get("/batches/{batch_id}", summary="Get specific batch details")
@@ -260,6 +272,55 @@ async def update_lead_pipeline_status(
     return {"success": True, "lead": updated}
 
 
+@router.post("/waitlist", summary="Join waitlist for upcoming subject or cohort")
+async def submit_waitlist(
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    """
+    Register a student waitlist interest for upcoming subjects (e.g. Next Batch in SQL, Excel, Power BI).
+    Accepts JSON or Form data.
+    """
+    client_ip = request.client.host if request.client else None
+    content_type = request.headers.get("content-type", "")
+
+    try:
+        if "application/json" in content_type:
+            raw_data = await request.json()
+            waitlist_obj = WaitlistCreate(**raw_data)
+        else:
+            form = await request.form()
+            raw_consent = form.get("consent")
+            consent_flag = raw_consent in ("on", "true", "1", "yes", True) if raw_consent is not None else False
+            waitlist_obj = WaitlistCreate(
+                full_name=str(form.get("full_name") or ""),
+                phone=str(form.get("phone") or ""),
+                email=str(form.get("email") or ""),
+                subject_interest=str(form.get("subject_interest") or "Next Cohort"),
+                message=str(form.get("message") or ""),
+                consent=consent_flag
+            )
+    except ValidationError as ve:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=_format_validation_errors(ve)
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=str(e)
+        )
+
+    result = create_waitlist_lead(db=db, waitlist_data=waitlist_obj, client_ip=client_ip)
+
+    if "application/json" not in content_type:
+        return RedirectResponse(
+            url=f"/registration-success?type=waitlist&subject={waitlist_obj.subject_interest}",
+            status_code=303
+        )
+    return JSONResponse(status_code=status.HTTP_201_CREATED, content=result)
+
+
 @router.post("/batches", response_model=BatchOut, status_code=status.HTTP_201_CREATED, summary="Create a new batch")
 async def add_new_batch(
     payload: BatchCreate,
@@ -268,4 +329,18 @@ async def add_new_batch(
 ):
     """Admin endpoint to create a new batch schedule (Admin session required)."""
     batch = create_batch(db=db, batch_data=payload)
+    return batch.to_dict()
+
+
+@router.patch("/batches/{batch_id}", response_model=BatchOut, summary="Update batch details")
+async def update_existing_batch(
+    batch_id: int,
+    payload: BatchUpdate,
+    admin: AdminUser = Depends(require_admin),
+    db: Session = Depends(get_db)
+):
+    """Admin endpoint to update batch parameters (Admin session required)."""
+    batch = update_batch(db=db, batch_id=batch_id, update_dict=payload.model_dump(exclude_unset=True))
+    if not batch:
+        raise HTTPException(status_code=404, detail="Batch not found")
     return batch.to_dict()

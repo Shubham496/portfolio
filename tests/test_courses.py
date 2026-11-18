@@ -430,3 +430,151 @@ def test_legal_policy_pages():
     assert "Refund &amp; Rescheduling Policy" in ref_resp.text or "Refund & Rescheduling Policy" in ref_resp.text
     assert "Demo" in ref_resp.text
 
+
+def test_grouped_batches_api():
+    """Verify /api/courses/batches/grouped categorizes batches by track and lifecycle."""
+    resp = client.get("/api/courses/batches/grouped")
+    assert resp.status_code == 200
+    data = resp.json()
+
+    assert "data_analytics" in data
+    assert "digital_marketing" in data
+    assert len(data["data_analytics"]["enrolling"]) >= 1
+
+    # Check track attribute and remaining_seats
+    da_batch = data["data_analytics"]["enrolling"][0]
+    assert da_batch["track"] == "data_analytics"
+    assert "remaining_seats" in da_batch
+    assert da_batch["remaining_seats"] <= da_batch["max_seats"]
+
+    # Check Digital Marketing track
+    assert len(data["digital_marketing"]["enrolling"]) >= 1
+    dm_batch = data["digital_marketing"]["enrolling"][0]
+    assert dm_batch["track"] == "digital_marketing"
+
+
+def test_waitlist_submission_api_and_form():
+    """Verify 'Notify Me for Next Batch' waitlist lead creation via API and form."""
+    # 1. Successful API submission
+    payload = {
+        "full_name": "Arjun Patel",
+        "phone": "+91 9888877777",
+        "email": "arjun@example.com",
+        "subject_interest": "Power BI",
+        "message": "Notify me when the next Power BI intensive starts",
+        "consent": True
+    }
+    resp = client.post("/api/courses/waitlist", json=payload)
+    assert resp.status_code == 201
+    res_data = resp.json()
+    assert res_data["success"] is True
+    assert res_data["lead_type"] == "waitlist"
+    assert res_data["subject_interest"] == "Power BI"
+    assert res_data["data"]["phone"] == "+91 9888877777"
+
+    # 2. Rejection without consent
+    no_consent_payload = {
+        "full_name": "No Consent Student",
+        "phone": "+91 9888866666",
+        "subject_interest": "SQL",
+        "consent": False
+    }
+    fail_resp = client.post("/api/courses/waitlist", json=no_consent_payload)
+    assert fail_resp.status_code == 422
+
+
+def test_admin_batches_crud_and_archival():
+    """Verify admin /admin/batches panel, batch creation, updating, and active toggle."""
+    import uuid
+    # 1. Login as admin
+    agent_password = os.getenv("AGENT_PASSWORD", "hUrHD1qKvVPQqk_y1itG*ISU")
+    login_resp = client.post("/admin/login", data={"username": "agent_admin", "password": agent_password})
+    assert login_resp.status_code in (200, 303)
+    cookies = client.cookies
+
+    # 2. View /admin/batches page
+    batches_page_resp = client.get("/admin/batches", cookies=cookies)
+    assert batches_page_resp.status_code == 200
+    assert "Cohort &amp; Batch Manager" in batches_page_resp.text or "Cohort & Batch Manager" in batches_page_resp.text
+    assert "DA-WKND-2026-B1" in batches_page_resp.text
+
+    # 3. Create a new batch via admin form
+    new_batch_code = f"DA-TEST-{uuid.uuid4().hex[:6].upper()}"
+    try:
+        create_resp = client.post("/admin/batches/create", data={
+            "batch_code": new_batch_code,
+            "title": "Automated Test Batch for Analytics",
+            "course_name": "Data Analytics Test",
+            "track": "data_analytics",
+            "technologies": "Python, SQL",
+            "schedule_days": "Saturday & Sunday",
+            "schedule_time": "6:00 PM – 8:00 PM IST",
+            "start_date": "Next Month",
+            "duration": "8 Weeks",
+            "status": "upcoming",
+            "max_seats": 20,
+            "description": "Test batch description"
+        }, cookies=cookies, follow_redirects=True)
+        assert create_resp.status_code == 200
+        assert new_batch_code in create_resp.text
+
+        # 4. Find the created batch id and update it
+        from app.apps.courses.database import SessionLocal
+        from app.apps.courses.models import Batch
+        with SessionLocal() as db:
+            created_batch = db.query(Batch).filter(Batch.batch_code == new_batch_code).first()
+            assert created_batch is not None
+            b_id = created_batch.id
+
+        update_resp = client.post(f"/admin/batches/{b_id}/update", data={
+            "title": "Updated Test Batch Title",
+            "status": "enrolling",
+            "max_seats": 30
+        }, cookies=cookies, follow_redirects=True)
+        assert update_resp.status_code == 200
+        assert "Updated Test Batch Title" in update_resp.text
+
+        # 5. Toggle active / archive
+        toggle_resp = client.post(f"/admin/batches/{b_id}/toggle-active", cookies=cookies, follow_redirects=True)
+        assert toggle_resp.status_code == 200
+        with SessionLocal() as db:
+            reloaded = db.query(Batch).filter(Batch.id == b_id).first()
+            assert reloaded.is_active is False
+    finally:
+        from app.apps.courses.database import SessionLocal
+        from app.apps.courses.models import Batch
+        with SessionLocal() as db:
+            db.query(Batch).filter(Batch.batch_code == new_batch_code).delete()
+            db.commit()
+
+
+def test_homepage_track_grouped_cohort_display_and_scarcity():
+    """Verify that homepage renders track-grouped cohorts, roadmap strip, and zero tuition pricing."""
+    resp = client.get("/")
+    assert resp.status_code == 200
+    html = resp.text
+
+    # Verify Track 1: Data Analytics & BI Track
+    assert "Data Analytics &amp; BI Track" in html or "Data Analytics & BI Track" in html
+    assert "One subject per batch so you go deep" in html
+
+    # Verify Subject Roadmap Sequence (Task 3.2: [SUBJECT_ORDER])
+    assert "Subject Roadmap Sequence" in html
+    assert "SQL" in html
+    assert "Excel" in html
+    assert "Power BI" in html
+    assert "Tableau" in html
+    assert "Notify Me" in html
+
+    # Verify Track 2: Digital Marketing Track
+    assert "Digital Marketing Track" in html
+    assert "Performance Marketing &amp; Paid Advertising" in html or "Performance Marketing & Paid Advertising" in html
+
+    # Verify Seat Scarcity (Task 3.5)
+    assert "Seats Left" in html or "seats left" in html
+
+    # Invariant: Strictly Zero Tuition Pricing on browse cards
+    assert "₹" not in html
+    assert "tuition fee" not in html.lower()
+
+
