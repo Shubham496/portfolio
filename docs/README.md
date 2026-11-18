@@ -26,7 +26,7 @@ Welcome to the central documentation index for **MYTHOS Online Institute**.
 ### 1. Prospective Student Journey
 1. **Homepage Engagement (`/`)**:
    - High-impact hero section presenting Mythos Data Systems & Learning Engine.
-   - Verified credentials showcase: 3+ years enterprise consulting, 550+ students & developers trained.
+   - Verified credentials showcase: 3+ years enterprise consulting, 400+ learners taught.
    - Visual display of the **5 Data Analysis Pillars**: Python, SQL, Power BI, Excel, Tableau.
    - Prominent weekend schedule badges: **Saturday & Sunday only, 6:00 PM – 8:00 PM IST**.
    - Immediate CTAs: **Apply for Batch** and **Direct Admissions Desk**.

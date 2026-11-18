@@ -5,6 +5,7 @@ from app.apps.courses.database import Base, engine, SessionLocal
 from app.apps.courses.models import Batch, StudentLead, AdminUser
 from app.apps.courses.auth import create_session_token, SESSION_COOKIE_NAME
 from app.apps.courses.services import init_courses_db
+from app.core.config import settings
 import os
 
 client = TestClient(app)
@@ -33,12 +34,15 @@ def test_instructor_endpoint():
     assert response.status_code == 200
     data = response.json()
     
-    # Verify instructor credentials & contact
+    # Verify instructor credentials & dynamic contact
     instructor = data["instructor"]
     assert "Mythos" in instructor["name"] or "Mentor" in instructor["name"]
-    assert instructor["email"] in ("shubhamsinghh057@gmail.com", "admissions@mythostech.in") or "@" in instructor["email"]
-    assert "8727864157" in instructor["phone"]
+    assert instructor["email"] == settings.BUSINESS_EMAIL or "@" in instructor["email"]
+    assert "shubhamsinghh057@gmail.com" not in instructor["email"]
+    assert "8727864157" not in instructor["phone"]
+    assert instructor["phone"] == settings.BUSINESS_WHATSAPP
     assert len(instructor["experience_highlights"]) > 0
+    assert "550+" not in str(data)
 
     # Verify course & syllabus
     course = data["course"]

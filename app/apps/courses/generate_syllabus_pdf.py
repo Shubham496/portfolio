@@ -5,6 +5,7 @@ Builds a high-impact, styled 2-page curriculum brochure PDF using fpdf2.
 
 import os
 from fpdf import FPDF
+from app.core.config import settings
 
 
 class MythosSyllabusPDF(FPDF):
@@ -44,7 +45,7 @@ class MythosSyllabusPDF(FPDF):
 
         self.set_font('Helvetica', '', 7.5)
         self.set_text_color(71, 85, 105)
-        self.cell(110, 6, 'Admissions: shubhamsinghh057@gmail.com | WhatsApp: +91 8727864157', align='C')
+        self.cell(110, 6, f'Admissions: {settings.BUSINESS_EMAIL} | WhatsApp: +91 {settings.BUSINESS_WHATSAPP}', align='C')
 
         self.set_font('Helvetica', 'B', 7.5)
         self.set_text_color(100, 116, 139)
@@ -76,7 +77,7 @@ def generate_syllabus_pdf(output_path: str = "app/static/pdf/Data_Analysis_Sylla
     # Value proposition
     pdf.set_font('Helvetica', '', 8.5)
     pdf.set_text_color(71, 85, 105)
-    pdf.cell(0, 4.5, 'Trained 550+ students & developers | 100% Weekend Live Interactive Coding | Real Capstones', align='L', new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 4.5, f'{settings.TRUST_CLAIM} | 100% Weekend Live Interactive Coding | Real Capstones', align='L', new_x="LMARGIN", new_y="NEXT")
     pdf.ln(2)
 
     # ── Fixed Schedule & Format Strip ──
@@ -435,8 +436,8 @@ def generate_syllabus_pdf(output_path: str = "app/static/pdf/Data_Analysis_Sylla
     pdf.set_xy(15, desk_y + 8.5)
     pdf.set_font('Helvetica', '', 8)
     pdf.set_text_color(203, 213, 225)
-    pdf.cell(90, 4, 'Email: shubhamsinghh057@gmail.com', align='L')
-    pdf.cell(90, 4, 'WhatsApp / Direct Call: +91 8727864157', align='R')
+    pdf.cell(90, 4, f'Email: {settings.BUSINESS_EMAIL}', align='L')
+    pdf.cell(90, 4, f'WhatsApp / Direct Call: +91 {settings.BUSINESS_WHATSAPP}', align='R')
 
     pdf.set_xy(15, desk_y + 13.5)
     pdf.set_font('Helvetica', '', 7.5)

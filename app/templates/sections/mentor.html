@@ -1,33 +1,160 @@
 {# ═════════════════════════════════════════════════════════════
-   8. ADMISSIONS & MENTORSHIP DESK (Contact & Counseling)
+   8. DUAL-MENTOR SHOWCASE & ADMISSIONS DESK
+   Strict discipline separation between Data Analytics & Digital Marketing.
    ═════════════════════════════════════════════════════════════ #}
-<section id="about" class="py-14 border-b border-slate-200 dark:border-slate-800/80 bg-slate-50/50 dark:bg-[#070B14] transition-colors">
+<section id="about" class="py-16 border-b border-slate-200 dark:border-slate-800/80 bg-slate-50/50 dark:bg-[#070B14] transition-colors relative">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
         
-        <div class="text-center max-w-2xl mx-auto mb-10">
-            <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full border border-blue-500/20 bg-blue-50/80 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 text-xs font-semibold mb-3">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>Admissions &amp; Direct Mentorship Desk</span>
+        <!-- Section Header -->
+        <div class="text-center max-w-2xl mx-auto mb-12">
+            <div class="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full border border-blue-500/20 bg-blue-50/80 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 text-xs font-semibold mb-3">
+                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-blue-500"></i>
+                <span>Specialized Academic Faculty</span>
             </div>
-            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mb-2">
-                Connect Directly With Admissions
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mb-3 tracking-tight">
+                Dual Specialized Mentors. <span class="text-gradient-mythos">Zero Generalists.</span>
             </h2>
-            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
-                Have questions about the 5 core pillars, cohort schedule, or enrollment? Reach out directly via WhatsApp, phone, or email.
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-xl mx-auto leading-relaxed">
+                Our mentors teach exclusively within their specialized domain. {{ settings.TRUST_CLAIM }}.
             </p>
         </div>
 
-        <!-- 3 Contact Cards -->
+        <!-- Dual Mentor Showcase Grid (Strict Discipline Separation) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+            
+            <!-- Card 1: Data Analytics Mentor (Anonymous, High-Tech Emblem, No Photo) -->
+            <div class="p-8 rounded-3xl bg-white dark:bg-[#0B1120] border border-slate-200 dark:border-slate-800 shadow-sm hover:border-cyan-500/40 transition group flex flex-col justify-between relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 rounded-full blur-2xl pointer-events-none"></div>
+                <div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <!-- Anonymous High-Tech Emblem -->
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-500 p-0.5 shadow-md shrink-0">
+                            <div class="w-full h-full rounded-2xl bg-[#0B1120] flex items-center justify-center text-cyan-400">
+                                <i data-lucide="terminal" class="w-8 h-8"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800">
+                                Data Analytics &amp; BI Track
+                            </span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white mt-1.5">
+                                Mythos Data Analytics Mentor
+                            </h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Lead Python &amp; Data Architecture Faculty</p>
+                        </div>
+                    </div>
+
+                    <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+                        3+ years of professional teaching and engineering experience, having trained 400+ learners in production SQL, CPython memory internals, Power BI DAX modeling, and enterprise data warehousing.
+                    </p>
+
+                    <div class="space-y-2.5 mb-6 text-xs text-slate-600 dark:text-slate-400">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-emerald-500 shrink-0"></i>
+                            <span>Covers SQL, Python, Excel, Power BI, Tableau, Git/GitHub</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="calendar" class="w-4 h-4 text-blue-500 shrink-0"></i>
+                            <span>Cohort Schedule: Saturday &amp; Sunday, 6:00 PM – 8:00 PM IST</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="shield" class="w-4 h-4 text-cyan-500 shrink-0"></i>
+                            <span>Strict Discipline Focus: Data Systems Only</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                    <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">One subject per batch (~8 weeks)</span>
+                    <a href="/register?track=data_analytics" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs transition shadow-sm inline-flex items-center gap-1.5">
+                        <span>Apply for Track</span>
+                        <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Card 2: Digital Marketing Mentor (Photo, Real Bio, LinkedIn) -->
+            <div class="p-8 rounded-3xl bg-white dark:bg-[#0B1120] border border-slate-200 dark:border-slate-800 shadow-sm hover:border-purple-500/40 transition group flex flex-col justify-between relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 rounded-full blur-2xl pointer-events-none"></div>
+                <div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <!-- Professional Photo Container -->
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-600 to-pink-500 p-0.5 shadow-md shrink-0 overflow-hidden">
+                            {% if settings.DM_MENTOR_PHOTO and settings.DM_MENTOR_PHOTO != '[DM_MENTOR_PHOTO]' and not settings.DM_MENTOR_PHOTO.startswith('[') %}
+                            <img src="{{ settings.DM_MENTOR_PHOTO }}" 
+                                 alt="{{ settings.DM_MENTOR_NAME }}" 
+                                 loading="lazy" 
+                                 class="w-full h-full object-cover rounded-2xl">
+                            {% else %}
+                            <div class="w-full h-full rounded-2xl bg-[#0B1120] flex flex-col items-center justify-center text-pink-400 p-1 text-center">
+                                <i data-lucide="user" class="w-6 h-6"></i>
+                                <span class="text-[8px] font-mono font-bold leading-tight mt-0.5 text-pink-300">[DM_MENTOR_PHOTO]</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-800">
+                                Growth &amp; Marketing Track
+                            </span>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white mt-1.5">
+                                {{ settings.DM_MENTOR_NAME }}
+                            </h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Director of Performance Marketing &amp; SEO</p>
+                        </div>
+                    </div>
+
+                    <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+                        {{ settings.DM_MENTOR_BIO }}{% if '[DM_MENTOR_BIO]' in settings.DM_MENTOR_BIO %} Specialist in performance media buying, ROAS optimization across Meta &amp; Google Ads, data-driven organic SEO funnels, and retention marketing.{% endif %}
+                    </p>
+
+                    <div class="space-y-2.5 mb-6 text-xs text-slate-600 dark:text-slate-400">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-emerald-500 shrink-0"></i>
+                            <span>Covers Meta Ads Manager, Google Search/PMax, SEO &amp; Attribution</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="calendar" class="w-4 h-4 text-purple-500 shrink-0"></i>
+                            <span>Cohort Schedule: {{ settings.DM_SCHEDULE }}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="shield" class="w-4 h-4 text-purple-500 shrink-0"></i>
+                            <span>Strict Discipline Focus: Marketing &amp; Growth Only</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                    {% if settings.DM_MENTOR_LINKEDIN and settings.DM_MENTOR_LINKEDIN.startswith('http') %}
+                    <a href="{{ settings.DM_MENTOR_LINKEDIN }}" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold text-[#0A66C2] hover:underline flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.64c-.95 0-1.72.78-1.72 1.73s.77 1.73 1.73 1.73c.96 0 1.73-.78 1.73-1.73s-.77-1.73-1.73-1.73z"/></svg>
+                        <span>Verified LinkedIn</span>
+                    </a>
+                    {% else %}
+                    <span class="text-xs font-mono text-slate-400 flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5 fill-current text-slate-400" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.64c-.95 0-1.72.78-1.72 1.73s.77 1.73 1.73 1.73c.96 0 1.73-.78 1.73-1.73s-.77-1.73-1.73-1.73z"/></svg>
+                        <span>[DM_MENTOR_LINKEDIN]</span>
+                    </span>
+                    {% endif %}
+                    <a href="/register?track=digital_marketing" class="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs transition shadow-sm inline-flex items-center gap-1.5">
+                        <span>Apply for Track</span>
+                        <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 3 Contact Cards (Dynamic Admissions Desk) -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
             <!-- Card 1: WhatsApp / Phone -->
-            <a href="https://wa.me/918727864157" target="_blank" rel="noopener noreferrer" 
+            <a href="{{ settings.whatsapp_url }}" target="_blank" rel="noopener noreferrer" 
                class="p-6 rounded-2xl bg-white dark:bg-[#0B1120] border border-slate-200 dark:border-slate-800 shadow-sm hover:border-emerald-500/50 transition group flex flex-col justify-between">
                 <div>
                     <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
                         <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.48 0-2.93-.39-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.196 8.196 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24M8.53 7.33c-.14 0-.36.05-.54.26-.19.21-.71.7-.71 1.71 0 1.01.73 1.99.83 2.13.1.14 1.44 2.21 3.5 3.09.49.21.87.33 1.17.43.49.16.94.13 1.29.08.4-.06 1.21-.5 1.38-.98.17-.48.17-.89.12-.98-.05-.09-.18-.14-.38-.24s-1.21-.6-1.4-.66c-.19-.07-.33-.1-.47.1-.14.21-.54.7-.66.84-.12.14-.24.16-.44.06-.2-.1-.85-.31-1.63-1-.6-.53-1.01-1.2-1.13-1.4-.12-.2-.01-.31.09-.41.09-.09.2-.24.3-.36.1-.12.14-.2.2-.34.07-.14.03-.26-.02-.36s-.47-1.14-.65-1.57c-.17-.41-.35-.35-.49-.36-.12 0-.27-.01-.41-.01Z"/></svg>
                     </div>
                     <div class="text-xs uppercase font-bold text-slate-500 mb-1">WhatsApp &amp; Phone</div>
-                    <div class="text-lg font-mono font-bold text-slate-900 dark:text-white mb-2">8727864157</div>
+                    <div class="text-lg font-mono font-bold text-slate-900 dark:text-white mb-2">{{ settings.BUSINESS_WHATSAPP }}</div>
                     <p class="text-xs text-slate-600 dark:text-slate-400">
                         Instant chat for seat availability, syllabus questions, and batch orientation.
                     </p>
@@ -39,14 +166,14 @@
             </a>
 
             <!-- Card 2: Email -->
-            <a href="mailto:shubhamsinghh057@gmail.com" 
+            <a href="mailto:{{ settings.BUSINESS_EMAIL }}" 
                class="p-6 rounded-2xl bg-white dark:bg-[#0B1120] border border-slate-200 dark:border-slate-800 shadow-sm hover:border-blue-500/50 transition group flex flex-col justify-between">
                 <div>
                     <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
                         <i data-lucide="mail" class="w-5 h-5"></i>
                     </div>
-                    <div class="text-xs uppercase font-bold text-slate-500 mb-1">Official Email</div>
-                    <div class="text-sm sm:text-base font-mono font-bold text-slate-900 dark:text-white mb-2 truncate">shubhamsinghh057@gmail.com</div>
+                    <div class="text-xs uppercase font-bold text-slate-500 mb-1">Official Admissions Email</div>
+                    <div class="text-sm sm:text-base font-mono font-bold text-slate-900 dark:text-white mb-2 truncate">{{ settings.BUSINESS_EMAIL }}</div>
                     <p class="text-xs text-slate-600 dark:text-slate-400">
                         Send formal inquiries, curriculum questions, or counseling callback requests.
                     </p>

@@ -1,0 +1,53 @@
+{# ═════════════════════════════════════════════════════════════
+   TESTIMONIALS SECTION (DORMANT COMPONENT)
+   Strictly renders nothing if testimonials list is empty or unsupplied.
+   Zero synthetic quotes, fake names, or fabricated corporate logos.
+   ═════════════════════════════════════════════════════════════ #}
+{% if testimonials and testimonials|length > 0 %}
+<section id="testimonials" class="py-16 border-b border-slate-200 dark:border-slate-800/80 bg-slate-50/50 dark:bg-[#070B14] transition-colors relative">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        
+        <div class="text-center max-w-2xl mx-auto mb-12">
+            <div class="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full border border-blue-500/20 bg-blue-50/80 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 text-xs font-semibold mb-3">
+                <i data-lucide="message-square" class="w-3.5 h-3.5 text-blue-500"></i>
+                <span>Verified Student Feedback</span>
+            </div>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mb-3 tracking-tight">
+                Authentic Learner Experiences
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
+                Genuine feedback from students and professionals who completed our weekend mentorship cohorts.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for item in testimonials %}
+            <div class="p-6 rounded-2xl bg-white dark:bg-[#0B1120] border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-1 text-amber-400 mb-3">
+                        {% for _ in range(item.rating or 5) %}
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        {% endfor %}
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 italic mb-4 leading-relaxed">
+                        "{{ item.quote }}"
+                    </p>
+                </div>
+                <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                    <div>
+                        <div class="text-xs font-bold text-slate-900 dark:text-white">{{ item.name }}</div>
+                        <div class="text-[11px] text-slate-500 dark:text-slate-400">{{ item.role_or_cohort }}</div>
+                    </div>
+                    {% if item.verified %}
+                    <span class="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
+                        <i data-lucide="check-circle" class="w-3 h-3"></i> Verified
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+</section>
+{% endif %}

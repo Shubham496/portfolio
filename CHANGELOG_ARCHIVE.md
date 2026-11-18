@@ -35,6 +35,14 @@ Entries are organized chronologically by **Year** and **Month**, preserving orig
   - **Bugs Fixed**: Resolved critical test bug where test runner overwrote production admin password hash when run without environment variables.
   - **Breaking Changes**: None.
 
+- **[Archived from Changeslog.md Entry 4] (2026-11-12)**:
+  - **Feature**: Overhauled design system across all pages to Mythos brand ("BUILD SKILLS. BUILD SYSTEMS. BUILD THE FUTURE.") using Google Fonts Poppins, Deep Navy (`#070B14`), Electric Blue (`#2563EB`), Cyan (`#06B6D4`), and Split Orange (`#F97316`); rebuilt landing page with hero, problem vs solution, capability programs, methodology, capstones, and admission desk; updated cohort views.
+  - **Files**: `app/templates/base.html`, `app/templates/index.html`, `app/templates/register.html`, `app/templates/confirmation.html`, `app/templates/admin/login.html`, `app/templates/admin/dashboard.html`, `app/static/css/style.css`.
+  - **API Changes**: None.
+  - **Database Changes**: None.
+  - **Bugs Fixed**: None.
+  - **Breaking Changes**: None.
+
 - **Commit 4347a5e (2026-11-11)**:
   - **Feature**: Hardened admin authentication integration test to be strictly idempotent across test runner environments.
   - **Files**: `tests/test_courses.py`.

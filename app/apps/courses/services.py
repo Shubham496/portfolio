@@ -1240,9 +1240,9 @@ def get_instructor_curriculum_profile() -> Dict[str, Any]:
                 "Digital Marketing (Performance Marketing, Paid Ads, SEO, Content Growth) and "
                 "Data Analytics (Python, SQL, Power BI, Excel, Tableau). 100% online, live faculty mentorship."
             ),
-            "phone": settings.OWNER_PHONE,
-            "email": settings.EMAIL,
-            "whatsapp": "https://wa.me/918727864157"
+            "phone": settings.BUSINESS_WHATSAPP,
+            "email": settings.BUSINESS_EMAIL,
+            "whatsapp": settings.whatsapp_url
         },
         "instructor": {
             "name": settings.OWNER_NAME,
@@ -1251,10 +1251,10 @@ def get_instructor_curriculum_profile() -> Dict[str, Any]:
             "experience_highlights": [
                 "Live Online Faculty Mentorship: Digital Marketing & Data Analytics Cohorts",
                 "Real Industry Simulations: Live Paid Ad Spends, GA4 Tracking & Multi-Source SQL Data Warehouses",
-                "Career Acceleration: 550+ Students & Working Professionals Mentored with ATS Resumes & Portfolios"
+                f"Career Acceleration: {settings.TRUST_CLAIM} with ATS Resumes & Portfolios"
             ],
-            "phone": settings.OWNER_PHONE,
-            "email": settings.EMAIL,
+            "phone": settings.BUSINESS_WHATSAPP,
+            "email": settings.BUSINESS_EMAIL,
             "linkedin": settings.LINKEDIN_URL,
             "github": settings.GITHUB_URL
         },

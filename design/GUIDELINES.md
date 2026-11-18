@@ -30,7 +30,7 @@
   - `500 (Medium)`: Navigation items, form input labels, button labels.
   - `600 (SemiBold)`: Section subheadings, card titles, certificate award prefixes.
   - `700 (Bold)`: Main section headings (H2/H3), candidate name on certificates.
-  - `800 (ExtraBold)`: Hero main headline, numerical milestone metrics (e.g. `550+`).
+  - `800 (ExtraBold)`: Hero main headline, numerical milestone metrics (e.g. `400+`).
   - `900 (Black)`: Brand Wordmark (`MYTHOS`), Certificate Header.
 
 ### Monospace Font Family: **JetBrains Mono**

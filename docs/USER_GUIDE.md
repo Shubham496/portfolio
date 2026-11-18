@@ -16,7 +16,7 @@ Your website is an **active online educational institute platform (MYTHOS Online
   3. **Data Analysis & Business Intelligence Masterclass** (Python, SQL, Power BI, Advanced Excel, Tableau).
 * **Fixed Schedule**: **Saturday and Sunday only, 6:00 PM to 8:00 PM IST** (live online cohorts).
 * **Admissions Model**: Pure educational admissions without online pricing or payment gateways. Enrollment readiness and batch selection are reviewed directly during orientation.
-* **Direct Contact**: Email (`shubhamsinghh057@gmail.com`) and WhatsApp (`+91 8727864157`).
+* **Direct Contact**: Email (`[BUSINESS_EMAIL]`) and WhatsApp (`[BUSINESS_WHATSAPP]`).
 * **Production Deployment Note**: Only you ("I") can push code to production (`git push`). AI agents maintain clean local git commits for every task without pushing to production.
 * **Easy Application for Students**:
   1. **Batch Registration**: Select their preferred course track and apply for upcoming weekend batches (via `/register` or homepage modal). Email is optional—only name and WhatsApp/mobile number are required!

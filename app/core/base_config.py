@@ -19,13 +19,38 @@ class BaseConfig(BaseSettings):
         "across Digital Marketing (Performance Marketing, Paid Ads, SEO, Content Growth) and "
         "Data Analytics & Business Intelligence (Python, SQL, Power BI, Excel, Tableau)."
     )
-    OWNER_PHONE: str = os.getenv("BUSINESS_WHATSAPP", "8727864157")
+    # Dynamic Business Contact Details (Loaded from env, no hardcoded personal details)
+    BUSINESS_EMAIL: str = os.getenv("BUSINESS_EMAIL", "admissions@mythostech.in")
+    BUSINESS_WHATSAPP: str = os.getenv("BUSINESS_WHATSAPP", "[BUSINESS_WHATSAPP]")
+    EMAIL: str = os.getenv("BUSINESS_EMAIL", "admissions@mythostech.in")
+    OWNER_PHONE: str = os.getenv("BUSINESS_WHATSAPP", "[BUSINESS_WHATSAPP]")
     OWNER_LOCATION: str = "Live Online Weekend Cohorts"
-    GITHUB_URL: str = ""
-    LINKEDIN_URL: str = ""
-    EMAIL: str = os.getenv("BUSINESS_EMAIL", "shubhamsinghh057@gmail.com")
+    
+    # Social & Community Links
+    GITHUB_URL: str = os.getenv("GITHUB_URL", "")
+    LINKEDIN_URL: str = os.getenv("LINKEDIN_PAGE_URL", "")
+    WHATSAPP_CHANNEL_URL: str = os.getenv("WHATSAPP_CHANNEL_URL", "[WHATSAPP_CHANNEL_URL]")
+    TELEGRAM_URL: str = os.getenv("TELEGRAM_URL", "[TELEGRAM_URL]")
+    INSTAGRAM_URL: str = os.getenv("INSTAGRAM_URL", "[INSTAGRAM_URL]")
+    YOUTUBE_URL: str = os.getenv("YOUTUBE_URL", "[YOUTUBE_URL]")
+
+    # Dual Mentors & Academic Specifications
+    DM_MENTOR_NAME: str = os.getenv("DM_MENTOR_NAME", "[DM_MENTOR_NAME]")
+    DM_MENTOR_PHOTO: str = os.getenv("DM_MENTOR_PHOTO", "[DM_MENTOR_PHOTO]")
+    DM_MENTOR_BIO: str = os.getenv("DM_MENTOR_BIO", "[DM_MENTOR_BIO]")
+    DM_MENTOR_LINKEDIN: str = os.getenv("DM_MENTOR_LINKEDIN", "[DM_MENTOR_LINKEDIN]")
+    DM_SCHEDULE: str = os.getenv("DM_SCHEDULE", "[DM_SCHEDULE]")
+    TRUST_CLAIM: str = os.getenv("TRUST_CLAIM", "400+ learners taught by our mentors over 3+ years")
+
     RESUME_PATH: str = ""
     PROFILE_PHOTO_PATH: str = "/static/Images/mythos/mythos_icon_transparent.png"
+
+    @property
+    def whatsapp_url(self) -> str:
+        digits = "".join(filter(str.isdigit, self.BUSINESS_WHATSAPP))
+        if digits:
+            return f"https://wa.me/{digits}"
+        return f"https://wa.me/{self.BUSINESS_WHATSAPP}" if self.BUSINESS_WHATSAPP else "#about"
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 

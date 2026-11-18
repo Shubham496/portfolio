@@ -189,28 +189,28 @@ Phase 6: Later Only (Optional Paywalled Bundles via External Link)
 
 ---
 
-### Phase 2: Trust & People (Mentors & Brand Transparency)
+### Phase 2: Trust & People (Mentors & Brand Transparency) (COMPLETED)
 *Transform the platform's human credibility with clear mentor separation and honest claims.*
 
-* [ ] **Task 2.1: Dual-Mentor Showcase & Dedicated `/about` Page**
-  * Rebuild the Mentorship section on the landing page (`app/templates/sections/mentor.html`) and create a dedicated `/about` page (`app/templates/about.html`):
-    * **Digital Marketing Mentor**: Show `[DM_MENTOR_NAME]`, professional photo `[DM_MENTOR_PHOTO]`, verified bio `[DM_MENTOR_BIO]`, and LinkedIn `[DM_MENTOR_LINKEDIN]`.
-    * **Data Analytics Mentor**: Show as the *Mythos Data Analytics Mentor* (anonymous, no photo, high-tech emblem), with a grounded profile highlighting 3+ years teaching, 400+ learners taught, and practical tools covered.
-    * Maintain strict discipline separation: each mentor owns exclusively their subject domain.
-* [ ] **Task 2.2: Systematic Purge of the "550+" Metric**
-  * Search and replace every occurrence of "550+" students across all HTML templates, static files, Python services, PDF generators, and test assertions.
-  * Replace with `[TRUST_CLAIM]` (default: *"400+ learners taught by our mentors over 3+ years"*).
-* [ ] **Task 2.3: Contact Information Migration & PDF Brochure Regeneration**
-  * Move all support and admissions contacts to `BUSINESS_EMAIL` and `BUSINESS_WHATSAPP` loaded from `app/core/base_config.py`.
-  * Remove hardcoded `shubhamsinghh057@gmail.com` and `8727864157` from templates, footer, registration modals, syllabus generator, and documentation.
-  * Re-render `app/static/pdf/Data_Analysis_Syllabus.pdf` reflecting new mentor credentials and dynamic contact information.
-* [ ] **Task 2.4: Dormant Testimonials Component**
-  * Build a clean testimonials section partial (`app/templates/sections/testimonials.html`).
+* [x] **Task 2.1: Dual-Mentor Showcase & Dedicated `/about` Page**
+  * Rebuilt the Mentorship section on the landing page (`app/templates/sections/mentor.html`) and dedicated `/about` page (`app/templates/about.html`):
+    * **Digital Marketing Mentor**: Shows `[DM_MENTOR_NAME]`, professional photo container `[DM_MENTOR_PHOTO]`, verified bio `[DM_MENTOR_BIO]`, and LinkedIn `[DM_MENTOR_LINKEDIN]`.
+    * **Data Analytics Mentor**: Shows as the *Mythos Data Analytics Mentor* (anonymous, no photo, high-tech emblem), with a grounded profile highlighting 3+ years teaching, 400+ learners taught, and practical tools covered.
+    * Strict discipline separation: each mentor owns exclusively their subject domain.
+* [x] **Task 2.2: Systematic Purge of the "550+" Metric**
+  * Searched and replaced every occurrence of "550+" students across all HTML templates, static files, Python services, PDF generators, and test assertions.
+  * Replaced with `[TRUST_CLAIM]` (default: *"400+ learners taught by our mentors over 3+ years"*).
+* [x] **Task 2.3: Contact Information Migration & PDF Brochure Regeneration**
+  * Moved all support and admissions contacts to `BUSINESS_EMAIL` and `BUSINESS_WHATSAPP` loaded from `app/core/base_config.py`.
+  * Removed hardcoded `shubhamsinghh057@gmail.com` and `8727864157` from templates, footer, registration modals, syllabus generator, and documentation.
+  * Re-rendered `app/static/pdf/Data_Analysis_Syllabus.pdf` reflecting new mentor credentials and dynamic contact information.
+* [x] **Task 2.4: Dormant Testimonials Component**
+  * Built a clean testimonials section partial (`app/templates/sections/testimonials.html`).
   * If no real testimonials exist in the database or config, the component renders nothing (completely hidden).
-  * Never synthesize placeholder reviews, quotes, or fake corporate logos.
-* [ ] **Task 2.5: Compliance & Guarantee Audit**
-  * Audit all copy to eliminate any phrasing promising guaranteed jobs, placements, or specific salary figures.
-  * Frame all outcomes around practical skill mastery, portfolio readiness, and interview preparation.
+  * Never synthesizes placeholder reviews, quotes, or fake corporate logos.
+* [x] **Task 2.5: Compliance & Guarantee Audit**
+  * Audited all copy to eliminate any phrasing promising guaranteed jobs, placements, or specific salary figures.
+  * Framed all outcomes around practical skill mastery, portfolio readiness, and interview preparation.
 
 ---
 

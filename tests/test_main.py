@@ -225,3 +225,82 @@ def test_dedicated_about_and_demo_pages():
     assert "Reserve Your Free Demo Seat" in demo_res.text
     assert "[DEMO_CLASS_DATETIME]" in demo_res.text
     assert "I agree to be contacted by phone or WhatsApp" in demo_res.text
+
+
+def test_purge_of_550_metric():
+    """Verify that '550+' is completely expunged across all public pages, API output, and templates (Task 2.2)."""
+    endpoints = ["/", "/about", "/demo", "/register", "/student/register", "/api/courses/instructor"]
+    for path in endpoints:
+        res = client.get(path)
+        assert res.status_code == 200, f"Endpoint {path} failed"
+        assert "550+" not in res.text, f"Legacy metric '550+' still found in {path}"
+
+    # Verify standard trust claim is rendered
+    home_res = client.get("/")
+    assert "400+ Learners Taught" in home_res.text or "400+" in home_res.text
+
+
+def test_purge_of_personal_contact_details():
+    """Verify legacy personal email and phone are completely purged and replaced by dynamic config (Task 2.3)."""
+    endpoints = ["/", "/about", "/demo", "/register", "/registration-success", "/library", "/library/sql", "/api/courses/instructor"]
+    for path in endpoints:
+        res = client.get(path)
+        assert res.status_code == 200, f"Endpoint {path} failed"
+        assert "shubhamsinghh057@gmail.com" not in res.text, f"Legacy personal email found in {path}"
+        assert "8727864157" not in res.text, f"Legacy personal phone found in {path}"
+
+    # Verify configured business email and whatsapp are present
+    home_res = client.get("/")
+    assert settings.BUSINESS_EMAIL in home_res.text
+    assert settings.BUSINESS_WHATSAPP in home_res.text
+
+
+def test_dual_mentor_showcase_and_discipline_separation():
+    """Verify dual mentor showcase, discipline separation, and mentor profiles on / and /about (Task 2.1)."""
+    for path in ["/", "/about"]:
+        res = client.get(path)
+        assert res.status_code == 200
+        html = res.text
+
+        # 1. Data Analytics Mentor: Anonymous, no personal photo, grounded credentials
+        assert "Mythos Data Analytics Mentor" in html
+        assert "Data Analytics &amp; BI Track" in html or "Data Analytics & BI Track" in html
+        assert "400+ learners taught" in html
+        assert "SQL" in html
+        assert "Python" in html
+        assert "Saturday &amp; Sunday, 6:00 PM" in html or "Saturday & Sunday, 6:00 PM" in html
+
+        # 2. Digital Marketing Mentor: Configurable name, bio, photo placeholder, LinkedIn
+        assert settings.DM_MENTOR_NAME in html
+        assert "Growth &amp; Marketing Track" in html or "Growth & Marketing Track" in html
+        assert settings.DM_MENTOR_LINKEDIN in html
+        assert settings.DM_SCHEDULE in html
+
+
+def test_dormant_testimonials_component():
+    """Verify testimonials component remains dormant and renders nothing when testimonials are not provided (Task 2.4)."""
+    res = client.get("/")
+    assert res.status_code == 200
+    # No fake reviews or testimonials section when no testimonials exist
+    assert '<section id="testimonials"' not in res.text
+
+
+def test_compliance_and_guarantee_audit():
+    """Verify that no false placement guarantees, job promises, or salary claims exist on core pages (Task 2.5)."""
+    endpoints = ["/", "/about", "/demo", "/register"]
+    prohibited_phrases = [
+        "100% placement",
+        "placement guarantee",
+        "job guarantee",
+        "guaranteed placement",
+        "guaranteed job",
+        "salary guarantee",
+        "package guarantee"
+    ]
+    for path in endpoints:
+        res = client.get(path)
+        assert res.status_code == 200
+        lower_html = res.text.lower()
+        for phrase in prohibited_phrases:
+            assert phrase not in lower_html, f"Prohibited compliance phrase '{phrase}' found in {path}"
+

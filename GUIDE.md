@@ -13,6 +13,13 @@
 1. **Live Online Academic Cohorts**: Delivers weekend cohort mentorship in **Digital Marketing** (Performance Marketing & SEO/Growth) and **Data Analytics** (Python, SQL, Power BI, Excel, Tableau).
 2. **Resource Library & Knowledge Engine**: Provides university-rigorous documentation, W3Schools-style sequential study tracks, and interview viva preparation covering **34 major programming languages, databases, tools, and platforms**.
 
+### Faculty Mentorship Model & Brand Credibility
+- **Dual Specialized Mentors**: Strict separation of disciplines. The Data Analytics mentor is anonymous (*Mythos Data Analytics Mentor*, lead faculty, high-tech emblem, no photo), while the Digital Marketing mentor is featured with real credentials (`[DM_MENTOR_NAME]`, `[DM_MENTOR_PHOTO]`, `[DM_MENTOR_BIO]`, `[DM_MENTOR_LINKEDIN]`).
+- **Standardized Trust Metric**: Grounded in `[TRUST_CLAIM]` (*"400+ learners taught by our mentors over 3+ years"*). The legacy "550+" metric is systematically expunged across all surfaces.
+- **Dynamic Contact Information**: Support and admissions contacts load dynamically via `BUSINESS_EMAIL` and `BUSINESS_WHATSAPP`. Legacy personal contacts are completely expunged.
+- **Dormant Testimonials Component**: `sections/testimonials.html` renders nothing (100% dormant) unless authentic student reviews are supplied in context. Zero fake quotes or corporate logos.
+- **Compliance & Guarantee Standard**: Strictly zero placement guarantees or fabricated salary claims. All student outcomes are framed around verifiable proof of work and interview readiness.
+
 ---
 
 ## 2. Technology Stack & Key Dependencies
@@ -124,7 +131,7 @@ coding/
 │       ├── register.html               # Dedicated full-page weekend cohort registration
 │       ├── confirmation.html           # Post-registration student confirmation page
 │       ├── partials/                   # Global components (navbar.html, in_page_nav.html, footer.html)
-│       ├── sections/                   # 10 modular landing page section partials
+│       ├── sections/                   # 11 modular landing page section partials (includes dormant testimonials.html)
 │       ├── admin/                      # Instructor portal views (login.html, dashboard.html)
 │       ├── student/                    # Student portal views (login.html, register.html, dashboard.html)
 │       └── library/                    # Docs & dataset views (index.html, subject_hub.html, reader.html, datasets.html, dataset_detail.html)
@@ -281,6 +288,14 @@ Auto-loaded via `python-dotenv` from `.env` in [`app/core/config.py`](file:///f:
 | `DATABASE_URL` | Cloud Prod | `""` (falls back to SQLite)| External PostgreSQL connection URI (Neon / Supabase / Render Postgres). |
 | `BASE_URL` | No | `https://mythostech.in` | Canonical base domain used for sitemap.xml, canonical URLs, and schema metadata. |
 | `GOOGLE_SITE_VERIFICATION` | Optional | `""` | Google Search Console site verification HTML tag content. |
+| `BUSINESS_EMAIL` | Recommended | `admissions@mythostech.in` | Official institute contact email rendered across templates and PDF brochures. |
+| `BUSINESS_WHATSAPP` | Recommended | `[BUSINESS_WHATSAPP]` | Official institute WhatsApp/phone contact number; purged of legacy personal numbers. |
+| `DM_MENTOR_NAME` | Optional | `[DM_MENTOR_NAME]` | Full name for the Digital Marketing Mentor. |
+| `DM_MENTOR_PHOTO` | Optional | `[DM_MENTOR_PHOTO]` | Professional photo path or URL for the Digital Marketing Mentor. |
+| `DM_MENTOR_BIO` | Optional | `[DM_MENTOR_BIO]` | Professional track record and background for the Digital Marketing Mentor. |
+| `DM_MENTOR_LINKEDIN`| Optional | `[DM_MENTOR_LINKEDIN]` | Verified LinkedIn profile URL for the Digital Marketing Mentor. |
+| `DM_SCHEDULE` | Optional | `[DM_SCHEDULE]` | Live cohort schedule for Digital Marketing batches. |
+| `TRUST_CLAIM` | Optional | `400+ learners taught by our mentors over 3+ years` | Standardized institutional credibility statement replacing legacy 550+ metrics. |
 | `PYTHON_VERSION`| Cloud Prod | `3.10.11` | Runtime version specified for Render build environments. |
 
 ---

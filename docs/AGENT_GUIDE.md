@@ -16,7 +16,7 @@
 * **Platform Name**: MYTHOS Online Institute
 * **Platform Identity**: 100% Online Educational Institute offering live cohorts across Digital Marketing & Data Analytics.
 * **Lead Mentorship**: Mythos Academic Council / Platform Maintainer
-* **Contact**: `shubhamsinghh057@gmail.com` | WhatsApp: `+91 8727864157`
+* **Contact**: Official Admissions Desk via `[BUSINESS_EMAIL]` | WhatsApp: `[BUSINESS_WHATSAPP]`
 * **Production Deployment Authority**: **STRICTLY RESERVED FOR THE PLATFORM OWNER ("I")**. AI agents must NEVER execute `git push` or deploy to production.
 
 ---
