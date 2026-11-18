@@ -327,7 +327,7 @@ uvicorn app.main:app --reload --port 8000
 ```powershell
 python -m pytest -v
 ```
-**Verification Requirement**: All **61 automated tests** must pass with zero failures.
+**Verification Requirement**: All **66 automated tests** must pass with zero failures.
 
 ---
 
@@ -347,3 +347,127 @@ python -m pytest -v
    - AI agents maintain local git hygiene (test, stage, commit locally) and must never push to remote.
 5. **Decoupled Heavy Asset Vault (`external_assets/`)**:
    - High-resolution imagery, large datasets (`.csv`, `.sqlite`), and downloadable bundles are isolated in `external_assets/` and served via CDN/GitHub Raw to keep the Render container lightweight.
+
+---
+
+## 10. AI Agent Accelerator & Rapid Discovery Index
+
+> [!TIP]
+> **Use this index on every task to bypass redundant file searches, directory scans, and route guessing.**
+
+### 10.1 Master Document Locator
+| Purpose | Exact Workspace Path | Notes |
+| :--- | :--- | :--- |
+| **Master Task Roadmap** | [`docs/task_new.md`](file:///f:/Projects/coding/docs/task_new.md) | **NOT in root**. Phases 0–6 task checklist & owner directives. |
+| **AI Operational Rules** | [`AGENTS.md`](file:///f:/Projects/coding/AGENTS.md) | 15 golden rules & push restrictions. |
+| **System Technical Guide** | [`GUIDE.md`](file:///f:/Projects/coding/GUIDE.md) | Single-source-of-truth manual (current file). |
+| **Recent Changelog** | [`Changeslog.md`](file:///f:/Projects/coding/Changeslog.md) | Strictly latest 15 development entries. |
+| **Changelog Archive** | [`CHANGELOG_ARCHIVE.md`](file:///f:/Projects/coding/CHANGELOG_ARCHIVE.md) | Permanent historical archive (Entry 4 and older). |
+| **Agent Operations Manual** | [`docs/AGENT_GUIDE.md`](file:///f:/Projects/coding/docs/AGENT_GUIDE.md) | Extended agent workflow & patterns guide. |
+
+---
+
+### 10.2 Template & Route Registry
+Never guess route names or template locations:
+
+| Template Path | HTTP Route | Handler File & Function | Jinja Context Variables Passed |
+| :--- | :--- | :--- | :--- |
+| `app/templates/index.html` | `GET /` | `app/main.py:read_root()` | `settings`, `batches`, `course_profile`, `testimonials` |
+| `app/templates/about.html` | `GET /about` | `app/main.py:about_page()` | `settings`, `course_profile` |
+| `app/templates/demo.html` | `GET /demo` | `app/main.py:demo_class_page()`| `settings`, `course_profile` |
+| `app/templates/register.html` | `GET /register` | `app/main.py:register_page()` | `settings`, `batches` |
+| `app/templates/confirmation.html` | `GET /registration-success` | `app/main.py:registration_success_page()` | `settings`, `title`, `course_profile` *(Note: route is `/registration-success`, NOT `/confirmation`)* |
+| `app/templates/legal/privacy.html` | `GET /privacy` | `app/main.py:privacy_policy_page()` | `settings` |
+| `app/templates/legal/terms.html` | `GET /terms` | `app/main.py:terms_page()` | `settings` |
+| `app/templates/legal/refund_policy.html` | `GET /refund-policy` | `app/main.py:refund_policy_page()` | `settings` |
+| `app/templates/library/index.html` | `GET /library` | `app/apps/library/router.py:library_home()` | `settings`, `subjects`, `summary`, `verticals` |
+| `app/templates/library/subject_hub.html` | `GET /library/{subject}` | `app/apps/library/router.py:subject_hub()` | `settings`, `subject`, `documents`, `adjacent` |
+| `app/templates/library/reader.html` | `GET /library/{subject}/notes/{slug}` | `app/apps/library/router.py:reader()` | `settings`, `subject`, `meta`, `html_content`, `toc` |
+| `app/templates/library/datasets.html` | `GET /library/datasets` | `app/apps/library/router.py:practice_datasets()` | `settings`, `datasets`, `current_user` |
+| `app/templates/library/dataset_detail.html` | `GET /library/datasets/{slug}`| `app/apps/library/router.py:practice_dataset_detail()` | `settings`, `dataset`, `current_user` |
+| `app/templates/admin/login.html` | `GET /admin/login` | `app/apps/courses/admin_router.py:admin_login_page()` | `settings`, `error` |
+| `app/templates/admin/dashboard.html` | `GET /admin/dashboard` | `app/apps/courses/admin_router.py:admin_dashboard()` | `settings`, `leads`, `summary`, `batches`, `current_admin` |
+| `app/templates/student/login.html` | `GET /student/login` | `app/apps/courses/student_router.py:student_login_page()` | `settings`, `error`, `next` |
+| `app/templates/student/register.html` | `GET /student/register` | `app/apps/courses/student_router.py:student_register_page()` | `settings`, `error`, `next` |
+| `app/templates/student/dashboard.html` | `GET /student/dashboard` | `app/apps/courses/student_router.py:student_dashboard()` | `settings`, `current_user`, `activity_logs`, `datasets` |
+
+#### Homepage (`index.html`) Section Partials (Render Order):
+1. `partials/in_page_nav.html`: Sticky left in-page navigator rail
+2. `sections/hero.html`: Hero banner, 3D animated terminal, trust pill
+3. `sections/engine.html`: Problem vs Solution & 4-step institute model
+4. `sections/programs.html`: Dual cohort tracks (Data Analytics & Digital Marketing)
+5. `sections/methodology.html`: 5-part engineering pedagogy
+6. `sections/projects.html`: Real-world enterprise capstones
+7. `sections/admission.html`: Step-by-step admissions counseling path
+8. `sections/career.html`: 4-pillar interview readiness & proof of work
+9. `sections/syllabus.html`: Paired interactive 6-module curriculum accordion
+10. `sections/testimonials.html`: **Dormant partial** (renders 0 bytes unless authentic reviews are provided)
+11. `sections/mentor.html`: Dual-mentor showcase (anonymous DA mentor + verified DM mentor) & admissions contact desk
+12. `sections/modals.html`: Quick-apply enrollment & enquiry modal dialogs
+
+---
+
+### 10.3 Canonical Institutional Constants & Placeholders
+Always use these exact attributes and tokens; **never hardcode strings**:
+
+| Token / Attribute | Source / Config Property | Default Fallback Value | Usage Context |
+| :--- | :--- | :--- | :--- |
+| `BUSINESS_EMAIL` | `settings.BUSINESS_EMAIL` | `admissions@mythostech.in` | All public email links (`mailto:{{ settings.BUSINESS_EMAIL }}`) |
+| `BUSINESS_WHATSAPP` | `settings.BUSINESS_WHATSAPP` | `[BUSINESS_WHATSAPP]` | Formatted WhatsApp display number |
+| WhatsApp URL | `settings.whatsapp_url` | `https://wa.me/{digits}` or `#about` | Direct click-to-chat links |
+| `TRUST_CLAIM` | `settings.TRUST_CLAIM` | `400+ learners taught by our mentors over 3+ years` | Credibility metric (*NEVER use 550+*) |
+| `DM_MENTOR_NAME` | `settings.DM_MENTOR_NAME` | `[DM_MENTOR_NAME]` | Digital Marketing Mentor Name |
+| `DM_MENTOR_PHOTO` | `settings.DM_MENTOR_PHOTO` | `[DM_MENTOR_PHOTO]` | DM Mentor image path/URL |
+| `DM_MENTOR_BIO` | `settings.DM_MENTOR_BIO` | `[DM_MENTOR_BIO]` | DM Mentor background |
+| `DM_MENTOR_LINKEDIN` | `settings.DM_MENTOR_LINKEDIN` | `[DM_MENTOR_LINKEDIN]` | DM Mentor LinkedIn profile URL |
+| `DM_SCHEDULE` | `settings.DM_SCHEDULE` | `[DM_SCHEDULE]` | DM cohort days & timing |
+| DA Mentor Profile | Code / Template constant | *Mythos Data Analytics Mentor* | Anonymous DA Mentor (no photo, terminal emblem, 3+ yrs, 400+ taught, Sat & Sun 6–8 PM) |
+| `DEMO_CLASS_DATETIME`| Token | `[DEMO_CLASS_DATETIME]` | Free demo session schedule |
+
+> [!WARNING]
+> **Strictly Prohibited Legacy Strings**:
+> - Never use `"550+"` or `"550+ Students"` (replaced by `settings.TRUST_CLAIM`).
+> - Never use `"shubhamsinghh057@gmail.com"` (replaced by `settings.BUSINESS_EMAIL`).
+> - Never use `"8727864157"` (replaced by `settings.BUSINESS_WHATSAPP`).
+> - Never use `"100% placement"`, `"placement guarantee"`, or specific salary packages.
+
+---
+
+### 10.4 Subsystem Test Suite Map & Fast Verification Commands
+
+Instead of running all 66 tests during rapid iterations, run targeted sub-suites:
+
+```powershell
+# 1. Frontend & Core Routing (SEO, sitemap, meta, mentors, contact, quality gate, 550+ purge)
+python -m pytest tests/test_main.py -v
+
+# 2. Admissions, Cohorts, Leads, Auth & Admin Security
+python -m pytest tests/test_courses.py -v
+
+# 3. Knowledge Engine, 34-Tech Catalog, W3Schools Tracks & Parsing
+python -m pytest tests/test_library.py -v
+
+# 4. Student Authentication, Sessions, Datasets Vault & Activity Logs
+python -m pytest tests/test_student_auth.py -v
+
+# 5. Full Final Verification Suite (Mandatory before committing)
+python -m pytest -v
+```
+
+---
+
+### 10.5 Phase Development Protocol (Rapid Checklist)
+Follow this exact 8-step sequence for every upcoming phase:
+
+```text
+1. INGEST    ──> Read current phase in docs/task_new.md.
+2. LOCATE    ──> Lookup affected routes & templates in Section 10.2 above.
+3. BASELINE  ──> Run: git status && python -m pytest tests/test_<module>.py -v
+4. IMPLEMENT ──> Write clean code adhering to Section 10.3 placeholders.
+5. PDF CHECK ──> If syllabus/contact changed, run: python -m app.apps.courses.generate_syllabus_pdf
+6. TEST      ──> Run: python -m pytest -v (must pass with 0 failures).
+7. CHANGELOG ──> Add [Entry N] to Changeslog.md. If 16 entries exist, move oldest to CHANGELOG_ARCHIVE.md.
+8. COMMIT    ──> Update docs/task_new.md & GUIDE.md. Stage files and run:
+                 git commit -m "feat(scope): concise description" (NEVER RUN git push).
+```
+

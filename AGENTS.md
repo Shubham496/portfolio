@@ -42,8 +42,9 @@ When assigned a task, follow this exact workflow:
 
 ```
 Step 1: Ingest Context
-  ├─ Read GUIDE.md
+  ├─ Read GUIDE.md (consult Section 10: AI Agent Accelerator for instant maps)
   ├─ Read the latest entries in Changeslog.md
+  ├─ Read the current phase in docs/task_new.md (Master Task Roadmap)
   └─ Inspect relevant files in app/ and tests/
 
 Step 2: Pre-Execution Verification
