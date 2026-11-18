@@ -1,5 +1,63 @@
 {% extends "base.html" %}
 
+{% block title %}MYTHOS Online Institute — Live Weekend Cohorts in Data Analytics &amp; Digital Marketing{% endblock %}
+
+{% block meta_description %}Selective live weekend cohorts in Data Analytics (SQL, Python, Power BI, Excel, Tableau) and Digital Marketing (Performance Media &amp; SEO Growth). 400+ learners taught over 3+ years.{% endblock %}
+
+{% block canonical_url %}{{ settings.BASE_URL }}/{% endblock %}
+
+{% block schema_org %}
+<!-- Organization & Course Schema.org JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "EducationalOrganization",
+      "@id": "{{ settings.BASE_URL }}#organization",
+      "name": "MYTHOS Online Institute",
+      "url": "{{ settings.BASE_URL }}",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "{{ settings.BASE_URL }}/static/Images/mythos/mythos_icon_transparent.png"
+      },
+      "description": "Premier online institute providing structured, cohort-based live education in Data Analytics and Digital Marketing.",
+      "telephone": "+91{{ settings.OWNER_PHONE }}",
+      "email": "{{ settings.EMAIL }}"
+    },
+    {
+      "@type": "Course",
+      "@id": "{{ settings.BASE_URL }}#data-analytics-cohort",
+      "name": "Data Analytics & Business Intelligence Live Weekend Cohort",
+      "description": "Production-focused weekend live cohort covering SQL, Python, Power BI, Excel, and Tableau with enterprise datasets and viva prep.",
+      "provider": {
+        "@id": "{{ settings.BASE_URL }}#organization"
+      },
+      "courseSchedule": {
+        "@type": "Schedule",
+        "repeatFrequency": "Weekly",
+        "byDay": [
+          "https://schema.org/Saturday",
+          "https://schema.org/Sunday"
+        ],
+        "startTime": "18:00:00+05:30",
+        "endTime": "20:00:00+05:30"
+      }
+    },
+    {
+      "@type": "Course",
+      "@id": "{{ settings.BASE_URL }}#digital-marketing-cohort",
+      "name": "Digital Marketing & Performance Media Live Cohort",
+      "description": "Live growth cohort covering Performance Marketing, Paid Media, Meta Ads, Google Ads, SEO, and Attribution.",
+      "provider": {
+        "@id": "{{ settings.BASE_URL }}#organization"
+      }
+    }
+  ]
+}
+</script>
+{% endblock %}
+
 {% block content %}
     {% include "partials/in_page_nav.html" %}
     {% include "sections/hero.html" %}

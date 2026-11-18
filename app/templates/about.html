@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+
+{% block title %}About MYTHOS — Academic Faculty &amp; Mentorship Philosophy{% endblock %}
+
+{% block meta_description %}Learn about MYTHOS Online Institute, our dual-discipline academic mentorship model across Digital Marketing and Data Analytics, and our zero-fluff live training pedagogy.{% endblock %}
+
+{% block canonical_url %}{{ settings.BASE_URL }}/about{% endblock %}
+
+{% block og_title %}About MYTHOS Online Institute — Faculty &amp; Mission{% endblock %}
+{% block og_description %}Discover our weekend live mentorship model: clear discipline isolation between Performance Marketing and Data Analytics, grounded in production rigor.{% endblock %}
+
+{% block content %}
+<div class="relative min-h-screen bg-[#f8fafc] dark:bg-[#070B14] py-12">
+    <!-- Ambient Top Glow -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-blue-600/10 via-purple-600/5 to-transparent blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        
+        <!-- Breadcrumb -->
+        <nav class="flex items-center space-x-2 text-xs sm:text-sm text-slate-500 dark:text-slate-400 mb-8">
+            <a href="/" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-1">
+                <i data-lucide="home" class="w-3.5 h-3.5"></i> Home
+            </a>
+            <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+            <span class="text-slate-900 dark:text-slate-200 font-semibold">About Us</span>
+        </nav>
+
+        <!-- Page Header -->
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800/60 text-xs font-semibold text-blue-700 dark:text-blue-400 mb-4 shadow-sm">
+                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-blue-500"></i> Academic Council &amp; Faculty
+            </div>
+            <h1 class="text-3xl sm:text-5xl font-black tracking-tight text-slate-900 dark:text-white leading-tight mb-4">
+                Structured Mentorship. <span class="text-gradient-mythos">Zero Gimmicks.</span>
+            </h1>
+            <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
+                MYTHOS is a controlled tech learning system. We train working professionals and college seniors on live production workloads through focused weekend cohorts.
+            </p>
+        </div>
+
+        <!-- Institute Pillars -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+            <div class="p-6 rounded-3xl bg-white dark:bg-[#0B1120] border border-slate-200 dark:border-slate-800 shadow-sm">
+                <div class="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-950/80 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-4">
+                    <i data-lucide="layers" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-base font-bold text-slate-900 dark:text-white mb-2">One Subject at a Time</h3>
+                <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                    We reject shallow surface overviews. Our cohorts focus deeply on one subject per batch (~8 weeks) to ensure true architectural mastery before moving forward.
+                </p>
+            </div>
+
+            <div class="p-6 rounded-3xl bg-white dark:bg-[#0B1120] border border-slate-200 dark:border-slate-800 shadow-sm">
+                <div class="w-12 h-12 rounded-2xl bg-purple-50 dark:bg-purple-950/80 text-purple-600 dark:text-purple-400 flex items-center justify-center mb-4">
+                    <i data-lucide="users" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-base font-bold text-slate-900 dark:text-white mb-2">Discipline Isolation</h3>
+                <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                    Our mentors teach exclusively within their specialized domain. Performance Marketing is led by seasoned growth leaders, and Data Analytics by senior data architects.
+                </p>
+            </div>
+
+            <div class="p-6 rounded-3xl bg-white dark:bg-[#0B1120] border border-slate-200 dark:border-slate-800 shadow-sm">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-4">
+                    <i data-lucide="cpu" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-base font-bold text-slate-900 dark:text-white mb-2">Production Rigor</h3>
+                <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                    Zero simulated toys. Students work directly with real 50k+ row transaction records, live SQL query plans, and real multi-channel ROAS audits.
+                </p>
+            </div>
+        </div>
+
+        <!-- Mentors Section -->
+        <div class="mb-16">
+            <div class="text-center max-w-2xl mx-auto mb-10">
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mb-2">
+                    Our Specialized Faculty
+                </h2>
+                <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+                    400+ learners taught by our mentors over 3+ years of live cohort delivery.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Data Analytics Mentor Card -->
+                <div class="p-8 rounded-3xl bg-white dark:bg-[#0B1120] border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-500 p-0.5 shadow-md">
+                                <div class="w-full h-full rounded-2xl bg-[#0B1120] flex items-center justify-center text-cyan-400">
+                                    <i data-lucide="terminal" class="w-8 h-8"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800">
+                                    Data Analytics &amp; BI Track
+                                </span>
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-white mt-1">
+                                    Mythos Data Analytics Mentor
+                                </h3>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">Lead Python &amp; Data Architecture Faculty</p>
+                            </div>
+                        </div>
+
+                        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+                            3+ years of professional teaching and engineering experience, having trained 400+ learners in production SQL, CPython memory internals, Power BI DAX modeling, and enterprise data warehousing.
+                        </p>
+
+                        <div class="space-y-2 mb-6 text-xs text-slate-600 dark:text-slate-400">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="check" class="w-4 h-4 text-emerald-500 shrink-0"></i>
+                                <span>Covers SQL, Python, Excel, Power BI, Tableau, Git/GitHub</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="calendar" class="w-4 h-4 text-blue-500 shrink-0"></i>
+                                <span>Cohort Schedule: Saturday &amp; Sunday, 6:00 PM – 8:00 PM IST</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="/register?track=data_analytics" class="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs text-center transition-colors shadow-sm">
+                        Apply for Data Analytics Cohort
+                    </a>
+                </div>
+
+                <!-- Digital Marketing Mentor Card -->
+                <div class="p-8 rounded-3xl bg-white dark:bg-[#0B1120] border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-600 to-pink-500 p-0.5 shadow-md">
+                                <div class="w-full h-full rounded-2xl bg-[#0B1120] flex items-center justify-center text-pink-400">
+                                    <i data-lucide="trending-up" class="w-8 h-8"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-800">
+                                    Growth &amp; Marketing Track
+                                </span>
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-white mt-1">
+                                    [DM_MENTOR_NAME]
+                                </h3>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">Director of Performance Marketing &amp; SEO</p>
+                            </div>
+                        </div>
+
+                        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+                            [DM_MENTOR_BIO] Specialist in performance media buying, ROAS optimization across Meta &amp; Google Ads, data-driven organic SEO funnels, and retention marketing.
+                        </p>
+
+                        <div class="space-y-2 mb-6 text-xs text-slate-600 dark:text-slate-400">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="check" class="w-4 h-4 text-emerald-500 shrink-0"></i>
+                                <span>Covers Meta Ads Manager, Google Search/PMax, SEO &amp; Attribution</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="calendar" class="w-4 h-4 text-purple-500 shrink-0"></i>
+                                <span>Cohort Schedule: [DM_SCHEDULE]</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="/register?track=digital_marketing" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs text-center transition-colors shadow-sm">
+                        Apply for Digital Marketing Cohort
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Box -->
+        <div class="p-8 sm:p-10 rounded-3xl bg-gradient-to-r from-blue-900/40 via-purple-900/30 to-slate-900 border border-blue-500/30 shadow-lg text-center">
+            <h3 class="text-xl sm:text-2xl font-bold text-white mb-2">Want to experience our classroom first?</h3>
+            <p class="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto mb-6 leading-relaxed">
+                Attend our free 60-minute live demo session this weekend. Review our interactive curriculum and get answers from our faculty.
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="/demo" class="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-semibold text-xs sm:text-sm transition-all shadow-md">
+                    Book Free Live Demo Seat
+                </a>
+                <a href="/register" class="px-6 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs sm:text-sm transition-all border border-slate-700">
+                    Direct Cohort Application
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

@@ -155,38 +155,37 @@ Phase 6: Later Only (Optional Paywalled Bundles via External Link)
 
 ---
 
-### Phase 1: Be Findable (SEO & Quality Gate)
+### Phase 1: Be Findable (SEO & Quality Gate) (COMPLETED)
 *Ensure search engines index high-quality content while excluding drafts and private surfaces.*
 
-* [ ] **Task 1.1: Dynamic Sitemap & Search Directives**
-  * Implement dynamic `GET /sitemap.xml` listing the home page, `/about`, `/demo`, active subject hubs, and published notes with `<lastmod>` and `<changefreq>`.
-  * Implement dynamic `GET /robots.txt` disallowing `/admin/`, `/api/`, `/student/`, and pointing to `/sitemap.xml`.
-* [ ] **Task 1.2: Meta Tags, Open Graph & Canonical URLs**
-  * Add unique `<title>`, `<meta name="description">`, `<link rel="canonical">`, and Open Graph (`og:title`, `og:description`, `og:image`, `og:url`) tags to every template.
-  * Derive canonical URLs from `BASE_URL` loaded from environment (fallback: `https://mythostech.in`).
-* [ ] **Task 1.3: Google Search Console Verification Meta Tag**
-  * Support optional `GOOGLE_SITE_VERIFICATION` environment variable.
-  * Inject `<meta name="google-site-verification" content="...">` in `app/templates/base.html` when configured.
-* [ ] **Task 1.4: Schema.org JSON-LD Structured Data**
-  * Home page: `Organization` schema with name, URL, logo, and social profile links.
-  * Cohorts / Batches: `Course` schema with course name, description, provider, and schedule.
-  * Technical Notes: `TechArticle` schema on hand-written, published documentation articles only.
-* [ ] **Task 1.5: Content Quality Gate (Draft vs. Published Frontmatter)**
-  * Add `status: "published" | "draft"` frontmatter attribute to documentation metadata.
+* [x] **Task 1.1: Dynamic Sitemap & Search Directives**
+  * Implemented dynamic `GET /sitemap.xml` listing the home page, `/about`, `/demo`, `/register`, active subject hubs, datasets, and published notes with `<lastmod>` and `<changefreq>`. Excluded drafts.
+  * Implemented dynamic `GET /robots.txt` disallowing `/admin/`, `/api/`, `/student/`, and pointing to `/sitemap.xml`.
+* [x] **Task 1.2: Meta Tags, Open Graph & Canonical URLs**
+  * Added unique `<title>`, `<meta name="description">`, `<link rel="canonical">`, and Open Graph (`og:title`, `og:description`, `og:image`, `og:url`) and Twitter Cards to every template.
+  * Derived canonical URLs from `BASE_URL` loaded from environment (fallback: `https://mythostech.in`).
+* [x] **Task 1.3: Google Search Console Verification Meta Tag**
+  * Supported optional `GOOGLE_SITE_VERIFICATION` environment variable.
+  * Injected `<meta name="google-site-verification" content="...">` in `app/templates/base.html` when configured.
+* [x] **Task 1.4: Schema.org JSON-LD Structured Data**
+  * Home page: `EducationalOrganization` schema with name, URL, logo, and social profile links; `Course` schemas for cohort tracks.
+  * Technical Notes: `TechArticle` and `BreadcrumbList` schemas on hand-written, published documentation articles.
+* [x] **Task 1.5: Content Quality Gate (Draft vs. Published Frontmatter)**
+  * Added `status: "published" | "draft"` frontmatter attribute to documentation metadata.
   * Hand-authored articles are marked `published`.
   * Placeholder catalog topics synthesized from blueprints are treated as `draft`:
     * Injected with `<meta name="robots" content="noindex, nofollow">`.
     * Excluded from `sitemap.xml`.
     * Displayed in topic sidebars with a clean "Coming Soon" badge with no filler body.
   * Resource counters across the library display only published articles.
-* [ ] **Task 1.6: Web Performance & Static Asset Caching**
-  * Configure HTTP cache-control headers on static assets (`max-age=31536000, immutable` for versioned CSS/JS/images).
-  * Enable GZip middleware on FastAPI application.
-  * Add `loading="lazy"` on all images.
-  * Verify `GET /health` responds in <20ms for external uptime pingers.
-* [ ] **Task 1.7: Breadcrumb & Contextual Funnel Integration**
-  * Include structured breadcrumb navigation on all library subpages.
-  * Mount contextual free demo-class CTA card on every note and study track page.
+* [x] **Task 1.6: Web Performance & Static Asset Caching**
+  * Configured HTTP cache-control headers on static assets (`max-age=31536000, immutable`).
+  * Enabled `GZipMiddleware` on FastAPI application.
+  * Added `loading="lazy"` on all template images.
+  * Verified `GET /health` responds in <20ms for external uptime pingers.
+* [x] **Task 1.7: Breadcrumb & Contextual Funnel Integration**
+  * Included structured breadcrumb navigation on all library subpages.
+  * Mounted contextual free demo-class CTA card on note and study track pages.
 
 ---
 

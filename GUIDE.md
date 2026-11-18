@@ -145,11 +145,11 @@ coding/
 ├── external_assets/                    # [DECOUPLED VAULT] Git-ignored submodule (mythos-assets)
 │                                       # Houses datasets, downloads, and large images via CDN
 │
-└── tests/                              # Automated test suite (46 tests passing cleanly)
-    ├── test_courses.py                 # Admissions, registrations, auth, CSV export, PDF (13 tests)
+└── tests/                              # Automated test suite (61 tests passing cleanly)
+    ├── test_courses.py                 # Admissions, registrations, auth, CSV export, PDF, security (18 tests)
     ├── test_library.py                 # W3Schools panels, sequential nav, reader, catalog (17 tests)
     ├── test_student_auth.py            # Student auth, session cookies, activity logging, datasets (14 tests)
-    └── test_main.py                    # Root health check and homepage integration (2 tests)
+    └── test_main.py                    # Health, SEO, sitemap, robots, Open Graph, schema, quality gate (12 tests)
 ```
 
 ---
@@ -181,6 +181,10 @@ Navigation features a top inter-page bar (`navbar.html`) and a left in-page dock
 | `GET` | `/privacy` | HTML (`legal/privacy.html`) | Data protection, WhatsApp outreach terms, and zero data-selling policy. |
 | `GET` | `/terms` | HTML (`legal/terms.html`) | Academic guidelines, static code execution invariant, and IP protections. |
 | `GET` | `/refund-policy` | HTML (`legal/refund_policy.html`) | Free demo guarantee, cohort rescheduling, and refund terms. |
+| `GET` | `/about` | HTML (`about.html`) | Institute history, dual-mentor separation, and academic standards. |
+| `GET` | `/demo` | HTML (`demo.html`) | Free 60-minute live weekend demo class reservation page. |
+| `GET` | `/sitemap.xml` | XML (`application/xml`) | Dynamic sitemap listing active pages, hubs, datasets, and published notes. |
+| `GET` | `/robots.txt` | PlainText (`text/plain`) | Crawl directives disallowing `/admin/`, `/api/`, `/student/`, pointing to sitemap. |
 | `GET` | `/course/syllabus/download` | File (`Data_Analysis_Syllabus.pdf`) | Direct attachment download of syllabus brochure. |
 | `GET` | `/course/syllabus` | File (Inline PDF) | Inline browser preview of syllabus brochure. |
 | `GET` | `/resume` | File (Inline PDF) | Serves the instructor's technical resume PDF. |
@@ -275,6 +279,8 @@ Auto-loaded via `python-dotenv` from `.env` in [`app/core/config.py`](file:///f:
 | `ENVIRONMENT` | Yes | `development` | Toggles between `LocalSettings` and `DeploymentSettings`. |
 | `PORT` | Auto | `8000` (dev) / `10000` (cloud)| Injected by cloud host; bound dynamically by Uvicorn. |
 | `DATABASE_URL` | Cloud Prod | `""` (falls back to SQLite)| External PostgreSQL connection URI (Neon / Supabase / Render Postgres). |
+| `BASE_URL` | No | `https://mythostech.in` | Canonical base domain used for sitemap.xml, canonical URLs, and schema metadata. |
+| `GOOGLE_SITE_VERIFICATION` | Optional | `""` | Google Search Console site verification HTML tag content. |
 | `PYTHON_VERSION`| Cloud Prod | `3.10.11` | Runtime version specified for Render build environments. |
 
 ---
@@ -306,7 +312,7 @@ uvicorn app.main:app --reload --port 8000
 ```powershell
 python -m pytest -v
 ```
-**Verification Requirement**: All **32 automated tests** must pass with zero failures.
+**Verification Requirement**: All **61 automated tests** must pass with zero failures.
 
 ---
 

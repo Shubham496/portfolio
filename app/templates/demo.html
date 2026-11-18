@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block title %}Book Free Live Demo Class | MYTHOS Online Institute{% endblock %}
+
+{% block meta_description %}Register for our upcoming 60-minute free live demo class in Data Analytics or Digital Marketing. Experience our production-grade live cohort teaching style.{% endblock %}
+
+{% block canonical_url %}{{ settings.BASE_URL }}/demo{% endblock %}
+
+{% block og_title %}Free Live Weekend Demo Class — MYTHOS Online Institute{% endblock %}
+{% block og_description %}Experience live cohort mentorship before enrolling. 60-minute interactive session covering real production workloads. Only Full Name &amp; WhatsApp required.{% endblock %}
+
+{% block content %}
+<div class="relative min-h-screen bg-[#f8fafc] dark:bg-[#070B14] py-12">
+    <!-- Ambient Top Glow -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-blue-600/10 via-purple-600/5 to-transparent blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        
+        <!-- Breadcrumb -->
+        <nav class="flex items-center space-x-2 text-xs sm:text-sm text-slate-500 dark:text-slate-400 mb-8">
+            <a href="/" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-1">
+                <i data-lucide="home" class="w-3.5 h-3.5"></i> Home
+            </a>
+            <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+            <span class="text-slate-900 dark:text-slate-200 font-semibold">Free Demo Class</span>
+        </nav>
+
+        <!-- Header -->
+        <div class="text-center max-w-2xl mx-auto mb-12">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800/60 text-xs font-semibold text-emerald-700 dark:text-emerald-400 mb-4 shadow-sm">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                Next Session: [DEMO_CLASS_DATETIME]
+            </div>
+            <h1 class="text-3xl sm:text-5xl font-black tracking-tight text-slate-900 dark:text-white leading-tight mb-4">
+                Experience Our <span class="text-gradient-mythos">Live Classroom</span>
+            </h1>
+            <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-xl mx-auto leading-relaxed">
+                Join a 60-minute interactive live workshop with our mentors. See how we dissect query engines and analyze growth funnels in production.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+            
+            <!-- Highlights Side (5 cols) -->
+            <div class="md:col-span-5 space-y-6">
+                <div class="p-6 rounded-3xl bg-white dark:bg-[#0B1120] border border-slate-200 dark:border-slate-800 shadow-sm">
+                    <h3 class="text-base font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                        <i data-lucide="check-circle" class="w-5 h-5 text-emerald-500"></i> What You Experience
+                    </h3>
+                    <ul class="space-y-3 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+                        <li class="flex items-start gap-2.5">
+                            <i data-lucide="terminal" class="w-4 h-4 text-blue-500 shrink-0 mt-0.5"></i>
+                            <span>Live execution walkthroughs on enterprise datasets.</span>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <i data-lucide="help-circle" class="w-4 h-4 text-purple-500 shrink-0 mt-0.5"></i>
+                            <span>Real mock oral viva questions and interviewer traps.</span>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <i data-lucide="message-square" class="w-4 h-4 text-cyan-500 shrink-0 mt-0.5"></i>
+                            <span>Direct Q&amp;A on batch schedules, curriculum depth, and projects.</span>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <i data-lucide="shield-check" class="w-4 h-4 text-emerald-500 shrink-0 mt-0.5"></i>
+                            <span>Zero pressure, zero upfront fee traps. 100% free access.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="p-5 rounded-2xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 text-xs text-blue-800 dark:text-blue-300 leading-relaxed">
+                    <p class="font-semibold mb-1">Privacy Guarantee:</p>
+                    <p>We respect your privacy. Email is strictly optional. We only use your WhatsApp/Phone to deliver the meeting link and class reminder.</p>
+                </div>
+            </div>
+
+            <!-- Demo Registration Form (7 cols) -->
+            <div class="md:col-span-7 bg-white dark:bg-[#0B1120] border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-sm">
+                <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Reserve Your Free Demo Seat</h2>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mb-6">Takes less than 30 seconds. Meeting link will be sent via WhatsApp.</p>
+
+                <form id="demo-form" action="/api/courses/enquiry" method="POST" class="space-y-4">
+                    <input type="hidden" name="enquiry_type" value="demo_class">
+                    <input type="hidden" name="source" value="demo_landing_page">
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                            Full Name <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" name="full_name" required placeholder="e.g. Rahul Sharma"
+                               class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                            WhatsApp / Phone Number <span class="text-red-500">*</span>
+                        </label>
+                        <input type="tel" name="phone" required placeholder="10-digit mobile number"
+                               class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                            Email Address <span class="text-slate-400 font-normal">(Optional)</span>
+                        </label>
+                        <input type="email" name="email" placeholder="rahul@example.com (optional)"
+                               class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                            Preferred Track / Subject <span class="text-red-500">*</span>
+                        </label>
+                        <select name="course_interest" required
+                                class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            <option value="Data Analytics & BI Track (SQL, Python, Power BI)">Data Analytics &amp; BI Track (SQL, Python, Power BI)</option>
+                            <option value="Digital Marketing Track (Performance & SEO)">Digital Marketing Track (Performance &amp; SEO)</option>
+                        </select>
+                    </div>
+
+                    <!-- Mandatory Consent Checkbox -->
+                    <div class="pt-2">
+                        <label class="flex items-start gap-2.5 cursor-pointer">
+                            <input type="checkbox" name="consent" required checked
+                                   class="mt-0.5 rounded border-slate-300 dark:border-slate-700 text-blue-600 focus:ring-blue-500">
+                            <span class="text-[11px] text-slate-600 dark:text-slate-400 leading-tight">
+                                I agree to be contacted by phone or WhatsApp about this course and demo session.
+                            </span>
+                        </label>
+                    </div>
+
+                    <button type="submit"
+                            class="w-full mt-4 py-3 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-bold text-xs sm:text-sm transition-all shadow-md flex items-center justify-center gap-2">
+                        <i data-lucide="calendar" class="w-4 h-4"></i> Confirm Free Demo Reservation
+                    </button>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}

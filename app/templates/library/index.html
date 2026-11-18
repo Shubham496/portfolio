@@ -1,6 +1,36 @@
 {% extends "base.html" %}
 
-{% block title %}Resource Library & Knowledge Hub | MYTHOS Online Institute{% endblock %}
+{% block title %}Resource Library &amp; Knowledge Engine — 34 Technologies | MYTHOS{% endblock %}
+
+{% block meta_description %}Explore university-rigorous documentation, sequential W3Schools-style study tracks, and viva interview question banks across 34 programming languages, databases, and tools.{% endblock %}
+
+{% block canonical_url %}{{ settings.BASE_URL }}/library{% endblock %}
+
+{% block og_title %}Technology Resource Library &amp; Knowledge Hub | MYTHOS{% endblock %}
+{% block og_description %}Deep-dive technical notes, interactive sequential curricula, and viva prep covering SQL, Python, Power BI, PostgreSQL, and 30+ engineering tools.{% endblock %}
+
+{% block schema_org %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "{{ settings.BASE_URL }}/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Resource Library",
+      "item": "{{ settings.BASE_URL }}/library"
+    }
+  ]
+}
+</script>
+{% endblock %}
 
 {% block content %}
 <div class="relative min-h-screen bg-[#f8fafc] dark:bg-[#070B14]">
@@ -96,7 +126,7 @@
                         {{ item.short_title }}
                     </h3>
                     <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-                        {{ item.total_resources }} Topics
+                        {{ item.total_resources }} Published {{ 'Note' if item.total_resources == 1 else 'Notes' }}
                     </p>
                 </div>
             </a>

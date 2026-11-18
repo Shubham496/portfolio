@@ -748,9 +748,14 @@ class DocumentMetadata:
     reading_time: str = "5 min read"
     description: str = ""
     tags: List[str] = field(default_factory=list)
+    status: str = "draft"
     last_updated: str = ""
     file_path: Optional[str] = None
     mtime: float = 0.0
+
+    @property
+    def is_published(self) -> bool:
+        return self.status == "published"
 
     @property
     def is_free(self) -> bool:
@@ -792,6 +797,8 @@ class DocumentMetadata:
             "reading_time": self.reading_time,
             "description": self.description,
             "tags": self.tags,
+            "status": self.status,
+            "is_published": self.is_published,
             "last_updated": self.last_updated,
             "is_free": self.is_free,
         }
@@ -884,6 +891,7 @@ def parse_markdown_file(file_path: Path) -> ParsedDocument:
     tags = meta.get("tags") or []
     if isinstance(tags, str):
         tags = [t.strip() for t in tags.split(",") if t.strip()]
+    status = meta.get("status", "published")
     last_updated = meta.get("last_updated", "")
 
     raw_body = post.content
@@ -907,6 +915,7 @@ def parse_markdown_file(file_path: Path) -> ParsedDocument:
         reading_time=reading_time,
         description=description,
         tags=tags,
+        status=status,
         last_updated=str(last_updated),
         file_path=str(file_path),
         mtime=file_path.stat().st_mtime,
@@ -2297,62 +2306,18 @@ def _generate_topic_outline_document(subject: str, slug: str, topic_meta: Dict[s
         body = specialized_body
     else:
         body = f"""
-## 1. Academic Definition & Objectives
-
-This module explores **{title}** within the **{subject_info.get('title', subject.upper())}** engineering curriculum.
-
-In computer science examinations and senior technical interviews, mastering this topic requires understanding:
-* The formal architectural definition and memory/resource implications.
-* Standard syntax patterns and edge cases.
-* Key algorithmic trade-offs (Time vs. Space complexity).
+## Curriculum Module Under Peer Review
 
 > [!NOTE]
-> **Curriculum Status**: This topic is an active part of the MYTHOS {subject_info.get('short_title', subject.upper())} curriculum. Full deep-dive lab files and code demonstrations are continuously reviewed by our academic council.
+> **Status: Coming Soon**
+> This topic is an active part of the MYTHOS {subject_info.get('short_title', subject.upper())} curriculum. Full deep-dive technical notes, verified syntax patterns, and viva trap banks are currently being authored and peer-reviewed by our academic council.
 
----
+### Planned Competency Coverage for {title}
+* Theoretical specifications and memory/resource architecture
+* Idiomatic production implementation and anti-pattern analysis
+* Senior oral viva examination edge cases and practical traps
 
-## 2. Core Concepts & Implementation Blueprint
-
-```text
-{subject.upper()} ARCHITECTURE PIPELINE:
-[ High-Level Code / Query ] ──► [ Lexer & Parser ] ──► [ Execution Engine ] ──► [ Memory & System ]
-```
-
-### Essential Competencies
-1. **Fundamental Operations**: Syntax, declaration, and state lifecycle.
-2. **Resource Management**: How the runtime allocates memory, handles scope, and cleans up references.
-3. **Common Patterns**: Idiomatic industry practices vs. deprecated legacy methods.
-
----
-
-## 3. The Production Reality ("What Textbooks Skip")
-
-Most college textbooks and introductory tutorials focus only on basic syntax in isolation. In production systems:
-
-* **Concurrency & Load**: How this component behaves under concurrent read/write pressure.
-* **Failure Modes**: Memory leaks, unindexed table scans, blocking I/O, or connection starvation.
-* **Monitoring & Observability**: How senior engineers profile, log, and diagnose bottlenecks in production.
-
-> [!WARNING]
-> **Production Gotcha**: Never assume default configuration parameters in production. Default pool sizes, timeout limits, and memory limits are engineered for local toys, not enterprise scale.
-
----
-
-## 4. Exam & Technical Interview Gotchas
-
-When examiners or technical interviewers test candidates on **{title}**, they focus on these trap areas:
-
-1. **Edge Case Handling**: How the system evaluates boundary conditions (null values, empty collections, zero division).
-2. **Complexity Bounds**: What is the worst-case vs. average-case runtime complexity?
-3. **Failure Recovery**: What happens when an unhandled exception or crash occurs during execution?
-
----
-
-## 5. Mythos Mentorship Bridge
-
-Reading theory helps you pass written exams; executing controlled live builds with senior mentors prepares you for high-paying engineering roles.
-
-Ready to build production-grade systems live? **[Apply for our selective Weekend Mentorship Cohort](/register?source=library_{subject}_{slug})**.
+Experience our interactive live curriculum: **[Apply for Weekend Cohort](/register?source=library_{subject}_{slug})** or **[Join Free Live Demo Class](/demo)**.
 """
 
     preprocessed_body = _preprocess_github_alerts(body)
@@ -2371,9 +2336,10 @@ Ready to build production-grade systems live? **[Apply for our selective Weekend
         tier="free",
         price_inr=0,
         reading_time=reading_time,
-        description=f"Master {title}: Exam definitions, implementation architecture, production reality, and interview gotchas.",
+        description=f"Master {title}: Curriculum specifications, production patterns, and interview edge cases.",
         tags=[subject_info.get("short_title", subject), category, "Study Guide"],
-        last_updated="Active Curriculum",
+        status="draft",
+        last_updated="Coming Soon",
         file_path=None,
         mtime=0.0,
     )
@@ -2436,12 +2402,13 @@ def get_document(subject: str, slug: str) -> Optional[ParsedDocument]:
 
 
 def list_documents_for_subject(
-    subject: str, vertical: Optional[str] = None
+    subject: str, vertical: Optional[str] = None, published_only: bool = False
 ) -> List[DocumentMetadata]:
     """
     Lists all documents for a given subject. Combines:
     1. Authored markdown files from disk (`app/content/{subject}/*.md`).
     2. Curated topics defined in SUBJECTS[subject]["topics"].
+    If published_only is True, filters to only documents with status == 'published'.
     """
     subject_lower = subject.lower().strip()
     if subject_lower not in SUBJECTS:
@@ -2472,6 +2439,7 @@ def list_documents_for_subject(
                 if isinstance(tags, str):
                     tags = [t.strip() for t in tags.split(",") if t.strip()]
 
+                status = meta.get("status", "published")
                 words = len(post.content.split())
                 reading_time = meta.get("reading_time") or _calculate_reading_time(words)
                 description = meta.get("description", "")
@@ -2488,6 +2456,7 @@ def list_documents_for_subject(
                     reading_time=reading_time,
                     description=description,
                     tags=tags,
+                    status=status,
                     last_updated=str(meta.get("last_updated", "")),
                     file_path=str(file_path),
                     mtime=file_path.stat().st_mtime,
@@ -2519,6 +2488,7 @@ def list_documents_for_subject(
             reading_time=t.get("reading_time", "8 min read"),
             description=f"Structured topic study guide for {t.get('title')}.",
             tags=[subject_info.get("short_title", subject_lower), t.get("category", "Curriculum")],
+            status=t.get("status", "draft"),
             last_updated="Curated",
             file_path=None,
             mtime=0.0,
@@ -2528,6 +2498,8 @@ def list_documents_for_subject(
 
     # Sort by curriculum sequence order, then by title
     docs.sort(key=lambda d: (d.order, d.title))
+    if published_only:
+        docs = [d for d in docs if d.is_published]
     return docs
 
 
@@ -2713,21 +2685,24 @@ def get_subject_videos(subject: str) -> List[Dict[str, Any]]:
 
 
 def get_subject_summary(subject: str) -> Optional[Dict[str, Any]]:
-    """Returns subject details and vertical resource counts."""
+    """Returns subject details and vertical resource counts for published resources."""
     subject_lower = subject.lower().strip()
     info = SUBJECTS.get(subject_lower)
     if not info:
         return None
 
     docs = list_documents_for_subject(subject_lower)
+    published_docs = [d for d in docs if d.is_published]
     vertical_counts: Dict[str, int] = {v: 0 for v in VERTICALS}
-    for doc in docs:
+    for doc in published_docs:
         if doc.vertical in vertical_counts:
             vertical_counts[doc.vertical] += 1
 
     return {
         **info,
-        "total_resources": len(docs),
+        "total_resources": len(published_docs),
+        "total_topics": len(docs),
+        "published_resources": len(published_docs),
         "counts": vertical_counts,
         "documents": docs,
     }

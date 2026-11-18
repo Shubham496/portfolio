@@ -10,6 +10,8 @@ class BaseConfig(BaseSettings):
     SECRET_KEY: str = os.getenv("SECRET_KEY", "")
 
     # Platform Information & Contact
+    BASE_URL: str = os.getenv("BASE_URL", "https://mythostech.in").rstrip("/")
+    GOOGLE_SITE_VERIFICATION: str = os.getenv("GOOGLE_SITE_VERIFICATION", "")
     OWNER_NAME: str = "Mythos Academic Council"
     OWNER_TITLE: str = "Faculty of Digital Marketing & Data Analytics"
     OWNER_BIO: str = (

@@ -10,6 +10,7 @@ price_inr: 0
 reading_time: "8 min read"
 description: "Master SQL non-equi joins, planner hash vs merge join algorithms, and the dangerous NULL join trap that breaks analytics pipelines."
 tags: ["SQL", "Relational Databases", "Query Optimization", "Interviews"]
+status: "published"
 last_updated: "2026-11-18"
 ---
 

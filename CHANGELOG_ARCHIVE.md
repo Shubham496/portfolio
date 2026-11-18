@@ -27,6 +27,14 @@ Entries are organized chronologically by **Year** and **Month**, preserving orig
   - **Bugs Fixed**: Fixed security loophole allowing public account creation on admin routes.
   - **Breaking Changes**: None.
 
+- **Commit 05e052c (2026-11-11) [Archived from Changeslog.md Entry 3]**:
+  - **Feature**: Implemented SQL-level pagination in `get_leads_paginated()` with configurable `per_page` (10, 25, 50); restructured leads table into 7 distinct columns (Type, Submitted Date, Student, Contact, Message, Status, Admin Notes & Action); integrated `python-dotenv` for auto-loading `.env` variables (`ADMIN_PASSWORD`, `SECRET_KEY`, `DATABASE_URL`); purged 17 obsolete standalone attendance analysis scripts.
+  - **Files**: `app/apps/courses/services.py`, `app/apps/courses/models.py`, `app/templates/admin/dashboard.html`, `app/core/config.py`, `requirements.txt`, `tests/test_courses.py`.
+  - **API Changes**: Added query parameters (`page`, `per_page`, `lead_type`, `status`, `search`) to `/admin/dashboard`.
+  - **Database Changes**: Added `created_date` and `created_time` IST formatting attributes to `StudentLead.to_dict()`.
+  - **Bugs Fixed**: Resolved critical test bug where test runner overwrote production admin password hash when run without environment variables.
+  - **Breaking Changes**: None.
+
 - **Commit 4347a5e (2026-11-11)**:
   - **Feature**: Hardened admin authentication integration test to be strictly idempotent across test runner environments.
   - **Files**: `tests/test_courses.py`.

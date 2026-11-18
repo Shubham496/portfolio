@@ -1,7 +1,8 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse, FileResponse
+from fastapi.responses import HTMLResponse, FileResponse, PlainTextResponse
+from fastapi.middleware.gzip import GZipMiddleware
 from app.core.config import settings
 from app.apps.todos.router import router as todos_router
 from app.apps.courses.router import router as courses_router
@@ -10,7 +11,9 @@ from app.apps.courses.student_router import router as student_router
 from app.apps.library.router import router as library_router
 from app.apps.courses.services import get_instructor_curriculum_profile, generate_syllabus_html_brochure, list_batches
 from app.apps.courses.database import SessionLocal
+from app.apps.library.services import SUBJECTS, list_documents_for_subject, list_practice_datasets
 import os
+import datetime
 
 # Initialize application
 app = FastAPI(
@@ -21,6 +24,9 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
+# Enable GZip middleware for optimal static and dynamic compression
+app.add_middleware(GZipMiddleware, minimum_size=1000)
+
 # Register Sub-Apps / Mini-Apps
 app.include_router(todos_router)
 app.include_router(courses_router)
@@ -28,8 +34,18 @@ app.include_router(admin_router)
 app.include_router(student_router)
 app.include_router(library_router)
 
-# Mount static files
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
+
+class CachedStaticFiles(StaticFiles):
+    """Static file handler adding 1-year aggressive cache-control headers."""
+    async def get_response(self, path: str, scope):
+        response = await super().get_response(path, scope)
+        if response.status_code == 200:
+            response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
+        return response
+
+
+# Mount static files with cache headers
+app.mount("/static", CachedStaticFiles(directory="app/static"), name="static")
 
 # Templates
 templates = Jinja2Templates(directory="app/templates")
@@ -258,6 +274,109 @@ async def refund_policy_page(request: Request):
             "title": "Refund & Rescheduling Policy",
         }
     )
+
+@app.get("/about", response_class=HTMLResponse)
+async def about_page(request: Request):
+    """Dedicated About page detailing institute history, faculty separation, and academic standards."""
+    return templates.TemplateResponse(
+        request=request,
+        name="about.html",
+        context={
+            "settings": settings,
+            "title": "About MYTHOS Online Institute — Faculty, Mission & Architecture",
+        }
+    )
+
+@app.get("/demo", response_class=HTMLResponse)
+async def demo_page(request: Request):
+    """Dedicated Free Live Demo Class reservation page."""
+    with SessionLocal() as db:
+        active_batches = list_batches(db)
+    return templates.TemplateResponse(
+        request=request,
+        name="demo.html",
+        context={
+            "settings": settings,
+            "title": "Free Live Weekend Demo Class | MYTHOS",
+            "batches": active_batches,
+        }
+    )
+
+@app.get("/sitemap.xml", response_class=Response)
+async def sitemap_xml():
+    """Dynamic XML sitemap listing home, /about, /demo, active subject hubs, and published notes."""
+    base_url = settings.BASE_URL.rstrip("/")
+    today = datetime.date.today().isoformat()
+
+    urls = [
+        {"loc": f"{base_url}/", "changefreq": "daily", "priority": "1.0", "lastmod": today},
+        {"loc": f"{base_url}/about", "changefreq": "monthly", "priority": "0.8", "lastmod": today},
+        {"loc": f"{base_url}/demo", "changefreq": "weekly", "priority": "0.9", "lastmod": today},
+        {"loc": f"{base_url}/register", "changefreq": "weekly", "priority": "0.9", "lastmod": today},
+        {"loc": f"{base_url}/library", "changefreq": "daily", "priority": "0.9", "lastmod": today},
+        {"loc": f"{base_url}/library/datasets", "changefreq": "weekly", "priority": "0.8", "lastmod": today},
+        {"loc": f"{base_url}/privacy", "changefreq": "yearly", "priority": "0.3", "lastmod": today},
+        {"loc": f"{base_url}/terms", "changefreq": "yearly", "priority": "0.3", "lastmod": today},
+        {"loc": f"{base_url}/refund-policy", "changefreq": "yearly", "priority": "0.3", "lastmod": today},
+    ]
+
+    # Practice datasets
+    for ds in list_practice_datasets():
+        urls.append({
+            "loc": f"{base_url}/library/datasets/{ds['slug']}",
+            "changefreq": "monthly",
+            "priority": "0.7",
+            "lastmod": today,
+        })
+
+    # Active subject hubs
+    for subj_slug in SUBJECTS:
+        urls.append({
+            "loc": f"{base_url}/library/{subj_slug}",
+            "changefreq": "weekly",
+            "priority": "0.8",
+            "lastmod": today,
+        })
+
+        # Published technical notes only (drafts are excluded)
+        published_docs = list_documents_for_subject(subj_slug, published_only=True)
+        for doc in published_docs:
+            lastmod = doc.last_updated if (doc.last_updated and len(doc.last_updated) == 10 and doc.last_updated[4] == '-') else today
+            urls.append({
+                "loc": f"{base_url}/library/{subj_slug}/notes/{doc.slug}",
+                "changefreq": "monthly",
+                "priority": "0.7",
+                "lastmod": lastmod,
+            })
+
+    xml_lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ]
+    for u in urls:
+        xml_lines.append("  <url>")
+        xml_lines.append(f"    <loc>{u['loc']}</loc>")
+        xml_lines.append(f"    <lastmod>{u['lastmod']}</lastmod>")
+        xml_lines.append(f"    <changefreq>{u['changefreq']}</changefreq>")
+        xml_lines.append(f"    <priority>{u['priority']}</priority>")
+        xml_lines.append("  </url>")
+    xml_lines.append("</urlset>")
+
+    xml_content = "\n".join(xml_lines)
+    return Response(content=xml_content, media_type="application/xml")
+
+@app.get("/robots.txt", response_class=PlainTextResponse)
+async def robots_txt():
+    """Robots.txt disallowing private administrative and API routes and directing to sitemap.xml."""
+    base_url = settings.BASE_URL.rstrip("/")
+    content = f"""User-agent: *
+Disallow: /admin/
+Disallow: /api/
+Disallow: /student/
+
+Sitemap: {base_url}/sitemap.xml
+"""
+    return PlainTextResponse(content=content)
 
 @app.get("/course/syllabus/download", response_class=FileResponse)
 async def download_full_course_syllabus():

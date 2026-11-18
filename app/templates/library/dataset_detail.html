@@ -1,6 +1,62 @@
 {% extends "base.html" %}
 
-{% block title %}{{ dataset.title }} — Data Dictionary & Sample Preview | MYTHOS{% endblock %}
+{% block title %}{{ dataset.title }} — Data Dictionary &amp; Preview | MYTHOS{% endblock %}
+
+{% block meta_description %}{{ dataset.description[:160] }}{% endblock %}
+
+{% block canonical_url %}{{ settings.BASE_URL }}/library/datasets/{{ dataset.slug }}{% endblock %}
+
+{% block og_title %}{{ dataset.title }} — Practice Dataset | MYTHOS{% endblock %}
+{% block og_description %}{{ dataset.description }}{% endblock %}
+
+{% block schema_org %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "{{ settings.BASE_URL }}/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Resource Library",
+      "item": "{{ settings.BASE_URL }}/library"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Practice Datasets Vault",
+      "item": "{{ settings.BASE_URL }}/library/datasets"
+    },
+    {
+      "@type": "ListItem",
+      "position": 4,
+      "name": "{{ dataset.short_title }}",
+      "item": "{{ settings.BASE_URL }}/library/datasets/{{ dataset.slug }}"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": "{{ dataset.title }}",
+  "description": "{{ dataset.description }}",
+  "url": "{{ settings.BASE_URL }}/library/datasets/{{ dataset.slug }}",
+  "isAccessibleForFree": true,
+  "creator": {
+    "@type": "Organization",
+    "name": "MYTHOS Online Institute"
+  }
+}
+</script>
+{% endblock %}
 
 {% block content %}
 <div class="relative min-h-screen bg-[#f8fafc] dark:bg-[#070B14] py-10">

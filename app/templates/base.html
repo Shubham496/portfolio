@@ -3,11 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}MYTHOS — Build Skills. Build Systems. Build The Future. | Data Analysis Mentorship{% endblock %}</title>
+    <title>{% block title %}MYTHOS — Build Skills. Build Systems. Build The Future. | Weekend Live Cohorts{% endblock %}</title>
     
     <!-- Meta SEO -->
-    <meta name="description" content="Mythos is a controlled tech learning system. Weekend mentorship in Python, SQL, Power BI, Excel, and Tableau led by Shubham Singh.">
-    <meta name="author" content="Mythos &amp; {{ settings.OWNER_NAME }}">
+    <meta name="description" content="{% block meta_description %}MYTHOS Online Institute delivers live weekend cohort mentorship in Data Analytics and Digital Marketing with production-grade curriculum and oral viva interview preparation.{% endblock %}">
+    <meta name="author" content="MYTHOS Online Institute">
+    {% block meta_robots %}{% endblock %}
+
+    {% if settings.GOOGLE_SITE_VERIFICATION %}
+    <!-- Google Search Console Verification -->
+    <meta name="google-site-verification" content="{{ settings.GOOGLE_SITE_VERIFICATION }}">
+    {% endif %}
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{% block canonical_url %}{{ settings.BASE_URL }}{{ request.url.path if request else '' }}{% endblock %}">
+
+    <!-- Open Graph / Social Cards -->
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:site_name" content="MYTHOS Online Institute">
+    <meta property="og:title" content="{% block og_title %}{{ self.title() }}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{{ self.meta_description() }}{% endblock %}">
+    <meta property="og:url" content="{% block og_url %}{{ self.canonical_url() }}{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{{ settings.BASE_URL }}/static/Images/mythos/mythos_icon_transparent.png{% endblock %}">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ self.og_title() }}">
+    <meta name="twitter:description" content="{{ self.og_description() }}">
+    <meta name="twitter:image" content="{{ self.og_image() }}">
+
+    {% block schema_org %}{% endblock %}
     
     <!-- Favicon using Mythos Icon -->
     <link rel="icon" type="image/png" href="/static/Images/mythos/mythos_icon_transparent.png">

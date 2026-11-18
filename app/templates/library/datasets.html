@@ -1,6 +1,42 @@
 {% extends "base.html" %}
 
-{% block title %}Practice Datasets Vault | MYTHOS Online Institute{% endblock %}
+{% block title %}Practice Datasets Vault — Clean Real-World Data | MYTHOS{% endblock %}
+
+{% block meta_description %}Explore and download clean, production-grade practice datasets for SQL queries, Power BI dashboards, and data analysis portfolios. Free instant student download.{% endblock %}
+
+{% block canonical_url %}{{ settings.BASE_URL }}/library/datasets{% endblock %}
+
+{% block og_title %}Real-World Practice Datasets Vault | MYTHOS Online Institute{% endblock %}
+{% block og_description %}Clean CSV datasets with data dictionaries and schemas for SQL, Power BI, and Python analysis. 50k+ row transaction records.{% endblock %}
+
+{% block schema_org %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "{{ settings.BASE_URL }}/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Resource Library",
+      "item": "{{ settings.BASE_URL }}/library"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Practice Datasets Vault",
+      "item": "{{ settings.BASE_URL }}/library/datasets"
+    }
+  ]
+}
+</script>
+{% endblock %}
 
 {% block content %}
 <div class="relative min-h-screen bg-[#f8fafc] dark:bg-[#070B14] py-10">
