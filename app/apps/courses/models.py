@@ -6,6 +6,7 @@ from sqlalchemy import (
     Text,
     Boolean,
     DateTime,
+    Date,
     ForeignKey,
     func
 )
@@ -98,8 +99,13 @@ class StudentLead(Base):
     subject_interest = Column(String(100), nullable=True, index=True)  # e.g., "SQL", "Power BI", "Excel", etc.
     message = Column(Text, nullable=True)  # Student questions, notes, or expectations
     
+    # Attribution & Funnel Tracking
+    source_utm = Column(String(255), nullable=True, index=True)
+    referrer_url = Column(String(255), nullable=True)
+    follow_up_date = Column(Date, nullable=True)
+
     # Lead / Admission Pipeline Tracking
-    status = Column(String(30), nullable=False, default="new", index=True)  # new, contacted, enrolled, closed, do_not_contact
+    status = Column(String(30), nullable=False, default="new", index=True)  # new, contacted, demo_attended, enrolled, closed, do_not_contact
     admin_notes = Column(Text, nullable=True)
     source_ip = Column(String(50), nullable=True)
 
@@ -127,6 +133,9 @@ class StudentLead(Base):
             "preferred_schedule": self.preferred_schedule,
             "subject_interest": self.subject_interest,
             "message": self.message,
+            "source_utm": self.source_utm,
+            "referrer_url": self.referrer_url,
+            "follow_up_date": self.follow_up_date.isoformat() if self.follow_up_date else None,
             "status": self.status,
             "admin_notes": self.admin_notes,
             "consent_given": self.consent_given,

@@ -36,6 +36,16 @@ class EnquiryCreate(BaseModel):
         default=True,
         description="Consent to be contacted by phone or WhatsApp about this course"
     )
+    website_url_hp: Optional[str] = Field(default=None, description="Anti-spam honeypot field")
+    source_utm: Optional[str] = Field(default=None, description="Attribution UTM string")
+    referrer_url: Optional[str] = Field(default=None, description="Referrer URL")
+
+    @field_validator("website_url_hp")
+    @classmethod
+    def validate_hp(cls, v) -> Optional[str]:
+        if v and str(v).strip():
+            raise ValueError("Spam submission detected.")
+        return v
 
     @field_validator("consent", mode="before")
     @classmethod
@@ -90,6 +100,16 @@ class BatchRegistrationCreate(BaseModel):
         default=True,
         description="Consent to be contacted by phone or WhatsApp about this course"
     )
+    website_url_hp: Optional[str] = Field(default=None, description="Anti-spam honeypot field")
+    source_utm: Optional[str] = Field(default=None, description="Attribution UTM string")
+    referrer_url: Optional[str] = Field(default=None, description="Referrer URL")
+
+    @field_validator("website_url_hp")
+    @classmethod
+    def validate_hp(cls, v) -> Optional[str]:
+        if v and str(v).strip():
+            raise ValueError("Spam submission detected.")
+        return v
 
     @field_validator("consent", mode="before")
     @classmethod
@@ -113,13 +133,14 @@ class BatchRegistrationCreate(BaseModel):
 
 class LeadStatusUpdate(BaseModel):
     """Update lead pipeline stage and counseling notes."""
-    status: str = Field(..., description="'new', 'contacted', 'enrolled', 'closed', or 'do_not_contact'")
+    status: str = Field(..., description="'new', 'contacted', 'demo_attended', 'enrolled', 'closed', or 'do_not_contact'")
     admin_notes: Optional[str] = Field(default="", description="Counselor or instructor internal notes")
+    follow_up_date: Optional[str] = Field(default=None, description="Follow-up scheduled date (YYYY-MM-DD)")
 
     @field_validator("status")
     @classmethod
     def validate_status(cls, v: str) -> str:
-        allowed = ("new", "contacted", "enrolled", "closed", "do_not_contact")
+        allowed = ("new", "contacted", "demo_attended", "enrolled", "closed", "do_not_contact")
         v_clean = v.strip().lower()
         if v_clean not in allowed:
             raise ValueError(f"Invalid status '{v}'. Allowed statuses: {', '.join(allowed)}")
@@ -196,6 +217,9 @@ class LeadOut(BaseModel):
     preferred_schedule: str
     subject_interest: Optional[str] = ""
     message: Optional[str]
+    source_utm: Optional[str] = None
+    referrer_url: Optional[str] = None
+    follow_up_date: Optional[str] = None
     status: str
     admin_notes: Optional[str]
     consent_given: bool = True
@@ -211,6 +235,106 @@ class WaitlistCreate(BaseModel):
     subject_interest: str = Field(..., min_length=1, max_length=100, description="Target subject (SQL, Excel, Power BI, Python, etc.)")
     message: Optional[str] = Field(default="", max_length=1000, description="Optional notes or questions")
     consent: bool = Field(default=True, description="Consent to be contacted")
+    website_url_hp: Optional[str] = Field(default=None, description="Anti-spam honeypot field")
+    source_utm: Optional[str] = Field(default=None, description="Attribution UTM string")
+    referrer_url: Optional[str] = Field(default=None, description="Referrer URL")
+
+    @field_validator("website_url_hp")
+    @classmethod
+    def validate_hp(cls, v) -> Optional[str]:
+        if v and str(v).strip():
+            raise ValueError("Spam submission detected.")
+        return v
+
+    @field_validator("consent", mode="before")
+    @classmethod
+    def validate_consent(cls, v) -> bool:
+        if isinstance(v, str):
+            v = v.strip().lower() in ("true", "1", "on", "yes")
+        if not bool(v):
+            raise ValueError("You must agree to be contacted by phone or WhatsApp about this course.")
+        return True
+
+    @field_validator("email")
+    @classmethod
+    def validate_email(cls, v: Optional[str]) -> Optional[str]:
+        if not v:
+            return ""
+        v = v.strip().lower()
+        if v and not EMAIL_REGEX.match(v):
+            raise ValueError("Invalid email format")
+        return v
+
+
+class DemoClassCreate(BaseModel):
+    """Schema for free live demo class reservations."""
+    full_name: str = Field(..., min_length=2, max_length=120, description="Full name of student")
+    phone: str = Field(..., min_length=7, max_length=25, description="Mobile / WhatsApp contact number")
+    email: Optional[str] = Field(default="", description="Student email address (optional)")
+    preferred_subject: Optional[str] = Field(
+        default=None,
+        description="Preferred subject (Data Analytics, Digital Marketing, etc.)"
+    )
+    course_interest: Optional[str] = Field(
+        default="Data Analytics & BI Track (SQL, Python, Power BI)",
+        description="Track or program of interest"
+    )
+    subject_interest: Optional[str] = Field(
+        default=None,
+        description="Subject interest"
+    )
+    message: Optional[str] = Field(default="", max_length=2000)
+    preferred_schedule: Optional[str] = Field(default="Live Demo Session")
+    consent: bool = Field(default=True, description="Consent to be contacted by phone or WhatsApp")
+    website_url_hp: Optional[str] = Field(default=None, description="Anti-spam honeypot field")
+    source_utm: Optional[str] = Field(default=None, description="Attribution UTM string")
+    referrer_url: Optional[str] = Field(default=None, description="Referrer URL")
+
+    @field_validator("website_url_hp")
+    @classmethod
+    def validate_hp(cls, v) -> Optional[str]:
+        if v and str(v).strip():
+            raise ValueError("Spam submission detected.")
+        return v
+
+    @field_validator("consent", mode="before")
+    @classmethod
+    def validate_consent(cls, v) -> bool:
+        if isinstance(v, str):
+            v = v.strip().lower() in ("true", "1", "on", "yes")
+        if not bool(v):
+            raise ValueError("You must agree to be contacted by phone or WhatsApp about this course.")
+        return True
+
+    @field_validator("email")
+    @classmethod
+    def validate_email(cls, v: Optional[str]) -> Optional[str]:
+        if not v:
+            return ""
+        v = v.strip().lower()
+        if v and not EMAIL_REGEX.match(v):
+            raise ValueError("Invalid email format")
+        return v
+
+
+class LeadMagnetCreate(BaseModel):
+    """Schema for free lead magnet asset downloads (cheat sheets, sample datasets)."""
+    full_name: str = Field(..., min_length=2, max_length=120, description="Full name of student")
+    phone: str = Field(..., min_length=7, max_length=25, description="Mobile / WhatsApp contact number")
+    email: Optional[str] = Field(default="", description="Student email address (optional)")
+    resource_name: str = Field(..., min_length=2, max_length=150, description="Name of lead magnet asset requested")
+    subject_interest: Optional[str] = Field(default="", max_length=100)
+    consent: bool = Field(default=True, description="Consent to be contacted by phone or WhatsApp")
+    website_url_hp: Optional[str] = Field(default=None, description="Anti-spam honeypot field")
+    source_utm: Optional[str] = Field(default=None, description="Attribution UTM string")
+    referrer_url: Optional[str] = Field(default=None, description="Referrer URL")
+
+    @field_validator("website_url_hp")
+    @classmethod
+    def validate_hp(cls, v) -> Optional[str]:
+        if v and str(v).strip():
+            raise ValueError("Spam submission detected.")
+        return v
 
     @field_validator("consent", mode="before")
     @classmethod

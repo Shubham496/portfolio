@@ -578,3 +578,196 @@ def test_homepage_track_grouped_cohort_display_and_scarcity():
     assert "tuition fee" not in html.lower()
 
 
+def test_demo_class_api_and_honeypot():
+    """Verify live demo class registration API, validation, and anti-spam honeypot defense."""
+    # 1. Successful JSON submission
+    valid_payload = {
+        "full_name": "Priya Patel",
+        "phone": "+91 9876543219",
+        "email": "priya.p@example.com",
+        "preferred_subject": "Data Analytics",
+        "preferred_slot": "Saturday 6:00 PM IST",
+        "learning_goals": "Transitioning to Data Analyst role",
+        "consent": True
+    }
+    resp = client.post("/api/courses/demo", json=valid_payload)
+    assert resp.status_code == 201
+    data = resp.json()
+    assert data["success"] is True
+    assert data["lead_type"] == "demo_class"
+    assert data["data"]["full_name"] == "Priya Patel"
+    assert data["data"]["subject_interest"] == "Data Analytics"
+
+    # 2. Form submission with 303 redirect to registration-success
+    form_resp = client.post("/api/courses/demo", data={
+        "full_name": "Vikram Sen",
+        "phone": "+91 9876543218",
+        "preferred_subject": "Digital Marketing",
+        "consent": "true"
+    }, follow_redirects=False)
+    assert form_resp.status_code == 303
+    assert "/registration-success?type=demo" in form_resp.headers["location"]
+
+    # 3. Anti-spam honeypot rejection: bots filling website_url_hp are rejected
+    spam_resp = client.post("/api/courses/demo", json={
+        "full_name": "Spam Bot",
+        "phone": "+91 9999999999",
+        "consent": True,
+        "website_url_hp": "http://spamsite.example.com"
+    })
+    assert spam_resp.status_code == 400
+    assert "spam" in spam_resp.json()["detail"].lower()
+
+    # 4. Mandatory consent enforcement
+    no_consent_resp = client.post("/api/courses/demo", json={
+        "full_name": "No Consent User",
+        "phone": "+91 9876543217",
+        "consent": False
+    })
+    assert no_consent_resp.status_code == 422
+
+
+def test_lead_magnet_api_and_instant_reveal():
+    """Verify free lead magnet download gate, honeypot rejection, and instant download reveal."""
+    # 1. Successful Lead Magnet Request
+    payload = {
+        "full_name": "Ananya Roy",
+        "phone": "+91 9876543216",
+        "resource_name": "Data Analyst Python Cheat Sheet",
+        "subject_interest": "Data Analytics",
+        "current_status": "Working Professional",
+        "consent": True
+    }
+    resp = client.post("/api/courses/lead-magnet", json=payload)
+    assert resp.status_code == 201
+    data = resp.json()
+    assert data["success"] is True
+    assert data["lead_type"] == "lead_magnet"
+    assert "download_url" in data
+    assert data["data"]["subject_interest"] == "Data Analytics"
+
+    # 2. Honeypot rejection
+    bot_payload = {
+        "full_name": "Bot Downloader",
+        "phone": "+91 9876543215",
+        "resource_name": "SQL viva questions",
+        "consent": True,
+        "website_url_hp": "https://malicious-link.test"
+    }
+    bot_resp = client.post("/api/courses/lead-magnet", json=bot_payload)
+    assert bot_resp.status_code == 400
+
+
+def test_first_touch_utm_persistence_middleware_and_lead_attribution():
+    """Verify 30-day first-touch UTM persistence middleware and lead attribution capture."""
+    fresh_client = TestClient(app)
+    
+    # 1. Incoming campaign traffic lands on homepage with UTM parameters
+    resp = fresh_client.get("/?utm_source=linkedin&utm_medium=sponsored&utm_campaign=weekend_cohort")
+    assert resp.status_code == 200
+    assert "mythos_utm" in resp.cookies
+    utm_cookie_val = resp.cookies["mythos_utm"]
+    assert "utm_source=linkedin" in utm_cookie_val
+    assert "utm_campaign=weekend_cohort" in utm_cookie_val
+
+    # 2. Subsequent navigation preserves first-touch attribution without overwriting
+    resp2 = fresh_client.get("/demo?utm_source=google")
+    assert resp2.status_code == 200
+    # Cookie should still retain original first-touch attribution
+    assert "utm_source=linkedin" in fresh_client.cookies["mythos_utm"]
+
+    # 3. Form submission without explicit source_utm inherits first-touch cookie automatically
+    lead_resp = fresh_client.post("/api/courses/demo", json={
+        "full_name": "Attributed Lead",
+        "phone": "+91 9876543214",
+        "consent": True
+    })
+    assert lead_resp.status_code == 201
+    lead_data = lead_resp.json()
+    assert "linkedin" in (lead_data["data"]["source_utm"] or "")
+
+
+def test_admin_pipeline_expanded_filters_and_follow_up():
+    """Verify admin dashboard multi-filters (traffic source, subject), status demo_attended, and follow_up_date."""
+    cookies = get_admin_cookies()
+
+    # 1. Create a lead with demo_class and UTM attribution
+    lead_resp = client.post("/api/courses/demo", json={
+        "full_name": "Kavita Nair",
+        "phone": "+91 9876543213",
+        "preferred_subject": "Digital Marketing",
+        "source_utm": "utm_source=instagram&utm_campaign=dm_demo",
+        "consent": True
+    })
+    assert lead_resp.status_code == 201
+    lead_id = lead_resp.json()["data"]["id"]
+
+    try:
+        # 2. Filter dashboard by lead_type=demo_class and traffic_source=instagram
+        filter_resp = client.get(
+            "/admin/dashboard?lead_type=demo_class&traffic_source=instagram",
+            cookies=cookies
+        )
+        assert filter_resp.status_code == 200
+        assert "Kavita Nair" in filter_resp.text
+        assert "Live Demo" in filter_resp.text
+
+        # 3. Update lead status to 'demo_attended', set follow-up date, and counselor notes
+        update_resp = client.post(f"/admin/leads/{lead_id}/status", data={
+            "status": "demo_attended",
+            "follow_up_date": "2026-11-28",
+            "admin_notes": "Attended live session on weekend; highly engaged, will enroll on Monday",
+            "page": 1,
+            "lead_type": "all",
+            "filter_status": "all",
+            "traffic_source": "all",
+            "subject_interest": "all"
+        }, cookies=cookies, follow_redirects=True)
+        assert update_resp.status_code == 200
+
+        # 4. Verify in DB
+        with SessionLocal() as db:
+            updated_lead = db.query(StudentLead).filter(StudentLead.id == lead_id).first()
+            assert updated_lead is not None
+            assert updated_lead.status == "demo_attended"
+            assert str(updated_lead.follow_up_date) == "2026-11-28"
+            assert "highly engaged" in updated_lead.admin_notes
+
+        # 5. Verify CSV export contains new fields
+        csv_resp = client.get("/api/courses/leads/export.csv", cookies=cookies)
+        assert csv_resp.status_code == 200
+        csv_text = csv_resp.text
+        assert "Subject Interest" in csv_text
+        assert "Traffic Source / UTM" in csv_text
+        assert "Follow-Up Date" in csv_text
+        assert "Kavita Nair" in csv_text
+    finally:
+        with SessionLocal() as db:
+            db.query(StudentLead).filter(StudentLead.id == lead_id).delete()
+            db.commit()
+
+
+def test_demo_page_and_confirmation_community_links():
+    """Verify dedicated /demo landing page and confirmation community broadcast integration."""
+    # 1. /demo landing page renders correctly
+    demo_page = client.get("/demo")
+    assert demo_page.status_code == 200
+    assert "Live Demo Class" in demo_page.text
+    assert settings.DEMO_CLASS_DATETIME in demo_page.text or "[DEMO_CLASS_DATETIME]" in demo_page.text
+    assert "website_url_hp" in demo_page.text
+
+    # 2. Registration confirmation page for demo
+    conf_page = client.get("/registration-success?type=demo")
+    assert conf_page.status_code == 200
+    assert "Live Demo Seat Confirmed" in conf_page.text or "Free Demo" in conf_page.text
+    assert "Add to Google Calendar" in conf_page.text
+    assert "Join WhatsApp Channel" in conf_page.text
+    assert "Join Telegram Group" in conf_page.text
+
+    # 3. Footer community channel links
+    home_page = client.get("/")
+    assert home_page.status_code == 200
+    assert "Student Community Channels" in home_page.text or "WhatsApp Channel" in home_page.text
+
+
+

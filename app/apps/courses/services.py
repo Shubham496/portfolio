@@ -18,6 +18,8 @@ from app.apps.courses.schemas import (
     LeadStatusUpdate,
     StudentRegister,
     WaitlistCreate,
+    DemoClassCreate,
+    LeadMagnetCreate,
 )
 from app.apps.courses.auth import hash_password, verify_password
 from app.core.config import settings
@@ -89,6 +91,36 @@ def _run_startup_migrations(bind_engine):
                     logger.info("Migrated batches: added track column.")
                 except Exception as e:
                     logger.warning(f"Could not add track column: {e}")
+            # Check source_utm in student_leads
+            try:
+                conn.execute(text("SELECT source_utm FROM student_leads LIMIT 1"))
+            except Exception:
+                try:
+                    conn.execute(text("ALTER TABLE student_leads ADD COLUMN source_utm VARCHAR(255)"))
+                    conn.commit()
+                    logger.info("Migrated student_leads: added source_utm column.")
+                except Exception as e:
+                    logger.warning(f"Could not add source_utm column: {e}")
+            # Check referrer_url in student_leads
+            try:
+                conn.execute(text("SELECT referrer_url FROM student_leads LIMIT 1"))
+            except Exception:
+                try:
+                    conn.execute(text("ALTER TABLE student_leads ADD COLUMN referrer_url VARCHAR(255)"))
+                    conn.commit()
+                    logger.info("Migrated student_leads: added referrer_url column.")
+                except Exception as e:
+                    logger.warning(f"Could not add referrer_url column: {e}")
+            # Check follow_up_date in student_leads
+            try:
+                conn.execute(text("SELECT follow_up_date FROM student_leads LIMIT 1"))
+            except Exception:
+                try:
+                    conn.execute(text("ALTER TABLE student_leads ADD COLUMN follow_up_date DATE"))
+                    conn.commit()
+                    logger.info("Migrated student_leads: added follow_up_date column.")
+                except Exception as e:
+                    logger.warning(f"Could not add follow_up_date column: {e}")
     except Exception as exc:
         logger.warning(f"Startup migration check skipped or failed: {exc}")
 
@@ -330,6 +362,109 @@ def toggle_batch_active(db: Session, batch_id: int) -> Optional[Batch]:
     return batch
 
 
+def create_demo_lead(
+    db: Session,
+    demo_data: DemoClassCreate,
+    client_ip: Optional[str] = None
+) -> Dict[str, Any]:
+    """Record a student reservation for a free live demo class."""
+    target_batch = None
+    kw = (demo_data.course_interest or "").lower()
+    if "performance" in kw or "paid" in kw or "meta" in kw:
+        target_batch = db.query(Batch).filter(Batch.batch_code == "DM-PERF-2026-B1").first()
+    elif "seo" in kw or "growth" in kw or "marketing" in kw:
+        target_batch = db.query(Batch).filter(Batch.batch_code == "DM-GROWTH-2026-B1").first()
+    else:
+        target_batch = db.query(Batch).filter(Batch.batch_code == "DA-WKND-2026-B1").first()
+
+    if not target_batch:
+        target_batch = get_default_active_batch(db)
+
+    subj = (
+        demo_data.preferred_subject
+        or demo_data.subject_interest
+        or demo_data.course_interest
+        or "Live Demo Session"
+    ).strip()
+    lead = StudentLead(
+        lead_type="demo_class",
+        batch_id=target_batch.id if target_batch else None,
+        full_name=demo_data.full_name.strip(),
+        email=demo_data.email.strip().lower() if demo_data.email else "",
+        phone=demo_data.phone.strip(),
+        current_status="Demo Student",
+        prior_experience=None,
+        preferred_schedule=demo_data.preferred_schedule or "Free Live Weekend Demo",
+        subject_interest=subj,
+        message=demo_data.message.strip() if demo_data.message else f"Free Demo Class reservation: {subj}",
+        status="new",
+        source_ip=client_ip,
+        source_utm=getattr(demo_data, "source_utm", None),
+        referrer_url=getattr(demo_data, "referrer_url", None),
+        consent_given=bool(demo_data.consent),
+        consent_at=datetime.utcnow()
+    )
+    db.add(lead)
+    db.commit()
+    db.refresh(lead)
+
+    return {
+        "success": True,
+        "message": "Your seat for the free live demo class is confirmed! Meeting link will be delivered via WhatsApp.",
+        "lead_id": lead.id,
+        "lead_type": lead.lead_type,
+        "subject_interest": lead.subject_interest,
+        "data": lead.to_dict()
+    }
+
+
+def create_lead_magnet_lead(
+    db: Session,
+    lm_data: LeadMagnetCreate,
+    client_ip: Optional[str] = None
+) -> Dict[str, Any]:
+    """Record a student lead magnet download request."""
+    lead = StudentLead(
+        lead_type="lead_magnet",
+        batch_id=None,
+        full_name=lm_data.full_name.strip(),
+        email=lm_data.email.strip().lower() if lm_data.email else "",
+        phone=lm_data.phone.strip(),
+        current_status="Lead Magnet Reader",
+        prior_experience=None,
+        preferred_schedule="Self-Paced / Resource Download",
+        subject_interest=(lm_data.subject_interest or lm_data.resource_name or "Resource Download").strip(),
+        message=f"Lead magnet download request: {lm_data.resource_name}",
+        status="new",
+        source_ip=client_ip,
+        source_utm=getattr(lm_data, "source_utm", None),
+        referrer_url=getattr(lm_data, "referrer_url", None),
+        consent_given=bool(lm_data.consent),
+        consent_at=datetime.utcnow()
+    )
+    db.add(lead)
+    db.commit()
+    db.refresh(lead)
+
+    # Resolve download URL based on resource name
+    download_url = "/course/syllabus/download"
+    res_lower = lm_data.resource_name.lower()
+    if "dataset" in res_lower:
+        download_url = "/library/datasets"
+    elif "sql" in res_lower or "cheat" in res_lower:
+        download_url = "/course/syllabus/download"
+
+    return {
+        "success": True,
+        "message": f"Your download for '{lm_data.resource_name}' is ready!",
+        "lead_id": lead.id,
+        "lead_type": lead.lead_type,
+        "resource_name": lm_data.resource_name,
+        "download_url": download_url,
+        "data": lead.to_dict()
+    }
+
+
 def create_waitlist_lead(
     db: Session,
     waitlist_data: WaitlistCreate,
@@ -361,6 +496,8 @@ def create_waitlist_lead(
         message=waitlist_data.message.strip() if waitlist_data.message else f"Waitlist interest for upcoming {waitlist_data.subject_interest} batch",
         status="new",
         source_ip=client_ip,
+        source_utm=getattr(waitlist_data, "source_utm", None),
+        referrer_url=getattr(waitlist_data, "referrer_url", None),
         consent_given=bool(waitlist_data.consent),
         consent_at=datetime.utcnow()
     )
@@ -397,6 +534,7 @@ def create_student_enquiry(
     if not target_batch:
         target_batch = get_default_active_batch(db)
     
+    subj = enquiry.subject_interest.strip() if getattr(enquiry, "subject_interest", None) else (getattr(enquiry, "course_interest", "") or "General Counseling")
     lead = StudentLead(
         lead_type="enquiry",
         batch_id=target_batch.id if target_batch else None,
@@ -406,9 +544,12 @@ def create_student_enquiry(
         current_status=enquiry.current_status,
         prior_experience=None,
         preferred_schedule=enquiry.preferred_schedule or "Saturday & Sunday 6:00 PM – 8:00 PM IST",
+        subject_interest=subj,
         message=enquiry.message.strip() if enquiry.message else "",
         status="new",
         source_ip=client_ip,
+        source_utm=getattr(enquiry, "source_utm", None),
+        referrer_url=getattr(enquiry, "referrer_url", None),
         consent_given=bool(getattr(enquiry, "consent", True)),
         consent_at=datetime.utcnow()
     )
@@ -462,9 +603,12 @@ def create_batch_registration(
         current_status=reg.current_status,
         prior_experience=reg.prior_experience,
         preferred_schedule=pref_sched,
+        subject_interest=getattr(reg, "course_name", "Data Analysis"),
         message=reg.message.strip() if reg.message else "",
         status="new",
         source_ip=client_ip,
+        source_utm=getattr(reg, "source_utm", None),
+        referrer_url=getattr(reg, "referrer_url", None),
         consent_given=bool(getattr(reg, "consent", True)),
         consent_at=datetime.utcnow()
     )
@@ -490,7 +634,9 @@ def get_leads(
     lead_type: Optional[str] = None,
     batch_id: Optional[int] = None,
     status: Optional[str] = None,
-    search: Optional[str] = None
+    search: Optional[str] = None,
+    traffic_source: Optional[str] = None,
+    subject_interest: Optional[str] = None
 ) -> List[Dict[str, Any]]:
     """Retrieve student leads with flexible filtering."""
     query = db.query(StudentLead)
@@ -504,13 +650,21 @@ def get_leads(
     if status and status != "all":
         query = query.filter(StudentLead.status == status)
 
+    if traffic_source and traffic_source != "all":
+        query = query.filter(StudentLead.source_utm.ilike(f"%{traffic_source}%"))
+
+    if subject_interest and subject_interest != "all":
+        query = query.filter(StudentLead.subject_interest.ilike(f"%{subject_interest}%"))
+
     if search:
         search_term = f"%{search}%"
         query = query.filter(
             or_(
                 StudentLead.full_name.ilike(search_term),
                 StudentLead.email.ilike(search_term),
-                StudentLead.phone.ilike(search_term)
+                StudentLead.phone.ilike(search_term),
+                StudentLead.subject_interest.ilike(search_term),
+                StudentLead.source_utm.ilike(search_term)
             )
         )
 
@@ -524,6 +678,8 @@ def get_leads_paginated(
     batch_id: Optional[int] = None,
     status: Optional[str] = None,
     search: Optional[str] = None,
+    traffic_source: Optional[str] = None,
+    subject_interest: Optional[str] = None,
     page: int = 1,
     per_page: int = 10
 ) -> Dict[str, Any]:
@@ -539,13 +695,21 @@ def get_leads_paginated(
     if status and status != "all":
         query = query.filter(StudentLead.status == status)
 
+    if traffic_source and traffic_source != "all":
+        query = query.filter(StudentLead.source_utm.ilike(f"%{traffic_source}%"))
+
+    if subject_interest and subject_interest != "all":
+        query = query.filter(StudentLead.subject_interest.ilike(f"%{subject_interest}%"))
+
     if search:
         search_term = f"%{search}%"
         query = query.filter(
             or_(
                 StudentLead.full_name.ilike(search_term),
                 StudentLead.email.ilike(search_term),
-                StudentLead.phone.ilike(search_term)
+                StudentLead.phone.ilike(search_term),
+                StudentLead.subject_interest.ilike(search_term),
+                StudentLead.source_utm.ilike(search_term)
             )
         )
 
@@ -581,8 +745,13 @@ def get_lead_summary(db: Session) -> Dict[str, Any]:
     total = len(all_leads)
     enquiries = len([l for l in all_leads if l.lead_type == "enquiry"])
     registrations = len([l for l in all_leads if l.lead_type == "batch_registration"])
+    demo_classes = len([l for l in all_leads if l.lead_type == "demo_class"])
+    waitlists = len([l for l in all_leads if l.lead_type == "waitlist"])
+    lead_magnets = len([l for l in all_leads if l.lead_type == "lead_magnet"])
+
     new_count = len([l for l in all_leads if l.status == "new"])
     contacted_count = len([l for l in all_leads if l.status == "contacted"])
+    demo_attended_count = len([l for l in all_leads if l.status == "demo_attended"])
     enrolled_count = len([l for l in all_leads if l.status == "enrolled"])
     closed_count = len([l for l in all_leads if l.status == "closed"])
     dnc_count = len([l for l in all_leads if l.status == "do_not_contact"])
@@ -591,8 +760,12 @@ def get_lead_summary(db: Session) -> Dict[str, Any]:
         "total_leads": total,
         "enquiries": enquiries,
         "batch_registrations": registrations,
+        "demo_classes": demo_classes,
+        "waitlists": waitlists,
+        "lead_magnets": lead_magnets,
         "new": new_count,
         "contacted": contacted_count,
+        "demo_attended": demo_attended_count,
         "enrolled": enrolled_count,
         "closed": closed_count,
         "do_not_contact": dnc_count,
@@ -604,7 +777,7 @@ def update_lead_status(
     lead_id: int,
     status_update: LeadStatusUpdate
 ) -> Optional[Dict[str, Any]]:
-    """Update pipeline status and internal notes for a lead."""
+    """Update pipeline status, internal notes, and follow-up date for a lead."""
     lead = db.query(StudentLead).filter(StudentLead.id == lead_id).first()
     if not lead:
         return None
@@ -612,6 +785,15 @@ def update_lead_status(
     lead.status = status_update.status
     if status_update.admin_notes is not None:
         lead.admin_notes = status_update.admin_notes
+    if getattr(status_update, "follow_up_date", None) is not None:
+        val = str(status_update.follow_up_date).strip()
+        if val:
+            try:
+                lead.follow_up_date = datetime.strptime(val, "%Y-%m-%d").date()
+            except Exception:
+                pass
+        else:
+            lead.follow_up_date = None
 
     db.commit()
     db.refresh(lead)
@@ -619,7 +801,7 @@ def update_lead_status(
 
 
 def export_leads_csv(db: Session) -> str:
-    """Generate a clean CSV string containing all enquiries and batch registrations."""
+    """Generate a clean CSV string containing all student leads, demo requests, and registrations."""
     leads = db.query(StudentLead).order_by(desc(StudentLead.id)).all()
 
     output = io.StringIO()
@@ -631,12 +813,16 @@ def export_leads_csv(db: Session) -> str:
         "Type",
         "Batch Title",
         "Batch Code",
+        "Subject Interest",
         "Full Name",
         "Email",
         "Phone",
         "Current Status",
         "Prior Experience",
         "Schedule",
+        "Traffic Source / UTM",
+        "Referrer URL",
+        "Follow-Up Date",
         "Message / Questions",
         "Status",
         "Admin Notes",
@@ -651,12 +837,16 @@ def export_leads_csv(db: Session) -> str:
             l.lead_type,
             l.batch.title if l.batch else "General",
             l.batch.batch_code if l.batch else "-",
+            l.subject_interest or "",
             l.full_name,
             l.email,
             l.phone,
             l.current_status or "",
             l.prior_experience or "",
             l.preferred_schedule or "",
+            l.source_utm or "",
+            l.referrer_url or "",
+            l.follow_up_date.isoformat() if l.follow_up_date else "",
             l.message or "",
             l.status,
             l.admin_notes or "",

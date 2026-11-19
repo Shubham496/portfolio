@@ -17,6 +17,14 @@ Entries are organized chronologically by **Year** and **Month**, preserving orig
 
 ### November 2026
 
+- **[Archived from Changeslog.md Entry 6] (2026-11-12)**:
+  - **Feature**: Expunged plaintext passwords from all documentation and git history; provisioned high-entropy master password for `admin` in `.env`; created isolated `agent_admin` test profile (`agent@mythostech.in`) with `AGENT_PASSWORD` in `.env`; redesigned floating hero portrait card; integrated direct WhatsApp click-to-chat links (`wa.me/918727864157`).
+  - **Files**: `docs/AGENT_GUIDE.md`, `docs/USER_GUIDE.md`, `tests/test_courses.py`, `.env`, `app/templates/index.html`, `app/templates/partials/footer.html`, `app/templates/confirmation.html`, `app/static/js/main.js`, `app/static/pdf/Data_Analysis_Syllabus.pdf`.
+  - **API Changes**: None.
+  - **Database Changes**: Added `agent_admin` profile seeding in `app/apps/courses/services.py`.
+  - **Bugs Fixed**: Resolved browser caching bug with syllabus accordion by inlining toggle logic and cache-busting `main.js?v=2.2`.
+  - **Breaking Changes**: None.
+
 #### [Historical Foundation: Commits 1c231b6 through c3eb35f] - 2026-11-02 to 2026-11-11
 
 - **Commit c3eb35f (2026-11-11) [Archived from Changeslog.md Entry 2]**:

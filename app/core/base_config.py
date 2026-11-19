@@ -42,6 +42,7 @@ class BaseConfig(BaseSettings):
     DM_SCHEDULE: str = os.getenv("DM_SCHEDULE", "[DM_SCHEDULE]")
     TRUST_CLAIM: str = os.getenv("TRUST_CLAIM", "400+ learners taught by our mentors over 3+ years")
     SUBJECT_ORDER: str = os.getenv("SUBJECT_ORDER", "SQL, Excel, Power BI, Python, Tableau, Git & GitHub")
+    DEMO_CLASS_DATETIME: str = os.getenv("DEMO_CLASS_DATETIME", "[DEMO_CLASS_DATETIME]")
 
     RESUME_PATH: str = ""
     PROFILE_PHOTO_PATH: str = "/static/Images/mythos/mythos_icon_transparent.png"

@@ -1,4 +1,6 @@
-from typing import Optional, List
+import time
+from collections import defaultdict
+from typing import Optional, List, Dict
 from fastapi import APIRouter, Depends, Request, Query, HTTPException, status
 from fastapi.responses import JSONResponse, Response, RedirectResponse
 from sqlalchemy.orm import Session
@@ -15,13 +17,17 @@ from app.apps.courses.schemas import (
     LeadStatusUpdate,
     LeadOut,
     BatchOut,
-    WaitlistCreate
+    WaitlistCreate,
+    DemoClassCreate,
+    LeadMagnetCreate
 )
 from app.apps.courses.services import (
     init_courses_db,
     create_student_enquiry,
     create_batch_registration,
     create_waitlist_lead,
+    create_demo_lead,
+    create_lead_magnet_lead,
     list_batches,
     get_grouped_batches,
     create_batch,
@@ -38,6 +44,27 @@ router = APIRouter(prefix="/api/courses", tags=["Courses & Admissions"])
 
 # Ensure database tables and initial weekend batch are created on module load
 init_courses_db()
+
+# In-memory IP rate limiter for public student forms
+_RATE_LIMIT_STORE: Dict[str, List[float]] = defaultdict(list)
+RATE_LIMIT_MAX = 30  # Max 30 requests per minute per IP
+RATE_LIMIT_WINDOW = 60.0  # seconds
+
+
+def check_submission_rate_limit(request: Request, force: bool = False):
+    """Enforce in-memory sliding-window IP rate limiting to prevent spam floods."""
+    client_ip = request.client.host if request.client else "unknown"
+    if not force and client_ip in ("testclient", "127.0.0.1", "localhost"):
+        return
+    now = time.time()
+    timestamps = [t for t in _RATE_LIMIT_STORE[client_ip] if now - t < RATE_LIMIT_WINDOW]
+    if len(timestamps) >= RATE_LIMIT_MAX:
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Too many submission requests. Please wait a minute before trying again."
+        )
+    timestamps.append(now)
+    _RATE_LIMIT_STORE[client_ip] = timestamps
 
 
 def _format_validation_errors(ve: ValidationError) -> List[dict]:
@@ -100,15 +127,25 @@ async def submit_enquiry(
     Register a prospective student enquiry.
     Accepts either JSON payload (via AJAX/Fetch) or URL-encoded Form fields.
     """
+    check_submission_rate_limit(request)
     client_ip = request.client.host if request.client else None
     content_type = request.headers.get("content-type", "")
 
     try:
         if "application/json" in content_type:
             raw_data = await request.json()
+            if raw_data.get("website_url_hp"):
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Spam submission detected.")
+            if not raw_data.get("source_utm"):
+                raw_data["source_utm"] = request.cookies.get("mythos_utm")
+            if not raw_data.get("referrer_url"):
+                raw_data["referrer_url"] = request.headers.get("referer")
             enquiry_obj = EnquiryCreate(**raw_data)
         else:
             form = await request.form()
+            hp = form.get("website_url_hp")
+            if hp and str(hp).strip():
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Spam submission detected.")
             raw_consent = form.get("consent")
             consent_flag = raw_consent in ("on", "true", "1", "yes", True) if raw_consent is not None else False
             enquiry_obj = EnquiryCreate(
@@ -117,10 +154,16 @@ async def submit_enquiry(
                 phone=str(form.get("phone") or ""),
                 current_status=str(form.get("current_status") or "Working Professional"),
                 course_interest=str(form.get("course_interest") or "All Programs / Undecided"),
+                subject_interest=str(form.get("subject_interest") or ""),
                 message=str(form.get("message") or ""),
                 preferred_schedule=str(form.get("preferred_schedule") or "Saturday & Sunday 6:00 PM – 8:00 PM IST"),
-                consent=consent_flag
+                consent=consent_flag,
+                website_url_hp=str(hp or "") if hp else None,
+                source_utm=str(form.get("source_utm") or "") or request.cookies.get("mythos_utm"),
+                referrer_url=str(form.get("referrer_url") or "") or request.headers.get("referer")
             )
+    except HTTPException:
+        raise
     except ValidationError as ve:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
@@ -149,15 +192,25 @@ async def register_for_batch(
     """
     Register student directly into an institute cohort.
     """
+    check_submission_rate_limit(request)
     client_ip = request.client.host if request.client else None
     content_type = request.headers.get("content-type", "")
 
     try:
         if "application/json" in content_type:
             raw_data = await request.json()
+            if raw_data.get("website_url_hp"):
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Spam submission detected.")
+            if not raw_data.get("source_utm"):
+                raw_data["source_utm"] = request.cookies.get("mythos_utm")
+            if not raw_data.get("referrer_url"):
+                raw_data["referrer_url"] = request.headers.get("referer")
             reg_obj = BatchRegistrationCreate(**raw_data)
         else:
             form = await request.form()
+            hp = form.get("website_url_hp")
+            if hp and str(hp).strip():
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Spam submission detected.")
             batch_id_raw = form.get("batch_id")
             batch_id = int(batch_id_raw) if batch_id_raw and str(batch_id_raw).isdigit() else None
             raw_consent = form.get("consent")
@@ -173,8 +226,13 @@ async def register_for_batch(
                 prior_experience=str(form.get("prior_experience") or "Beginner"),
                 message=str(form.get("message") or ""),
                 preferred_schedule=str(form.get("preferred_schedule") or "Saturday & Sunday 6:00 PM – 8:00 PM IST"),
-                consent=consent_flag
+                consent=consent_flag,
+                website_url_hp=str(hp or "") if hp else None,
+                source_utm=str(form.get("source_utm") or "") or request.cookies.get("mythos_utm"),
+                referrer_url=str(form.get("referrer_url") or "") or request.headers.get("referer")
             )
+    except HTTPException:
+        raise
     except ValidationError as ve:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
@@ -194,26 +252,160 @@ async def register_for_batch(
     return JSONResponse(status_code=status.HTTP_201_CREATED, content=result)
 
 
+@router.post("/demo", summary="Reserve seat for upcoming live demo class")
+async def submit_demo(
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    """
+    Reserve a seat for the free live weekend demo class.
+    Accepts JSON payload or Form fields.
+    """
+    check_submission_rate_limit(request)
+    client_ip = request.client.host if request.client else None
+    content_type = request.headers.get("content-type", "")
+
+    try:
+        if "application/json" in content_type:
+            raw_data = await request.json()
+            if raw_data.get("website_url_hp"):
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Spam submission detected.")
+            if not raw_data.get("source_utm"):
+                raw_data["source_utm"] = request.cookies.get("mythos_utm")
+            if not raw_data.get("referrer_url"):
+                raw_data["referrer_url"] = request.headers.get("referer")
+            demo_obj = DemoClassCreate(**raw_data)
+        else:
+            form = await request.form()
+            hp = form.get("website_url_hp")
+            if hp and str(hp).strip():
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Spam submission detected.")
+            raw_consent = form.get("consent")
+            consent_flag = raw_consent in ("on", "true", "1", "yes", True) if raw_consent is not None else False
+            demo_obj = DemoClassCreate(
+                full_name=str(form.get("full_name") or ""),
+                phone=str(form.get("phone") or ""),
+                email=str(form.get("email") or ""),
+                course_interest=str(form.get("course_interest") or form.get("track") or "Data Analytics & BI Track (SQL, Python, Power BI)"),
+                subject_interest=str(form.get("subject_interest") or "Live Demo Session"),
+                message=str(form.get("message") or ""),
+                preferred_schedule=str(form.get("preferred_schedule") or "Free Live Weekend Demo"),
+                consent=consent_flag,
+                website_url_hp=str(hp or "") if hp else None,
+                source_utm=str(form.get("source_utm") or "") or request.cookies.get("mythos_utm"),
+                referrer_url=str(form.get("referrer_url") or "") or request.headers.get("referer")
+            )
+    except HTTPException:
+        raise
+    except ValidationError as ve:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=_format_validation_errors(ve)
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=str(e)
+        )
+
+    result = create_demo_lead(db=db, demo_data=demo_obj, client_ip=client_ip)
+
+    if "application/json" not in content_type:
+        return RedirectResponse(
+            url=f"/registration-success?type=demo&track={demo_obj.course_interest}",
+            status_code=303
+        )
+    return JSONResponse(status_code=status.HTTP_201_CREATED, content=result)
+
+
+@router.post("/lead-magnet", summary="Download free lead magnet (cheat sheet / clean dataset)")
+async def submit_lead_magnet(
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    """
+    Capture student details before downloading a free cheat sheet or practice dataset.
+    Accepts JSON or Form data.
+    """
+    check_submission_rate_limit(request)
+    client_ip = request.client.host if request.client else None
+    content_type = request.headers.get("content-type", "")
+
+    try:
+        if "application/json" in content_type:
+            raw_data = await request.json()
+            if raw_data.get("website_url_hp"):
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Spam submission detected.")
+            if not raw_data.get("source_utm"):
+                raw_data["source_utm"] = request.cookies.get("mythos_utm")
+            if not raw_data.get("referrer_url"):
+                raw_data["referrer_url"] = request.headers.get("referer")
+            lm_obj = LeadMagnetCreate(**raw_data)
+        else:
+            form = await request.form()
+            hp = form.get("website_url_hp")
+            if hp and str(hp).strip():
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Spam submission detected.")
+            raw_consent = form.get("consent")
+            consent_flag = raw_consent in ("on", "true", "1", "yes", True) if raw_consent is not None else False
+            lm_obj = LeadMagnetCreate(
+                full_name=str(form.get("full_name") or ""),
+                phone=str(form.get("phone") or ""),
+                email=str(form.get("email") or ""),
+                resource_name=str(form.get("resource_name") or "SQL Interview Traps Cheat Sheet (PDF)"),
+                subject_interest=str(form.get("subject_interest") or form.get("resource_name") or ""),
+                consent=consent_flag,
+                website_url_hp=str(hp or "") if hp else None,
+                source_utm=str(form.get("source_utm") or "") or request.cookies.get("mythos_utm"),
+                referrer_url=str(form.get("referrer_url") or "") or request.headers.get("referer")
+            )
+    except HTTPException:
+        raise
+    except ValidationError as ve:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=_format_validation_errors(ve)
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=str(e)
+        )
+
+    result = create_lead_magnet_lead(db=db, lm_data=lm_obj, client_ip=client_ip)
+
+    if "application/json" not in content_type:
+        return RedirectResponse(
+            url=f"/registration-success?type=lead_magnet&resource={lm_obj.resource_name}",
+            status_code=303
+        )
+    return JSONResponse(status_code=status.HTTP_201_CREATED, content=result)
+
+
 # -------------------------------------------------------------
 # Admin & Lead Management Endpoints (Protected by require_admin)
 # -------------------------------------------------------------
 
 @router.get("/leads", response_model=List[LeadOut], summary="List all student leads and registrations")
 async def list_student_leads(
-    lead_type: Optional[str] = Query(None, description="'enquiry' or 'batch_registration'"),
+    lead_type: Optional[str] = Query(None, description="'enquiry', 'batch_registration', 'demo_class', 'waitlist', 'lead_magnet'"),
     batch_id: Optional[int] = Query(None, description="Filter by batch ID"),
-    lead_status: Optional[str] = Query(None, alias="status", description="'new', 'contacted', 'enrolled', 'closed', 'do_not_contact'"),
+    lead_status: Optional[str] = Query(None, alias="status", description="'new', 'contacted', 'demo_attended', 'enrolled', 'closed', 'do_not_contact'"),
     search: Optional[str] = Query(None, description="Search by student name, email, or phone"),
+    traffic_source: Optional[str] = Query(None, description="Filter by UTM or traffic origin"),
+    subject_interest: Optional[str] = Query(None, description="Filter by subject or topic interest"),
     admin: AdminUser = Depends(require_admin),
     db: Session = Depends(get_db)
 ):
-    """View student leads with filtering for enquiries and batch admissions (Admin session required)."""
+    """View student leads with filtering for enquiries, demo sessions, and batch admissions (Admin session required)."""
     return get_leads(
         db=db,
         lead_type=lead_type,
         batch_id=batch_id,
         status=lead_status,
-        search=search
+        search=search,
+        traffic_source=traffic_source,
+        subject_interest=subject_interest
     )
 
 
@@ -281,15 +473,25 @@ async def submit_waitlist(
     Register a student waitlist interest for upcoming subjects (e.g. Next Batch in SQL, Excel, Power BI).
     Accepts JSON or Form data.
     """
+    check_submission_rate_limit(request)
     client_ip = request.client.host if request.client else None
     content_type = request.headers.get("content-type", "")
 
     try:
         if "application/json" in content_type:
             raw_data = await request.json()
+            if raw_data.get("website_url_hp"):
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Spam submission detected.")
+            if not raw_data.get("source_utm"):
+                raw_data["source_utm"] = request.cookies.get("mythos_utm")
+            if not raw_data.get("referrer_url"):
+                raw_data["referrer_url"] = request.headers.get("referer")
             waitlist_obj = WaitlistCreate(**raw_data)
         else:
             form = await request.form()
+            hp = form.get("website_url_hp")
+            if hp and str(hp).strip():
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Spam submission detected.")
             raw_consent = form.get("consent")
             consent_flag = raw_consent in ("on", "true", "1", "yes", True) if raw_consent is not None else False
             waitlist_obj = WaitlistCreate(
@@ -298,8 +500,13 @@ async def submit_waitlist(
                 email=str(form.get("email") or ""),
                 subject_interest=str(form.get("subject_interest") or "Next Cohort"),
                 message=str(form.get("message") or ""),
-                consent=consent_flag
+                consent=consent_flag,
+                website_url_hp=str(hp or "") if hp else None,
+                source_utm=str(form.get("source_utm") or "") or request.cookies.get("mythos_utm"),
+                referrer_url=str(form.get("referrer_url") or "") or request.headers.get("referer")
             )
+    except HTTPException:
+        raise
     except ValidationError as ve:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,

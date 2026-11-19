@@ -42,30 +42,42 @@
             </div>
         </div>
 
-        <!-- 4 Metric KPI Cards -->
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 my-6">
-            <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0B1120] shadow-sm">
-                <div class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total Leads</div>
-                <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">{{ summary.total_leads }}</div>
-                <div class="text-[11px] text-slate-500 mt-1">All enquiries &amp; enrollments</div>
+        <!-- 6 Metric KPI Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 my-6">
+            <div class="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0B1120] shadow-sm">
+                <div class="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total Leads</div>
+                <div class="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">{{ summary.total_leads }}</div>
+                <div class="text-[10px] text-slate-500 mt-0.5">All funnel entries</div>
             </div>
 
-            <div class="p-4 rounded-xl border border-blue-200 dark:border-blue-900/60 bg-blue-50/50 dark:bg-blue-950/20 shadow-sm">
-                <div class="text-[11px] font-semibold text-blue-700 dark:text-blue-400 uppercase tracking-wider">Batch Registrations</div>
-                <div class="text-2xl sm:text-3xl font-extrabold text-blue-600 dark:text-blue-400 mt-1">{{ summary.batch_registrations }}</div>
-                <div class="text-[11px] text-blue-600/70 dark:text-blue-400/70 mt-1">Weekend batch enrollments</div>
+            <div class="p-3.5 rounded-xl border border-blue-200 dark:border-blue-900/60 bg-blue-50/50 dark:bg-blue-950/20 shadow-sm">
+                <div class="text-[10px] font-semibold text-blue-700 dark:text-blue-400 uppercase tracking-wider">Registrations</div>
+                <div class="text-2xl font-extrabold text-blue-600 dark:text-blue-400 mt-1">{{ summary.batch_registrations }}</div>
+                <div class="text-[10px] text-blue-600/70 dark:text-blue-400/70 mt-0.5">Weekend cohorts</div>
             </div>
 
-            <div class="p-4 rounded-xl border border-purple-200 dark:border-purple-900/60 bg-purple-50/50 dark:bg-purple-950/20 shadow-sm">
-                <div class="text-[11px] font-semibold text-purple-700 dark:text-purple-400 uppercase tracking-wider">Course Inquiries</div>
-                <div class="text-2xl sm:text-3xl font-extrabold text-purple-600 dark:text-purple-400 mt-1">{{ summary.enquiries }}</div>
-                <div class="text-[11px] text-purple-600/70 dark:text-purple-400/70 mt-1">Questions / counseling</div>
+            <div class="p-3.5 rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50/50 dark:bg-amber-950/20 shadow-sm">
+                <div class="text-[10px] font-semibold text-amber-700 dark:text-amber-400 uppercase tracking-wider">Demo Requests</div>
+                <div class="text-2xl font-extrabold text-amber-600 dark:text-amber-400 mt-1">{{ summary.demo_classes }}</div>
+                <div class="text-[10px] text-amber-600/70 dark:text-amber-400/70 mt-0.5">{{ summary.demo_attended }} attended</div>
             </div>
 
-            <div class="p-4 rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50/50 dark:bg-amber-950/20 shadow-sm">
-                <div class="text-[11px] font-semibold text-amber-700 dark:text-amber-400 uppercase tracking-wider">Pending (New)</div>
-                <div class="text-2xl sm:text-3xl font-extrabold text-amber-600 dark:text-amber-400 mt-1">{{ summary.new }}</div>
-                <div class="text-[11px] text-amber-600/70 dark:text-amber-400/70 mt-1">Awaiting your response</div>
+            <div class="p-3.5 rounded-xl border border-purple-200 dark:border-purple-900/60 bg-purple-50/50 dark:bg-purple-950/20 shadow-sm">
+                <div class="text-[10px] font-semibold text-purple-700 dark:text-purple-400 uppercase tracking-wider">Inquiries &amp; Waitlist</div>
+                <div class="text-2xl font-extrabold text-purple-600 dark:text-purple-400 mt-1">{{ summary.enquiries + summary.waitlists }}</div>
+                <div class="text-[10px] text-purple-600/70 dark:text-purple-400/70 mt-0.5">Counseling / next batch</div>
+            </div>
+
+            <div class="p-3.5 rounded-xl border border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/50 dark:bg-emerald-950/20 shadow-sm">
+                <div class="text-[10px] font-semibold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider">Lead Magnets</div>
+                <div class="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-1">{{ summary.lead_magnets }}</div>
+                <div class="text-[10px] text-emerald-600/70 dark:text-emerald-400/70 mt-0.5">Downloads &amp; resources</div>
+            </div>
+
+            <div class="p-3.5 rounded-xl border border-rose-200 dark:border-rose-900/60 bg-rose-50/50 dark:bg-rose-950/20 shadow-sm">
+                <div class="text-[10px] font-semibold text-rose-700 dark:text-rose-400 uppercase tracking-wider">Pending Action</div>
+                <div class="text-2xl font-extrabold text-rose-600 dark:text-rose-400 mt-1">{{ summary.new }}</div>
+                <div class="text-[10px] text-rose-600/70 dark:text-rose-400/70 mt-0.5">Awaiting contact</div>
             </div>
         </div>
 
@@ -75,40 +87,65 @@
                 <div class="flex flex-wrap items-center gap-2 w-full lg:w-auto">
                     <!-- Lead Type Filter -->
                     <select name="lead_type" onchange="this.form.submit()"
-                            class="px-3 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-[#070B14] text-slate-900 dark:text-white">
-                        <option value="all" {% if current_lead_type == 'all' %}selected{% endif %}>All Types</option>
+                            class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-[#070B14] text-slate-900 dark:text-white">
+                        <option value="all" {% if current_lead_type == 'all' %}selected{% endif %}>All Funnels</option>
                         <option value="batch_registration" {% if current_lead_type == 'batch_registration' %}selected{% endif %}>Batch Enrollments</option>
-                        <option value="enquiry" {% if current_lead_type == 'enquiry' %}selected{% endif %}>Inquiries Only</option>
+                        <option value="demo_class" {% if current_lead_type == 'demo_class' %}selected{% endif %}>Demo Requests</option>
+                        <option value="lead_magnet" {% if current_lead_type == 'lead_magnet' %}selected{% endif %}>Lead Magnets</option>
+                        <option value="waitlist" {% if current_lead_type == 'waitlist' %}selected{% endif %}>Waitlist</option>
+                        <option value="enquiry" {% if current_lead_type == 'enquiry' %}selected{% endif %}>Inquiries</option>
                     </select>
 
                     <!-- Status Filter -->
                     <select name="status" onchange="this.form.submit()"
-                            class="px-3 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-[#070B14] text-slate-900 dark:text-white">
+                            class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-[#070B14] text-slate-900 dark:text-white">
                         <option value="all" {% if current_status == 'all' %}selected{% endif %}>All Statuses</option>
                         <option value="new" {% if current_status == 'new' %}selected{% endif %}>New</option>
                         <option value="contacted" {% if current_status == 'contacted' %}selected{% endif %}>Contacted</option>
+                        <option value="demo_attended" {% if current_status == 'demo_attended' %}selected{% endif %}>Demo Attended</option>
                         <option value="enrolled" {% if current_status == 'enrolled' %}selected{% endif %}>Enrolled</option>
                         <option value="closed" {% if current_status == 'closed' %}selected{% endif %}>Closed</option>
                         <option value="do_not_contact" {% if current_status == 'do_not_contact' %}selected{% endif %}>Do Not Contact</option>
                     </select>
 
+                    <!-- Subject Interest Filter -->
+                    <select name="subject_interest" onchange="this.form.submit()"
+                            class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-[#070B14] text-slate-900 dark:text-white">
+                        <option value="all" {% if current_subject_interest == 'all' %}selected{% endif %}>All Subjects</option>
+                        <option value="Data Analytics" {% if current_subject_interest == 'Data Analytics' %}selected{% endif %}>Data Analytics</option>
+                        <option value="Digital Marketing" {% if current_subject_interest == 'Digital Marketing' %}selected{% endif %}>Digital Marketing</option>
+                    </select>
+
+                    <!-- Traffic Source Filter -->
+                    <select name="traffic_source" onchange="this.form.submit()"
+                            class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-[#070B14] text-slate-900 dark:text-white">
+                        <option value="all" {% if current_traffic_source == 'all' %}selected{% endif %}>All Sources</option>
+                        <option value="direct" {% if current_traffic_source == 'direct' %}selected{% endif %}>Direct</option>
+                        <option value="google" {% if current_traffic_source == 'google' %}selected{% endif %}>Google / SEO</option>
+                        <option value="whatsapp" {% if current_traffic_source == 'whatsapp' %}selected{% endif %}>WhatsApp</option>
+                        <option value="telegram" {% if current_traffic_source == 'telegram' %}selected{% endif %}>Telegram</option>
+                        <option value="linkedin" {% if current_traffic_source == 'linkedin' %}selected{% endif %}>LinkedIn</option>
+                        <option value="instagram" {% if current_traffic_source == 'instagram' %}selected{% endif %}>Instagram</option>
+                        <option value="youtube" {% if current_traffic_source == 'youtube' %}selected{% endif %}>YouTube</option>
+                    </select>
+
                     <!-- Per Page Selector -->
                     <select name="per_page" onchange="this.form.submit()"
-                            class="px-3 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-[#070B14] text-slate-900 dark:text-white">
-                        <option value="10" {% if per_page == 10 %}selected{% endif %}>10 per page</option>
-                        <option value="25" {% if per_page == 25 %}selected{% endif %}>25 per page</option>
-                        <option value="50" {% if per_page == 50 %}selected{% endif %}>50 per page</option>
+                            class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-[#070B14] text-slate-900 dark:text-white">
+                        <option value="10" {% if per_page == 10 %}selected{% endif %}>10 / page</option>
+                        <option value="25" {% if per_page == 25 %}selected{% endif %}>25 / page</option>
+                        <option value="50" {% if per_page == 50 %}selected{% endif %}>50 / page</option>
                     </select>
                 </div>
 
                 <!-- Search Input -->
                 <div class="flex items-center space-x-2 w-full lg:w-80">
-                    <input type="text" name="search" value="{{ current_search or '' }}" placeholder="Search name, email, phone..."
+                    <input type="text" name="search" value="{{ current_search or '' }}" placeholder="Search name, phone, utm..."
                            class="w-full px-3 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-[#070B14] text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <button type="submit" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold whitespace-nowrap">
                         Search
                     </button>
-                    {% if current_search or current_lead_type != 'all' or current_status != 'all' or per_page != 10 %}
+                    {% if current_search or current_lead_type != 'all' or current_status != 'all' or current_traffic_source != 'all' or current_subject_interest != 'all' or per_page != 10 %}
                     <a href="/admin/dashboard" class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200" title="Clear Filters">
                         <i data-lucide="x" class="w-4 h-4"></i>
                     </a>
@@ -128,9 +165,10 @@
                             <th class="py-3 px-3.5 whitespace-nowrap">Submitted Date</th>
                             <th class="py-3 px-3.5">Student</th>
                             <th class="py-3 px-3.5">Contact</th>
+                            <th class="py-3 px-3.5">Subject &amp; Attribution</th>
                             <th class="py-3 px-3.5">Message / Goals</th>
                             <th class="py-3 px-3.5 whitespace-nowrap">Status</th>
-                            <th class="py-3 px-3.5">Admin Notes &amp; Action</th>
+                            <th class="py-3 px-3.5">Counselor Notes &amp; Follow-Up</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
@@ -141,6 +179,8 @@
                                 <input type="hidden" name="page" value="{{ pagination.page }}">
                                 <input type="hidden" name="lead_type" value="{{ current_lead_type }}">
                                 <input type="hidden" name="filter_status" value="{{ current_status }}">
+                                <input type="hidden" name="traffic_source" value="{{ current_traffic_source }}">
+                                <input type="hidden" name="subject_interest" value="{{ current_subject_interest }}">
                                 {% if current_search %}<input type="hidden" name="search" value="{{ current_search }}">{% endif %}
                             </form>
                             
@@ -149,6 +189,18 @@
                                 {% if lead.lead_type == 'batch_registration' %}
                                 <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
                                     Registration
+                                </span>
+                                {% elif lead.lead_type == 'demo_class' %}
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                                    Live Demo
+                                </span>
+                                {% elif lead.lead_type == 'lead_magnet' %}
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                                    Lead Magnet
+                                </span>
+                                {% elif lead.lead_type == 'waitlist' %}
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+                                    Waitlist
                                 </span>
                                 {% else %}
                                 <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
@@ -197,6 +249,23 @@
                                 {% endif %}
                             </td>
 
+                            <!-- Subject & Attribution Column -->
+                            <td class="py-3 px-3.5 align-top max-w-[180px]">
+                                <div class="font-semibold text-slate-800 dark:text-slate-200 text-xs">
+                                    {{ lead.subject_interest or 'General' }}
+                                </div>
+                                {% if lead.source_utm %}
+                                <div class="text-[10px] text-blue-600 dark:text-blue-400 font-mono mt-0.5 truncate" title="{{ lead.source_utm }}">
+                                    utm: {{ lead.source_utm }}
+                                </div>
+                                {% endif %}
+                                {% if lead.referrer_url %}
+                                <div class="text-[10px] text-slate-400 font-mono truncate" title="{{ lead.referrer_url }}">
+                                    ref: {{ lead.referrer_url }}
+                                </div>
+                                {% endif %}
+                            </td>
+
                             <!-- Student Message & Goals -->
                             <td class="py-3 px-3.5 align-top max-w-xs">
                                 {% if lead.prior_experience %}
@@ -221,6 +290,10 @@
                                         <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
                                             <span class="w-1.5 h-1.5 rounded-full bg-blue-500 mr-1.5"></span>Contacted
                                         </span>
+                                        {% elif lead.status == 'demo_attended' %}
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-cyan-100 dark:bg-cyan-900/40 text-cyan-800 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-800">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-cyan-500 mr-1.5"></span>Demo Attended
+                                        </span>
                                         {% elif lead.status == 'enrolled' %}
                                         <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                                             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>Enrolled
@@ -240,6 +313,7 @@
                                                 class="px-2 py-1 text-[11px] font-semibold rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#070B14] text-slate-900 dark:text-white focus:ring-1 focus:ring-blue-500">
                                             <option value="new" {% if lead.status == 'new' %}selected{% endif %}>New</option>
                                             <option value="contacted" {% if lead.status == 'contacted' %}selected{% endif %}>Contacted</option>
+                                            <option value="demo_attended" {% if lead.status == 'demo_attended' %}selected{% endif %}>Demo Attended</option>
                                             <option value="enrolled" {% if lead.status == 'enrolled' %}selected{% endif %}>Enrolled</option>
                                             <option value="closed" {% if lead.status == 'closed' %}selected{% endif %}>Closed</option>
                                             <option value="do_not_contact" {% if lead.status == 'do_not_contact' %}selected{% endif %}>Do Not Contact</option>
@@ -248,17 +322,25 @@
                                 </div>
                             </td>
 
-                            <!-- Separated Admin Notes & Action Column -->
-                            <td class="py-3 px-3.5 align-top min-w-[200px]">
+                            <!-- Separated Counselor Notes & Follow-Up Column -->
+                            <td class="py-3 px-3.5 align-top min-w-[220px]">
                                 <div class="space-y-1.5">
-                                    <input type="text" name="admin_notes" form="lead-form-{{ lead.id }}"
-                                           value="{{ lead.admin_notes or '' }}" placeholder="Add note (e.g. called, agreed)"
-                                           class="w-full px-2 py-1 text-[11px] rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#070B14] text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:ring-1 focus:ring-blue-500">
-                                    <button type="submit" form="lead-form-{{ lead.id }}"
-                                            class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-bold shadow-sm transition">
-                                        <i data-lucide="check" class="w-3 h-3"></i>
-                                        <span>Save</span>
-                                    </button>
+                                    <div class="flex items-center space-x-1.5">
+                                        <label class="text-[10px] text-slate-400 whitespace-nowrap">Follow-up:</label>
+                                        <input type="date" name="follow_up_date" form="lead-form-{{ lead.id }}"
+                                               value="{{ lead.follow_up_date or '' }}"
+                                               class="w-full px-1.5 py-0.5 text-[10px] rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#070B14] text-slate-800 dark:text-slate-200 focus:ring-1 focus:ring-blue-500">
+                                    </div>
+                                    <div class="flex items-center space-x-1">
+                                        <input type="text" name="admin_notes" form="lead-form-{{ lead.id }}"
+                                               value="{{ lead.admin_notes or '' }}" placeholder="Counselor notes..."
+                                               class="w-full px-2 py-1 text-[11px] rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#070B14] text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:ring-1 focus:ring-blue-500">
+                                        <button type="submit" form="lead-form-{{ lead.id }}"
+                                                class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-bold shadow-sm transition">
+                                            <i data-lucide="check" class="w-3 h-3"></i>
+                                            <span>Save</span>
+                                        </button>
+                                    </div>
                                 </div>
                             </td>
 
@@ -277,7 +359,7 @@
                 <div class="flex items-center space-x-1">
                     <!-- Previous Button -->
                     {% if pagination.has_prev %}
-                    <a href="/admin/dashboard?page={{ pagination.prev_page }}&per_page={{ per_page }}&lead_type={{ current_lead_type }}&status={{ current_status }}{% if current_search %}&search={{ current_search }}{% endif %}"
+                    <a href="/admin/dashboard?page={{ pagination.prev_page }}&per_page={{ per_page }}&lead_type={{ current_lead_type }}&status={{ current_status }}&traffic_source={{ current_traffic_source }}&subject_interest={{ current_subject_interest }}{% if current_search %}&search={{ current_search }}{% endif %}"
                        class="px-2.5 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
                         &larr; Prev
                     </a>
@@ -294,7 +376,7 @@
                         {{ p }}
                     </span>
                     {% elif p <= 3 or p >= pagination.total_pages - 1 or (p >= pagination.page - 1 and p <= pagination.page + 1) %}
-                    <a href="/admin/dashboard?page={{ p }}&per_page={{ per_page }}&lead_type={{ current_lead_type }}&status={{ current_status }}{% if current_search %}&search={{ current_search }}{% endif %}"
+                    <a href="/admin/dashboard?page={{ p }}&per_page={{ per_page }}&lead_type={{ current_lead_type }}&status={{ current_status }}&traffic_source={{ current_traffic_source }}&subject_interest={{ current_subject_interest }}{% if current_search %}&search={{ current_search }}{% endif %}"
                        class="px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
                         {{ p }}
                     </a>
@@ -305,7 +387,7 @@
 
                     <!-- Next Button -->
                     {% if pagination.has_next %}
-                    <a href="/admin/dashboard?page={{ pagination.next_page }}&per_page={{ per_page }}&lead_type={{ current_lead_type }}&status={{ current_status }}{% if current_search %}&search={{ current_search }}{% endif %}"
+                    <a href="/admin/dashboard?page={{ pagination.next_page }}&per_page={{ per_page }}&lead_type={{ current_lead_type }}&status={{ current_status }}&traffic_source={{ current_traffic_source }}&subject_interest={{ current_subject_interest }}{% if current_search %}&search={{ current_search }}{% endif %}"
                        class="px-2.5 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
                         Next &rarr;
                     </a>

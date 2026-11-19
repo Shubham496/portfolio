@@ -239,10 +239,10 @@ Phase 6: Later Only (Optional Paywalled Bundles via External Link)
 
 ---
 
-### Phase 4: Lead Capture, Demo Class & Funnel Optimization
+### Phase 4: Lead Capture, Demo Class & Funnel Optimization (COMPLETED)
 *Streamline the visitor-to-student journey with frictionless demo registration and lead magnets.*
 
-* [ ] **Task 4.1: Database Schema Expansion for Funnels & Attribution**
+* [x] **Task 4.1: Database Schema Expansion for Funnels & Attribution**
   * Add lead types to `StudentLead`: `demo_class`, `waitlist`, `lead_magnet`, `enquiry`, `batch_registration`.
   * Add tracking columns to `StudentLead`:
     * `source_utm`: `String(255)` (concatenated or JSON of `utm_source`, `utm_medium`, `utm_campaign`).
@@ -252,27 +252,27 @@ Phase 6: Later Only (Optional Paywalled Bundles via External Link)
     * `consent_at`: `DateTime`.
     * `follow_up_date`: `Date`, nullable.
   * Implement an idempotent startup migration checking and adding columns safely on SQLite and PostgreSQL.
-* [ ] **Task 4.2: Dedicated Free Demo Class Landing Page (`/demo`)**
+* [x] **Task 4.2: Dedicated Free Demo Class Landing Page (`/demo`)**
   * Build dedicated route `GET /demo` (`app/templates/demo.html`):
     * Highlight date and time of next live demo session (`[DEMO_CLASS_DATETIME]`).
     * Simple high-converting form: Full Name, WhatsApp Number, optional Email, Subject Interest, and mandatory Consent Checkbox.
     * Confirmation screen with "Add to Google Calendar" button and link to join the WhatsApp Community Channel.
-* [ ] **Task 4.3: Free Lead Magnets (Cheat Sheets & Clean Datasets)**
+* [x] **Task 4.3: Free Lead Magnets (Cheat Sheets & Clean Datasets)**
   * Add contextual lead magnet callouts on subject hubs and note sidebars:
     * E.g., *"Download the Free SQL Interview Traps Cheat Sheet (PDF)"* or *"Download Indian E-Commerce 50k Dataset"*.
   * Short modal/form (Name, WhatsApp, Consent) reveals the direct download link upon submission.
   * Core notes remain 100% public with no login wall.
-* [ ] **Task 4.4: Community Channel Direct Action Links**
+* [x] **Task 4.4: Community Channel Direct Action Links**
   * Add prominent join buttons for the official **WhatsApp Community Channel** (`[WHATSAPP_CHANNEL_URL]`) and **Telegram Group** (`[TELEGRAM_URL]`) in footer, confirmation pages, and note reading sidebars.
-* [ ] **Task 4.5: First-Touch UTM Capture & Cookie Persistence**
+* [x] **Task 4.5: First-Touch UTM Capture & Cookie Persistence**
   * Implement lightweight middleware storing incoming `utm_source`, `utm_medium`, `utm_campaign`, and `ref` in a first-party cookie (`mythos_utm`, 30 days).
   * Automatically attach captured UTM metadata whenever a visitor submits an inquiry, demo request, or registration.
-* [ ] **Task 4.6: Admin Pipeline Management Overhaul**
+* [x] **Task 4.6: Admin Pipeline Management Overhaul**
   * Expand `/admin/dashboard` lead statuses: `new`, `contacted`, `demo_attended`, `enrolled`, `closed`, `do_not_contact`.
   * Add multi-filter controls by Lead Type, Traffic Source, and Subject Interest.
   * Add counselor follow-up date picker and notes updater.
   * Update CSV export to include UTM source, subject interest, and consent timestamp.
-* [ ] **Task 4.7: Anti-Spam & Rate Limiting**
+* [x] **Task 4.7: Anti-Spam & Rate Limiting**
   * Add invisible honeypot form fields (`website_url_hp`) on all public forms; reject submissions where the honeypot is filled.
   * Implement in-memory IP rate limiting on public submission endpoints to prevent automated spam abuse.
 

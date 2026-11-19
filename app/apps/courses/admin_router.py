@@ -115,17 +115,21 @@ async def admin_dashboard(
     lead_type: str = Query("all"),
     status: str = Query("all"),
     search: Optional[str] = Query(None),
+    traffic_source: str = Query("all"),
+    subject_interest: str = Query("all"),
     page: int = Query(1, ge=1),
     per_page: int = Query(10, ge=1, le=100),
     admin: AdminUser = Depends(require_admin),
     db: Session = Depends(get_db)
 ):
-    """Protected monitoring dashboard displaying student admissions & enquiries with pagination."""
+    """Protected monitoring dashboard displaying student admissions, demo requests & enquiries with multi-filters & pagination."""
     pagination = get_leads_paginated(
         db=db,
         lead_type=lead_type if lead_type != "all" else None,
         status=status if status != "all" else None,
         search=search,
+        traffic_source=traffic_source if traffic_source != "all" else None,
+        subject_interest=subject_interest if subject_interest != "all" else None,
         page=page,
         per_page=per_page
     )
@@ -143,6 +147,8 @@ async def admin_dashboard(
             "current_lead_type": lead_type,
             "current_status": status,
             "current_search": search,
+            "current_traffic_source": traffic_source,
+            "current_subject_interest": subject_interest,
             "current_page": page,
             "per_page": per_page
         }
@@ -154,21 +160,28 @@ async def admin_update_lead(
     lead_id: int,
     status: str = Form(...),
     admin_notes: Optional[str] = Form(""),
+    follow_up_date: Optional[str] = Form(None),
     page: int = Form(1),
     lead_type: str = Form("all"),
     filter_status: str = Form("all"),
+    traffic_source: str = Form("all"),
+    subject_interest: str = Form("all"),
     search: Optional[str] = Form(None),
     admin: AdminUser = Depends(require_admin),
     db: Session = Depends(get_db)
 ):
-    """Update lead pipeline stage and notes directly from the dashboard."""
+    """Update lead pipeline stage, counselor notes, and follow-up date directly from the dashboard."""
     update_lead_status(
         db=db,
         lead_id=lead_id,
-        status_update=LeadStatusUpdate(status=status, admin_notes=admin_notes or "")
+        status_update=LeadStatusUpdate(
+            status=status,
+            admin_notes=admin_notes or "",
+            follow_up_date=follow_up_date
+        )
     )
     # Redirect preserving current filters and page
-    redirect_url = f"/admin/dashboard?page={page}&lead_type={lead_type}&status={filter_status}"
+    redirect_url = f"/admin/dashboard?page={page}&lead_type={lead_type}&status={filter_status}&traffic_source={traffic_source}&subject_interest={subject_interest}"
     if search:
         redirect_url += f"&search={search}"
     return RedirectResponse(url=redirect_url, status_code=303)

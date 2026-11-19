@@ -17,25 +17,73 @@
         <!-- Headline -->
         <div class="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full border border-blue-500/20 bg-blue-50/80 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 text-xs font-semibold mb-3">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            {% if request.query_params.get('type') == 'demo' %}
+            <span>Live Demo Seat Confirmed</span>
+            {% elif request.query_params.get('type') == 'waitlist' %}
+            <span>Waitlist Priority Confirmed</span>
+            {% elif request.query_params.get('type') == 'lead_magnet' %}
+            <span>Resource Download Ready</span>
+            {% else %}
             <span>Registration Confirmed</span>
+            {% endif %}
         </div>
 
         <h1 class="text-2xl sm:text-3xl font-black text-slate-950 dark:text-white tracking-tight mb-3">
+            {% if request.query_params.get('type') == 'demo' %}
+            You're Booked for the Free Demo!
+            {% elif request.query_params.get('type') == 'waitlist' %}
+            You're on the Priority Waitlist!
+            {% elif request.query_params.get('type') == 'lead_magnet' %}
+            Your Resource is Ready!
+            {% else %}
             Thank You for Registering!
+            {% endif %}
         </h1>
 
         <!-- Reassuring Message -->
         <p class="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed mb-6 font-normal">
+            {% if request.query_params.get('type') == 'demo' %}
+            We have reserved your seat for the upcoming 60-minute live demo class.
+            <br>
+            <span class="text-blue-600 dark:text-blue-400 font-semibold">Meeting access link will be delivered directly to your WhatsApp</span> before the session.
+            {% elif request.query_params.get('type') == 'waitlist' %}
+            We have added you to the priority waitlist for <strong class="text-slate-900 dark:text-white">{{ request.query_params.get('subject') or 'the upcoming cohort' }}</strong>.
+            <br>
+            <span class="text-blue-600 dark:text-blue-400 font-semibold">You will receive first notification on WhatsApp</span> the moment admissions open.
+            {% elif request.query_params.get('type') == 'lead_magnet' %}
+            Your free learning asset is ready for download. We've also queued practical study notes for your WhatsApp.
+            {% else %}
             We have received your enrollment request for the <strong class="text-slate-900 dark:text-white">MYTHOS Weekend Cohort Track</strong>.
             <br>
             <span class="text-blue-600 dark:text-blue-400 font-semibold">Our admissions team will contact you shortly</span> via WhatsApp, phone, or email to discuss batch orientation, verify course track alignment, and share live class onboarding links.
+            {% endif %}
         </p>
 
+        {% if request.query_params.get('type') == 'demo' %}
+        <!-- Demo Session Schedule Box -->
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-[#070B14] border border-slate-200 dark:border-slate-800 text-left mb-6 shadow-sm">
+            <div class="flex items-center space-x-2 text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-2.5">
+                <i data-lucide="calendar" class="w-4 h-4 text-emerald-600 dark:text-emerald-400"></i>
+                <span>Demo Session Timing &amp; Calendar</span>
+            </div>
+            <p class="text-xs text-slate-600 dark:text-slate-300 mb-3">
+                <strong>Scheduled Date &amp; Time:</strong> {{ settings.DEMO_CLASS_DATETIME }}
+            </p>
+            <div class="flex flex-wrap items-center gap-2">
+                <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=MYTHOS+Free+Live+Weekend+Demo+Class&details=Live+online+cohort+demo+session+with+MYTHOS+mentors.+Meeting+access+link+will+be+delivered+via+WhatsApp.&location=Google+Meet" 
+                   target="_blank" rel="noopener noreferrer"
+                   class="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs shadow-sm transition">
+                    <i data-lucide="calendar-plus" class="w-4 h-4"></i>
+                    <span>Add to Google Calendar</span>
+                </a>
+            </div>
+        </div>
+        {% else %}
         <!-- Batch Schedule Callout Box -->
-        <div class="p-4 rounded-xl bg-slate-50 dark:bg-[#070B14] border border-slate-200 dark:border-slate-800 text-left mb-8 shadow-sm">
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-[#070B14] border border-slate-200 dark:border-slate-800 text-left mb-6 shadow-sm">
             <div class="flex items-center space-x-2 text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-2.5">
                 <i data-lucide="calendar" class="w-4 h-4 text-blue-600 dark:text-blue-400"></i>
-                <span>Your Enrolled Batch Schedule</span>
+                <span>Your Cohort Schedule</span>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-600 dark:text-slate-300">
                 <div class="flex items-center space-x-2">
@@ -54,6 +102,29 @@
                     <span class="text-emerald-500 font-bold">✓</span>
                     <span><strong>Format:</strong> 100% Live Cohort Labs &amp; Capstones</span>
                 </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Student Community Channel Action Strip (Task 4.4) -->
+        <div class="p-4 rounded-xl bg-gradient-to-r from-emerald-500/10 via-blue-500/10 to-purple-500/10 border border-emerald-500/20 text-left mb-6">
+            <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                <i data-lucide="users" class="w-4 h-4 text-emerald-500"></i> Join the Student Community
+            </h4>
+            <p class="text-xs text-slate-600 dark:text-slate-400 mb-3 leading-relaxed">
+                Stay updated with lecture notes, viva traps, cohort announcements, and meeting links directly inside our student channels.
+            </p>
+            <div class="flex flex-wrap items-center gap-2.5">
+                <a href="{{ settings.WHATSAPP_CHANNEL_URL }}" target="_blank" rel="noopener noreferrer"
+                   class="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs shadow-sm transition">
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.48 0-2.93-.39-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.196 8.196 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24M8.53 7.33c-.14 0-.36.05-.54.26-.19.21-.71.7-.71 1.71 0 1.01.73 1.99.83 2.13.1.14 1.44 2.21 3.5 3.09.49.21.87.33 1.17.43.49.16.94.13 1.29.08.4-.06 1.21-.5 1.38-.98.17-.48.17-.89.12-.98-.05-.09-.18-.14-.38-.24s-1.21-.6-1.4-.66c-.19-.07-.33-.1-.47.1-.14.21-.54.7-.66.84-.12.14-.24.16-.44.06-.2-.1-.85-.31-1.63-1-.6-.53-1.01-1.2-1.13-1.4-.12-.2-.01-.31.09-.41.09-.09.2-.24.3-.36.1-.12.14-.2.2-.34.07-.14.03-.26-.02-.36s-.47-1.14-.65-1.57c-.17-.41-.35-.35-.49-.36-.12 0-.27-.01-.41-.01Z"/></svg>
+                    <span>Join WhatsApp Channel</span>
+                </a>
+                <a href="{{ settings.TELEGRAM_URL }}" target="_blank" rel="noopener noreferrer"
+                   class="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-blue-500 hover:bg-blue-400 text-white font-semibold text-xs shadow-sm transition">
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+                    <span>Join Telegram Group</span>
+                </a>
             </div>
         </div>
 

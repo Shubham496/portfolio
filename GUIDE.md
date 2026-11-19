@@ -207,8 +207,8 @@ Navigation features a top inter-page bar (`navbar.html`) and a left in-page dock
 | `POST` | `/admin/login` | No | Authenticates credentials and sets signed session cookie. |
 | `GET` | `/admin/signup` | No | **Disabled**: returns 303 redirect to `/admin/login`. |
 | `POST` | `/admin/signup` | No | **Disabled**: returns 303 redirect to `/admin/login`. |
-| `GET` | `/admin/dashboard` | **`require_admin`** | Protected dashboard with KPI cards and paginated leads table. |
-| `POST` | `/admin/leads/{id}/status`| **`require_admin`** | Updates lead status & counseling notes; preserves active page. |
+| `GET` | `/admin/dashboard` | **`require_admin`** | Protected dashboard with 6 KPI cards, multi-filter toolbar (Lead Type, Status, Traffic Source, Subject), and paginated leads table. |
+| `POST` | `/admin/leads/{id}/status`| **`require_admin`** | Updates lead pipeline status (`new`, `contacted`, `demo_attended`, `enrolled`, `closed`, `do_not_contact`), follow-up date, and counselor notes. |
 | `GET` | `/admin/logout` | No | Clears `admin_session` cookie and redirects to `/admin/login`. |
 
 ### 5.3 Course Admissions API (`app/apps/courses/router.py`)
@@ -216,14 +216,18 @@ Navigation features a top inter-page bar (`navbar.html`) and a left in-page dock
 | :--- | :--- | :--- | :--- |
 | `GET` | `/api/courses/instructor` | Public | Instructor profile, tools, credentials, and highlights. |
 | `GET` | `/api/courses/batches` | Public | Returns active cohorts with available seat metrics. |
+| `GET` | `/api/courses/batches/grouped` | Public | Cohorts grouped by Track (`data_analytics`, `digital_marketing`) and lifecycle. |
 | `GET` | `/api/courses/batches/{id}` | Public | Detailed information for a single batch. |
-| `POST` | `/api/courses/enquiry` | Public | Submits a general inquiry or callback request (mandatory consent). |
-| `POST` | `/api/courses/register` | Public | Enrolls a student in a cohort. Email is optional (mandatory consent). |
-| `GET` | `/api/courses/leads` | **`require_admin`** | Filtered lead records (returns 401 for anonymous access). |
-| `GET` | `/api/courses/leads/summary`| **`require_admin`** | KPI metrics (`total_leads`, `registrations`, `enquiries`, `do_not_contact`). |
-| `GET` | `/api/courses/leads/export.csv`| **`require_admin`** | Downloads student lead database with consent timestamps as clean CSV. |
+| `POST` | `/api/courses/enquiry` | Public | Submits general inquiry or callback request (mandatory consent, honeypot & rate limited). |
+| `POST` | `/api/courses/register` | Public | Enrolls a student in a cohort. Email is optional (mandatory consent, honeypot & rate limited). |
+| `POST` | `/api/courses/demo` | Public | Reserves seat for upcoming live demo class (`[DEMO_CLASS_DATETIME]`, honeypot & rate limited). |
+| `POST` | `/api/courses/lead-magnet` | Public | Requests free cheat sheet or clean dataset with instant download reveal (honeypot & rate limited). |
+| `POST` | `/api/courses/waitlist` | Public | Adds student to priority waitlist for upcoming subject or next batch (honeypot & rate limited). |
+| `GET` | `/api/courses/leads` | **`require_admin`** | Filtered lead records by type, status, traffic source, subject interest (returns 401 for anonymous). |
+| `GET` | `/api/courses/leads/summary`| **`require_admin`** | KPI metrics (`total_leads`, `batch_registrations`, `enquiries`, `demo_classes`, `lead_magnets`, `new`, `contacted`, `demo_attended`, `enrolled`, `do_not_contact`). |
+| `GET` | `/api/courses/leads/export.csv`| **`require_admin`** | Downloads lead database with UTM attribution, subject interest, follow-up date, and consent timestamps as clean CSV. |
 | `GET` | `/api/courses/leads/{id}` | **`require_admin`** | Single lead detail lookup. |
-| `PATCH`| `/api/courses/leads/{id}/status`| **`require_admin`** | Updates pipeline status (`contacted`, `enrolled`, `closed`, `do_not_contact`). |
+| `PATCH`| `/api/courses/leads/{id}/status`| **`require_admin`** | Updates pipeline status (`contacted`, `demo_attended`, `enrolled`, `closed`, `do_not_contact`) and follow-up date. |
 | `POST` | `/api/courses/batches` | **`require_admin`** | Creates new cohort batch. |
 
 ### 5.4 Knowledge Engine & Library API (`app/apps/library/router.py`)
@@ -267,8 +271,8 @@ For the exhaustive database specification, see [`docs/database.md`](file:///f:/P
   - `pool_size=5`, `max_overflow=10`
 
 ### Tables Summary
-1. `batches`: Scheduled live cohorts (`batch_code`, `course_name`, `schedule_days`, `schedule_time`, `max_seats`, `is_active`).
-2. `student_leads`: Prospective student records (`full_name`, `email` [optional], `phone` [mandatory], `current_status`, `prior_experience`, `status`, `admin_notes`, foreign key to `batches.id`).
+1. `batches`: Scheduled live cohorts (`batch_code`, `title`, `course_name`, `track` ['data_analytics', 'digital_marketing'], `technologies`, `schedule_days`, `schedule_time`, `max_seats`, `status` ['enrolling', 'running', 'next', 'past'], `is_active`).
+2. `student_leads`: Prospective student records across funnels (`lead_type` ['demo_class', 'waitlist', 'lead_magnet', 'enquiry', 'batch_registration'], `full_name`, `email` [optional], `phone` [mandatory], `subject_interest`, `source_utm`, `referrer_url`, `preferred_schedule`, `message`, `status` ['new', 'contacted', 'demo_attended', 'enrolled', 'closed', 'do_not_contact'], `admin_notes`, `follow_up_date`, `consent_given`, `consent_at`, foreign key to `batches.id`).
 3. `admin_users`: Administrative accounts (`username`, `email`, `hashed_password` [bcrypt 12 rounds], `is_active`).
 4. `users`: Registered student & professional platform accounts (`full_name`, `phone` [unique/mandatory], `email` [optional], `hashed_password` [bcrypt 12 rounds], `user_type`, `college_or_company`, `is_active`).
 5. `user_activity_logs`: High-resolution engagement logs (`user_id`, `session_id`, `event_type`, `resource_type`, `resource_slug`, `referrer`, `ip_address`).

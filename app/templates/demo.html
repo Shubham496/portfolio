@@ -29,7 +29,7 @@
         <div class="text-center max-w-2xl mx-auto mb-12">
             <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800/60 text-xs font-semibold text-emerald-700 dark:text-emerald-400 mb-4 shadow-sm">
                 <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                Next Session: [DEMO_CLASS_DATETIME]
+                Next Session: {{ settings.DEMO_CLASS_DATETIME }}
             </div>
             <h1 class="text-3xl sm:text-5xl font-black tracking-tight text-slate-900 dark:text-white leading-tight mb-4">
                 Experience Our <span class="text-gradient-mythos">Live Classroom</span>
@@ -78,9 +78,11 @@
                 <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Reserve Your Free Demo Seat</h2>
                 <p class="text-xs text-slate-500 dark:text-slate-400 mb-6">Takes less than 30 seconds. Meeting link will be sent via WhatsApp.</p>
 
-                <form id="demo-form" action="/api/courses/enquiry" method="POST" class="space-y-4">
-                    <input type="hidden" name="enquiry_type" value="demo_class">
-                    <input type="hidden" name="source" value="demo_landing_page">
+                <form id="demo-form" action="/api/courses/demo" method="POST" class="space-y-4">
+                    <!-- Invisible Honeypot Field -->
+                    <div style="display:none;" aria-hidden="true">
+                        <input type="text" name="website_url_hp" tabindex="-1" autocomplete="off">
+                    </div>
 
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
@@ -113,7 +115,10 @@
                         <select name="course_interest" required
                                 class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                             <option value="Data Analytics & BI Track (SQL, Python, Power BI)">Data Analytics &amp; BI Track (SQL, Python, Power BI)</option>
-                            <option value="Digital Marketing Track (Performance & SEO)">Digital Marketing Track (Performance &amp; SEO)</option>
+                            <option value="Digital Marketing: Performance Marketing & Paid Ads">Digital Marketing: Performance Marketing &amp; Paid Ads</option>
+                            <option value="Digital Marketing: SEO & Growth Strategy">Digital Marketing: SEO &amp; Growth Strategy</option>
+                            <option value="SQL Relational Modeling & Query Traps">SQL Relational Modeling &amp; Query Traps</option>
+                            <option value="Power BI & DAX Dashboards">Power BI &amp; DAX Dashboards</option>
                         </select>
                     </div>
 
@@ -123,15 +128,16 @@
                             <input type="checkbox" name="consent" required checked
                                    class="mt-0.5 rounded border-slate-300 dark:border-slate-700 text-blue-600 focus:ring-blue-500">
                             <span class="text-[11px] text-slate-600 dark:text-slate-400 leading-tight">
-                                I agree to be contacted by phone or WhatsApp about this course and demo session.
+                                I agree to be contacted by phone or WhatsApp about this course and demo session. View our <a href="/privacy" target="_blank" class="text-blue-600 underline">Privacy Policy</a>.
                             </span>
                         </label>
                     </div>
 
-                    <button type="submit"
+                    <button type="submit" id="demo-submit-btn"
                             class="w-full mt-4 py-3 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-bold text-xs sm:text-sm transition-all shadow-md flex items-center justify-center gap-2">
                         <i data-lucide="calendar" class="w-4 h-4"></i> Confirm Free Demo Reservation
                     </button>
+                </form>
                 </form>
             </div>
 

@@ -47,6 +47,55 @@ document.addEventListener("DOMContentLoaded", () => {
         '🚀 On the Waitlist!',
         'You are on the priority waitlist! We will notify you via WhatsApp as soon as enrollment opens.');
 
+    bindForm('demo-form', '/api/courses/demo', 'demo-submit-btn',
+        '🎉 Demo Reservation Confirmed!',
+        'Your seat for the free live demo class is reserved! We will send the meeting link to your WhatsApp.');
+
+    // Lead Magnet Form AJAX Handler
+    const lmForm = document.getElementById('lead-magnet-form');
+    if (lmForm) {
+        lmForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = document.getElementById('lead-magnet-submit-btn');
+            const data = {};
+            new FormData(lmForm).forEach((val, key) => { data[key] = val; });
+            if (!data.source_utm) {
+                const cookieMatch = document.cookie.match(/mythos_utm=([^;]+)/);
+                if (cookieMatch) data.source_utm = decodeURIComponent(cookieMatch[1]);
+            }
+            if (!data.referrer_url && document.referrer) {
+                data.referrer_url = document.referrer;
+            }
+            if (submitBtn) submitBtn.disabled = true;
+            try {
+                const res = await fetch('/api/courses/lead-magnet', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                if (res.ok || res.status === 201) {
+                    const result = await res.json();
+                    const revealDiv = document.getElementById('lead-magnet-download-reveal');
+                    const directBtn = document.getElementById('lead-magnet-direct-btn');
+                    if (revealDiv && directBtn && result.download_url) {
+                        directBtn.href = result.download_url;
+                        revealDiv.classList.remove('hidden');
+                        if (submitBtn) submitBtn.classList.add('hidden');
+                    }
+                    showToast('success', '🎉 Download Ready!', 'Your learning asset is ready. Click the download button below.');
+                } else {
+                    const err = await res.json().catch(() => ({}));
+                    const detail = Array.isArray(err.detail) ? err.detail.map(d => d.msg).join(', ') : (err.detail || 'Submission failed.');
+                    showToast('error', 'Download Failed', detail);
+                    if (submitBtn) submitBtn.disabled = false;
+                }
+            } catch (_) {
+                showToast('error', 'Network Error', 'Unable to reach the server.');
+                if (submitBtn) submitBtn.disabled = false;
+            }
+        });
+    }
+
     // ESC key closes modals
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeAllModals();
@@ -105,11 +154,22 @@ function openWaitlistModal(subjectName) {
     }
 }
 
+function openLeadMagnetModal(resourceName) {
+    openModal('lead-magnet');
+    if (resourceName) {
+        const input = document.getElementById('lead-magnet-resource-input');
+        const badge = document.getElementById('lead-magnet-resource-badge');
+        if (input) input.value = resourceName;
+        if (badge) badge.textContent = resourceName;
+    }
+}
+
 function closeAllModals(restoreScroll = true) {
     document.getElementById('modal-backdrop')?.classList.add('hidden');
     document.getElementById('modal-enroll')?.classList.add('hidden');
     document.getElementById('modal-enquiry')?.classList.add('hidden');
     document.getElementById('modal-waitlist')?.classList.add('hidden');
+    document.getElementById('modal-lead-magnet')?.classList.add('hidden');
     if (restoreScroll) document.body.style.overflow = '';
 }
 
@@ -128,6 +188,15 @@ function bindForm(formId, endpoint, submitBtnId, successTitle, successMsg) {
         // Build JSON payload from form
         const data = {};
         new FormData(form).forEach((val, key) => { data[key] = val; });
+
+        // Auto-attach UTM attribution tokens and referrer (Task 4.5)
+        if (!data.source_utm) {
+            const cookieMatch = document.cookie.match(/mythos_utm=([^;]+)/);
+            if (cookieMatch) data.source_utm = decodeURIComponent(cookieMatch[1]);
+        }
+        if (!data.referrer_url && document.referrer) {
+            data.referrer_url = document.referrer;
+        }
 
         // Loading state
         submitBtn.disabled = true;

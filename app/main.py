@@ -32,6 +32,35 @@ app = FastAPI(
 # Enable GZip middleware for optimal static and dynamic compression
 app.add_middleware(GZipMiddleware, minimum_size=1000)
 
+@app.middleware("http")
+async def utm_attribution_middleware(request: Request, call_next):
+    """
+    First-touch UTM and referrer attribution middleware (Task 4.5).
+    Persists incoming attribution tokens (utm_source, utm_medium, utm_campaign, ref)
+    in a 30-day first-party cookie ('mythos_utm').
+    """
+    response = await call_next(request)
+    qp = request.query_params
+    utm_parts = []
+    for key in ("utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "ref", "source"):
+        val = qp.get(key)
+        if val:
+            utm_parts.append(f"{key}={val.strip()}")
+
+    if utm_parts:
+        existing = request.cookies.get("mythos_utm")
+        if not existing:
+            utm_str = "&".join(utm_parts)
+            response.set_cookie(
+                key="mythos_utm",
+                value=utm_str,
+                max_age=60 * 60 * 24 * 30,  # 30 days
+                httponly=False,
+                samesite="lax",
+                secure=False
+            )
+    return response
+
 # Register Sub-Apps / Mini-Apps
 app.include_router(todos_router)
 app.include_router(courses_router)

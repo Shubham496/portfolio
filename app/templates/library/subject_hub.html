@@ -386,6 +386,24 @@
                         <p class="text-[10px] text-slate-400 text-center mt-2">Zero fees · Only Name &amp; WhatsApp</p>
                     </div>
 
+                    <!-- Contextual Free Lead Magnet Card (Task 4.3) -->
+                    <div class="p-5 rounded-2xl bg-gradient-to-br from-emerald-900/40 via-teal-900/20 to-slate-900 border border-emerald-500/30 shadow-md text-left">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">FREE DOWNLOAD</span>
+                            <span class="text-[10px] text-emerald-400 font-semibold flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Instant PDF
+                            </span>
+                        </div>
+                        <h4 class="text-sm font-bold text-white mb-1.5">{{ subject.short_title }} Interview Traps</h4>
+                        <p class="text-xs text-slate-300 mb-3 leading-relaxed">
+                            Download the curated cheat sheet covering the 45+ most commonly asked technical interview traps and query edge cases.
+                        </p>
+                        <button onclick="openLeadMagnetModal('{{ subject.short_title }} Interview Traps Cheat Sheet (PDF)')" 
+                                class="w-full py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-semibold text-xs text-center transition-all shadow-sm flex items-center justify-center gap-1.5">
+                            <i data-lucide="file-text" class="w-3.5 h-3.5"></i> Download Cheat Sheet
+                        </button>
+                    </div>
+
                 </aside>
 
             </div>
