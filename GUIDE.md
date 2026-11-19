@@ -154,11 +154,11 @@ coding/
 ├── external_assets/                    # [DECOUPLED VAULT] Git-ignored submodule (mythos-assets)
 │                                       # Houses datasets, downloads, and large images via CDN
 │
-└── tests/                              # Automated test suite (61 tests passing cleanly)
-    ├── test_courses.py                 # Admissions, registrations, auth, CSV export, PDF, security (18 tests)
+└── tests/                              # Automated test suite (77 tests passing cleanly)
+    ├── test_courses.py                 # Admissions, registrations, auth, CSV export, PDF, funnels, security (27 tests)
     ├── test_library.py                 # W3Schools panels, sequential nav, reader, catalog (17 tests)
     ├── test_student_auth.py            # Student auth, session cookies, activity logging, datasets (14 tests)
-    └── test_main.py                    # Health, SEO, sitemap, robots, Open Graph, schema, quality gate (12 tests)
+    └── test_main.py                    # Health, SEO, sitemap, robots, Open Graph, schema, quality gate, analytics (19 tests)
 ```
 
 ---
@@ -294,6 +294,8 @@ Auto-loaded via `python-dotenv` from `.env` in [`app/core/config.py`](file:///f:
 | `DATABASE_URL` | Cloud Prod | `""` (falls back to SQLite)| External PostgreSQL connection URI (Neon / Supabase / Render Postgres). |
 | `BASE_URL` | No | `https://mythostech.in` | Canonical base domain used for sitemap.xml, canonical URLs, and schema metadata. |
 | `GOOGLE_SITE_VERIFICATION` | Optional | `""` | Google Search Console site verification HTML tag content. |
+| `ANALYTICS_SCRIPT` | Optional | `""` | Privacy-friendly tracking snippet injection (Plausible, Umami, Cloudflare Web Analytics). |
+| `GA4_MEASUREMENT_ID` | Optional | `""` | Google Analytics 4 measurement ID (e.g., `G-XXXXXXXXXX`) with automated `gtag` setup. |
 | `BUSINESS_EMAIL` | Recommended | `admissions@mythostech.in` | Official institute contact email rendered across templates and PDF brochures. |
 | `BUSINESS_WHATSAPP` | Recommended | `[BUSINESS_WHATSAPP]` | Official institute WhatsApp/phone contact number; purged of legacy personal numbers. |
 | `DM_MENTOR_NAME` | Optional | `[DM_MENTOR_NAME]` | Full name for the Digital Marketing Mentor. |
@@ -333,7 +335,7 @@ uvicorn app.main:app --reload --port 8000
 ```powershell
 python -m pytest -v
 ```
-**Verification Requirement**: All **66 automated tests** must pass with zero failures.
+**Verification Requirement**: All **77 automated tests** must pass with zero failures.
 
 ---
 

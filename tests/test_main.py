@@ -304,3 +304,67 @@ def test_compliance_and_guarantee_audit():
         for phrase in prohibited_phrases:
             assert phrase not in lower_html, f"Prohibited compliance phrase '{phrase}' found in {path}"
 
+
+def test_privacy_friendly_analytics_script_injection_and_ga4():
+    """Verify lightweight script injection via ANALYTICS_SCRIPT and GA4_MEASUREMENT_ID (Task 5.1)."""
+    orig_analytics = getattr(settings, "ANALYTICS_SCRIPT", "")
+    orig_ga4 = getattr(settings, "GA4_MEASUREMENT_ID", "")
+    try:
+        # 1. Default state: no script tags injected
+        settings.ANALYTICS_SCRIPT = ""
+        settings.GA4_MEASUREMENT_ID = ""
+        res_default = client.get("/")
+        assert res_default.status_code == 200
+        assert "googletagmanager.com/gtag/js" not in res_default.text
+        assert "plausible.io" not in res_default.text
+
+        # 2. Plausible / Umami script injection via ANALYTICS_SCRIPT
+        test_script = '<script defer data-domain="mythostech.in" src="https://plausible.io/js/script.js"></script>'
+        settings.ANALYTICS_SCRIPT = test_script
+        res_plausible = client.get("/")
+        assert res_plausible.status_code == 200
+        assert test_script in res_plausible.text
+
+        # 3. GA4 measurement ID injection
+        test_ga4 = "G-MYTHOSTEST99"
+        settings.GA4_MEASUREMENT_ID = test_ga4
+        res_ga4 = client.get("/")
+        assert res_ga4.status_code == 200
+        assert f"googletagmanager.com/gtag/js?id={test_ga4}" in res_ga4.text
+        assert f"gtag('config', '{test_ga4}')" in res_ga4.text
+    finally:
+        settings.ANALYTICS_SCRIPT = orig_analytics
+        settings.GA4_MEASUREMENT_ID = orig_ga4
+
+
+def test_custom_client_event_tracking_and_activity_logging():
+    """Verify client JS defines trackEvent for custom events and logs to activity endpoint (Task 5.1)."""
+    # 1. Verify main.js contains required event tracking functions and handlers
+    with open("app/static/js/main.js", "r", encoding="utf-8") as f:
+        js_content = f.read()
+
+    assert "function trackEvent(" in js_content
+    assert "window.trackEvent = trackEvent" in js_content
+    assert "cta_click" in js_content
+    assert "form_submit" in js_content
+    assert "lead_magnet_download" in js_content
+    assert "whatsapp_join" in js_content
+    assert "window.plausible" in js_content
+    assert "window.umami" in js_content
+    assert "window.gtag" in js_content
+
+    # 2. Verify /api/activity/log handles each custom analytics event cleanly
+    custom_events = [
+        {"event_type": "cta_click", "resource_type": "cta_button", "resource_slug": "apply_now"},
+        {"event_type": "form_submit", "resource_type": "form", "resource_slug": "demo-form"},
+        {"event_type": "lead_magnet_download", "resource_type": "cheat_sheet", "resource_slug": "sql-interview-traps"},
+        {"event_type": "whatsapp_join", "resource_type": "community_channel", "resource_slug": "whatsapp-broadcast"},
+    ]
+    for ev in custom_events:
+        res = client.post("/api/activity/log", json=ev)
+        assert res.status_code == 200
+        body = res.json()
+        assert body["success"] is True
+        assert body["logged"] is True
+
+

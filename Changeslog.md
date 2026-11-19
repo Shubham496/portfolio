@@ -5,6 +5,16 @@ Historical records prior to these entries are archived in [`docs/CHANGELOG_ARCHI
 
 ---
 
+## [Entry 22] - 2026-11-19 (Phase 5: Privacy-Friendly Analytics Integration & Custom Client Event Tracking)
+- **Feature Added / Modified**: Implemented privacy-friendly analytics script injection and custom client event tracking architecture (Task 5.1); added support for lightweight script injection via environment variable `ANALYTICS_SCRIPT` (supporting Plausible, Umami, or Cloudflare Web Analytics without tracking cookies) and `GA4_MEASUREMENT_ID` (for Google Analytics 4 with automatic `gtag` setup) in `app/core/base_config.py` and `app/templates/base.html`; built robust client-side event tracking utility `trackEvent(eventName, eventData)` on `window` in `app/static/js/main.js` with multi-dispatcher support across Plausible (`window.plausible`), Umami (`window.umami.track`), Google Analytics 4 (`window.gtag`), and internal engagement activity logging (`/api/activity/log` via `navigator.sendBeacon` or fetch); wired automatic event capture for all 4 key conversion events: `cta_click` (on modal openers, apply buttons, demo booking, syllabus downloads, and `.btn-cta`), `form_submit` (across enroll, enquiry, waitlist, demo, lead magnet, and registration forms), `lead_magnet_download` (on cheat sheet reveal and download buttons), and `whatsapp_join` (on WhatsApp click-to-chat links and community broadcast channels); bumped static script version to `?v=2.3` in `base.html` for cache-busting; created 2 new automated test cases in `tests/test_main.py` verifying script injection and event dispatching (77 total tests passing cleanly with 0 errors).
+- **Files Affected**: `app/core/base_config.py`, `.env.example`, `app/templates/base.html`, `app/static/js/main.js`, `tests/test_main.py`, `docs/task_new.md`, `Changeslog.md`, `docs/CHANGELOG_ARCHIVE.md`, `GUIDE.md`.
+- **Important API Changes**: Added `settings.ANALYTICS_SCRIPT` and `settings.GA4_MEASUREMENT_ID`; client JS exposes `window.trackEvent(eventName, eventData)`.
+- **Database / Schema Changes**: None.
+- **Bugs Fixed**: None.
+- **Breaking Changes**: None.
+
+---
+
 ## [Entry 21] - 2026-11-19 (Phase 4: Lead Capture, Demo Class & Funnel Optimization — Dedicated /demo, Lead Magnets, First-Touch UTM Persistence, Admin Pipeline Overhaul & Anti-Spam Defense)
 - **Feature Added / Modified**: Implemented comprehensive lead capture, live demo class funnel, and counselor pipeline optimization; created dedicated free demo class landing page (`GET /demo`, `app/templates/demo.html`) highlighting `[DEMO_CLASS_DATETIME]` with high-converting reservation form, anti-spam honeypot defense, and instant Google Calendar integration (`app/templates/confirmation.html`); designed free lead magnet architecture (cheat sheets and clean sample datasets) with contextual download gates on subject hubs and reader sidebars (`app/templates/library/reader.html`, `app/templates/library/subject_hub.html`, `#modal-lead-magnet`), revealing direct download links upon submission while keeping core reading notes 100% public; integrated official student community broadcast action strips for **WhatsApp Community Channel** (`[WHATSAPP_CHANNEL_URL]`) and **Telegram Group** (`[TELEGRAM_URL]`) across footer (`partials/footer.html`), confirmation page, and reader sidebar; developed first-touch UTM persistence middleware (`utm_attribution_middleware` in `app/main.py`) caching incoming UTM campaign parameters and referrers into a 30-day `mythos_utm` cookie and automatically attaching attribution to all student submissions (`demo_class`, `lead_magnet`, `enquiry`, `batch_registration`, `waitlist`); overhauled admin admissions pipeline (`/admin/dashboard`, `app/templates/admin/dashboard.html`) with expanded lead statuses (`new`, `contacted`, `demo_attended`, `enrolled`, `closed`, `do_not_contact`), 6 metric KPI cards, multi-filter toolbar (Lead Type, Status, Subject Interest, Traffic Source), counselor follow-up date picker (`follow_up_date`), internal counselor notes updater, and enriched CSV export; implemented invisible anti-spam honeypots (`website_url_hp`) on all public forms and in-memory IP rate limiting on public submission endpoints; expanded test suite with 5 new automated test cases in `tests/test_courses.py` (75 total tests passing cleanly with 0 errors).
 - **Files Affected**: `app/core/base_config.py`, `app/apps/courses/models.py`, `app/apps/courses/schemas.py`, `app/apps/courses/services.py`, `app/apps/courses/router.py`, `app/apps/courses/admin_router.py`, `app/main.py`, `app/templates/demo.html`, `app/templates/confirmation.html`, `app/templates/register.html`, `app/templates/sections/modals.html`, `app/templates/partials/footer.html`, `app/templates/library/reader.html`, `app/templates/library/subject_hub.html`, `app/templates/admin/dashboard.html`, `app/static/js/main.js`, `tests/test_courses.py`, `docs/task_new.md`, `GUIDE.md`, `Changeslog.md`, `docs/CHANGELOG_ARCHIVE.md`.
@@ -141,16 +151,6 @@ Historical records prior to these entries are archived in [`docs/CHANGELOG_ARCHI
 - **Important API Changes**: Updated `toggleSyllabus(index)` paired logic.
 - **Database / Schema Changes**: None.
 - **Bugs Fixed**: Mobile vs laptop syllabus expansion ergonomics.
-- **Breaking Changes**: None.
-
----
-
-## [Entry 7] - 2026-11-12 (Frontend Architecture Modularization & Environment Template)
-- **Feature Added / Modified**: Decomposed monolithic 1,300-line `app/templates/index.html` into 10 maintainable Jinja2 section partials in `app/templates/sections/`; streamlined header navigation by removing redundant badges; created `.env.example` documenting all expected environment variables with safe dummy placeholders.
-- **Files Affected**: `app/templates/index.html`, `app/templates/sections/*.html`, `app/templates/partials/navbar.html`, `.env.example`, `docs/AGENT_GUIDE.md`.
-- **Important API Changes**: None.
-- **Database / Schema Changes**: None.
-- **Bugs Fixed**: Eliminated monolithic HTML maintenance issues with zero visual or UX regression.
 - **Breaking Changes**: None.
 
 ---

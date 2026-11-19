@@ -1,4 +1,41 @@
 // ─────────────────────────────────────────────
+// Privacy-Friendly Custom Event Tracking (Task 5.1)
+// Dispatches to Plausible, Umami, GA4, and internal activity logger
+// ─────────────────────────────────────────────
+function trackEvent(eventName, eventData = {}) {
+    if (!eventName) return;
+    if (typeof window.plausible === 'function') {
+        try { window.plausible(eventName, { props: eventData }); } catch (_) {}
+    }
+    if (window.umami && typeof window.umami.track === 'function') {
+        try { window.umami.track(eventName, eventData); } catch (_) {}
+    }
+    if (typeof window.gtag === 'function') {
+        try { window.gtag('event', eventName, eventData); } catch (_) {}
+    }
+    try {
+        const payload = {
+            event_type: eventName,
+            resource_type: eventData.category || eventData.type || 'analytics_event',
+            resource_slug: (eventData.label || eventData.slug || eventData.target || eventData.form_id || eventData.cta_id || '').toString().slice(0, 100),
+            referrer: document.referrer || window.location.href
+        };
+        const blobData = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+        if (navigator.sendBeacon) {
+            navigator.sendBeacon('/api/activity/log', blobData);
+        } else {
+            fetch('/api/activity/log', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+                keepalive: true
+            }).catch(() => {});
+        }
+    } catch (_) {}
+}
+window.trackEvent = trackEvent;
+
+// ─────────────────────────────────────────────
 // Theme toggle (dark / light)
 // ─────────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", () => {
@@ -74,6 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     body: JSON.stringify(data)
                 });
                 if (res.ok || res.status === 201) {
+                    trackEvent('form_submit', { form_id: 'lead-magnet-form', resource: data.resource_name || 'lead_magnet' });
                     const result = await res.json();
                     const revealDiv = document.getElementById('lead-magnet-download-reveal');
                     const directBtn = document.getElementById('lead-magnet-direct-btn');
@@ -95,6 +133,66 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
+
+    // Delegated click listener for custom analytics events (Task 5.1)
+    document.addEventListener('click', (e) => {
+        const target = e.target.closest('a, button');
+        if (!target) return;
+
+        const href = target.getAttribute('href') || '';
+        const onclickAttr = target.getAttribute('onclick') || '';
+        const ctaName = target.getAttribute('data-cta') || target.getAttribute('data-track');
+        const text = (target.innerText || target.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 50);
+
+        // 1. WhatsApp Join Tracking
+        if (href.includes('wa.me') || href.includes('whatsapp.com') || target.hasAttribute('data-whatsapp') || href.includes('chat.whatsapp.com')) {
+            trackEvent('whatsapp_join', {
+                url: href,
+                label: text || 'whatsapp_join',
+                location: window.location.pathname
+            });
+        }
+
+        // 2. Lead Magnet Download Tracking
+        if (target.id === 'lead-magnet-direct-btn' || target.hasAttribute('data-lead-magnet') || (href.includes('/syllabus/download') && target.closest('#lead-magnet-download-reveal'))) {
+            const badge = document.getElementById('lead-magnet-resource-badge');
+            const resourceName = badge ? badge.textContent : 'Lead Magnet Resource';
+            trackEvent('lead_magnet_download', {
+                resource: resourceName,
+                url: href,
+                location: window.location.pathname
+            });
+        }
+
+        // 3. CTA Click Tracking
+        const isExplicitCTA = Boolean(ctaName);
+        const isModalOpen = onclickAttr.includes('openModal') || onclickAttr.includes('openWaitlistModal') || onclickAttr.includes('openLeadMagnetModal');
+        const isFunnelLink = href.startsWith('/register') || href.startsWith('/demo') || href.startsWith('/#programs') || href.includes('/syllabus/download');
+        const hasCtaClass = target.classList.contains('btn-cta') || target.classList.contains('cta-btn');
+
+        if (isExplicitCTA || isModalOpen || isFunnelLink || hasCtaClass) {
+            trackEvent('cta_click', {
+                cta_id: ctaName || (isModalOpen ? 'open_modal' : (href || 'button')),
+                label: text || 'cta_button',
+                destination: href || onclickAttr,
+                location: window.location.pathname
+            });
+        }
+    });
+
+    // Delegated generic form submission tracking (Task 5.1)
+    document.addEventListener('submit', (e) => {
+        const form = e.target;
+        if (form && form.tagName === 'FORM') {
+            const formId = form.id || form.getAttribute('action') || 'generic_form';
+            if (!['enroll-form', 'enquiry-form', 'waitlist-form', 'demo-form', 'lead-magnet-form'].includes(formId)) {
+                trackEvent('form_submit', {
+                    form_id: formId,
+                    action: form.getAttribute('action') || window.location.pathname
+                });
+            }
+        }
+    });
 
     // ESC key closes modals
     document.addEventListener('keydown', (e) => {
@@ -214,6 +312,7 @@ function bindForm(formId, endpoint, submitBtnId, successTitle, successMsg) {
             });
 
             if (res.ok || res.status === 201) {
+                trackEvent('form_submit', { form_id: formId, endpoint: endpoint, type: 'form' });
                 closeAllModals();
                 form.reset();
                 if (formId === 'enroll-form') {

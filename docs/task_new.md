@@ -281,9 +281,9 @@ Phase 6: Later Only (Optional Paywalled Bundles via External Link)
 ### Phase 5: Privacy-Friendly Analytics & Funnel Monitoring
 *Monitor acquisition channels and conversion rates without tracking cookies.*
 
-* [ ] **Task 5.1: Privacy-Friendly Analytics Integration**
+* [x] **Task 5.1: Privacy-Friendly Analytics Integration**
   * Support lightweight script injection via environment variable (`ANALYTICS_SCRIPT` for Plausible, Umami, or Cloudflare Web Analytics, or `GA4_MEASUREMENT_ID`).
-  * Track custom client events: `cta_click`, `form_submit`, `lead_magnet_download`, `whatsapp_join`.
+  * Track custom client events: `cta_click`, `form_submit`, `lead_magnet_download`, `whatsapp_join` with automatic dispatch to Plausible, Umami, GA4, and the internal activity logging endpoint.
 * [ ] **Task 5.2: Admin Funnel Summary Card**
   * Add an executive conversion metric card on `/admin/dashboard`:
     * Weekly leads by traffic source (WhatsApp, Google, Direct, Referral).

@@ -15,6 +15,22 @@
     <meta name="google-site-verification" content="{{ settings.GOOGLE_SITE_VERIFICATION }}">
     {% endif %}
 
+    {% if settings.GA4_MEASUREMENT_ID %}
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ settings.GA4_MEASUREMENT_ID }}"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '{{ settings.GA4_MEASUREMENT_ID }}');
+    </script>
+    {% endif %}
+
+    {% if settings.ANALYTICS_SCRIPT %}
+    <!-- Privacy-Friendly Analytics Script Injection (Plausible / Umami / Cloudflare) -->
+    {{ settings.ANALYTICS_SCRIPT | safe }}
+    {% endif %}
+
     <!-- Canonical URL -->
     <link rel="canonical" href="{% block canonical_url %}{{ settings.BASE_URL }}{{ request.url.path if request else '' }}{% endblock %}">
 
@@ -116,7 +132,7 @@
     {% include "partials/footer.html" %}
 
     <!-- Global Client Scripts (Cache-busted) -->
-    <script src="/static/js/main.js?v=2.2"></script>
+    <script src="/static/js/main.js?v=2.3"></script>
     <script>
         lucide.createIcons();
     </script>
