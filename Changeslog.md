@@ -5,6 +5,16 @@ Historical records prior to these entries are archived in [`docs/CHANGELOG_ARCHI
 
 ---
 
+## [Entry 24] - 2026-11-19 (Notes & Knowledge Engine UI Polish: Viewport Margins, Sticky Sidebar Grid Alignment & High-Contrast Mythos Theming)
+- **Feature Added / Modified**: Resolved library reading workspace layout and contrast defects across `/library/{subject}` and `/library/{subject}/notes/{slug}`; expanded ambient header and body containers to `max-w-[100rem]` eliminating excessive 320px outer whitespace margins and expanding the central reading canvas from 580px to over 1000px; fixed 3-column grid alignment by replacing invalid fractional Tailwind classes (`col-span-2.5`, `col-span-3.5`, `col-span-8.5`) with exact, responsive integer grid distributions (`lg:col-span-3 xl:col-span-2` for topic menu, `lg:col-span-6 xl:col-span-7 2xl:col-span-8` for reading canvas, and `hidden lg:block lg:col-span-3 xl:col-span-3 2xl:col-span-2` for table of contents), preventing the right sticky sidebar from wrapping beneath article content; purged illegible translucent dark gradients across mentorship bridge cards, live demo class cards, lead magnet downloads, and weekend cohort banners, migrating them to high-contrast Mythos theme card structures (`bg-white dark:bg-[#0B1120]` with `border-2 border-blue-600/30 dark:border-blue-500/40`); injected GitHub font family (`font-github`: `-apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif`) across card containers, metadata badges, and explanatory paragraphs for crystal-clear readability in both light and dark modes; verified all 78 automated tests passing cleanly with 0 errors.
+- **Files Affected**: `app/templates/base.html`, `app/static/css/style.css`, `app/templates/library/subject_hub.html`, `app/templates/library/reader.html`, `app/templates/library/index.html`, `docs/CHANGELOG_ARCHIVE.md`, `Changeslog.md`.
+- **Important API Changes**: Added `fontFamily.github` in `tailwind.config` and `.font-github` / `.font-github-mono` in `app/static/css/style.css`.
+- **Database / Schema Changes**: None.
+- **Bugs Fixed**: Eliminated right sidebar wrapping to bottom of page; removed excessive side margins on desktop screens; fixed unreadable white text on translucent gradient boxes in light and dark modes.
+- **Breaking Changes**: None.
+
+---
+
 ## [Entry 23] - 2026-11-19 (Phase 5: Executive Funnel & Conversion Analytics Card on Admin Dashboard)
 - **Feature Added / Modified**: Implemented comprehensive executive conversion funnel summary card on the admin monitoring portal (`/admin/dashboard`, `app/templates/admin/dashboard.html`, Task 5.2); engineered `classify_lead_source` utility in `app/apps/courses/services.py` accurately categorizing student acquisition into 4 primary channels: WhatsApp (`whatsapp`, `wa.me`), Google Search (`google`, `organic`), Direct (`direct`, none), and Referral (`referral`, `telegram`, `linkedin`, `instagram`, `youtube`); enhanced `get_lead_summary` to compute 7-day weekly lead acquisition metrics with volume and percentage proportions, total demo class registrants vs attended with attendance conversion rate (`demo_attendance_rate`), and cohort enrollment conversion rates (`cohort_conversion_rate` across all leads, and `batch_conversion_rate` for direct cohort applications); mounted responsive 3-column executive card on `/admin/dashboard` featuring real-time source distribution progress bars, demo attendance metrics, and cohort conversion KPI indicators; exposed complete `funnel` dictionary on authenticated API endpoint `GET /api/courses/leads/summary`; added automated test case in `tests/test_courses.py` (78 total tests passing cleanly with 0 errors).
 - **Files Affected**: `app/apps/courses/services.py`, `app/apps/courses/admin_router.py`, `app/templates/admin/dashboard.html`, `tests/test_courses.py`, `docs/task_new.md`, `GUIDE.md`, `Changeslog.md`, `docs/CHANGELOG_ARCHIVE.md`.
@@ -141,16 +151,6 @@ Historical records prior to these entries are archived in [`docs/CHANGELOG_ARCHI
 - **Important API Changes**: Updated `POST /api/courses/register` and `POST /api/courses/enquiry` to accept `course_name` and `course_interest`.
 - **Database / Schema Changes**: Pydantic schemas updated for course selection.
 - **Bugs Fixed**: Eliminated awkward defensive payment disclaimers across templates.
-- **Breaking Changes**: None.
-
----
-
-## [Entry 9] - 2026-11-12 (High-Definition Design Assets & Brand Master Overhaul)
-- **Feature Added / Modified**: Replaced pixelated assets with 1376x768 3D studio renders (illuminated circular neon podium, gradient 'M' ribbon sculpture); created zero-halo transparent icons (`mythos_icon_transparent.png`, `mythos_icon_2048.png`); built precision vector SVG emblem (`mythos_emblem.svg`); updated certificate generator to modern FPDF2 coordinates.
-- **Files Affected**: `design/assets/`, `app/static/Images/mythos/`, `design/certificate_generator_template.py`, `design/GUIDELINES.md`.
-- **Important API Changes**: Modernized `fpdf2` coordinate calls (`new_x`, `new_y`).
-- **Database / Schema Changes**: None.
-- **Bugs Fixed**: Eliminated alpha halo fringing; resolved FPDF2 deprecation warnings.
 - **Breaking Changes**: None.
 
 ---

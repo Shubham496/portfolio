@@ -107,14 +107,14 @@
     <!-- Top Progress Bar -->
     <div id="reading-progress" class="fixed top-0 left-0 h-1 bg-gradient-to-r from-blue-600 via-purple-600 to-orange-500 z-50 transition-all duration-150" style="width: 0%;"></div>
 
-    <div class="max-w-[92rem] mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div class="max-w-[100rem] mx-auto px-4 sm:px-6 lg:px-8 py-6">
         
         <div class="lg:grid lg:grid-cols-12 lg:gap-8">
             
             <!-- ══════════════════════════════════════════════════════════
                  COLUMN 1: LEFT NAVIGATION TREE (3 cols on lg, 2 cols on xl)
                  ══════════════════════════════════════════════════════════ -->
-            <aside class="hidden lg:block lg:col-span-3 xl:col-span-2.5 sticky top-20 self-start docs-sidebar-scroll overflow-y-auto pr-3">
+            <aside class="hidden lg:block lg:col-span-3 xl:col-span-2 sticky top-20 self-start docs-sidebar-scroll overflow-y-auto pr-3">
                 <div class="pb-8">
                     <!-- Subject Back Link -->
                     <a href="/library/{{ subject.slug }}" class="inline-flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 mb-6 transition-colors">
@@ -171,9 +171,9 @@
             </aside>
 
             <!-- ══════════════════════════════════════════════════════════
-                 COLUMN 2: CENTER READING CANVAS (7 cols on lg, 7 cols on xl)
+                 COLUMN 2: CENTER READING CANVAS (6 cols on lg, 7 cols on xl, 8 cols on 2xl)
                  ══════════════════════════════════════════════════════════ -->
-            <main class="lg:col-span-6 xl:col-span-7 bg-white dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-10 shadow-sm">
+            <main class="lg:col-span-6 xl:col-span-7 2xl:col-span-8 bg-white dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-10 shadow-sm">
                 
                 <!-- Breadcrumbs -->
                 <nav class="flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 mb-6 overflow-x-auto whitespace-nowrap">
@@ -279,21 +279,21 @@
                 </div>
 
                 <!-- Mentorship Bridge Card -->
-                <div class="mt-12 p-6 sm:p-8 rounded-2xl bg-gradient-to-r from-blue-900/20 via-purple-900/20 to-slate-900 border border-blue-500/20 text-left">
-                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 text-[11px] font-semibold mb-3">
+                <div class="mt-12 p-6 sm:p-8 rounded-2xl bg-white dark:bg-[#0B1120] border-2 border-blue-600/30 dark:border-blue-500/40 shadow-sm text-left font-github">
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/80 text-blue-600 dark:text-blue-400 text-[11px] font-semibold border border-blue-200 dark:border-blue-800/80 mb-3">
                         <i data-lucide="terminal" class="w-3 h-3"></i> MYTHOS Production Mentorship Bridge
                     </span>
-                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2 font-github">
                         Stop Learning in Silos. Build Live Systems This Weekend.
                     </h3>
-                    <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mb-5 leading-relaxed">
+                    <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mb-5 leading-relaxed font-github">
                         In our selective live weekend cohorts, you do not memorize syntax. You build production-grade query pipelines, data warehouses, and high-converting marketing funnels under direct review.
                     </p>
                     <div class="flex flex-wrap items-center gap-3">
-                        <a href="/register?source=library_{{ subject.slug }}_{{ meta.slug }}" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs transition-colors shadow-sm flex items-center gap-2">
+                        <a href="/register?source=library_{{ subject.slug }}_{{ meta.slug }}" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs transition-colors shadow-sm flex items-center gap-2 font-github">
                             Apply for Live Cohort <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
                         </a>
-                        <a href="{{ settings.whatsapp_url }}" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-semibold text-xs transition-colors flex items-center gap-1.5">
+                        <a href="{{ settings.whatsapp_url }}" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-semibold text-xs transition-colors flex items-center gap-1.5 font-github border border-slate-300 dark:border-slate-700">
                             <i data-lucide="message-circle" class="w-3.5 h-3.5 text-emerald-500"></i> Ask Counselor
                         </a>
                     </div>
@@ -303,27 +303,27 @@
 
             <!-- ══════════════════════════════════════════════════════════
                  COLUMN 3: RIGHT STICKY SIDEBAR (TOC + COHORT CARD)
-                 (3 cols on lg, 2.5 cols on xl)
+                 (3 cols on lg, 3 cols on xl, 2 cols on 2xl)
                  ══════════════════════════════════════════════════════════ -->
-            <aside class="hidden lg:block lg:col-span-3 xl:col-span-2.5 sticky top-20 self-start docs-sidebar-scroll overflow-y-auto pl-2">
+            <aside class="hidden lg:block lg:col-span-3 xl:col-span-3 2xl:col-span-2 sticky top-20 self-start docs-sidebar-scroll overflow-y-auto pl-2">
                 <div class="space-y-6 pb-8">
                     
                     <!-- Table of Contents -->
                     {% if doc.toc_tokens %}
-                    <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
-                        <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-3">
+                    <div class="p-5 rounded-2xl bg-white dark:bg-[#0B1120] border-2 border-blue-600/30 dark:border-blue-500/40 shadow-sm font-github">
+                        <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-3 font-github">
                             <i data-lucide="list" class="w-4 h-4 text-blue-500"></i> On This Page
                         </div>
                         <nav id="toc-nav" class="space-y-1 text-xs">
                             {% for token in doc.toc_tokens %}
                                 {% if token.level >= 2 %}
-                                <a href="#{{ token.id }}" class="toc-link block py-1.5 pl-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 border-l-2 border-transparent transition-colors">
+                                <a href="#{{ token.id }}" class="toc-link block py-1.5 pl-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 border-l-2 border-transparent transition-colors font-github">
                                     {{ token.name }}
                                 </a>
                                 {% endif %}
                                 {% for child in token.children %}
                                     {% if child.level >= 2 %}
-                                    <a href="#{{ child.id }}" class="toc-link block py-1 pl-4 text-[11px] text-slate-500 dark:text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 border-l-2 border-transparent transition-colors">
+                                    <a href="#{{ child.id }}" class="toc-link block py-1 pl-4 text-[11px] text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 border-l-2 border-transparent transition-colors font-github">
                                         {{ child.name }}
                                     </a>
                                     {% endif %}
@@ -334,48 +334,48 @@
                     {% endif %}
 
                     <!-- Contextual Free Live Demo Class Card -->
-                    <div class="p-5 rounded-2xl bg-gradient-to-br from-blue-900/40 via-cyan-900/20 to-slate-900 border border-cyan-500/30 shadow-md text-left">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">FREE LIVE DEMO</span>
-                            <span class="text-[10px] text-emerald-400 font-semibold flex items-center gap-1">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Weekend
+                    <div class="p-5 rounded-2xl bg-white dark:bg-[#0B1120] border-2 border-blue-600/30 dark:border-blue-500/40 shadow-sm text-left font-github">
+                        <div class="flex items-center justify-between mb-2.5">
+                            <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/70 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 font-github">FREE LIVE DEMO</span>
+                            <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1 font-github">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Weekend
                             </span>
                         </div>
-                        <h4 class="text-sm font-bold text-white mb-1.5">Free 60-Min Live Demo</h4>
-                        <p class="text-xs text-slate-300 mb-3 leading-relaxed">
+                        <h4 class="text-sm font-bold text-slate-900 dark:text-white mb-1.5 font-github">Free 60-Min Live Demo</h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-300 mb-3 leading-relaxed font-github">
                             Experience our live classroom before enrolling. Interactive query profiling, live coding, and mock viva prep.
                         </p>
-                        <a href="/demo?source=reader_{{ subject.slug }}" class="block w-full py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold text-xs text-center transition-all shadow-sm">
+                        <a href="/demo?source=reader_{{ subject.slug }}" class="block w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs text-center transition-colors shadow-sm font-github">
                             Book Free Demo Seat
                         </a>
-                        <p class="text-[10px] text-slate-400 text-center mt-2">Zero fees · Only Name &amp; WhatsApp</p>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400 text-center mt-2 font-github">Zero fees · Only Name &amp; WhatsApp</p>
                     </div>
 
                     <!-- Contextual Free Lead Magnet Card (Task 4.3) -->
-                    <div class="p-5 rounded-2xl bg-gradient-to-br from-emerald-900/40 via-teal-900/20 to-slate-900 border border-emerald-500/30 shadow-md text-left">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">FREE DOWNLOAD</span>
-                            <span class="text-[10px] text-emerald-400 font-semibold flex items-center gap-1">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Instant PDF
+                    <div class="p-5 rounded-2xl bg-white dark:bg-[#0B1120] border-2 border-blue-600/30 dark:border-blue-500/40 shadow-sm text-left font-github">
+                        <div class="flex items-center justify-between mb-2.5">
+                            <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 font-github">FREE DOWNLOAD</span>
+                            <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1 font-github">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Instant PDF
                             </span>
                         </div>
-                        <h4 class="text-sm font-bold text-white mb-1.5">Free {{ subject.short_title }} Interview Traps</h4>
-                        <p class="text-xs text-slate-300 mb-3 leading-relaxed">
+                        <h4 class="text-sm font-bold text-slate-900 dark:text-white mb-1.5 font-github">Free {{ subject.short_title }} Interview Traps</h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-300 mb-3 leading-relaxed font-github">
                             Download our curated cheat sheet covering the 45+ most commonly asked technical traps and query edge cases.
                         </p>
                         <button onclick="openLeadMagnetModal('{{ subject.short_title }} Interview Traps Cheat Sheet (PDF)')" 
-                                class="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-semibold text-xs text-center transition-all shadow-sm flex items-center justify-center gap-1.5">
-                            <i data-lucide="file-text" class="w-3.5 h-3.5"></i> Download Free Cheat Sheet
+                                class="w-full py-2.5 rounded-xl bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 dark:hover:bg-slate-700 text-white font-semibold text-xs text-center transition-colors shadow-sm flex items-center justify-center gap-1.5 border border-slate-700 dark:border-slate-600 font-github">
+                            <i data-lucide="file-text" class="w-3.5 h-3.5 text-blue-400"></i> Download Free Cheat Sheet
                         </button>
-                        <p class="text-[10px] text-slate-400 text-center mt-2">Zero fee · Only Name &amp; WhatsApp</p>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400 text-center mt-2 font-github">Zero fee · Only Name &amp; WhatsApp</p>
                     </div>
 
                     <!-- Student Community Broadcast Links (Task 4.4) -->
-                    <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-xs text-left">
-                        <div class="flex items-center gap-1.5 mb-2 font-bold text-slate-900 dark:text-white">
+                    <div class="p-4 rounded-xl bg-slate-50 dark:bg-[#0B1120] border border-blue-500/20 dark:border-blue-500/30 text-xs text-left font-github">
+                        <div class="flex items-center gap-1.5 mb-2 font-bold text-slate-900 dark:text-white font-github">
                             <i data-lucide="radio" class="w-4 h-4 text-emerald-500"></i> Student Community
                         </div>
-                        <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-3 leading-relaxed">
+                        <p class="text-[11px] text-slate-600 dark:text-slate-400 mb-3 leading-relaxed font-github">
                             Join our official discussion &amp; broadcast channels for real-time notes and lecture links:
                         </p>
                         <div class="space-y-2">
@@ -393,32 +393,32 @@
                     </div>
 
                     <!-- Contextual Weekend Cohort Card -->
-                    <div class="p-5 rounded-2xl bg-gradient-to-br from-blue-900/30 to-slate-900 border border-blue-800/40 shadow-sm text-left">
+                    <div class="p-5 rounded-2xl bg-white dark:bg-[#0B1120] border-2 border-blue-600/30 dark:border-blue-500/40 shadow-sm text-left font-github">
                         <div class="flex items-center justify-between mb-3">
-                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300">LIVE COHORT</span>
-                            <span class="text-[10px] text-emerald-400 font-semibold flex items-center gap-1">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Weekend Only
+                            <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/70 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 font-github">LIVE COHORT</span>
+                            <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1 font-github">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Weekend Only
                             </span>
                         </div>
-                        <h4 class="text-sm font-bold text-white mb-1.5">Weekend Masterclass</h4>
-                        <p class="text-xs text-slate-300 mb-4 leading-relaxed">
-                            Saturday & Sunday, 6:00 PM – 8:00 PM IST. Live interactive mentorship with hands-on capstone builds.
+                        <h4 class="text-sm font-bold text-slate-900 dark:text-white mb-1.5 font-github">Weekend Masterclass</h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-300 mb-4 leading-relaxed font-github">
+                            Saturday &amp; Sunday, 6:00 PM – 8:00 PM IST. Live interactive mentorship with hands-on capstone builds.
                         </p>
-                        <a href="/register?source=reader_{{ subject.slug }}" class="block w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs text-center transition-colors shadow-sm mb-2">
+                        <a href="/register?source=reader_{{ subject.slug }}" class="block w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs text-center transition-colors shadow-sm mb-2 font-github">
                             Apply for Admission
                         </a>
-                        <p class="text-[10px] text-slate-400 text-center">Zero defensive fee traps · Pure merit counseling</p>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400 text-center font-github">Zero defensive fee traps · Pure merit counseling</p>
                     </div>
 
                     <!-- Digital Asset Micro-Monetization Card -->
-                    <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-xs">
-                        <div class="flex items-center gap-2 mb-1.5 text-slate-900 dark:text-white font-semibold">
+                    <div class="p-4 rounded-xl bg-slate-50 dark:bg-[#0B1120] border border-blue-500/20 dark:border-blue-500/30 text-xs font-github">
+                        <div class="flex items-center gap-2 mb-1.5 text-slate-900 dark:text-white font-semibold font-github">
                             <i data-lucide="help-circle" class="w-4 h-4 text-amber-500"></i> Need Lab Viva Traps?
                         </div>
-                        <p class="text-slate-600 dark:text-slate-400 text-[11px] mb-3 leading-relaxed">
+                        <p class="text-slate-600 dark:text-slate-400 text-[11px] mb-3 leading-relaxed font-github">
                             Access our curated bank of 45+ oral exam traps, query edge cases, and junior examiner questions.
                         </p>
-                        <a href="/library/{{ subject.slug }}?vertical=viva" class="inline-flex items-center gap-1 font-semibold text-blue-600 dark:text-blue-400 hover:underline text-xs">
+                        <a href="/library/{{ subject.slug }}?vertical=viva" class="inline-flex items-center gap-1 font-semibold text-blue-600 dark:text-blue-400 hover:underline text-xs font-github">
                             Browse Viva Banks <i data-lucide="arrow-right" class="w-3 h-3"></i>
                         </a>
                     </div>

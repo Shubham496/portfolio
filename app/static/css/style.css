@@ -330,3 +330,12 @@ html.dark .admonition.warning .admonition-title { color: #fbbf24; }
 .admonition.danger .admonition-title, .admonition.caution .admonition-title { color: #dc2626; }
 html.dark .admonition.danger .admonition-title, .admonition.caution .admonition-title { color: #f87171; }
 
+/* GitHub Typography Utility */
+.font-github {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+.font-github-mono {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+
