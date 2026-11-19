@@ -292,3 +292,17 @@ def test_library_sql_interview_panel_isolation():
     html = response.text
     assert "Top 45 SQL Viva" in html
     assert "Interview Questions (" in html
+
+
+def test_library_sql_primary_foreign_key_published_note():
+    """Verify published note for SQL Primary & Foreign Key rendering the skipped basics and composite key reality."""
+    response = client.get("/library/sql/notes/sql-primary-foreign-key")
+    assert response.status_code == 200
+    html = response.text
+    assert "SQL PRIMARY KEY &amp; FOREIGN KEY" in html or "SQL PRIMARY KEY & FOREIGN KEY" in html
+    assert "Composite Primary Key" in html
+    assert "Clustered Index" in html
+    assert "Unindexed Foreign Key Lock Trap" in html
+    assert "students" in html
+    assert "student_enrollments" in html
+

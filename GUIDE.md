@@ -20,6 +20,12 @@
 - **Dormant Testimonials Component**: `sections/testimonials.html` renders nothing (100% dormant) unless authentic student reviews are supplied in context. Zero fake quotes or corporate logos.
 - **Compliance & Guarantee Standard**: Strictly zero placement guarantees or fabricated salary claims. All student outcomes are framed around verifiable proof of work and interview readiness.
 
+### 1.1 The "Skipped Foundations & Production Truth" Pedagogical Mandate
+The primary educational differentiator of MYTHOS notes across all 34 technologies is **uncovering what textbooks, online tutorials, and generic documentation systematically skip, oversimplify, or confuse learners on**:
+1. **The Skipped Nuance**: Never stop at superficial definitions. For example, standard tutorials teach that *"a table can only have one primary key"*, but omit that **more than one column can make up that single primary key** (Composite Primary Key), confusing students on compound database indexing and junction table design.
+2. **Textbook Theory vs. Production Reality**: Every topic contrasts classroom definitions against how production systems actually execute under scale (e.g., clustered index B-Tree ordering, the unindexed foreign key table-lock trap, Python object pointer bindings vs. memory copies, DAX filter vs. row context).
+3. **Crystal-Clear Foundational Grounding**: Clear away beginner misconceptions before introducing complex syntax so that students build rock-solid architectural intuition across all subjects, not just SQL.
+
 ---
 
 ## 2. Technology Stack & Key Dependencies

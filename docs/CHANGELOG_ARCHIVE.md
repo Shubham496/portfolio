@@ -17,6 +17,14 @@ Entries are organized chronologically by **Year** and **Month**, preserving orig
 
 ### November 2026
 
+- **[Archived from Changeslog.md Entry 10] (2026-11-15)**:
+  - **Feature**: Re-architected platform identity into MYTHOS Online Institute with multiple cohort offerings (Performance Marketing Track 1, SEO & Growth Track 2, Data Analysis & BI Track 3); completely removed defensive payment and fee disclaimers across all pages; added dynamic course track selection in enrollment forms and modals.
+  - **Files**: `app/templates/sections/mentor.html`, `app/templates/sections/modals.html`, `app/templates/sections/syllabus.html`, `app/templates/register.html`, `app/templates/confirmation.html`, `app/static/js/main.js`, `app/apps/courses/generate_syllabus_pdf.py`, `app/apps/courses/schemas.py`, `app/apps/courses/router.py`.
+  - **API Changes**: Updated `POST /api/courses/register` and `POST /api/courses/enquiry` to accept `course_name` and `course_interest`.
+  - **Database Changes**: Pydantic schemas updated for course selection.
+  - **Bugs Fixed**: Eliminated awkward defensive payment disclaimers across templates.
+  - **Breaking Changes**: None.
+
 - **[Archived from Changeslog.md Entry 9] (2026-11-12)**:
   - **Feature**: Replaced pixelated assets with 1376x768 3D studio renders (illuminated circular neon podium, gradient 'M' ribbon sculpture); created zero-halo transparent icons (`mythos_icon_transparent.png`, `mythos_icon_2048.png`); built precision vector SVG emblem (`mythos_emblem.svg`); updated certificate generator to modern FPDF2 coordinates.
   - **Files**: `design/assets/`, `app/static/Images/mythos/`, `design/certificate_generator_template.py`, `design/GUIDELINES.md`.

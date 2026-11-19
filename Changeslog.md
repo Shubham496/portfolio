@@ -5,6 +5,16 @@ Historical records prior to these entries are archived in [`docs/CHANGELOG_ARCHI
 
 ---
 
+## [Entry 25] - 2026-11-19 (Content Standard: "Skipped Foundations & Production Truth" Pedagogical Mandate & Primary/Foreign Key Deep-Dive Note)
+- **Feature Added / Modified**: Codified the institutional "Skipped Foundations & Production Truth" editorial mandate in `GUIDE.md` across all 34 technologies, establishing that notes must go beyond superficial tutorial definitions to explicitly uncover the critical basics that generic internet sources skip or oversimplify; authored flagship production-grade study guide `app/content/sql/sql-primary-foreign-key.md` implementing this exact pedagogy: dispels the beginner misconception that "only one primary key means only one column" by contrasting single surrogate keys against Composite Primary Keys (compound junction keys), details how composite keys form the clustered index B-Tree on disk and the leftmost prefix rule, exposes the unindexed foreign key lock trap that causes production table deadlocks during parent deletes, and clarifies that foreign keys can be NULL for optional relational modeling; added automated test case in `tests/test_library.py` (79 total tests passing cleanly with 0 errors).
+- **Files Affected**: `GUIDE.md`, `app/content/sql/sql-primary-foreign-key.md`, `tests/test_library.py`, `docs/CHANGELOG_ARCHIVE.md`, `Changeslog.md`.
+- **Important API Changes**: Published note route `/library/sql/notes/sql-primary-foreign-key` indexed and active in SQL curriculum track.
+- **Database / Schema Changes**: None.
+- **Bugs Fixed**: None.
+- **Breaking Changes**: None.
+
+---
+
 ## [Entry 24] - 2026-11-19 (Notes & Knowledge Engine UI Polish: Viewport Margins, Sticky Sidebar Grid Alignment & High-Contrast Mythos Theming)
 - **Feature Added / Modified**: Resolved library reading workspace layout and contrast defects across `/library/{subject}` and `/library/{subject}/notes/{slug}`; expanded ambient header and body containers to `max-w-[100rem]` eliminating excessive 320px outer whitespace margins and expanding the central reading canvas from 580px to over 1000px; fixed 3-column grid alignment by replacing invalid fractional Tailwind classes (`col-span-2.5`, `col-span-3.5`, `col-span-8.5`) with exact, responsive integer grid distributions (`lg:col-span-3 xl:col-span-2` for topic menu, `lg:col-span-6 xl:col-span-7 2xl:col-span-8` for reading canvas, and `hidden lg:block lg:col-span-3 xl:col-span-3 2xl:col-span-2` for table of contents), preventing the right sticky sidebar from wrapping beneath article content; purged illegible translucent dark gradients across mentorship bridge cards, live demo class cards, lead magnet downloads, and weekend cohort banners, migrating them to high-contrast Mythos theme card structures (`bg-white dark:bg-[#0B1120]` with `border-2 border-blue-600/30 dark:border-blue-500/40`); injected GitHub font family (`font-github`: `-apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif`) across card containers, metadata badges, and explanatory paragraphs for crystal-clear readability in both light and dark modes; verified all 78 automated tests passing cleanly with 0 errors.
 - **Files Affected**: `app/templates/base.html`, `app/static/css/style.css`, `app/templates/library/subject_hub.html`, `app/templates/library/reader.html`, `app/templates/library/index.html`, `docs/CHANGELOG_ARCHIVE.md`, `Changeslog.md`.
@@ -141,16 +151,6 @@ Historical records prior to these entries are archived in [`docs/CHANGELOG_ARCHI
 - **Important API Changes**: None.
 - **Database / Schema Changes**: None.
 - **Bugs Fixed**: Prevented Render.io container slug size and RAM bloat by isolating media/datasets from Git tracking.
-- **Breaking Changes**: None.
-
----
-
-## [Entry 10] - 2026-11-15 (Transition to Multi-Course Online Educational Institute & Complete Removal of Payment Mentions)
-- **Feature Added / Modified**: Re-architected platform identity into MYTHOS Online Institute with multiple cohort offerings (Performance Marketing Track 1, SEO & Growth Track 2, Data Analysis & BI Track 3); completely removed defensive payment and fee disclaimers across all pages; added dynamic course track selection in enrollment forms and modals.
-- **Files Affected**: `app/templates/sections/mentor.html`, `app/templates/sections/modals.html`, `app/templates/sections/syllabus.html`, `app/templates/register.html`, `app/templates/confirmation.html`, `app/static/js/main.js`, `app/apps/courses/generate_syllabus_pdf.py`, `app/apps/courses/schemas.py`, `app/apps/courses/router.py`.
-- **Important API Changes**: Updated `POST /api/courses/register` and `POST /api/courses/enquiry` to accept `course_name` and `course_interest`.
-- **Database / Schema Changes**: Pydantic schemas updated for course selection.
-- **Bugs Fixed**: Eliminated awkward defensive payment disclaimers across templates.
 - **Breaking Changes**: None.
 
 ---
