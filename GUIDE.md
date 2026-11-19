@@ -71,7 +71,7 @@ python-docx>=1.1.0
 coding/
 │
 ├── GUIDE.md                            # Definitive single-source-of-truth system manual & AI Accelerator
-├── AGENTS.md                           # 15 persistent golden rules & operational directives for AI agents
+├── AGENTS.md                           # 16 persistent golden rules, incremental slicing & operational directives
 ├── agent.md                            # Standard alias mirroring AGENTS.md (resolves naming ambiguity)
 ├── Changeslog.md                       # Latest 15 development history entries (active rolling log)
 ├── task_new.md                         # Quick pointer referencing active master roadmap in docs/task_new.md
@@ -365,7 +365,7 @@ python -m pytest -v
 | Purpose | Primary Workspace Path | Secondary / Alias Path | Notes |
 | :--- | :--- | :--- | :--- |
 | **Master Task Roadmap** | [`docs/task_new.md`](file:///f:/Projects/coding/docs/task_new.md) | [`task_new.md`](file:///f:/Projects/coding/task_new.md) (root pointer) | Active Phases 0–6 task checklist & owner directives. |
-| **AI Operational Rules** | [`AGENTS.md`](file:///f:/Projects/coding/AGENTS.md) | [`agent.md`](file:///f:/Projects/coding/agent.md) (root alias) | 15 golden rules & push restrictions. Auto-loaded by Antigravity. |
+| **AI Operational Rules** | [`AGENTS.md`](file:///f:/Projects/coding/AGENTS.md) | [`agent.md`](file:///f:/Projects/coding/agent.md) (root alias) | 16 golden rules, incremental slicing protocol & push restrictions. Auto-loaded by Antigravity. |
 | **System Technical Guide** | [`GUIDE.md`](file:///f:/Projects/coding/GUIDE.md) | — | Definitive single-source-of-truth manual (current file). |
 | **Recent Changelog** | [`Changeslog.md`](file:///f:/Projects/coding/Changeslog.md) | — | Strictly latest 15 development entries (rolling log). |
 | **Changelog Archive** | [`docs/CHANGELOG_ARCHIVE.md`](file:///f:/Projects/coding/docs/CHANGELOG_ARCHIVE.md) | [`CHANGELOG_ARCHIVE.md`](file:///f:/Projects/coding/CHANGELOG_ARCHIVE.md) (root pointer) | Permanent historical archive (Entry 4 and older). |
