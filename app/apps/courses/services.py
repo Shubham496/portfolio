@@ -3,7 +3,7 @@ import csv
 import io
 import math
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Optional, List, Dict, Any
 from sqlalchemy.orm import Session
 from sqlalchemy import or_, desc
@@ -739,6 +739,20 @@ def get_leads_paginated(
     }
 
 
+def classify_lead_source(source_utm: Optional[str], referrer_url: Optional[str]) -> str:
+    """Classify lead acquisition traffic into: 'whatsapp', 'google', 'direct', or 'referral'."""
+    text = f"{source_utm or ''} {referrer_url or ''}".strip().lower()
+    if not text:
+        return "direct"
+    if "whatsapp" in text or "wa.me" in text:
+        return "whatsapp"
+    if "google" in text or "organic" in text or "google.com" in text:
+        return "google"
+    if text in ("direct", "none", "unknown"):
+        return "direct"
+    return "referral"
+
+
 def get_lead_summary(db: Session) -> Dict[str, Any]:
     """Provide dashboard analytics for leads and batch admissions."""
     all_leads = db.query(StudentLead).all()
@@ -756,6 +770,52 @@ def get_lead_summary(db: Session) -> Dict[str, Any]:
     closed_count = len([l for l in all_leads if l.status == "closed"])
     dnc_count = len([l for l in all_leads if l.status == "do_not_contact"])
 
+    # Executive Funnel Metrics (Task 5.2)
+    one_week_ago = datetime.utcnow() - timedelta(days=7)
+    weekly_leads = []
+    for l in all_leads:
+        dt = getattr(l, "created_at", None)
+        if dt:
+            if isinstance(dt, str):
+                try:
+                    dt = datetime.fromisoformat(dt.replace("Z", "+00:00"))
+                except Exception:
+                    dt = None
+            if dt and dt.tzinfo is not None:
+                dt = dt.replace(tzinfo=None)
+            if dt and dt >= one_week_ago:
+                weekly_leads.append(l)
+
+    active_sample = weekly_leads if weekly_leads else all_leads
+    weekly_sources = {"whatsapp": 0, "google": 0, "direct": 0, "referral": 0, "total": len(weekly_leads)}
+    for l in active_sample:
+        src = classify_lead_source(getattr(l, "source_utm", None), getattr(l, "referrer_url", None))
+        weekly_sources[src] += 1
+    weekly_sources["total"] = len(weekly_leads)
+
+    denom = max(sum(weekly_sources[s] for s in ("whatsapp", "google", "direct", "referral")), 1)
+    weekly_sources_pct = {
+        s: round((weekly_sources[s] / denom) * 100, 1) for s in ("whatsapp", "google", "direct", "referral")
+    }
+
+    demo_registrants = demo_classes
+    demo_attended = len([l for l in all_leads if l.status == "demo_attended" or (l.lead_type == "demo_class" and l.status == "enrolled")])
+    demo_attendance_rate = round((demo_attended / max(demo_registrants, 1)) * 100, 1) if demo_registrants > 0 else 0.0
+
+    cohort_conversion_rate = round((enrolled_count / max(total, 1)) * 100, 1) if total > 0 else 0.0
+    batch_conversion_rate = round((enrolled_count / max(registrations, 1)) * 100, 1) if registrations > 0 else 0.0
+
+    funnel = {
+        "weekly_sources": weekly_sources,
+        "weekly_sources_pct": weekly_sources_pct,
+        "demo_registrants": demo_registrants,
+        "demo_attended": demo_attended,
+        "demo_attendance_rate": demo_attendance_rate,
+        "total_enrolled": enrolled_count,
+        "cohort_conversion_rate": cohort_conversion_rate,
+        "batch_conversion_rate": batch_conversion_rate,
+    }
+
     return {
         "total_leads": total,
         "enquiries": enquiries,
@@ -769,6 +829,10 @@ def get_lead_summary(db: Session) -> Dict[str, Any]:
         "enrolled": enrolled_count,
         "closed": closed_count,
         "do_not_contact": dnc_count,
+        "funnel": funnel,
+        "weekly_sources": weekly_sources,
+        "cohort_conversion_rate": cohort_conversion_rate,
+        "demo_attendance_rate": demo_attendance_rate,
     }
 
 

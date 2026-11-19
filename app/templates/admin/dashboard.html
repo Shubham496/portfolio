@@ -81,6 +81,92 @@
             </div>
         </div>
 
+        <!-- Executive Conversion Funnel Summary Card (Task 5.2) -->
+        <div class="mb-6 p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#0B1120] border border-slate-200 dark:border-slate-800 shadow-sm transition-colors">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100 dark:border-slate-800/80 mb-4">
+                <div class="flex items-center space-x-2.5">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <h2 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white">
+                        Executive Funnel &amp; Conversion Analytics
+                    </h2>
+                </div>
+                <span class="text-[11px] text-slate-500 dark:text-slate-400">
+                    Weekly Inflow: <strong class="text-blue-600 dark:text-blue-400">{{ funnel.weekly_sources.total }}</strong> leads this week
+                </span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- 1. Weekly Leads by Source -->
+                <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800/80">
+                    <div class="flex items-center justify-between text-xs mb-2">
+                        <span class="font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">Weekly Traffic Sources</span>
+                        <span class="text-[10px] text-slate-400">7-Day</span>
+                    </div>
+                    <div class="space-y-1.5 text-xs">
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-600 dark:text-slate-300 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500"></span>WhatsApp</span>
+                            <span class="font-mono font-semibold">{{ funnel.weekly_sources.whatsapp }} <span class="text-[10px] text-slate-400">({{ funnel.weekly_sources_pct.whatsapp }}%)</span></span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-600 dark:text-slate-300 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-blue-500"></span>Google / SEO</span>
+                            <span class="font-mono font-semibold">{{ funnel.weekly_sources.google }} <span class="text-[10px] text-slate-400">({{ funnel.weekly_sources_pct.google }}%)</span></span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-600 dark:text-slate-300 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-amber-500"></span>Direct</span>
+                            <span class="font-mono font-semibold">{{ funnel.weekly_sources.direct }} <span class="text-[10px] text-slate-400">({{ funnel.weekly_sources_pct.direct }}%)</span></span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-600 dark:text-slate-300 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-purple-500"></span>Referral</span>
+                            <span class="font-mono font-semibold">{{ funnel.weekly_sources.referral }} <span class="text-[10px] text-slate-400">({{ funnel.weekly_sources_pct.referral }}%)</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Demo Class Funnel -->
+                <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800/80 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between text-xs mb-2">
+                            <span class="font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">Demo Class Funnel</span>
+                            <span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 font-semibold">Attendance</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-center my-2">
+                            <div class="p-2 rounded-lg bg-white dark:bg-[#070B14] border border-slate-200 dark:border-slate-800">
+                                <div class="text-[10px] text-slate-500 uppercase">Registrants</div>
+                                <div class="text-lg font-black text-slate-900 dark:text-white">{{ funnel.demo_registrants }}</div>
+                            </div>
+                            <div class="p-2 rounded-lg bg-white dark:bg-[#070B14] border border-slate-200 dark:border-slate-800">
+                                <div class="text-[10px] text-emerald-600 uppercase">Attended</div>
+                                <div class="text-lg font-black text-emerald-600 dark:text-emerald-400">{{ funnel.demo_attended }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-200/60 dark:border-slate-800/60">
+                        <span class="text-[11px] text-slate-500">Attendance Rate:</span>
+                        <span class="font-mono font-bold text-slate-900 dark:text-white">{{ funnel.demo_attendance_rate }}%</span>
+                    </div>
+                </div>
+
+                <!-- 3. Cohort Conversion Rate -->
+                <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800/80 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between text-xs mb-2">
+                            <span class="font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">Cohort Conversion</span>
+                            <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-semibold">Enrolled</span>
+                        </div>
+                        <div class="p-2.5 rounded-lg bg-white dark:bg-[#070B14] border border-slate-200 dark:border-slate-800 text-center my-2">
+                            <div class="text-[10px] text-slate-500 uppercase">Enrollment Rate</div>
+                            <div class="text-2xl font-black text-emerald-600 dark:text-emerald-400 font-mono">{{ funnel.cohort_conversion_rate }}%</div>
+                            <div class="text-[10px] text-slate-400">{{ funnel.total_enrolled }} of {{ summary.total_leads }} total leads</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-200/60 dark:border-slate-800/60">
+                        <span class="text-[11px] text-slate-500">Direct Batch Rate:</span>
+                        <span class="font-mono font-bold text-slate-900 dark:text-white">{{ funnel.batch_conversion_rate }}%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Filter & Search Toolbar -->
         <div class="p-4 rounded-xl bg-white dark:bg-[#0B1120] border border-slate-200 dark:border-slate-800 shadow-sm mb-6">
             <form method="GET" action="/admin/dashboard" class="flex flex-col lg:flex-row items-center justify-between gap-3">

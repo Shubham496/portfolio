@@ -144,6 +144,7 @@ async def admin_dashboard(
             "leads": pagination["items"],
             "pagination": pagination,
             "summary": summary,
+            "funnel": summary.get("funnel", {}),
             "current_lead_type": lead_type,
             "current_status": status,
             "current_search": search,

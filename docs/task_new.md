@@ -284,11 +284,11 @@ Phase 6: Later Only (Optional Paywalled Bundles via External Link)
 * [x] **Task 5.1: Privacy-Friendly Analytics Integration**
   * Support lightweight script injection via environment variable (`ANALYTICS_SCRIPT` for Plausible, Umami, or Cloudflare Web Analytics, or `GA4_MEASUREMENT_ID`).
   * Track custom client events: `cta_click`, `form_submit`, `lead_magnet_download`, `whatsapp_join` with automatic dispatch to Plausible, Umami, GA4, and the internal activity logging endpoint.
-* [ ] **Task 5.2: Admin Funnel Summary Card**
-  * Add an executive conversion metric card on `/admin/dashboard`:
-    * Weekly leads by traffic source (WhatsApp, Google, Direct, Referral).
-    * Total demo class registrants vs. attended.
-    * Cohort enrollment conversion rate.
+* [x] **Task 5.2: Admin Funnel Summary Card**
+  * Added an executive conversion metric card on `/admin/dashboard`:
+    * Weekly leads by traffic source (WhatsApp, Google, Direct, Referral) with counts, percentage proportions, and progress indicators.
+    * Total demo class registrants vs. attended with calculated attendance conversion rate.
+    * Cohort enrollment conversion rate (overall lead-to-enrolled and direct batch registration conversion).
 
 ---
 

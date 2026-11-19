@@ -770,4 +770,51 @@ def test_demo_page_and_confirmation_community_links():
     assert "Student Community Channels" in home_page.text or "WhatsApp Channel" in home_page.text
 
 
+def test_admin_funnel_summary_card_and_conversion_metrics():
+    """Verify Task 5.2 executive conversion funnel metrics and dashboard card rendering."""
+    from app.apps.courses.services import classify_lead_source, get_lead_summary
+
+    # 1. Verify classify_lead_source helper
+    assert classify_lead_source("utm_source=whatsapp", None) == "whatsapp"
+    assert classify_lead_source(None, "https://wa.me/918727864157") == "whatsapp"
+    assert classify_lead_source("utm_source=google&utm_medium=cpc", None) == "google"
+    assert classify_lead_source(None, "https://www.google.com/search?q=mythos") == "google"
+    assert classify_lead_source(None, None) == "direct"
+    assert classify_lead_source("direct", "") == "direct"
+    assert classify_lead_source("utm_source=telegram", None) == "referral"
+    assert classify_lead_source(None, "https://linkedin.com") == "referral"
+
+    cookies = get_admin_cookies()
+
+    # 2. Verify API summary returns funnel dictionary
+    api_summary_resp = client.get("/api/courses/leads/summary", cookies=cookies)
+    assert api_summary_resp.status_code == 200
+    summary_data = api_summary_resp.json()
+    assert "funnel" in summary_data
+    funnel = summary_data["funnel"]
+    assert "weekly_sources" in funnel
+    assert "whatsapp" in funnel["weekly_sources"]
+    assert "google" in funnel["weekly_sources"]
+    assert "direct" in funnel["weekly_sources"]
+    assert "referral" in funnel["weekly_sources"]
+    assert "demo_registrants" in funnel
+    assert "demo_attended" in funnel
+    assert "demo_attendance_rate" in funnel
+    assert "cohort_conversion_rate" in funnel
+    assert "batch_conversion_rate" in funnel
+
+    # 3. Verify /admin/dashboard HTML renders the Executive Funnel Summary Card
+    dash_resp = client.get("/admin/dashboard", cookies=cookies)
+    assert dash_resp.status_code == 200
+    dash_html = dash_resp.text
+    assert "Executive Funnel &amp; Conversion Analytics" in dash_html or "Executive Funnel & Conversion Analytics" in dash_html
+    assert "Weekly Traffic Sources" in dash_html
+    assert "WhatsApp" in dash_html
+    assert "Google / SEO" in dash_html
+    assert "Demo Class Funnel" in dash_html
+    assert "Cohort Conversion" in dash_html
+    assert "Enrollment Rate" in dash_html
+
+
+
 

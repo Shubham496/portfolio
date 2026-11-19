@@ -5,6 +5,16 @@ Historical records prior to these entries are archived in [`docs/CHANGELOG_ARCHI
 
 ---
 
+## [Entry 23] - 2026-11-19 (Phase 5: Executive Funnel & Conversion Analytics Card on Admin Dashboard)
+- **Feature Added / Modified**: Implemented comprehensive executive conversion funnel summary card on the admin monitoring portal (`/admin/dashboard`, `app/templates/admin/dashboard.html`, Task 5.2); engineered `classify_lead_source` utility in `app/apps/courses/services.py` accurately categorizing student acquisition into 4 primary channels: WhatsApp (`whatsapp`, `wa.me`), Google Search (`google`, `organic`), Direct (`direct`, none), and Referral (`referral`, `telegram`, `linkedin`, `instagram`, `youtube`); enhanced `get_lead_summary` to compute 7-day weekly lead acquisition metrics with volume and percentage proportions, total demo class registrants vs attended with attendance conversion rate (`demo_attendance_rate`), and cohort enrollment conversion rates (`cohort_conversion_rate` across all leads, and `batch_conversion_rate` for direct cohort applications); mounted responsive 3-column executive card on `/admin/dashboard` featuring real-time source distribution progress bars, demo attendance metrics, and cohort conversion KPI indicators; exposed complete `funnel` dictionary on authenticated API endpoint `GET /api/courses/leads/summary`; added automated test case in `tests/test_courses.py` (78 total tests passing cleanly with 0 errors).
+- **Files Affected**: `app/apps/courses/services.py`, `app/apps/courses/admin_router.py`, `app/templates/admin/dashboard.html`, `tests/test_courses.py`, `docs/task_new.md`, `GUIDE.md`, `Changeslog.md`, `docs/CHANGELOG_ARCHIVE.md`.
+- **Important API Changes**: Enriched `GET /api/courses/leads/summary` with `funnel`, `weekly_sources`, `demo_attendance_rate`, and `cohort_conversion_rate`.
+- **Database / Schema Changes**: None.
+- **Bugs Fixed**: None.
+- **Breaking Changes**: None.
+
+---
+
 ## [Entry 22] - 2026-11-19 (Phase 5: Privacy-Friendly Analytics Integration & Custom Client Event Tracking)
 - **Feature Added / Modified**: Implemented privacy-friendly analytics script injection and custom client event tracking architecture (Task 5.1); added support for lightweight script injection via environment variable `ANALYTICS_SCRIPT` (supporting Plausible, Umami, or Cloudflare Web Analytics without tracking cookies) and `GA4_MEASUREMENT_ID` (for Google Analytics 4 with automatic `gtag` setup) in `app/core/base_config.py` and `app/templates/base.html`; built robust client-side event tracking utility `trackEvent(eventName, eventData)` on `window` in `app/static/js/main.js` with multi-dispatcher support across Plausible (`window.plausible`), Umami (`window.umami.track`), Google Analytics 4 (`window.gtag`), and internal engagement activity logging (`/api/activity/log` via `navigator.sendBeacon` or fetch); wired automatic event capture for all 4 key conversion events: `cta_click` (on modal openers, apply buttons, demo booking, syllabus downloads, and `.btn-cta`), `form_submit` (across enroll, enquiry, waitlist, demo, lead magnet, and registration forms), `lead_magnet_download` (on cheat sheet reveal and download buttons), and `whatsapp_join` (on WhatsApp click-to-chat links and community broadcast channels); bumped static script version to `?v=2.3` in `base.html` for cache-busting; created 2 new automated test cases in `tests/test_main.py` verifying script injection and event dispatching (77 total tests passing cleanly with 0 errors).
 - **Files Affected**: `app/core/base_config.py`, `.env.example`, `app/templates/base.html`, `app/static/js/main.js`, `tests/test_main.py`, `docs/task_new.md`, `Changeslog.md`, `docs/CHANGELOG_ARCHIVE.md`, `GUIDE.md`.
@@ -141,16 +151,6 @@ Historical records prior to these entries are archived in [`docs/CHANGELOG_ARCHI
 - **Important API Changes**: Modernized `fpdf2` coordinate calls (`new_x`, `new_y`).
 - **Database / Schema Changes**: None.
 - **Bugs Fixed**: Eliminated alpha halo fringing; resolved FPDF2 deprecation warnings.
-- **Breaking Changes**: None.
-
----
-
-## [Entry 8] - 2026-11-12 (Production Push Authority, Brand Anonymization, Paired Syllabus, Design System & Styled Brochure)
-- **Feature Added / Modified**: Codified immutable policy that ONLY the human platform owner can execute `git push`; replaced personal instructor photos with high-tech Mythos Data Systems Pipeline card; redesigned `#about` into Direct Admissions & Mentorship Desk; implemented paired laptop accordion expansion for curriculum modules ([1,2], [3,4], [5,6]); established `design/` repository; rebuilt 2-page syllabus PDF.
-- **Files Affected**: `docs/AGENT_GUIDE.md`, `app/templates/sections/syllabus.html`, `app/templates/sections/mentor.html`, `app/core/base_config.py`, `app/apps/courses/services.py`, `app/apps/courses/generate_syllabus_pdf.py`, `design/`.
-- **Important API Changes**: Updated `toggleSyllabus(index)` paired logic.
-- **Database / Schema Changes**: None.
-- **Bugs Fixed**: Mobile vs laptop syllabus expansion ergonomics.
 - **Breaking Changes**: None.
 
 ---

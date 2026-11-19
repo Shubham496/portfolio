@@ -17,6 +17,14 @@ Entries are organized chronologically by **Year** and **Month**, preserving orig
 
 ### November 2026
 
+- **[Archived from Changeslog.md Entry 8] (2026-11-12)**:
+  - **Feature**: Codified immutable policy that ONLY the human platform owner can execute `git push`; replaced personal instructor photos with high-tech Mythos Data Systems Pipeline card; redesigned `#about` into Direct Admissions & Mentorship Desk; implemented paired laptop accordion expansion for curriculum modules ([1,2], [3,4], [5,6]); established `design/` repository; rebuilt 2-page syllabus PDF.
+  - **Files**: `docs/AGENT_GUIDE.md`, `app/templates/sections/syllabus.html`, `app/templates/sections/mentor.html`, `app/core/base_config.py`, `app/apps/courses/services.py`, `app/apps/courses/generate_syllabus_pdf.py`, `design/`.
+  - **API Changes**: Updated `toggleSyllabus(index)` paired logic.
+  - **Database Changes**: None.
+  - **Bugs Fixed**: Mobile vs laptop syllabus expansion ergonomics.
+  - **Breaking Changes**: None.
+
 - **[Archived from Changeslog.md Entry 7] (2026-11-12)**:
   - **Feature**: Decomposed monolithic 1,300-line `app/templates/index.html` into 10 maintainable Jinja2 section partials in `app/templates/sections/`; streamlined header navigation by removing redundant badges; created `.env.example` documenting all expected environment variables with safe dummy placeholders.
   - **Files**: `app/templates/index.html`, `app/templates/sections/*.html`, `app/templates/partials/navbar.html`, `.env.example`, `docs/AGENT_GUIDE.md`.
