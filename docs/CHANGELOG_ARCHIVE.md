@@ -17,6 +17,22 @@ Entries are organized chronologically by **Year** and **Month**, preserving orig
 
 ### November 2026
 
+- **[Archived from Changeslog.md Entry 13] (2026-11-18)**:
+  - **Feature**: Phase 1.5: 34 Major Languages & Tools Catalog, Topic Curricula & Navigation Polish: Expanded resource catalog to index 34 major programming languages, databases, data tools, frameworks, and cloud platforms; dynamically synthesized 5-part blueprint guides with Table of Contents; added minimalist icon grid with category filter tabs; added universal left in-page navigator rail (`in_page_nav.html`).
+  - **Files**: `app/apps/library/services.py`, `app/templates/library/index.html`, `app/templates/library/reader.html`, `app/templates/library/subject_hub.html`, `app/templates/partials/navbar.html`, `app/templates/partials/in_page_nav.html`, `tests/test_library.py`.
+  - **API Changes**: Synthesized 5-part curriculum generator in `app/apps/library/services.py`.
+  - **Database Changes**: None.
+  - **Bugs Fixed**: Eliminated 404 errors for topics under active curation.
+  - **Breaking Changes**: None.
+
+- **[Archived from Changeslog.md Entry 12] (2026-11-18)**:
+  - **Feature**: Phase 1: Core Library Engine, Base Routing & Technical Docs UI Completed: Implemented core Knowledge Engine; Markdown parser with PyMdown extensions (admonitions, code highlight, tables); in-memory LRU/TTL caching with file mtime invalidation; 3-column docs reader layout (`reader.html`).
+  - **Files**: `requirements.txt`, `app/apps/library/__init__.py`, `app/apps/library/router.py`, `app/apps/library/services.py`, `app/content/sql/sql-joins-textbook-vs-reality.md`, `app/main.py`, `app/static/css/style.css`, `app/templates/base.html`, `app/templates/library/index.html`, `app/templates/library/reader.html`, `app/templates/library/subject_hub.html`, `app/templates/partials/footer.html`, `app/templates/partials/navbar.html`, `tests/test_library.py`.
+  - **API Changes**: Mounted `GET /library`, `GET /library/{subject}`, `GET /library/{subject}/notes/{slug}`, `GET /api/library/subjects`, `GET /api/library/{subject}/documents`.
+  - **Database Changes**: Established YAML frontmatter schema (`title`, `slug`, `subject`, `vertical`, `tier`, `price_inr`, `tags`).
+  - **Bugs Fixed**: None.
+  - **Breaking Changes**: None.
+
 - **[Archived from Changeslog.md Entry 11] (2026-11-18)**:
   - **Feature**: Knowledge Engine Blueprint, Decoupled Assets Vault & Micro-Monetization Architecture: Designed 5-phase educational platform roadmap (`docs/task_new.md`); established decoupled secondary asset vault (`external_assets/` linked to `https://github.com/Shubham496/mythos-assets`); formulated 4-tier micro-monetization ladder (free core notes, free student datasets, ₹10–₹49 micro-assets, unadvertised live cohorts).
   - **Files**: `external_assets/`, `.gitignore`, `docs/task_new.md`, `docs/AGENT_GUIDE.md`.

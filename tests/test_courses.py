@@ -816,5 +816,28 @@ def test_admin_funnel_summary_card_and_conversion_metrics():
     assert "Enrollment Rate" in dash_html
 
 
+def test_seven_primitives_cheatsheet_download_and_lead_magnet():
+    """Verify 7 Primitives cheat sheet PDF download endpoint and lead magnet resolution."""
+    # 1. Download endpoint verification
+    dl_resp = client.get("/cheatsheet/data-analysis-7-primitives/download")
+    assert dl_resp.status_code == 200
+    assert dl_resp.headers.get("content-type") == "application/pdf"
+    assert len(dl_resp.content) > 1000
+
+    # 2. Lead magnet resolution
+    payload = {
+        "full_name": "Rohan Sharma",
+        "phone": "+91 9876543299",
+        "resource_name": "7 Primitives of Data Analysis Cheat Sheet",
+        "consent": True
+    }
+    resp = client.post("/api/courses/lead-magnet", json=payload)
+    assert resp.status_code == 201
+    data = resp.json()
+    assert data["success"] is True
+    assert data["download_url"] == "/cheatsheet/data-analysis-7-primitives/download"
+
+
+
 
 

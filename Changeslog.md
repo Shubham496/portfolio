@@ -5,6 +5,16 @@ Historical records prior to these entries are archived in [`docs/CHANGELOG_ARCHI
 
 ---
 
+## [Entry 28] - 2026-11-21 (Content Standard & Lead Magnet: 7 Primitives of Tabular Data Analysis Masterclass Guide & Branded PDF Cheat Sheet)
+- **Feature Added / Modified**: Conceptualized and authored the flagship "7 Primitives of Tabular Data Analysis" master guide (`app/content/bi/data-analysis-seven-primitives.md`) establishing the foundational law that 95% of data transformations across any software reduce to 7 primitive operations (Add/Filter Columns, Add/Filter Rows, Order by Columns, Group & Aggregate, Attach Below [UNION ALL], Attach Side-by-Side [JOIN], and Pivot/Unpivot); constructed universal syntax Rosetta Stone directly comparing SQL, Python (Pandas), Microsoft Excel, and Power BI / Power Query; documented production truths including `UNION ALL` disk sort avoidance, Cartesian join multipliers, and columnar VertiPaq compression requiring unpivoted tables; registered note in `app/apps/library/services.py` under the Business Intelligence (`bi`) track; engineered publication-grade 2-page A4 reference PDF generator (`app/apps/courses/generate_cheatsheet_pdf.py`) using `fpdf2` rendering `app/static/pdf/Data_Analysis_7_Primitives_CheatSheet.pdf`; mounted direct download route `GET /cheatsheet/data-analysis-7-primitives/download` in `app/main.py`; integrated lead magnet resolution in `app/apps/courses/services.py`; added automated tests in `tests/test_library.py` and `tests/test_courses.py` (81 total tests passing cleanly with 0 errors).
+- **Files Affected**: `app/content/bi/data-analysis-seven-primitives.md`, `app/apps/library/services.py`, `app/apps/courses/generate_cheatsheet_pdf.py`, `app/static/pdf/Data_Analysis_7_Primitives_CheatSheet.pdf`, `app/main.py`, `app/apps/courses/services.py`, `tests/test_library.py`, `tests/test_courses.py`, `docs/CHANGELOG_ARCHIVE.md`, `Changeslog.md`.
+- **Important API Changes**: Mounted `GET /cheatsheet/data-analysis-7-primitives/download`; published note `/library/bi/notes/data-analysis-seven-primitives` active in sitemap.
+- **Database / Schema Changes**: None.
+- **Bugs Fixed**: None.
+- **Breaking Changes**: None.
+
+---
+
 ## [Entry 27] - 2026-11-21 (SEO Slice 1: GSC env-var isolation, keyword-first title rewrites, library meta desc fix)
 - **Feature Added / Modified**: Replaced hard-wired `GOOGLE_SITE_VERIFICATION` setting with a new `GSC_VERIFICATION_TOKEN` env var in `app/core/base_config.py`; updated `app/templates/base.html` to only render the `<meta name="google-site-verification">` tag when `GSC_VERIFICATION_TOKEN` is set — the old placeholder value (`google-site-verification-sample-key-replace-with-real-token`) no longer renders on any page. Rewrote homepage `{% block title %}` from 88 chars down to 61 chars (`Data Analytics Course Online – SQL, Python, Power BI | MYTHOS`) with search keyword first; rewrote homepage meta description from 184 chars down to 150 chars. Rewrote library index title from 66 chars to 57 chars (`SQL, Python, Power BI Notes & Guides | MYTHOS Library`) and meta description from 172 chars to 148 chars. Updated `tests/test_main.py::test_google_site_verification_meta_tag` to use the new `GSC_VERIFICATION_TOKEN` field. Verified 79 tests, 0 failures.
 - **Files Affected**: `app/core/base_config.py`, `app/templates/base.html`, `app/templates/index.html`, `app/templates/library/index.html`, `tests/test_main.py`, `Changeslog.md`.
@@ -140,26 +150,6 @@ Historical records prior to these entries are archived in [`docs/CHANGELOG_ARCHI
 - **Files Affected**: `app/apps/library/router.py`, `app/apps/library/services.py`, `app/templates/library/reader.html`, `app/templates/library/subject_hub.html`, `tests/test_library.py`.
 - **Important API Changes**: Implemented `get_adjacent_topics(subject, slug)`; added `?tab=` query parameter routing on subject hubs.
 - **Database / Schema Changes**: None.
-- **Bugs Fixed**: None.
-- **Breaking Changes**: None.
-
----
-
-## [Entry 13] - 2026-11-18 (Phase 1.5: 34 Major Languages & Tools Catalog, Topic Curricula & Navigation Polish)
-- **Feature Added / Modified**: Expanded resource catalog to index 34 major programming languages, databases, data tools, frameworks, and cloud platforms; dynamically synthesized 5-part blueprint guides with Table of Contents; added minimalist icon grid with category filter tabs; added universal left in-page navigator rail (`in_page_nav.html`).
-- **Files Affected**: `app/apps/library/services.py`, `app/templates/library/index.html`, `app/templates/library/reader.html`, `app/templates/library/subject_hub.html`, `app/templates/partials/navbar.html`, `app/templates/partials/in_page_nav.html`, `tests/test_library.py`.
-- **Important API Changes**: Synthesized 5-part curriculum generator in `app/apps/library/services.py`.
-- **Database / Schema Changes**: None.
-- **Bugs Fixed**: Eliminated 404 errors for topics under active curation.
-- **Breaking Changes**: None.
-
----
-
-## [Entry 12] - 2026-11-18 (Phase 1: Core Library Engine, Base Routing & Technical Docs UI Completed)
-- **Feature Added / Modified**: Implemented core Knowledge Engine; Markdown parser with PyMdown extensions (admonitions, code highlight, tables); in-memory LRU/TTL caching with file mtime invalidation; 3-column docs reader layout (`reader.html`).
-- **Files Affected**: `requirements.txt`, `app/apps/library/__init__.py`, `app/apps/library/router.py`, `app/apps/library/services.py`, `app/content/sql/sql-joins-textbook-vs-reality.md`, `app/main.py`, `app/static/css/style.css`, `app/templates/base.html`, `app/templates/library/index.html`, `app/templates/library/reader.html`, `app/templates/library/subject_hub.html`, `app/templates/partials/footer.html`, `app/templates/partials/navbar.html`, `tests/test_library.py`.
-- **Important API Changes**: Mounted `GET /library`, `GET /library/{subject}`, `GET /library/{subject}/notes/{slug}`, `GET /api/library/subjects`, `GET /api/library/{subject}/documents`.
-- **Database / Schema Changes**: Established YAML frontmatter schema (`title`, `slug`, `subject`, `vertical`, `tier`, `price_inr`, `tags`).
 - **Bugs Fixed**: None.
 - **Breaking Changes**: None.
 

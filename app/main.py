@@ -431,6 +431,18 @@ async def download_full_course_syllabus():
         )
     return HTMLResponse("Syllabus PDF file not found", status_code=404)
 
+@app.get("/cheatsheet/data-analysis-7-primitives/download", response_class=FileResponse)
+async def download_seven_primitives_cheatsheet():
+    """Download the 7 Primitives of Tabular Data Analysis Cheat Sheet PDF."""
+    pdf_path = "app/static/pdf/Data_Analysis_7_Primitives_CheatSheet.pdf"
+    if os.path.exists(pdf_path):
+        return FileResponse(
+            path=pdf_path,
+            filename="Data_Analysis_7_Primitives_CheatSheet.pdf",
+            media_type="application/pdf",
+        )
+    return HTMLResponse("Cheat sheet PDF file not found", status_code=404)
+
 @app.get("/course/syllabus", response_class=FileResponse)
 async def view_course_syllabus():
     """View Data Analysis syllabus PDF directly in browser."""

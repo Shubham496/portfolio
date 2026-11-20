@@ -112,7 +112,8 @@ coding/
 │   │   │   ├── router.py               # Public API routes (/api/courses/*)
 │   │   │   ├── admin_router.py         # Protected admin portal (/admin/*)
 │   │   │   ├── student_router.py       # Student portal & auth routes (/student/*, /api/student/*, /api/activity/log)
-│   │   │   └── generate_syllabus_pdf.py# Dynamic 2-page syllabus PDF generator (fpdf2)
+│   │   │   ├── generate_syllabus_pdf.py# Dynamic 2-page syllabus PDF generator (fpdf2)
+│   │   │   └── generate_cheatsheet_pdf.py # 2-page 7 Primitives reference PDF generator (fpdf2)
 │   │   │
 │   │   ├── library/                    # 34-Technology Knowledge & Documentation Engine
 │   │   │   ├── services.py             # PyMdown markdown parsing, LRU cache, topic trees, practice datasets catalog
@@ -201,6 +202,7 @@ Navigation features a top inter-page bar (`navbar.html`) and a left in-page dock
 | `GET` | `/sitemap.xml` | XML (`application/xml`) | Dynamic sitemap listing active pages, hubs, datasets, and published notes. |
 | `GET` | `/robots.txt` | PlainText (`text/plain`) | Crawl directives disallowing `/admin/`, `/api/`, `/student/`, pointing to sitemap. |
 | `GET` | `/course/syllabus/download` | File (`Data_Analysis_Syllabus.pdf`) | Direct attachment download of syllabus brochure. |
+| `GET` | `/cheatsheet/data-analysis-7-primitives/download` | File (`Data_Analysis_7_Primitives_CheatSheet.pdf`) | Direct attachment download of 7 Primitives cheat sheet. |
 | `GET` | `/course/syllabus` | File (Inline PDF) | Inline browser preview of syllabus brochure. |
 | `GET` | `/resume` | File (Inline PDF) | Serves the instructor's technical resume PDF. |
 | `GET` | `/health` | JSON (`{"status": "healthy", ...}`) | Cloud uptime and health probe endpoint. |

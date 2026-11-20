@@ -449,7 +449,9 @@ def create_lead_magnet_lead(
     # Resolve download URL based on resource name
     download_url = "/course/syllabus/download"
     res_lower = lm_data.resource_name.lower()
-    if "dataset" in res_lower:
+    if "7" in res_lower or "primitive" in res_lower:
+        download_url = "/cheatsheet/data-analysis-7-primitives/download"
+    elif "dataset" in res_lower:
         download_url = "/library/datasets"
     elif "sql" in res_lower or "cheat" in res_lower:
         download_url = "/course/syllabus/download"

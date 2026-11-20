@@ -306,3 +306,28 @@ def test_library_sql_primary_foreign_key_published_note():
     assert "students" in html
     assert "student_enrollments" in html
 
+
+def test_library_bi_data_analysis_seven_primitives_published_note():
+    """Verify published note for 7 Primitives of Tabular Data Analysis in Business Intelligence track."""
+    from app.apps.library.services import list_documents_for_subject
+
+    # 1. Note page verification
+    response = client.get("/library/bi/notes/data-analysis-seven-primitives")
+    assert response.status_code == 200
+    html = response.text
+    assert "The 7 Primitives of Tabular Data Analysis" in html
+    assert "Add or Filter Columns" in html
+    assert "Add or Filter Rows" in html
+    assert "Order by Columns" in html
+    assert "Group &amp; Aggregate" in html or "Group & Aggregate" in html
+    assert "Attach Table One Below Another" in html
+    assert "Attach Table Side by Side" in html
+    assert "Pivot and Unpivot" in html
+    assert "/cheatsheet/data-analysis-7-primitives/download" in html
+
+    # 2. Published documents list verification
+    published_docs = list_documents_for_subject("bi", published_only=True)
+    slugs = [d.slug for d in published_docs]
+    assert "data-analysis-seven-primitives" in slugs
+
+

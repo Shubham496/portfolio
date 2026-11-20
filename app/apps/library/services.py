@@ -477,6 +477,7 @@ SUBJECTS: Dict[str, Dict[str, Any]] = {
         "icon": "devicon-unifiedmodelinglanguage-plain colored",
         "badge": "Core Track",
         "topics": [
+            {"title": "The 7 Primitives of Tabular Data Analysis: SQL, Pandas, Excel & Power BI", "slug": "data-analysis-seven-primitives", "category": "Core Foundations", "vertical": "notes", "reading_time": "10 min read"},
             {"title": "Star Schema vs Snowflake Schema: Designing Production Data Marts", "slug": "bi-star-schema-vs-snowflake-schema", "category": "Data Modeling", "vertical": "notes", "reading_time": "9 min read"},
             {"title": "DAX Filter Context vs Row Context: The CALCULATE Function Demystified", "slug": "powerbi-dax-filter-context-calculate", "category": "Power BI & DAX", "vertical": "notes", "reading_time": "10 min read"},
             {"title": "Tableau LOD Expressions: FIXED, INCLUDE, EXCLUDE Calculations", "slug": "tableau-lod-fixed-include-exclude", "category": "Tableau Analytics", "vertical": "notes", "reading_time": "9 min read"},
