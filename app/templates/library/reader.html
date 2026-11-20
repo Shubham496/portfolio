@@ -226,8 +226,13 @@
                             {% endif %}
                         </div>
 
-                        <!-- 1-Click Viral Sharing Buttons -->
+                        <!-- 1-Click Viral Sharing Buttons & PDF Export -->
                         <div class="flex items-center gap-2">
+                            <a href="/library/{{ subject.slug }}/notes/{{ meta.slug }}/pdf" 
+                               title="Download Printable A4 PDF"
+                               class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 hover:bg-blue-100 dark:hover:bg-blue-900/60 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800 transition-colors font-medium text-xs">
+                                <i data-lucide="download" class="w-3.5 h-3.5"></i> PDF
+                            </a>
                             <a id="share-whatsapp" href="#" target="_blank" rel="noopener noreferrer" 
                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 transition-colors font-medium text-xs">
                                 <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> WhatsApp Class Group

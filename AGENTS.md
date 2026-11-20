@@ -24,6 +24,7 @@
 14. **Update `Changeslog.md` after meaningful changes**: Document every meaningful feature, schema change, bug fix, or breaking change following the standardized changelog entry format.
 15. **Archive older entries when the 15-entry limit is exceeded**: Automatically transfer entries older than the latest 15 to `docs/CHANGELOG_ARCHIVE.md` preserving all technical details.
 16. **Never modify production data or execute destructive operations without approval**: Do not drop tables, wipe rows, alter production databases, or execute destructive DDL commands.
+17. **Format all articles & notes to A4 PDF print-width**: All authored Markdown content (code blocks, tables, diagrams) must be designed to fit standard A4 portrait printable width (210mm minus margins = ~170–180mm, max 75–80 chars/line in monospace). Markdown notes must convert directly and cleanly into readable, publication-grade PDFs via the automated converter without manual pixel coordinate hacking.
 
 ---
 
@@ -107,3 +108,4 @@ To avoid long wait times, context saturation, and edit errors, agents must adher
 3. **Student Contact Fields**: Email is **strictly optional** across student registration and enquiry forms. Only **Full Name** and **WhatsApp/Phone** are mandatory.
 4. **Zero Code Execution**: The platform is strictly an educational reading and copy-only reference; never provide interactive runners, consoles, or REPLs.
 5. **Decoupled Asset Vault**: High-res images, datasets, and downloadable zip archives must be housed in `external_assets/` and referenced via CDN/Raw URLs, never committed directly to the core application repository.
+6. **A4 PDF Print-Width & Direct Markdown-to-PDF Invariant**: Every technical guide, study note, and article in `app/content/` must strictly observe PDF print geometry: code snippets and comments capped at ~75–80 characters; comparison tables capped at 4–5 concise columns; notes must compile directly into readable, styled PDFs via `render_markdown_file_to_pdf`.

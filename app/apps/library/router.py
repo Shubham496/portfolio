@@ -17,6 +17,7 @@ from app.apps.courses.auth import (
     get_or_create_guest_id,
 )
 from app.apps.courses.services import log_user_activity
+from app.apps.library.markdown_pdf import render_markdown_to_pdf
 from app.apps.library.services import (
     SUBJECTS,
     VERTICALS,
@@ -324,6 +325,40 @@ async def library_reader(request: Request, subject: str, slug: str):
             "page_title": f"{parsed_doc.metadata.title} | {subject_info['short_title']} | MYTHOS Library",
             "active_nav": "library",
         },
+    )
+
+
+@router.get("/library/{subject}/notes/{slug}/pdf")
+async def download_note_pdf(subject: str, slug: str):
+    """
+    Direct Markdown-to-PDF compilation endpoint.
+    Converts any authored markdown note in app/content/ into a styled, printable A4 PDF.
+    """
+    subject_lower = subject.lower().strip()
+    if subject_lower not in SUBJECTS:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Subject '{subject}' not found.",
+        )
+
+    parsed_doc = get_document(subject_lower, slug)
+    if not parsed_doc:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Article '{slug}' not found in subject '{subject}'.",
+        )
+
+    pdf_bytes = render_markdown_to_pdf(
+        markdown_content=parsed_doc.raw_content,
+        title=parsed_doc.metadata.title,
+        subject=subject_lower,
+    )
+
+    filename = f"{subject_lower}_{slug}.pdf"
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
     )
 
 

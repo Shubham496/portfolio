@@ -331,3 +331,31 @@ def test_library_bi_data_analysis_seven_primitives_published_note():
     assert "data-analysis-seven-primitives" in slugs
 
 
+def test_direct_markdown_to_pdf_endpoints():
+    """Verify universal Markdown-to-PDF compilation for authored library notes."""
+    from app.apps.library.markdown_pdf import render_markdown_file_to_pdf
+
+    # 1. SQL primary/foreign key note direct PDF compilation
+    sql_pdf_resp = client.get("/library/sql/notes/sql-primary-foreign-key/pdf")
+    assert sql_pdf_resp.status_code == 200
+    assert sql_pdf_resp.headers.get("content-type") == "application/pdf"
+    assert len(sql_pdf_resp.content) > 1000
+    assert sql_pdf_resp.content.startswith(b"%PDF")
+
+    # 2. 7 Primitives BI note direct PDF compilation
+    bi_pdf_resp = client.get("/library/bi/notes/data-analysis-seven-primitives/pdf")
+    assert bi_pdf_resp.status_code == 200
+    assert bi_pdf_resp.headers.get("content-type") == "application/pdf"
+    assert len(bi_pdf_resp.content) > 1000
+    assert bi_pdf_resp.content.startswith(b"%PDF")
+
+    # 3. Reader HTML includes the 1-click Download PDF button
+    reader_html = client.get("/library/bi/notes/data-analysis-seven-primitives").text
+    assert "/library/bi/notes/data-analysis-seven-primitives/pdf" in reader_html
+
+    # 4. Error cases
+    assert client.get("/library/nonexistent/notes/invalid/pdf").status_code == 404
+    assert client.get("/library/sql/notes/nonexistent-slug/pdf").status_code == 404
+
+
+

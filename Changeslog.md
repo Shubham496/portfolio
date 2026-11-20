@@ -5,6 +5,16 @@ Historical records prior to these entries are archived in [`docs/CHANGELOG_ARCHI
 
 ---
 
+## [Entry 29] - 2026-11-21 (Content Standard & Architecture: A4 PDF Print-Width Mandate, Universal Markdown-to-PDF Engine & 1-Click Note PDF Downloads)
+- **Feature Added / Modified**: Codified Rule 17 and Invariant 6 across `AGENTS.md`, `agent.md`, and `GUIDE.md` establishing the mandatory A4 PDF print-width standard for all generated articles, posts, and notes (210mm portrait geometry, 180mm printable width, monospace code/comments capped at 75–80 chars, comparison tables capped at 4–5 concise columns); built universal Markdown-to-PDF compilation engine (`app/apps/library/markdown_pdf.py`) utilizing `fpdf2` (`MythosNotePDF`) with branded dark navy/blue/orange header, institutional contact footer, frontmatter metadata badges, unicode latin-1 sanitization, and alert callout conversion; mounted direct PDF note compilation route `GET /library/{subject}/notes/{slug}/pdf` in `app/apps/library/router.py`; added 1-click Download PDF action button in article header on `app/templates/library/reader.html`; added comprehensive automated tests in `tests/test_library.py` (82 total tests passing cleanly with 0 errors).
+- **Files Affected**: `AGENTS.md`, `agent.md`, `GUIDE.md`, `app/apps/library/markdown_pdf.py`, `app/apps/library/router.py`, `app/templates/library/reader.html`, `tests/test_library.py`, `docs/CHANGELOG_ARCHIVE.md`, `Changeslog.md`.
+- **Important API Changes**: Mounted `GET /library/{subject}/notes/{slug}/pdf` delivering direct on-the-fly publication-grade PDF compiles of authored markdown notes.
+- **Database / Schema Changes**: None.
+- **Bugs Fixed**: None.
+- **Breaking Changes**: None.
+
+---
+
 ## [Entry 28] - 2026-11-21 (Content Standard & Lead Magnet: 7 Primitives of Tabular Data Analysis Masterclass Guide & Branded PDF Cheat Sheet)
 - **Feature Added / Modified**: Conceptualized and authored the flagship "7 Primitives of Tabular Data Analysis" master guide (`app/content/bi/data-analysis-seven-primitives.md`) establishing the foundational law that 95% of data transformations across any software reduce to 7 primitive operations (Add/Filter Columns, Add/Filter Rows, Order by Columns, Group & Aggregate, Attach Below [UNION ALL], Attach Side-by-Side [JOIN], and Pivot/Unpivot); constructed universal syntax Rosetta Stone directly comparing SQL, Python (Pandas), Microsoft Excel, and Power BI / Power Query; documented production truths including `UNION ALL` disk sort avoidance, Cartesian join multipliers, and columnar VertiPaq compression requiring unpivoted tables; registered note in `app/apps/library/services.py` under the Business Intelligence (`bi`) track; engineered publication-grade 2-page A4 reference PDF generator (`app/apps/courses/generate_cheatsheet_pdf.py`) using `fpdf2` rendering `app/static/pdf/Data_Analysis_7_Primitives_CheatSheet.pdf`; mounted direct download route `GET /cheatsheet/data-analysis-7-primitives/download` in `app/main.py`; integrated lead magnet resolution in `app/apps/courses/services.py`; added automated tests in `tests/test_library.py` and `tests/test_courses.py` (81 total tests passing cleanly with 0 errors).
 - **Files Affected**: `app/content/bi/data-analysis-seven-primitives.md`, `app/apps/library/services.py`, `app/apps/courses/generate_cheatsheet_pdf.py`, `app/static/pdf/Data_Analysis_7_Primitives_CheatSheet.pdf`, `app/main.py`, `app/apps/courses/services.py`, `tests/test_library.py`, `tests/test_courses.py`, `docs/CHANGELOG_ARCHIVE.md`, `Changeslog.md`.
@@ -141,16 +151,6 @@ Historical records prior to these entries are archived in [`docs/CHANGELOG_ARCHI
 - **Important API Changes**: Added `get_adjacent_topics_from_list()` in `app/apps/library/services.py`; updated `/library/{subject}` route handling.
 - **Database / Schema Changes**: None.
 - **Bugs Fixed**: Prevented standalone viva question banks from polluting the step-by-step SQL tutorial progression.
-- **Breaking Changes**: None.
-
----
-
-## [Entry 14] - 2026-11-18 (Phase 1.6: W3Schools Panel Architecture, Hierarchical Topic Sidebar & Sequential Navigation)
-- **Feature Added / Modified**: Transformed `/library/{subject}` into a 4-panel workspace (All Topics, Notes, Interview Questions, Video Lectures); implemented a left hierarchical topic sidebar with instant topic switching; authored Python foundational blueprints.
-- **Files Affected**: `app/apps/library/router.py`, `app/apps/library/services.py`, `app/templates/library/reader.html`, `app/templates/library/subject_hub.html`, `tests/test_library.py`.
-- **Important API Changes**: Implemented `get_adjacent_topics(subject, slug)`; added `?tab=` query parameter routing on subject hubs.
-- **Database / Schema Changes**: None.
-- **Bugs Fixed**: None.
 - **Breaking Changes**: None.
 
 ---

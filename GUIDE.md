@@ -26,6 +26,13 @@ The primary educational differentiator of MYTHOS notes across all 34 technologie
 2. **Textbook Theory vs. Production Reality**: Every topic contrasts classroom definitions against how production systems actually execute under scale (e.g., clustered index B-Tree ordering, the unindexed foreign key table-lock trap, Python object pointer bindings vs. memory copies, DAX filter vs. row context).
 3. **Crystal-Clear Foundational Grounding**: Clear away beginner misconceptions before introducing complex syntax so that students build rock-solid architectural intuition across all subjects, not just SQL.
 
+### 1.2 The A4 PDF Print-Width & Direct Markdown-to-PDF Invariant
+All technical articles, posts, and study notes authored for the platform are governed by a strict print-width invariant:
+1. **A4 Printable Geometry**: Standard A4 portrait width is 210mm. With 15mm margins, the printable canvas is 180mm (~75-80 monospace characters per line).
+2. **Code Snippets & Monospace Blocks**: Line lengths must not exceed 75-80 characters. Long function calls, SQL queries, or chained commands must be wrapped vertically.
+3. **Tabular Data Layout**: Markdown tables must not exceed 4-5 concise columns. Avoid sprawling 8-10 column tables that overflow off-page when rendered to PDF.
+4. **Direct Markdown-to-PDF Engine (`app.apps.library.markdown_pdf`)**: Every markdown note in `app/content/` converts directly into a publication-grade, styled A4 PDF (`MythosNotePDF`) with branded header/footer without manual coordinate rewrites via `render_markdown_file_to_pdf` and route `GET /library/{subject}/notes/{slug}/pdf`.
+
 ---
 
 ## 2. Technology Stack & Key Dependencies
@@ -117,6 +124,7 @@ coding/
 │   │   │
 │   │   ├── library/                    # 34-Technology Knowledge & Documentation Engine
 │   │   │   ├── services.py             # PyMdown markdown parsing, LRU cache, topic trees, practice datasets catalog
+│   │   │   ├── markdown_pdf.py         # Universal A4 Markdown-to-PDF conversion engine (MythosNotePDF)
 │   │   │   ├── router.py               # Web routes (/library/*), datasets vault & JSON APIs (/api/library/*)
 │   │   │   └── models.py               # Re-exports User & UserActivityLog; future digital products
 │   │   │
