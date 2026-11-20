@@ -12,6 +12,7 @@ class BaseConfig(BaseSettings):
     # Platform Information & Contact
     BASE_URL: str = os.getenv("BASE_URL", "https://mythostech.in").rstrip("/")
     GOOGLE_SITE_VERIFICATION: str = os.getenv("GOOGLE_SITE_VERIFICATION", "")
+    GSC_VERIFICATION_TOKEN: str = os.getenv("GSC_VERIFICATION_TOKEN", "")
     ANALYTICS_SCRIPT: str = os.getenv("ANALYTICS_SCRIPT", "")
     GA4_MEASUREMENT_ID: str = os.getenv("GA4_MEASUREMENT_ID", "")
     OWNER_NAME: str = "Mythos Academic Council"

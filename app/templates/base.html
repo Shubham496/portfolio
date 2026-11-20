@@ -10,9 +10,9 @@
     <meta name="author" content="MYTHOS Online Institute">
     {% block meta_robots %}{% endblock %}
 
-    {% if settings.GOOGLE_SITE_VERIFICATION %}
+    {% if settings.GSC_VERIFICATION_TOKEN %}
     <!-- Google Search Console Verification -->
-    <meta name="google-site-verification" content="{{ settings.GOOGLE_SITE_VERIFICATION }}">
+    <meta name="google-site-verification" content="{{ settings.GSC_VERIFICATION_TOKEN }}">
     {% endif %}
 
     {% if settings.GA4_MEASUREMENT_ID %}

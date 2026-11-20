@@ -121,18 +121,19 @@ def test_seo_meta_tags_and_canonical_urls():
 
 
 def test_google_site_verification_meta_tag(monkeypatch):
-    """Verify Google Search Console verification meta tag injection when configured (Task 1.3)."""
-    # 1. When empty/not configured
-    settings.GOOGLE_SITE_VERIFICATION = ""
+    """Verify Google Search Console verification meta tag injection when configured (Task 1.3).
+    Uses GSC_VERIFICATION_TOKEN (env var) — GOOGLE_SITE_VERIFICATION is legacy."""
+    # 1. When empty/not configured — tag must not appear
+    settings.GSC_VERIFICATION_TOKEN = ""
     res = client.get("/")
     assert 'meta name="google-site-verification"' not in res.text
 
-    # 2. When configured
-    settings.GOOGLE_SITE_VERIFICATION = "googletestverificationtoken12345"
+    # 2. When configured — tag must appear with exact token
+    settings.GSC_VERIFICATION_TOKEN = "googletestverificationtoken12345"
     res2 = client.get("/")
     assert '<meta name="google-site-verification" content="googletestverificationtoken12345">' in res2.text
     # Reset
-    settings.GOOGLE_SITE_VERIFICATION = ""
+    settings.GSC_VERIFICATION_TOKEN = ""
 
 
 def test_schema_org_json_ld_structured_data():
