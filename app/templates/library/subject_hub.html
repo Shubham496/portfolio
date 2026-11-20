@@ -9,12 +9,6 @@
 {% block og_title %}{{ page_title }}{% endblock %}
 {% block og_description %}{{ subject.description }}{% endblock %}
 
-{% block meta_robots %}
-{% if active_doc and active_doc.metadata.status == 'draft' %}
-<meta name="robots" content="noindex, nofollow">
-{% endif %}
-{% endblock %}
-
 {% block schema_org %}
 <script type="application/ld+json">
 {
@@ -246,9 +240,9 @@
                         </div>
 
                         <!-- Topic Title -->
-                        <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-6">
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-6">
                             {{ active_doc.metadata.title }}
-                        </h1>
+                        </h2>
 
                         <!-- Rendered Markdown Body (Static Syntax Copy-Only, Zero Code Execution) -->
                         <article class="markdown-body text-slate-800 dark:text-slate-200 leading-relaxed">

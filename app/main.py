@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse, FileResponse, PlainTextResponse
+from fastapi.responses import HTMLResponse, FileResponse, PlainTextResponse, RedirectResponse
 from fastapi.middleware.gzip import GZipMiddleware
 from app.core.config import settings
 from app.apps.todos.router import router as todos_router
@@ -407,12 +407,13 @@ async def sitemap_xml():
 
 @app.get("/robots.txt", response_class=PlainTextResponse)
 async def robots_txt():
-    """Robots.txt disallowing private administrative and API routes and directing to sitemap.xml."""
+    """Robots.txt disallowing private administrative, todos, and API routes and directing to sitemap.xml."""
     base_url = settings.BASE_URL.rstrip("/")
     content = f"""User-agent: *
 Disallow: /admin/
 Disallow: /api/
 Disallow: /student/
+Disallow: /apps/todos
 
 Sitemap: {base_url}/sitemap.xml
 """
@@ -441,17 +442,10 @@ async def view_course_syllabus():
         )
     return HTMLResponse("Syllabus PDF file not found", status_code=404)
 
-@app.get("/resume", response_class=FileResponse)
+@app.get("/resume")
 async def download_resume():
-    """Serve the latest resume PDF for viewing/downloading."""
-    resume_file = "app/static/pdf/resume.pdf"
-    if os.path.exists(resume_file):
-        return FileResponse(
-            path=resume_file,
-            filename="Shubham_Singh_Resume.pdf",
-            media_type="application/pdf"
-        )
-    return HTMLResponse("Resume file not found", status_code=404)
+    """Redirect legacy resume route to institute about page."""
+    return RedirectResponse(url="/about", status_code=301)
 
 @app.get("/health", tags=["System"])
 async def health_check():

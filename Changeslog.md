@@ -5,6 +5,16 @@ Historical records prior to these entries are archived in [`docs/CHANGELOG_ARCHI
 
 ---
 
+## [Entry 26] - 2026-11-21 (Technical SEO & Conversion Polish: Unblock 33 Subject Hubs from noindex, Inline Lead Capture on Notes, Strict Anonymity & Robots Hygiene)
+- **Feature Added / Modified**: Resolved critical SEO indexation blocker in `app/templates/library/subject_hub.html` by removing `noindex, nofollow` override that was de-indexing all 33 catalog hubs whose first topic had draft status; updated `library_subject_hub` in `app/apps/library/router.py` to ensure canonical subject pages render clean titles (`[Subject] Curriculum & Notes | MYTHOS Online Institute`) and demoted reader canvas heading from `h1` to `h2` to guarantee a single `h1` per page; embedded high-converting inline lead capture card on distraction-free reader articles (`app/templates/library/reader.html`) collecting Full Name and WhatsApp for live weekend cohorts and syllabus downloads; updated `robots.txt` in `app/main.py` to disallow internal `/apps/todos` and added `noindex, nofollow` in `app/apps/todos/templates/todos.html`; strictly enforced owner anonymity directives across the platform by replacing personal instructor name with *"our Lead Faculty"* on student dashboard (`app/templates/student/dashboard.html`) and redirecting legacy `/resume` route via HTTP 301 to `/about`; eliminated duplicate `</form>` closing tag in `app/templates/demo.html`; verified all 79 automated tests passing cleanly with 0 errors.
+- **Files Affected**: `app/templates/library/subject_hub.html`, `app/apps/library/router.py`, `app/templates/library/reader.html`, `app/templates/student/dashboard.html`, `app/main.py`, `app/apps/todos/templates/todos.html`, `app/templates/demo.html`, `docs/CHANGELOG_ARCHIVE.md`, `Changeslog.md`.
+- **Important API Changes**: `/robots.txt` disallows `/apps/todos`; `GET /resume` returns 301 redirect to `/about`.
+- **Database / Schema Changes**: None.
+- **Bugs Fixed**: Unblocked 33 subject hub landing pages from accidental `noindex`; fixed multiple `h1` tags on subject hub; eliminated owner name exposure on student dashboard; removed duplicate form tag in `demo.html`.
+- **Breaking Changes**: None.
+
+---
+
 ## [Entry 25] - 2026-11-19 (Content Standard: "Skipped Foundations & Production Truth" Pedagogical Mandate & Primary/Foreign Key Deep-Dive Note)
 - **Feature Added / Modified**: Codified the institutional "Skipped Foundations & Production Truth" editorial mandate in `GUIDE.md` across all 34 technologies, establishing that notes must go beyond superficial tutorial definitions to explicitly uncover the critical basics that generic internet sources skip or oversimplify; authored flagship production-grade study guide `app/content/sql/sql-primary-foreign-key.md` implementing this exact pedagogy: dispels the beginner misconception that "only one primary key means only one column" by contrasting single surrogate keys against Composite Primary Keys (compound junction keys), details how composite keys form the clustered index B-Tree on disk and the leftmost prefix rule, exposes the unindexed foreign key lock trap that causes production table deadlocks during parent deletes, and clarifies that foreign keys can be NULL for optional relational modeling; added automated test case in `tests/test_library.py` (79 total tests passing cleanly with 0 errors).
 - **Files Affected**: `GUIDE.md`, `app/content/sql/sql-primary-foreign-key.md`, `tests/test_library.py`, `docs/CHANGELOG_ARCHIVE.md`, `Changeslog.md`.
@@ -141,16 +151,6 @@ Historical records prior to these entries are archived in [`docs/CHANGELOG_ARCHI
 - **Important API Changes**: Mounted `GET /library`, `GET /library/{subject}`, `GET /library/{subject}/notes/{slug}`, `GET /api/library/subjects`, `GET /api/library/{subject}/documents`.
 - **Database / Schema Changes**: Established YAML frontmatter schema (`title`, `slug`, `subject`, `vertical`, `tier`, `price_inr`, `tags`).
 - **Bugs Fixed**: None.
-- **Breaking Changes**: None.
-
----
-
-## [Entry 11] - 2026-11-18 (Knowledge Engine Blueprint, Decoupled Assets Vault & Micro-Monetization Architecture)
-- **Feature Added / Modified**: Designed 5-phase educational platform roadmap (`docs/task_new.md`); established decoupled secondary asset vault (`external_assets/` linked to `https://github.com/Shubham496/mythos-assets`); formulated 4-tier micro-monetization ladder (free core notes, free student datasets, ₹10–₹49 micro-assets, unadvertised live cohorts).
-- **Files Affected**: `external_assets/`, `.gitignore`, `docs/task_new.md`, `docs/AGENT_GUIDE.md`.
-- **Important API Changes**: None.
-- **Database / Schema Changes**: None.
-- **Bugs Fixed**: Prevented Render.io container slug size and RAM bloat by isolating media/datasets from Git tracking.
 - **Breaking Changes**: None.
 
 ---

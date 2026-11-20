@@ -17,6 +17,14 @@ Entries are organized chronologically by **Year** and **Month**, preserving orig
 
 ### November 2026
 
+- **[Archived from Changeslog.md Entry 11] (2026-11-18)**:
+  - **Feature**: Knowledge Engine Blueprint, Decoupled Assets Vault & Micro-Monetization Architecture: Designed 5-phase educational platform roadmap (`docs/task_new.md`); established decoupled secondary asset vault (`external_assets/` linked to `https://github.com/Shubham496/mythos-assets`); formulated 4-tier micro-monetization ladder (free core notes, free student datasets, ₹10–₹49 micro-assets, unadvertised live cohorts).
+  - **Files**: `external_assets/`, `.gitignore`, `docs/task_new.md`, `docs/AGENT_GUIDE.md`.
+  - **API Changes**: None.
+  - **Database Changes**: None.
+  - **Bugs Fixed**: Prevented Render.io container slug size and RAM bloat by isolating media/datasets from Git tracking.
+  - **Breaking Changes**: None.
+
 - **[Archived from Changeslog.md Entry 10] (2026-11-15)**:
   - **Feature**: Re-architected platform identity into MYTHOS Online Institute with multiple cohort offerings (Performance Marketing Track 1, SEO & Growth Track 2, Data Analysis & BI Track 3); completely removed defensive payment and fee disclaimers across all pages; added dynamic course track selection in enrollment forms and modals.
   - **Files**: `app/templates/sections/mentor.html`, `app/templates/sections/modals.html`, `app/templates/sections/syllabus.html`, `app/templates/register.html`, `app/templates/confirmation.html`, `app/static/js/main.js`, `app/apps/courses/generate_syllabus_pdf.py`, `app/apps/courses/schemas.py`, `app/apps/courses/router.py`.

@@ -255,11 +255,10 @@ async def library_subject_hub(
     active_doc = get_document(subject_lower, active_slug) if active_slug else None
     prev_topic, next_topic = get_adjacent_topics_from_list(active_docs_list, active_slug) if active_slug else (None, None)
 
-    page_title = (
-        f"{active_doc.metadata.title} | {summary['short_title']} Topics | MYTHOS"
-        if (active_doc and active_tab == "all_topics")
-        else f"{summary['title']} — Study Guides & Resources | MYTHOS"
-    )
+    if topic and active_doc:
+        page_title = f"{active_doc.metadata.title} | {summary['short_title']} | MYTHOS"
+    else:
+        page_title = f"{summary['title']} Curriculum & Notes | MYTHOS Online Institute"
 
     return templates.TemplateResponse(
         request=request,

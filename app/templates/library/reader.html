@@ -249,6 +249,45 @@
                     {{ doc.html_content|safe }}
                 </article>
 
+                <!-- High-Converting Inline Lead Capture Component -->
+                <div class="my-10 p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#0B1120] border-2 border-blue-600/30 dark:border-blue-500/40 shadow-xl font-github">
+                    <div class="max-w-xl">
+                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/20 text-blue-600 dark:text-blue-400 text-xs font-bold mb-3 border border-blue-400/30">
+                            <i data-lucide="zap" class="w-3.5 h-3.5"></i> Live Weekend Cohort &amp; Free Datasets
+                        </div>
+                        <h3 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight mb-2">
+                            Master {{ subject.short_title }} in Weekend Live Classes
+                        </h3>
+                        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+                            Join our Saturday &amp; Sunday (6:00 PM – 8:00 PM IST) cohort. Enter your details to get the complete syllabus brochure and reserve a seat in the next free live demo.
+                        </p>
+                        <form action="/api/courses/demo" method="POST" class="space-y-3.5">
+                            <input type="hidden" name="course_interest" value="{{ subject.title }}">
+                            <input type="hidden" name="subject_interest" value="Reader Note: {{ meta.title }}">
+                            <div style="display:none;" aria-hidden="true">
+                                <input type="text" name="website_url_hp" tabindex="-1" autocomplete="off">
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Full Name <span class="text-red-500">*</span></label>
+                                    <input type="text" name="full_name" required placeholder="e.g. Rahul Sharma" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">WhatsApp / Phone <span class="text-red-500">*</span></label>
+                                    <input type="tel" name="phone" required placeholder="10-digit mobile number" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-2 pt-1">
+                                <input type="checkbox" name="consent" required checked class="mt-0.5 rounded text-blue-600 focus:ring-blue-500">
+                                <span class="text-[11px] text-slate-500 dark:text-slate-400 leading-tight">I agree to receive class schedule &amp; meeting links via WhatsApp. View <a href="/privacy" target="_blank" class="text-blue-600 dark:text-blue-400 underline">Privacy Policy</a>.</span>
+                            </div>
+                            <button type="submit" class="w-full mt-2 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs sm:text-sm transition shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2">
+                                <i data-lucide="calendar" class="w-4 h-4"></i> Get Syllabus &amp; Reserve Free Demo Seat
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
                 <!-- Sequential Topic Navigation (W3Schools Style) -->
                 <div class="mt-10 pt-6 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between gap-4">
                     {% if prev_topic %}
