@@ -453,8 +453,10 @@ def create_lead_magnet_lead(
         download_url = "/cheatsheet/data-analysis-7-primitives/download"
     elif "dataset" in res_lower:
         download_url = "/library/datasets"
-    elif "sql" in res_lower or "cheat" in res_lower:
-        download_url = "/course/syllabus/download"
+    elif "join" in res_lower:
+        download_url = "/library/sql/notes/sql-joins-textbook-vs-reality/pdf"
+    elif "sql" in res_lower or "key" in res_lower or "cheat" in res_lower:
+        download_url = "/library/sql/notes/sql-primary-foreign-key/pdf"
 
     return {
         "success": True,

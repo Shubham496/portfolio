@@ -375,8 +375,12 @@ async def submit_lead_magnet(
     result = create_lead_magnet_lead(db=db, lm_data=lm_obj, client_ip=client_ip)
 
     if "application/json" not in content_type:
+        import urllib.parse
+        dl_url = result.get("download_url", "/course/syllabus/download")
+        encoded_res = urllib.parse.quote(lm_obj.resource_name)
+        encoded_dl = urllib.parse.quote(dl_url)
         return RedirectResponse(
-            url=f"/registration-success?type=lead_magnet&resource={lm_obj.resource_name}",
+            url=f"/registration-success?type=lead_magnet&resource={encoded_res}&download_url={encoded_dl}",
             status_code=303
         )
     return JSONResponse(status_code=status.HTTP_201_CREATED, content=result)

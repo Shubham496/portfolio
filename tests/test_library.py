@@ -353,7 +353,11 @@ def test_direct_markdown_to_pdf_endpoints():
     reader_html = client.get("/library/bi/notes/data-analysis-seven-primitives").text
     assert "/library/bi/notes/data-analysis-seven-primitives/pdf" in reader_html
 
-    # 4. Error cases
+    # 4. Subject hub Notes panel renders direct PDF download link
+    hub_html = client.get("/library/bi?tab=notes").text
+    assert "/library/bi/notes/data-analysis-seven-primitives/pdf" in hub_html
+
+    # 5. Error cases
     assert client.get("/library/nonexistent/notes/invalid/pdf").status_code == 404
     assert client.get("/library/sql/notes/nonexistent-slug/pdf").status_code == 404
 

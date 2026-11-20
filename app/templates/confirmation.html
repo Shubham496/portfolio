@@ -130,11 +130,19 @@
 
         <!-- Action Buttons -->
         <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+            {% if request.query_params.get('download_url') %}
+            <a href="{{ request.query_params.get('download_url') }}" 
+               class="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm shadow-md shadow-blue-500/20 transition active:scale-95">
+                <i data-lucide="download" class="w-4 h-4"></i>
+                <span>Download Your Resource</span>
+            </a>
+            {% else %}
             <a href="/course/syllabus/download" 
                class="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm shadow-md shadow-blue-500/20 transition active:scale-95">
                 <i data-lucide="download" class="w-4 h-4"></i>
                 <span>Download Institute Syllabus</span>
             </a>
+            {% endif %}
             
             <a href="/" 
                class="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-6 py-3 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-medium text-sm transition">

@@ -2,6 +2,9 @@
 MYTHOS Universal Markdown-to-PDF Conversion Engine
 Converts any technical article or note in app/content/ into a publication-grade,
 printable A4 PDF with branded header, footer, metadata badge, and clean typography.
+Main written text is rendered in high-contrast black and white, while theme colors
+(Electric Blue #2563EB, Vivid Orange #F97316, Dark Navy #070B14) accentuate
+underlines, section headers, badges, and dividing bars.
 """
 
 from __future__ import annotations
@@ -12,6 +15,9 @@ from pathlib import Path
 from typing import Optional, Tuple, Dict, Any
 
 from fpdf import FPDF
+from fpdf.html import HTML2FPDF
+from fpdf.drawing import DeviceRGB
+from fpdf.fonts import TextStyle
 import markdown
 import frontmatter
 
@@ -36,8 +42,111 @@ UNICODE_REPLACEMENTS = [
 ]
 
 
+class MythosHTML2FPDF(HTML2FPDF):
+    """
+    Custom HTML-to-PDF renderer attaching MYTHOS theme colors to header underlines,
+    titles, and badges while enforcing high-contrast black-and-white for body prose.
+    """
+
+    def __init__(self, pdf, *args, **kwargs):
+        super().__init__(pdf, *args, **kwargs)
+
+        # ── Theme Typography for Headings ──
+        # H1: Dark Navy with 16pt bold
+        self.tag_styles["h1"] = TextStyle(
+            font_family="Helvetica",
+            font_style="B",
+            font_size_pt=15.5,
+            color=DeviceRGB(7 / 255, 11 / 255, 20 / 255),  # Dark Navy #070B14
+            b_margin=2.0,
+        )
+        # H2: Dark Slate with 12.5pt bold
+        self.tag_styles["h2"] = TextStyle(
+            font_family="Helvetica",
+            font_style="B",
+            font_size_pt=12.5,
+            color=DeviceRGB(15 / 255, 23 / 255, 42 / 255),  # Slate 900
+            b_margin=1.8,
+        )
+        # H3: Slate 800 with 10.0pt bold
+        self.tag_styles["h3"] = TextStyle(
+            font_family="Helvetica",
+            font_style="B",
+            font_size_pt=10.0,
+            color=DeviceRGB(30 / 255, 41 / 255, 59 / 255),  # Slate 800
+            b_margin=1.5,
+        )
+        # H4: Slate 700 with 9.0pt bold
+        self.tag_styles["h4"] = TextStyle(
+            font_family="Helvetica",
+            font_style="B",
+            font_size_pt=9.0,
+            color=DeviceRGB(51 / 255, 65 / 255, 85 / 255),
+            b_margin=1.2,
+        )
+
+        # ── High-Contrast Black & White for Main Written Content ──
+        # Paragraphs: Pure Black on White
+        self.tag_styles["p"] = TextStyle(
+            font_family="Helvetica",
+            font_style="",
+            font_size_pt=8.8,
+            color=DeviceRGB(0, 0, 0),  # Pure Black for maximum print contrast
+            b_margin=2.2,
+        )
+        # Monospace Code Blocks: Crisp Black on light background
+        self.tag_styles["pre"] = TextStyle(
+            font_family="Courier",
+            font_style="",
+            font_size_pt=7.2,
+            color=DeviceRGB(0, 0, 0),
+            b_margin=2.5,
+        )
+        self.tag_styles["code"] = TextStyle(
+            font_family="Courier",
+            font_style="",
+            font_size_pt=7.2,
+            color=DeviceRGB(0, 0, 0),
+        )
+
+    def handle_endtag(self, tag: str):
+        super().handle_endtag(tag)
+
+        # ── Theme Underlines Under Headers & Titles ──
+        if tag == "h1":
+            # H1: Split theme underline (Electric Blue + Vivid Orange + subtle slate baseline)
+            y = self.pdf.get_y()
+            self.pdf.set_fill_color(37, 99, 235)  # Electric Blue #2563EB
+            self.pdf.rect(15, y, 55, 1.0, "F")
+            self.pdf.set_fill_color(249, 115, 22)  # Vivid Orange #F97316
+            self.pdf.rect(70, y, 20, 1.0, "F")
+            self.pdf.set_fill_color(226, 232, 240)  # Slate 200
+            self.pdf.rect(90, y, 105, 0.3, "F")
+            self.pdf.set_y(y + 3.0)
+
+        elif tag == "h2":
+            # H2: Electric Blue line with Vivid Orange accent pip
+            y = self.pdf.get_y()
+            self.pdf.set_fill_color(249, 115, 22)  # Vivid Orange accent pip
+            self.pdf.rect(15, y, 12, 0.8, "F")
+            self.pdf.set_draw_color(37, 99, 235)   # Electric Blue line
+            self.pdf.set_line_width(0.5)
+            self.pdf.line(28, y + 0.4, 195, y + 0.4)
+            self.pdf.set_y(y + 2.5)
+
+        elif tag == "h3":
+            # H3: Subtle slate baseline separator
+            y = self.pdf.get_y()
+            self.pdf.set_draw_color(203, 213, 225)  # Slate 300
+            self.pdf.set_line_width(0.3)
+            self.pdf.line(15, y, 195, y)
+            self.pdf.set_y(y + 1.8)
+
+
 class MythosNotePDF(FPDF):
     """Publication-grade A4 PDF canvas with MYTHOS dark navy header and institutional footer."""
+
+    HTML2FPDF_CLASS = MythosHTML2FPDF
 
     def __init__(self, doc_title: str = "", doc_subject: str = "", *args, **kwargs):
         super().__init__(orientation="P", unit="mm", format="A4", *args, **kwargs)
@@ -166,27 +275,29 @@ def render_markdown_to_pdf(
     # Title & Metadata Banner
     pdf.set_y(22)
     pdf.set_font("Helvetica", "B", 15)
-    pdf.set_text_color(15, 23, 42)  # Slate 900
-    pdf.multi_cell(0, 7.0, sanitized_title, align="L")
+    pdf.set_text_color(7, 11, 20)  # Dark Navy #070B14
+    pdf.multi_cell(0, 6.8, sanitized_title, align="L")
     pdf.ln(1)
 
-    # Metadata Strip
+    # Metadata Strip (Theme Accents)
     pdf.set_font("Helvetica", "B", 7.5)
-    pdf.set_text_color(37, 99, 235)  # Blue 600
+    pdf.set_text_color(37, 99, 235)  # Electric Blue #2563EB
     meta_line = f"CATEGORY: {sanitized_cat.upper()}   |   READING TIME: {reading_time.upper()}"
     if sanitized_tags:
         meta_line += f"   |   TAGS: {sanitized_tags.upper()}"
     pdf.cell(0, 4.5, meta_line, align="L", new_x="LMARGIN", new_y="NEXT")
 
-    # Divider line
-    pdf.set_draw_color(203, 213, 225)
-    pdf.set_line_width(0.3)
-    pdf.line(15, pdf.get_y() + 1.5, 195, pdf.get_y() + 1.5)
-    pdf.set_y(pdf.get_y() + 4.0)
+    # Title Split Accent Underline
+    y_div = pdf.get_y() + 1.0
+    pdf.set_fill_color(37, 99, 235)  # Electric Blue
+    pdf.rect(15, y_div, 60, 1.2, "F")
+    pdf.set_fill_color(249, 115, 22)  # Vivid Orange
+    pdf.rect(75, y_div, 25, 1.2, "F")
+    pdf.set_fill_color(226, 232, 240)  # Slate 200
+    pdf.rect(100, y_div, 95, 0.4, "F")
+    pdf.set_y(y_div + 4.5)
 
-    # 6. Render Body HTML
-    pdf.set_font("Helvetica", size=9)
-    pdf.set_text_color(30, 41, 59)  # Slate 800
+    # 6. Render Body HTML with MythosHTML2FPDF
     pdf.write_html(html_content)
 
     # 7. Output result

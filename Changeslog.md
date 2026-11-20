@@ -5,6 +5,16 @@ Historical records prior to these entries are archived in [`docs/CHANGELOG_ARCHI
 
 ---
 
+## [Entry 30] - 2026-11-21 (Downloadable File Integration & PDF Theme Underline Styling: Black & White Body Typography with Theme Underlines)
+- **Feature Added / Modified**: Enhanced the universal Markdown-to-PDF engine (`app/apps/library/markdown_pdf.py`) with `MythosHTML2FPDF` enforcing crisp high-contrast black-and-white typography for all main written prose (`p`, `li`, `pre`, `code`, `table`) while dynamically rendering MYTHOS theme colors (Electric Blue `#2563EB`, Vivid Orange `#F97316`) on header underlines (`h1` split accent bar, `h2` underline with orange accent pip, `h3` subtle separator) and title/category badges; connected all platform downloadable assets to their respective endpoints: added direct PDF download actions to note cards in `app/templates/library/subject_hub.html`, integrated resource-specific PDF resolution in `app/apps/courses/services.py` for lead magnets, and updated `app/templates/confirmation.html` and `app/apps/courses/router.py` to forward and display the direct download action button; verified all 82 automated tests passing cleanly with 0 errors.
+- **Files Affected**: `app/apps/library/markdown_pdf.py`, `app/templates/library/subject_hub.html`, `app/apps/courses/services.py`, `app/apps/courses/router.py`, `app/templates/confirmation.html`, `tests/test_library.py`, `tests/test_courses.py`, `docs/CHANGELOG_ARCHIVE.md`, `Changeslog.md`.
+- **Important API Changes**: Lead magnet form redirect forwards `download_url` directly to the confirmation view.
+- **Database / Schema Changes**: None.
+- **Bugs Fixed**: None.
+- **Breaking Changes**: None.
+
+---
+
 ## [Entry 29] - 2026-11-21 (Content Standard & Architecture: A4 PDF Print-Width Mandate, Universal Markdown-to-PDF Engine & 1-Click Note PDF Downloads)
 - **Feature Added / Modified**: Codified Rule 17 and Invariant 6 across `AGENTS.md`, `agent.md`, and `GUIDE.md` establishing the mandatory A4 PDF print-width standard for all generated articles, posts, and notes (210mm portrait geometry, 180mm printable width, monospace code/comments capped at 75–80 chars, comparison tables capped at 4–5 concise columns); built universal Markdown-to-PDF compilation engine (`app/apps/library/markdown_pdf.py`) utilizing `fpdf2` (`MythosNotePDF`) with branded dark navy/blue/orange header, institutional contact footer, frontmatter metadata badges, unicode latin-1 sanitization, and alert callout conversion; mounted direct PDF note compilation route `GET /library/{subject}/notes/{slug}/pdf` in `app/apps/library/router.py`; added 1-click Download PDF action button in article header on `app/templates/library/reader.html`; added comprehensive automated tests in `tests/test_library.py` (82 total tests passing cleanly with 0 errors).
 - **Files Affected**: `AGENTS.md`, `agent.md`, `GUIDE.md`, `app/apps/library/markdown_pdf.py`, `app/apps/library/router.py`, `app/templates/library/reader.html`, `tests/test_library.py`, `docs/CHANGELOG_ARCHIVE.md`, `Changeslog.md`.
@@ -141,16 +151,6 @@ Historical records prior to these entries are archived in [`docs/CHANGELOG_ARCHI
 - **Important API Changes**: Mounted `/student/login`, `/student/register`, `/student/logout`, `/student/dashboard`, `/library/datasets`, `/library/datasets/{slug}`, `/library/datasets/{slug}/download`, `/api/student/register`, `/api/student/login`, `/api/student/me`, `/api/activity/log`.
 - **Database / Schema Changes**: Added `users` table (`id`, `full_name`, `phone` [unique], `email`, `hashed_password`, `user_type`, `college_or_company`, `is_active`, `created_at`, `updated_at`); added `user_activity_logs` table (`id`, `user_id` [FK users.id], `session_id`, `event_type`, `resource_type`, `resource_slug`, `referrer`, `ip_address`, `created_at`).
 - **Bugs Fixed**: Resolved TestClient cookie persistence across session boundary tests in test fixtures.
-- **Breaking Changes**: None.
-
----
-
-## [Entry 15] - 2026-11-18 (Phase 1.7: W3Schools Sequential SQL Study Track & Topic Progression)
-- **Feature Added / Modified**: Re-architected `/library/sql` into a 38-topic sequential study track across 11 categories mirroring W3Schools MySQL/SQL standards; added `< Previous Topic` and `Next Topic >` sequential navigation; isolated viva interview question banks into the dedicated Interview Questions tab (`?tab=interview_questions`).
-- **Files Affected**: `app/apps/library/router.py`, `app/apps/library/services.py`, `app/content/sql/sql-joins-textbook-vs-reality.md`, `tests/test_library.py`.
-- **Important API Changes**: Added `get_adjacent_topics_from_list()` in `app/apps/library/services.py`; updated `/library/{subject}` route handling.
-- **Database / Schema Changes**: None.
-- **Bugs Fixed**: Prevented standalone viva question banks from polluting the step-by-step SQL tutorial progression.
 - **Breaking Changes**: None.
 
 ---

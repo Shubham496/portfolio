@@ -17,6 +17,14 @@ Entries are organized chronologically by **Year** and **Month**, preserving orig
 
 ### November 2026
 
+- **[Archived from Changeslog.md Entry 15] (2026-11-18)**:
+  - **Feature**: Phase 1.7: W3Schools Sequential SQL Study Track & Topic Progression: Re-architected `/library/sql` into a 38-topic sequential study track across 11 categories mirroring W3Schools MySQL/SQL standards; added `< Previous Topic` and `Next Topic >` sequential navigation; isolated viva interview question banks into the dedicated Interview Questions tab (`?tab=interview_questions`).
+  - **Files**: `app/apps/library/router.py`, `app/apps/library/services.py`, `app/content/sql/sql-joins-textbook-vs-reality.md`, `tests/test_library.py`.
+  - **API Changes**: Added `get_adjacent_topics_from_list()` in `app/apps/library/services.py`; updated `/library/{subject}` route handling.
+  - **Database Changes**: None.
+  - **Bugs Fixed**: Prevented standalone viva question banks from polluting the step-by-step SQL tutorial progression.
+  - **Breaking Changes**: None.
+
 - **[Archived from Changeslog.md Entry 14] (2026-11-18)**:
   - **Feature**: Phase 1.6: W3Schools Panel Architecture, Hierarchical Topic Sidebar & Sequential Navigation: Transformed `/library/{subject}` into a 4-panel workspace (All Topics, Notes, Interview Questions, Video Lectures); implemented a left hierarchical topic sidebar with instant topic switching; authored Python foundational blueprints.
   - **Files**: `app/apps/library/router.py`, `app/apps/library/services.py`, `app/templates/library/reader.html`, `app/templates/library/subject_hub.html`, `tests/test_library.py`.

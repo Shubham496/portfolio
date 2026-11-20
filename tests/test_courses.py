@@ -837,6 +837,26 @@ def test_seven_primitives_cheatsheet_download_and_lead_magnet():
     assert data["success"] is True
     assert data["download_url"] == "/cheatsheet/data-analysis-7-primitives/download"
 
+    # 3. Form-data submission redirect with download_url
+    form_resp = client.post(
+        "/api/courses/lead-magnet",
+        data={
+            "full_name": "Vikram Singh",
+            "phone": "+91 9876543298",
+            "resource_name": "7 Primitives of Data Analysis Cheat Sheet",
+            "consent": "on"
+        },
+        follow_redirects=False
+    )
+    assert form_resp.status_code == 303
+    assert "download_url=" in form_resp.headers["location"]
+
+    # 4. Confirmation view renders the direct download button
+    conf_resp = client.get(form_resp.headers["location"])
+    assert conf_resp.status_code == 200
+    assert "Download Your Resource" in conf_resp.text
+    assert "/cheatsheet/data-analysis-7-primitives/download" in conf_resp.text
+
 
 
 
