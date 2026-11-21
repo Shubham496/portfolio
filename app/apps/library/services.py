@@ -49,12 +49,12 @@ SUBJECTS: Dict[str, Dict[str, Any]] = {
         "badge": "Core Track",
         "topics": [
             # 1. SQL Basics
-            {"title": "What is a Database & RDBMS?", "slug": "sql-what-is-database", "category": "1. SQL Basics", "vertical": "notes", "reading_time": "5 min read", "order": 1},
-            {"title": "SQL Introduction & Syntax", "slug": "sql-intro-syntax", "category": "1. SQL Basics", "vertical": "notes", "reading_time": "6 min read", "order": 2},
+            {"title": "What is a Database & RDBMS?", "slug": "sql-what-is-database", "category": "1. SQL Basics", "vertical": "notes", "reading_time": "5 min read", "order": 1, "status": "published"},
+            {"title": "SQL Introduction & Syntax", "slug": "sql-intro-syntax", "category": "1. SQL Basics", "vertical": "notes", "reading_time": "6 min read", "order": 2, "status": "published"},
 
             # 2. Database & Table Management (DDL)
-            {"title": "SQL CREATE & DROP DATABASE", "slug": "sql-create-drop-database", "category": "2. Database & Table Management", "vertical": "notes", "reading_time": "5 min read", "order": 3},
-            {"title": "SQL CREATE & DROP TABLE", "slug": "sql-create-drop-table", "category": "2. Database & Table Management", "vertical": "notes", "reading_time": "6 min read", "order": 4},
+            {"title": "SQL CREATE & DROP DATABASE", "slug": "sql-create-drop-database", "category": "2. Database & Table Management", "vertical": "notes", "reading_time": "5 min read", "order": 3, "status": "published"},
+            {"title": "SQL CREATE & DROP TABLE", "slug": "sql-create-drop-table", "category": "2. Database & Table Management", "vertical": "notes", "reading_time": "6 min read", "order": 4, "status": "published"},
             {"title": "SQL ALTER TABLE & TRUNCATE TABLE", "slug": "sql-alter-truncate-table", "category": "2. Database & Table Management", "vertical": "notes", "reading_time": "6 min read", "order": 5},
 
             # 3. Querying & Filtering (DQL)
@@ -82,7 +82,7 @@ SUBJECTS: Dict[str, Dict[str, Any]] = {
 
             # 7. Constraints & Keys
             {"title": "SQL Constraints (NOT NULL, UNIQUE, CHECK, DEFAULT)", "slug": "sql-constraints-overview", "category": "7. Constraints & Keys", "vertical": "notes", "reading_time": "7 min read", "order": 21},
-            {"title": "SQL PRIMARY KEY & FOREIGN KEY", "slug": "sql-primary-foreign-key", "category": "7. Constraints & Keys", "vertical": "notes", "reading_time": "7 min read", "order": 22},
+            {"title": "SQL PRIMARY KEY & FOREIGN KEY", "slug": "sql-primary-foreign-key", "category": "7. Constraints & Keys", "vertical": "notes", "reading_time": "7 min read", "order": 22, "status": "published"},
             {"title": "SQL AUTO_INCREMENT & Identity", "slug": "sql-auto-increment", "category": "7. Constraints & Keys", "vertical": "notes", "reading_time": "5 min read", "order": 23},
 
             # 8. SQL Joins
@@ -90,7 +90,7 @@ SUBJECTS: Dict[str, Dict[str, Any]] = {
             {"title": "SQL INNER JOIN", "slug": "sql-inner-join", "category": "8. SQL Joins", "vertical": "notes", "reading_time": "7 min read", "order": 25},
             {"title": "SQL LEFT JOIN (Outer Join)", "slug": "sql-left-join", "category": "8. SQL Joins", "vertical": "notes", "reading_time": "7 min read", "order": 26},
             {"title": "SQL RIGHT JOIN & FULL OUTER JOIN", "slug": "sql-right-full-join", "category": "8. SQL Joins", "vertical": "notes", "reading_time": "7 min read", "order": 27},
-            {"title": "SQL Joins: What Textbooks Teach vs. Production Reality", "slug": "sql-joins-textbook-vs-reality", "category": "8. SQL Joins", "vertical": "notes", "reading_time": "8 min read", "order": 28},
+            {"title": "SQL Joins: What Textbooks Teach vs. Production Reality", "slug": "sql-joins-textbook-vs-reality", "category": "8. SQL Joins", "vertical": "notes", "reading_time": "8 min read", "order": 28, "status": "published"},
 
             # 9. Advanced SQL & Analysis
             {"title": "SQL UNION & UNION ALL", "slug": "sql-union-all", "category": "9. Advanced SQL", "vertical": "notes", "reading_time": "6 min read", "order": 29},

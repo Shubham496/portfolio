@@ -98,6 +98,13 @@ To avoid long wait times, context saturation, and edit errors, agents must adher
    - Conclude by stating what is ready and ask the user to confirm before moving to Task X.3.
 4. **Preserved Working State**:
    - Each completed slice must leave the repository in a fully tested, working, and committed state. No half-finished or broken code between turns.
+5. **Automated Shorthand Continuation Dispatch ("do", "continue", "proceed", "next", "go on")**:
+   - When the user sends a single shorthand continuation command without detailed instructions, immediately read the active task queue in `docs/task_new.md`.
+   - Pick the next 1–2 pending subtasks and execute them immediately.
+   - For curriculum study notes, ensure the "Coming Soon" marker is removed upon completion by setting `status: "published"` in frontmatter and catalog metadata.
+   - Run tests (`pytest tests/test_library.py -k test_all_authored_markdown_notes_render_and_compile_to_pdf` and `python -m pytest -v`).
+   - Check off completed items `[x]` in `docs/task_new.md`.
+   - Document in `Changeslog.md` (maintaining 15 entries rolling window by archiving to `docs/CHANGELOG_ARCHIVE.md`), stage, and commit locally (`git commit`). Never run `git push`.
 
 ---
 

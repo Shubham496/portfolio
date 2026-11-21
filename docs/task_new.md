@@ -292,6 +292,82 @@ Phase 6: Later Only (Optional Paywalled Bundles via External Link)
 
 ---
 
+### Active Curriculum Task Queue: SQL Study Track (Topic-by-Topic Slices)
+
+> [!IMPORTANT]
+> **AUTOMATED SHORTHAND DISPATCH DIRECTIVE FOR AI AGENTS (`do`, `continue`, `proceed`, `next`, `go on`)**:
+> Whenever the user prompt is a single shorthand continuation command (e.g., **"do"**, **"continue"**, **"proceed"**, **"next"**, **"go on"**):
+> 1. Consult this Active Curriculum Task Queue immediately.
+> 2. Select the next pending 1 or 2 unchecked subtasks (`[ ]`).
+> 3. Author the topic study notes in `app/content/sql/{slug}.md` adhering to the A4 print-width invariant (code <= 75 chars, tables 3-4 columns) and "Skipped Foundations & Production Truth" pedagogy.
+> 4. Ensure the "Coming Soon" marker is automatically eliminated by setting `status: "published"` in its frontmatter.
+> 5. Verify cleanly with `pytest tests/test_library.py -k test_all_authored_markdown_notes_render_and_compile_to_pdf` and `python -m pytest -v`.
+> 6. Check off `[x]` the completed subtasks in this queue.
+> 7. Document the slice in `Changeslog.md` (maintaining the 15-entry rolling window by archiving oldest to `docs/CHANGELOG_ARCHIVE.md`).
+> 8. Stage and commit locally (`git commit`). **Never run `git push`** (platform owner only).
+
+#### Category 1: SQL Basics
+* [x] **Task SQL-1: What is a Database & RDBMS?** (`sql-what-is-database`) [Published]
+* [x] **Task SQL-2: SQL Introduction & Syntax** (`sql-intro-syntax`) [Published]
+
+#### Category 2: Database & Table Management (DDL)
+* [x] **Task SQL-3: SQL CREATE & DROP DATABASE** (`sql-create-drop-database`) [Published]
+* [x] **Task SQL-4: SQL CREATE & DROP TABLE** (`sql-create-drop-table`) [Published]
+* [ ] **Task SQL-5: SQL ALTER TABLE & TRUNCATE TABLE** (`sql-alter-truncate-table`) [NEXT SLICE 1/2]
+
+#### Category 3: Querying & Filtering (DQL)
+* [ ] **Task SQL-6: SQL SELECT & SELECT DISTINCT** (`sql-select-distinct`) [NEXT SLICE 2/2]
+* [ ] **Task SQL-7: SQL WHERE Clause & Comparison Operators** (`sql-where-clause`)
+* [ ] **Task SQL-8: SQL AND, OR & NOT Operators** (`sql-and-or-not`)
+* [ ] **Task SQL-9: SQL ORDER BY (Sorting Data)** (`sql-order-by`)
+
+#### Category 4: Data Manipulation (DML)
+* [ ] **Task SQL-10: SQL INSERT INTO (Adding Rows)** (`sql-insert-into`)
+* [ ] **Task SQL-11: SQL NULL Values (IS NULL & IS NOT NULL)** (`sql-null-values`)
+* [ ] **Task SQL-12: SQL UPDATE (Modifying Records)** (`sql-update`)
+* [ ] **Task SQL-13: SQL DELETE (Removing Records)** (`sql-delete`)
+* [ ] **Task SQL-14: SQL LIMIT & TOP Records** (`sql-limit-top`)
+
+#### Category 5: Aggregations & Grouping
+* [ ] **Task SQL-15: SQL Aggregate Functions (COUNT, SUM, AVG, MIN, MAX)** (`sql-aggregate-functions`)
+* [ ] **Task SQL-16: SQL GROUP BY Statement** (`sql-group-by`)
+* [ ] **Task SQL-17: SQL HAVING Clause** (`sql-having`)
+
+#### Category 6: Advanced Filtering & Operators
+* [ ] **Task SQL-18: SQL LIKE Operator & Wildcards** (`sql-like-wildcards`)
+* [ ] **Task SQL-19: SQL IN & BETWEEN Operators** (`sql-in-between`)
+* [ ] **Task SQL-20: SQL Aliases (Column & Table AS)** (`sql-aliases`)
+
+#### Category 7: Constraints & Keys
+* [ ] **Task SQL-21: SQL Constraints (NOT NULL, UNIQUE, CHECK, DEFAULT)** (`sql-constraints-overview`)
+* [x] **Task SQL-22: SQL PRIMARY KEY & FOREIGN KEY** (`sql-primary-foreign-key`) [Published]
+* [ ] **Task SQL-23: SQL AUTO_INCREMENT & Identity** (`sql-auto-increment`)
+
+#### Category 8: SQL Joins
+* [ ] **Task SQL-24: SQL Joins Overview & Venn Diagrams** (`sql-joins-introduction`)
+* [ ] **Task SQL-25: SQL INNER JOIN** (`sql-inner-join`)
+* [ ] **Task SQL-26: SQL LEFT JOIN (Outer Join)** (`sql-left-join`)
+* [ ] **Task SQL-27: SQL RIGHT JOIN & FULL OUTER JOIN** (`sql-right-full-join`)
+* [x] **Task SQL-28: SQL Joins: What Textbooks Teach vs. Production Reality** (`sql-joins-textbook-vs-reality`) [Published]
+
+#### Category 9: Advanced SQL & Analysis
+* [ ] **Task SQL-29: SQL UNION & UNION ALL** (`sql-union-all`)
+* [ ] **Task SQL-30: SQL CASE Statement** (`sql-case-expression`)
+* [ ] **Task SQL-31: SQL Subqueries & Nested Queries** (`sql-subqueries`)
+* [ ] **Task SQL-32: SQL Views (CREATE & DROP VIEW)** (`sql-views`)
+* [ ] **Task SQL-33: Window Functions Masterclass** (`sql-window-functions-deep-dive`)
+* [ ] **Task SQL-34: Common Table Expressions (CTEs) & Hierarchies** (`sql-recursive-ctes-and-hierarchies`)
+* [ ] **Task SQL-35: ACID Properties & Transaction Isolation Levels** (`sql-acid-transactions-and-isolation-levels`)
+
+#### Category 10: Query Optimization & Internals
+* [ ] **Task SQL-36: B-Tree vs Hash Indexing: Internals & Scans** (`sql-indexing-btree-hash-internals`)
+* [ ] **Task SQL-37: Database Normalization (1NF to BCNF) vs. Star Schema** (`sql-database-normalization-vs-star-schema`)
+
+#### Category 11: Interview Prep
+* [ ] **Task SQL-38: Top 45 SQL Viva Practical & Junior Interview Traps** (`sql-viva-top-45-interview-traps`)
+
+---
+
 ### Phase 6: Paywalls & Digital Bundles (LATER ONLY)
 *To be implemented only after steady organic traffic and cohort counseling volume are established, upon explicit platform owner directive.*
 
