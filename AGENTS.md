@@ -31,10 +31,16 @@
 ## 2. Non-Negotiable Push & Deployment Boundary
 
 > [!CAUTION]
-> **STRICT PUSH RESTRICTION (PLATFORM OWNER ONLY)**:
-> **Only the human platform owner ("I") is authorized to push commits to the remote repository (`git push origin main`) or trigger production deployments.**
-> AI agents and automated scripts are **STRICTLY PROHIBITED** from executing `git push`.
-> Agents must verify tests, review `git status`, stage files, and commit locally with conventional commit messages (`feat:`, `fix:`, `refactor:`, `docs:`), leaving the local working tree clean for the platform owner to review and push.
+> **DUAL-REPOSITORY PUSH & DEPLOYMENT BOUNDARIES**:
+>
+> 1. **Core Platform Repository (`coding` / `mythostech.in`) — STRICT PUSH RESTRICTION (PLATFORM OWNER ONLY)**:
+>    * **Only the human platform owner ("I") is authorized to push commits to the remote application repository (`git push origin main`) or trigger production deployments.**
+>    * AI agents and automated scripts are **STRICTLY PROHIBITED** from executing `git push` on this repository.
+>    * Agents must verify tests, review `git status`, stage files, and commit locally with conventional commit messages (`feat:`, `fix:`, `refactor:`, `docs:`), leaving the local working tree clean for the platform owner to review and push.
+>
+> 2. **Decoupled Asset Vault Repository (`external_assets/` / `mythos-assets`) — FULL AGENT PUSH COMMAND**:
+>    * The secondary repository at `external_assets/` (`https://github.com/Shubham496/mythos-assets.git`) is git-ignored by the core app and completely under AI agent command.
+>    * AI agents are **EXPLICITLY AUTHORIZED** to stage, commit, and execute `git push origin main` inside `external_assets/` to manage datasets, open-source cheat sheets, and media.
 
 ---
 
@@ -114,5 +120,5 @@ To avoid long wait times, context saturation, and edit errors, agents must adher
 2. **Admissions & Pricing Rule**: **Zero public pricing** displayed for live cohorts on the public website; admissions and batch readiness are handled through counseling and `/register`. Digital student micro-assets (viva sets, notes) may display micro-prices (₹10–₹49) only at purchase gates.
 3. **Student Contact Fields**: Email is **strictly optional** across student registration and enquiry forms. Only **Full Name** and **WhatsApp/Phone** are mandatory.
 4. **Zero Code Execution**: The platform is strictly an educational reading and copy-only reference; never provide interactive runners, consoles, or REPLs.
-5. **Decoupled Asset Vault & Open Resource Curation**: High-res images, voluminous datasets, and downloadable zip archives must be housed in `external_assets/` or a secondary repository (e.g. secondary GitHub/raw CDN) and never committed directly to the core application repository. Rather than authoring massive curricula from scratch, curate reputable open educational resources (OER) and open datasets, apply light editorial rewrites to maintain MYTHOS standards, and incrementally publish.
+5. **Decoupled Asset Vault & Open Resource Curation**: High-res images, voluminous datasets, cheatsheets, and downloadable zip archives must be housed in `external_assets/` (which is git-ignored in the core repo and connected to its own GitHub repository `https://github.com/Shubham496/mythos-assets.git`). Agents have full authority to push commits to `mythos-assets`. All assets are globally accessible via jsDelivr CDN (`https://cdn.jsdelivr.net/gh/Shubham496/mythos-assets@main/...`) and raw GitHub URLs. Rather than authoring massive curricula from scratch, agents should curate reputable open educational resources (OER) from open-source repos into `external_assets/`, apply light editorial rewrites to maintain MYTHOS 'Skipped Foundations & Production Truth' standards and A4 PDF print geometry, and incrementally publish.
 6. **A4 PDF Print-Width & Direct Markdown-to-PDF Invariant**: Every technical guide, study note, and article in `app/content/` must strictly observe PDF print geometry: code snippets and comments capped at ~75–80 characters; comparison tables capped at 4–5 concise columns; notes must compile directly into readable, styled PDFs via `render_markdown_file_to_pdf`.

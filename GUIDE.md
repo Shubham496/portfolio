@@ -34,9 +34,21 @@ All technical articles, posts, and study notes authored for the platform are gov
 4. **Direct Markdown-to-PDF Engine (`app.apps.library.markdown_pdf`)**: Every markdown note in `app/content/` converts directly into a publication-grade, styled A4 PDF (`MythosNotePDF`) with branded header/footer without manual coordinate rewrites via `render_markdown_file_to_pdf` and route `GET /library/{subject}/notes/{slug}/pdf`.
 
 ### 1.3 Decoupled Vault & Open Educational Resource (OER) Curation Strategy
-To prevent repository bloat, preserve git performance, and rapidly scale the curriculum across 34 technical subjects:
-1. **Decoupled Vault & Secondary Storage**: Voluminous datasets, extensive practice CSV/Parquet files, downloadable ZIP archives, and heavy binaries must never bloat the core application git repository. Store them in a secondary repository or external asset vault (`external_assets/`, raw GitHub CDN) and link or stream on demand.
-2. **Curate, Adapt & Polish (OER Integration)**: Rather than hand-authoring large corpora from scratch, curate reputable open-source educational resources, open datasets (e.g. Kaggle, Govt Open Data), and community cheat sheets. Adapt them with light rewrites to enforce the MYTHOS "Skipped Foundations & Production Truth" standard and A4 PDF print geometry before publishing incrementally to the main site.
+To prevent core repository bloat, preserve Git performance, and rapidly scale the curriculum across all 34 technical subjects:
+1. **Dual-Repository Architecture & Push Boundaries**:
+   * **Core Platform Repository (`coding` / `mythostech.in`)**: Houses the FastAPI web application, business logic, admission funnels, and published articles (`app/content/`). **Strict push restriction applies**: only the human platform owner is authorized to push commits to remote `origin main`.
+   * **Decoupled Asset Vault (`external_assets/` / `mythos-assets`)**: An independent, git-ignored Git repository connected to `https://github.com/Shubham496/mythos-assets.git`. **Under complete AI agent command**: agents are explicitly authorized to curate, commit, and `git push origin main` directly to `mythos-assets`.
+2. **Global CDN & Direct Download Access**:
+   * All assets stored in `mythos-assets` are publicly accessible via jsDelivr CDN and raw GitHub:
+     * **CDN Notes & Guides**: `https://cdn.jsdelivr.net/gh/Shubham496/mythos-assets@main/notes/<subject>/<filename>`
+     * **CDN Practice Datasets**: `https://cdn.jsdelivr.net/gh/Shubham496/mythos-assets@main/datasets/<filename>`
+     * **Direct Raw Downloads**: `https://github.com/Shubham496/mythos-assets/raw/main/datasets/<filename>`
+3. **Curate, Adapt & Polish (OER Integration)**:
+   * Rather than hand-authoring large corpora from scratch, curate reputable open-source educational resources, open datasets (e.g., Kaggle, Govt Open Data), and community cheat sheets using the automated runner (`python external_assets/fetch_assets.py`).
+   * When promoting notes to `app/content/`, apply light rewrites to enforce:
+     * The **Skipped Foundations & Production Truth** pedagogy.
+     * The **A4 PDF print-width invariant** (code line length <= 75–80 chars, comparison tables <= 4 columns).
+     * Catalog registration in `app/apps/library/services.py` with `status: "published"`.
 
 ---
 
