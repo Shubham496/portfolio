@@ -33,6 +33,11 @@ All technical articles, posts, and study notes authored for the platform are gov
 3. **Tabular Data Layout**: Markdown tables must not exceed 4-5 concise columns. Avoid sprawling 8-10 column tables that overflow off-page when rendered to PDF.
 4. **Direct Markdown-to-PDF Engine (`app.apps.library.markdown_pdf`)**: Every markdown note in `app/content/` converts directly into a publication-grade, styled A4 PDF (`MythosNotePDF`) with branded header/footer without manual coordinate rewrites via `render_markdown_file_to_pdf` and route `GET /library/{subject}/notes/{slug}/pdf`.
 
+### 1.3 Decoupled Vault & Open Educational Resource (OER) Curation Strategy
+To prevent repository bloat, preserve git performance, and rapidly scale the curriculum across 34 technical subjects:
+1. **Decoupled Vault & Secondary Storage**: Voluminous datasets, extensive practice CSV/Parquet files, downloadable ZIP archives, and heavy binaries must never bloat the core application git repository. Store them in a secondary repository or external asset vault (`external_assets/`, raw GitHub CDN) and link or stream on demand.
+2. **Curate, Adapt & Polish (OER Integration)**: Rather than hand-authoring large corpora from scratch, curate reputable open-source educational resources, open datasets (e.g. Kaggle, Govt Open Data), and community cheat sheets. Adapt them with light rewrites to enforce the MYTHOS "Skipped Foundations & Production Truth" standard and A4 PDF print geometry before publishing incrementally to the main site.
+
 ---
 
 ## 2. Technology Stack & Key Dependencies
