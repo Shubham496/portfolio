@@ -313,12 +313,12 @@ Phase 6: Later Only (Optional Paywalled Bundles via External Link)
 #### Category 2: Database & Table Management (DDL)
 * [x] **Task SQL-3: SQL CREATE & DROP DATABASE** (`sql-create-drop-database`) [Published]
 * [x] **Task SQL-4: SQL CREATE & DROP TABLE** (`sql-create-drop-table`) [Published]
-* [ ] **Task SQL-5: SQL ALTER TABLE & TRUNCATE TABLE** (`sql-alter-truncate-table`) [NEXT SLICE 1/2]
+* [x] **Task SQL-5: SQL ALTER TABLE & TRUNCATE TABLE** (`sql-alter-truncate-table`) [Published]
 
 #### Category 3: Querying & Filtering (DQL)
-* [ ] **Task SQL-6: SQL SELECT & SELECT DISTINCT** (`sql-select-distinct`) [NEXT SLICE 2/2]
-* [ ] **Task SQL-7: SQL WHERE Clause & Comparison Operators** (`sql-where-clause`)
-* [ ] **Task SQL-8: SQL AND, OR & NOT Operators** (`sql-and-or-not`)
+* [x] **Task SQL-6: SQL SELECT & SELECT DISTINCT** (`sql-select-distinct`) [Published]
+* [ ] **Task SQL-7: SQL WHERE Clause & Comparison Operators** (`sql-where-clause`) [NEXT SLICE 1/2]
+* [ ] **Task SQL-8: SQL AND, OR & NOT Operators** (`sql-and-or-not`) [NEXT SLICE 2/2]
 * [ ] **Task SQL-9: SQL ORDER BY (Sorting Data)** (`sql-order-by`)
 
 #### Category 4: Data Manipulation (DML)

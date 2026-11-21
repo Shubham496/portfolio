@@ -55,10 +55,10 @@ SUBJECTS: Dict[str, Dict[str, Any]] = {
             # 2. Database & Table Management (DDL)
             {"title": "SQL CREATE & DROP DATABASE", "slug": "sql-create-drop-database", "category": "2. Database & Table Management", "vertical": "notes", "reading_time": "5 min read", "order": 3, "status": "published"},
             {"title": "SQL CREATE & DROP TABLE", "slug": "sql-create-drop-table", "category": "2. Database & Table Management", "vertical": "notes", "reading_time": "6 min read", "order": 4, "status": "published"},
-            {"title": "SQL ALTER TABLE & TRUNCATE TABLE", "slug": "sql-alter-truncate-table", "category": "2. Database & Table Management", "vertical": "notes", "reading_time": "6 min read", "order": 5},
+            {"title": "SQL ALTER TABLE & TRUNCATE TABLE", "slug": "sql-alter-truncate-table", "category": "2. Database & Table Management", "vertical": "notes", "reading_time": "6 min read", "order": 5, "status": "published"},
 
             # 3. Querying & Filtering (DQL)
-            {"title": "SQL SELECT & SELECT DISTINCT", "slug": "sql-select-distinct", "category": "3. Querying & Filtering", "vertical": "notes", "reading_time": "6 min read", "order": 6},
+            {"title": "SQL SELECT & SELECT DISTINCT", "slug": "sql-select-distinct", "category": "3. Querying & Filtering", "vertical": "notes", "reading_time": "6 min read", "order": 6, "status": "published"},
             {"title": "SQL WHERE Clause & Comparison Operators", "slug": "sql-where-clause", "category": "3. Querying & Filtering", "vertical": "notes", "reading_time": "6 min read", "order": 7},
             {"title": "SQL AND, OR & NOT Operators", "slug": "sql-and-or-not", "category": "3. Querying & Filtering", "vertical": "notes", "reading_time": "5 min read", "order": 8},
             {"title": "SQL ORDER BY (Sorting Data)", "slug": "sql-order-by", "category": "3. Querying & Filtering", "vertical": "notes", "reading_time": "5 min read", "order": 9},
