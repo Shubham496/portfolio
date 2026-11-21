@@ -3,10 +3,21 @@
 > **PRIMARY DIRECTIVE FOR ALL AI AGENTS & CODING ASSISTANTS**:
 > You are working on the **MYTHOS Online Institute** repository.
 > You must strictly observe the non-negotiable operational rules below on every task.
+>
+> *Scope*: This document governs **how AI agents work** (process, boundaries, lifecycle, git hygiene).
+> For **what the system is** (architecture, schemas, complete API catalog, configuration), see [`GUIDE.md`](file:///f:/Projects/coding/GUIDE.md).
+
+> [!TIP]
+> **TL;DR Operational Quick-Reference**:
+> 1. **Bound your scope**: Strictly 1–2 subtasks per prompt. Never run ahead unprompted.
+> 2. **Surgical edits**: Keep edits compact (<50 lines per block). Match whitespace exactly.
+> 3. **Push boundary**: **NEVER run `git push`** on this repository. Stage and commit locally only.
+> 4. **Test gate**: Run targeted tests during development; verify all automated tests pass (0 failures) before handoff.
+> 5. **Changelog**: Record each slice in `Changeslog.md` (keep rolling 15 entries, archive older to `docs/CHANGELOG_ARCHIVE.md`).
 
 ---
 
-## 1. The 16 Golden Rules for AI Agents
+## 1. The 17 Golden Rules for AI Agents
 
 1. **Read `GUIDE.md` before starting development**: Understand the current application state, purpose, tech stack, and constraints before proposing or writing code.
 2. **Read the latest 15 entries in `Changeslog.md`**: Familiarize yourself with recent feature additions, schema migrations, and architectural decisions.
@@ -20,7 +31,7 @@
 10. **Keep edits surgical and compact (<50 lines)**: Avoid massive monolithic file replacements in complex HTML or Python templates. Read exact line ranges first, match exact whitespace, and apply compact contiguous replacements to eliminate edit tool mismatch errors.
 11. **Leverage fast targeted testing during iteration**: Use targeted pytest runs (`pytest tests/test_courses.py -k <test_name>`) for rapid 1-second feedback loops during development; execute the full test suite (`python -m pytest -v`) only once as the final verification gate before completing the turn.
 12. **Never expose credentials or API keys**: Keep secrets strictly in `.env`. Never commit, log, or document passwords, tokens, or private hashes. Ensure `.env` and `*.db` remain in `.gitignore`.
-13. **Test important changes before declaring completion**: Verify that all automated tests pass cleanly (`75+ passed, 0 failures`) before completing a task slice.
+13. **Test important changes before declaring completion**: Verify that all automated tests pass cleanly (0 failures) before completing a task slice.
 14. **Update `Changeslog.md` after meaningful changes**: Document every meaningful feature, schema change, bug fix, or breaking change following the standardized changelog entry format.
 15. **Archive older entries when the 15-entry limit is exceeded**: Automatically transfer entries older than the latest 15 to `docs/CHANGELOG_ARCHIVE.md` preserving all technical details.
 16. **Never modify production data or execute destructive operations without approval**: Do not drop tables, wipe rows, alter production databases, or execute destructive DDL commands.
@@ -50,7 +61,7 @@ When assigned a task or asked to perform a roadmap phase, follow this exact sing
 
 ```
 Step 1: Slice Scoping & Boundary Definition
-  ├─ Inspect docs/task_new.md to find the active phase
+  ├─ Inspect docs/task_new.md to find the active phase (root task_new.md is a pointer)
   ├─ Select ONLY the next 1 or 2 pending subtasks (e.g. Task 5.1 only)
   ├─ Explicitly state which subtask(s) you are implementing in this turn
   └─ DO NOT attempt the remaining tasks of the phase in this execution
@@ -65,6 +76,12 @@ Step 3: Surgical Implementation
   ├─ Apply small, focused edits (<50 lines per edit block) to prevent tool failures
   ├─ Adhere to zero-code execution on platform rule (static syntax only)
   └─ Maintain zero upfront pricing on student browse surfaces
+
+Step 3b: Failure Recovery & Clean Rollback
+  ├─ If tests fail or edit tools report mismatches, inspect with: git status && git diff
+  ├─ Revert damaged files cleanly: git checkout -- <file>
+  ├─ Re-read the exact line numbers and whitespace before retrying
+  └─ Never proceed to commit with broken tests or unstaged debris
 
 Step 4: Two-Tier Verification
   ├─ Fast tier: pytest tests/test_<module>.py -k <new_or_modified_test> (instant feedback)
@@ -107,14 +124,16 @@ To avoid long wait times, context saturation, and edit errors, agents must adher
 5. **Automated Shorthand Continuation Dispatch ("do", "continue", "proceed", "next", "go on")**:
    - When the user sends a single shorthand continuation command without detailed instructions, immediately read the active task queue in `docs/task_new.md`.
    - Pick the next 1–2 pending subtasks and execute them immediately.
-   - For curriculum study notes, ensure the "Coming Soon" marker is removed upon completion by setting `status: "published"` in frontmatter and catalog metadata.
-   - Run tests (`pytest tests/test_library.py -k test_all_authored_markdown_notes_render_and_compile_to_pdf` and `python -m pytest -v`).
+   - For curriculum study notes, remove "Coming Soon" draft markers upon completion by setting `status: "published"` in frontmatter and catalog metadata in `app/apps/library/services.py`.
+   - Run verification tests and full regression test suite (`python -m pytest -v`).
    - Check off completed items `[x]` in `docs/task_new.md`.
    - Document in `Changeslog.md` (maintaining 15 entries rolling window by archiving to `docs/CHANGELOG_ARCHIVE.md`), stage, and commit locally (`git commit`). Never run `git push`.
 
 ---
 
 ## 5. Key Implementation Constraints & Invariants
+
+> *Note: For the exhaustive system constraints and architecture, refer to [`GUIDE.md` §9](file:///f:/Projects/coding/GUIDE.md#9-non-negotiable-business--architectural-constraints).*
 
 1. **Academic Focus**: Live online weekend cohorts in Data Analysis & Digital Marketing (`Saturday & Sunday, 6:00 PM – 8:00 PM IST`).
 2. **Admissions & Pricing Rule**: **Zero public pricing** displayed for live cohorts on the public website; admissions and batch readiness are handled through counseling and `/register`. Digital student micro-assets (viva sets, notes) may display micro-prices (₹10–₹49) only at purchase gates.

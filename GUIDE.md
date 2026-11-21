@@ -3,7 +3,12 @@
 > **PRIMARY DIRECTIVE FOR DEVELOPERS & AI AGENTS**:
 > This document is the **definitive single-source-of-truth manual** for the current state of the codebase.
 > It describes current implementation, architecture, API contracts, schemas, and operational constraints.
-> For historical records, refer to [`Changeslog.md`](file:///f:/Projects/coding/Changeslog.md). For operational directives, refer to [`AGENTS.md`](file:///f:/Projects/coding/AGENTS.md).
+>
+> *Scope*: This document describes **what the system is** (architecture, APIs, schemas, configurations).
+> For **how AI agents work** (process, 17 golden rules, boundaries, git hygiene), see [`AGENTS.md`](file:///f:/Projects/coding/AGENTS.md).
+> For historical records, refer to [`Changeslog.md`](file:///f:/Projects/coding/Changeslog.md).
+>
+> *Status*: Active | Last Updated: 2026-11-22 | Automated Tests: 84 passing (0 failures) | Python 3.10.11
 
 ---
 
@@ -151,6 +156,7 @@ coding/
 │   │       └── templates/todos.html    # Kanban task board template
 │   │
 │   ├── content/                        # Markdown study guides and notes repository
+│   │   ├── bi/                         # Business Intelligence notes (e.g. 7 Primitives)
 │   │   └── sql/                        # SQL notes, viva sets, and W3Schools study track blueprints
 │   │
 │   ├── static/                         # Static web assets
@@ -186,9 +192,9 @@ coding/
 ├── external_assets/                    # [DECOUPLED VAULT] Git-ignored submodule (mythos-assets)
 │                                       # Houses datasets, downloads, and large images via CDN
 │
-└── tests/                              # Automated test suite (78 tests passing cleanly)
-    ├── test_courses.py                 # Admissions, registrations, auth, CSV export, PDF, funnels, security (28 tests)
-    ├── test_library.py                 # W3Schools panels, sequential nav, reader, catalog (17 tests)
+└── tests/                              # Automated test suite (84 tests passing cleanly)
+    ├── test_courses.py                 # Admissions, registrations, auth, CSV export, PDF, funnels, security (29 tests)
+    ├── test_library.py                 # W3Schools panels, sequential nav, reader, catalog, PDF compilation (22 tests)
     ├── test_student_auth.py            # Student auth, session cookies, activity logging, datasets (14 tests)
     └── test_main.py                    # Health, SEO, sitemap, robots, Open Graph, schema, quality gate, analytics (19 tests)
 ```
@@ -205,8 +211,8 @@ For the exhaustive architectural specification, see [`docs/architecture.md`](fil
 - `app/apps/todos`: Lightweight Kanban micro-app for internal milestone tracking.
 
 ### 4.2 Presentation & Template Decomposition
-The landing page (`app/templates/index.html`) is modularized into 10 isolated partials in `app/templates/sections/`:
-`hero.html`, `engine.html`, `programs.html`, `methodology.html`, `projects.html`, `admission.html`, `career.html`, `syllabus.html`, `mentor.html`, `modals.html`.
+The landing page (`app/templates/index.html`) is modularized into 11 isolated section partials in `app/templates/sections/`:
+`hero.html`, `engine.html`, `programs.html`, `methodology.html`, `projects.html`, `admission.html`, `career.html`, `syllabus.html`, `testimonials.html` (dormant), `mentor.html`, `modals.html`.
 Navigation features a top inter-page bar (`navbar.html`) and a left in-page docking rail (`in_page_nav.html`) with scroll-spy tracking.
 
 ---
@@ -229,7 +235,7 @@ Navigation features a top inter-page bar (`navbar.html`) and a left in-page dock
 | `GET` | `/course/syllabus/download` | File (`Data_Analysis_Syllabus.pdf`) | Direct attachment download of syllabus brochure. |
 | `GET` | `/cheatsheet/data-analysis-7-primitives/download` | File (`Data_Analysis_7_Primitives_CheatSheet.pdf`) | Direct attachment download of 7 Primitives cheat sheet. |
 | `GET` | `/course/syllabus` | File (Inline PDF) | Inline browser preview of syllabus brochure. |
-| `GET` | `/resume` | File (Inline PDF) | Serves the instructor's technical resume PDF. |
+| `GET` | `/resume` | 301 Redirect | Permanent redirect to institute about page (`/about`). |
 | `GET` | `/health` | JSON (`{"status": "healthy", ...}`) | Cloud uptime and health probe endpoint. |
 
 ### 5.2 Admin Portal Routes (`app/apps/courses/admin_router.py`)
@@ -241,6 +247,10 @@ Navigation features a top inter-page bar (`navbar.html`) and a left in-page dock
 | `GET` | `/admin/signup` | No | **Disabled**: returns 303 redirect to `/admin/login`. |
 | `POST` | `/admin/signup` | No | **Disabled**: returns 303 redirect to `/admin/login`. |
 | `GET` | `/admin/dashboard` | **`require_admin`** | Protected dashboard with 6 KPI cards, multi-filter toolbar (Lead Type, Status, Traffic Source, Subject), and paginated leads table. |
+| `GET` | `/admin/batches` | **`require_admin`** | Cohort management panel for creating, editing, and closing batches. |
+| `POST` | `/admin/batches/create` | **`require_admin`** | Creates new cohort batch from admin form. |
+| `POST` | `/admin/batches/{id}/update` | **`require_admin`** | Updates batch dates, status, or seat capacity. |
+| `POST` | `/admin/batches/{id}/toggle-active` | **`require_admin`** | Toggles batch active/archived state. |
 | `POST` | `/admin/leads/{id}/status`| **`require_admin`** | Updates lead pipeline status (`new`, `contacted`, `demo_attended`, `enrolled`, `closed`, `do_not_contact`), follow-up date, and counselor notes. |
 | `GET` | `/admin/logout` | No | Clears `admin_session` cookie and redirects to `/admin/login`. |
 
@@ -272,6 +282,7 @@ Navigation features a top inter-page bar (`navbar.html`) and a left in-page dock
 | `GET` | `/library/datasets/{slug}/download` | File (CSV) | **Protected Gate**: Download full RFC 4180 CSV (requires student login). |
 | `GET` | `/library/{subject}` | HTML (`library/subject_hub.html`) | W3Schools-style hub with 4-tab panels & topic sidebar. |
 | `GET` | `/library/{subject}/notes/{slug}`| HTML (`library/reader.html`) | 3-Column docs reader with TOC and Prism.js styling. |
+| `GET` | `/library/{subject}/notes/{slug}/pdf`| File (PDF) | On-the-fly publication-grade A4 PDF compilation of an authored markdown note. |
 | `GET` | `/api/library/subjects` | JSON | List of all 34 supported subjects with topic counts. |
 | `GET` | `/api/library/{subject}/documents`| JSON | List of all markdown articles indexed for a subject. |
 
@@ -326,7 +337,7 @@ Auto-loaded via `python-dotenv` from `.env` in [`app/core/config.py`](file:///f:
 | `PORT` | Auto | `8000` (dev) / `10000` (cloud)| Injected by cloud host; bound dynamically by Uvicorn. |
 | `DATABASE_URL` | Cloud Prod | `""` (falls back to SQLite)| External PostgreSQL connection URI (Neon / Supabase / Render Postgres). |
 | `BASE_URL` | No | `https://mythostech.in` | Canonical base domain used for sitemap.xml, canonical URLs, and schema metadata. |
-| `GOOGLE_SITE_VERIFICATION` | Optional | `""` | Google Search Console site verification HTML tag content. |
+| `GSC_VERIFICATION_TOKEN` | Optional | `""` | Google Search Console site verification HTML tag content (legacy fallback: `GOOGLE_SITE_VERIFICATION`). |
 | `ANALYTICS_SCRIPT` | Optional | `""` | Privacy-friendly tracking snippet injection (Plausible, Umami, Cloudflare Web Analytics). |
 | `GA4_MEASUREMENT_ID` | Optional | `""` | Google Analytics 4 measurement ID (e.g., `G-XXXXXXXXXX`) with automated `gtag` setup. |
 | `BUSINESS_EMAIL` | Recommended | `admissions@mythostech.in` | Official institute contact email rendered across templates and PDF brochures. |
@@ -368,11 +379,13 @@ uvicorn app.main:app --reload --port 8000
 ```powershell
 python -m pytest -v
 ```
-**Verification Requirement**: All **78 automated tests** must pass with zero failures.
+**Verification Requirement**: All **84 automated tests** must pass with zero failures.
 
 ---
 
 ## 9. Non-Negotiable Business & Architectural Constraints
+
+> *Note: For agent execution protocols, failure recovery, and single-slice lifecycles, refer to [`AGENTS.md`](file:///f:/Projects/coding/AGENTS.md).*
 
 1. **Cohort Admissions & Zero-Upfront Pricing Rule**:
    - **No tuition fees, prices, discounts, or payment gateways appear on the public website for cohorts**.
@@ -400,9 +413,9 @@ python -m pytest -v
 | Purpose | Primary Workspace Path | Secondary / Alias Path | Notes |
 | :--- | :--- | :--- | :--- |
 | **Master Task Roadmap** | [`docs/task_new.md`](file:///f:/Projects/coding/docs/task_new.md) | [`task_new.md`](file:///f:/Projects/coding/task_new.md) (root pointer) | Active Phases 0–6 task checklist & owner directives. |
-| **AI Operational Rules** | [`AGENTS.md`](file:///f:/Projects/coding/AGENTS.md) | [`agent.md`](file:///f:/Projects/coding/agent.md) (root alias) | 16 golden rules, incremental slicing protocol & push restrictions. Auto-loaded by Antigravity. |
+| **AI Operational Rules** | [`AGENTS.md`](file:///f:/Projects/coding/AGENTS.md) | [`agent.md`](file:///f:/Projects/coding/agent.md) (root alias) | 17 golden rules, incremental slicing protocol & push restrictions. Auto-loaded by Antigravity. |
 | **System Technical Guide** | [`GUIDE.md`](file:///f:/Projects/coding/GUIDE.md) | — | Definitive single-source-of-truth manual (current file). |
-| **Recent Changelog** | [`Changeslog.md`](file:///f:/Projects/coding/Changeslog.md) | — | Strictly latest 15 development entries (rolling log). |
+| **Recent Changelog** | [`Changeslog.md`](file:///f:/Projects/coding/Changeslog.md) | — | Strictly latest 15 development entries (rolling log; note: established repo filename, not a typo). |
 | **Changelog Archive** | [`docs/CHANGELOG_ARCHIVE.md`](file:///f:/Projects/coding/docs/CHANGELOG_ARCHIVE.md) | [`CHANGELOG_ARCHIVE.md`](file:///f:/Projects/coding/CHANGELOG_ARCHIVE.md) (root pointer) | Permanent historical archive (Entry 4 and older). |
 | **Deep-Dive Architecture** | [`docs/architecture.md`](file:///f:/Projects/coding/docs/architecture.md) | — | Detailed sub-app modular layout & request lifecycle. |
 | **Database Blueprint** | [`docs/database.md`](file:///f:/Projects/coding/docs/database.md) | — | Schemas, connection pools, and dual-engine strategy. |
@@ -482,7 +495,7 @@ Always use these exact attributes and tokens; **never hardcode strings**:
 
 ### 10.4 Subsystem Test Suite Map & Fast Verification Commands
 
-Instead of running all 70 tests during rapid iterations, run targeted sub-suites:
+Instead of running all 84 tests during rapid iterations, run targeted sub-suites:
 
 ```powershell
 # 1. Frontend & Core Routing (SEO, sitemap, meta, mentors, contact, quality gate, 550+ purge)
