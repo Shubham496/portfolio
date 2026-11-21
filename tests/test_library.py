@@ -362,4 +362,44 @@ def test_direct_markdown_to_pdf_endpoints():
     assert client.get("/library/sql/notes/nonexistent-slug/pdf").status_code == 404
 
 
+def test_library_sql_foundational_notes_slice():
+    """Verify published foundational notes for SQL (What is a Database & SQL Intro Syntax) with PDF generation."""
+    from app.apps.library.services import list_documents_for_subject
+
+    # 1. Topic 1: What is a Database & RDBMS
+    res1 = client.get("/library/sql/notes/sql-what-is-database")
+    assert res1.status_code == 200
+    assert "What is a Database &amp; RDBMS?" in res1.text or "What is a Database & RDBMS?" in res1.text
+    assert "Write-Ahead Log" in res1.text or "WAL" in res1.text
+    assert "Cost-Based Optimizer" in res1.text
+    assert "/library/sql/notes/sql-what-is-database/pdf" in res1.text
+
+    pdf1 = client.get("/library/sql/notes/sql-what-is-database/pdf")
+    assert pdf1.status_code == 200
+    assert pdf1.headers.get("content-type") == "application/pdf"
+    assert pdf1.content.startswith(b"%PDF")
+    assert len(pdf1.content) > 1000
+
+    # 2. Topic 2: SQL Introduction & Syntax
+    res2 = client.get("/library/sql/notes/sql-intro-syntax")
+    assert res2.status_code == 200
+    assert "SQL Introduction &amp; Syntax" in res2.text or "SQL Introduction & Syntax" in res2.text
+    assert "Logical Execution" in res2.text or "logical order" in res2.text
+    assert "Three-Valued Logic" in res2.text
+    assert "/library/sql/notes/sql-intro-syntax/pdf" in res2.text
+
+    pdf2 = client.get("/library/sql/notes/sql-intro-syntax/pdf")
+    assert pdf2.status_code == 200
+    assert pdf2.headers.get("content-type") == "application/pdf"
+    assert pdf2.content.startswith(b"%PDF")
+    assert len(pdf2.content) > 1000
+
+    # 3. Both are present in published documents for SQL
+    published = list_documents_for_subject("sql", published_only=True)
+    published_slugs = [d.slug for d in published]
+    assert "sql-what-is-database" in published_slugs
+    assert "sql-intro-syntax" in published_slugs
+
+
+
 

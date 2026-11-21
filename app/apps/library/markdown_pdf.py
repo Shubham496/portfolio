@@ -267,6 +267,13 @@ def render_markdown_to_pdf(
         extensions=["tables", "fenced_code"],
         output_format="html5",
     )
+    # Flatten nested tags inside table cells to prevent fpdf2 NotImplementedError
+    html_content = re.sub(
+        r"<(td|th)\b[^>]*>(.*?)</\1>",
+        lambda m: f"<{m.group(1)}>{re.sub(r'<[^>]+>', '', m.group(2))}</{m.group(1)}>",
+        html_content,
+        flags=re.DOTALL,
+    )
 
     # 5. Initialize PDF
     pdf = MythosNotePDF(doc_title=sanitized_title, doc_subject=resolved_subject)

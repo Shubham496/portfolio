@@ -66,9 +66,11 @@ def test_sitemap_xml_dynamic():
     
     # Hand-authored published note must be present
     assert f"{base_url}/library/sql/notes/sql-joins-textbook-vs-reality" in locs
+    assert f"{base_url}/library/sql/notes/sql-what-is-database" in locs
+    assert f"{base_url}/library/sql/notes/sql-intro-syntax" in locs
     
     # Draft blueprint topics MUST NOT be in sitemap.xml
-    assert f"{base_url}/library/sql/notes/sql-what-is-database" not in locs
+    assert f"{base_url}/library/sql/notes/sql-create-drop-database" not in locs
     assert f"{base_url}/library/python/notes/python-syntax-comments" not in locs
     assert f"{base_url}/library/docker/notes/docker-namespaces" not in locs
 
@@ -165,7 +167,7 @@ def test_content_quality_gate_draft_vs_published():
     assert 'content="noindex, nofollow"' not in pub_res.text
 
     # 2. Draft synthesized note has noindex/nofollow
-    draft_res = client.get("/library/sql/notes/sql-what-is-database")
+    draft_res = client.get("/library/sql/notes/sql-create-drop-database")
     assert draft_res.status_code == 200
     assert '<meta name="robots" content="noindex, nofollow">' in draft_res.text
     assert "Coming Soon" in draft_res.text
