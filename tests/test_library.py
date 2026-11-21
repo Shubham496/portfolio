@@ -401,5 +401,37 @@ def test_library_sql_foundational_notes_slice():
     assert "sql-intro-syntax" in published_slugs
 
 
+def test_all_authored_markdown_notes_render_and_compile_to_pdf():
+    """Universal auto-discovery verification: ensures every authored .md note in app/content
+    loads with HTTP 200, has valid published frontmatter, and compiles cleanly to a branded PDF."""
+    from app.apps.library.services import CONTENT_DIR, get_document
+
+    authored_md_files = list(CONTENT_DIR.glob("*/*.md"))
+    assert len(authored_md_files) >= 5, f"Expected at least 5 authored notes, found {len(authored_md_files)}"
+
+    for md_file in authored_md_files:
+        subject = md_file.parent.name
+        slug = md_file.stem
+
+        # 1. Service retrieval and frontmatter
+        doc = get_document(subject, slug)
+        assert doc is not None, f"Failed to retrieve document: {subject}/{slug}"
+        assert doc.metadata.status == "published", f"Note {subject}/{slug} must have status: published"
+        assert doc.metadata.title, f"Note {subject}/{slug} missing title"
+
+        # 2. Web reader page returns HTTP 200
+        res = client.get(f"/library/{subject}/notes/{slug}")
+        assert res.status_code == 200, f"Reader failed for {subject}/{slug}: {res.status_code}"
+        assert doc.metadata.title in res.text or doc.metadata.title.replace("&", "&amp;") in res.text
+
+        # 3. Direct PDF endpoint compiles cleanly with %PDF header and valid bytes
+        pdf_res = client.get(f"/library/{subject}/notes/{slug}/pdf")
+        assert pdf_res.status_code == 200, f"PDF route failed for {subject}/{slug}: {pdf_res.status_code}"
+        assert pdf_res.headers.get("content-type") == "application/pdf"
+        assert pdf_res.content.startswith(b"%PDF"), f"Invalid PDF stream for {subject}/{slug}"
+        assert len(pdf_res.content) > 1000, f"PDF too small for {subject}/{slug}: {len(pdf_res.content)} bytes"
+
+
+
 
 
